@@ -1,0 +1,11 @@
+def my_cool( prog )
+
+    raises = 1
+    an_error = 2
+
+    if ( 0 )
+       1  + 2 
+    elseif ( 2 )
+        exit ( )  
+    end 
+# missing end

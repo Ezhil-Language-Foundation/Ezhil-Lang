@@ -1,0 +1,26 @@
+def isprime ( n )
+    ## show if this number is prime 
+    rval = 1 ##need to add True, False
+    p  = floor( n / 2 )
+    while ( p >= 2 )    
+       if ( fmod( n, p ) == 0 )
+          ##print "breaking not-prime"
+          rval = 0
+       	  break 
+       end
+       p = p - 1
+    end
+    ##print "return statement"
+    return rval
+end
+
+n = 50
+while (  n >=  1 )
+
+  if ( isprime ( n ) )
+       print  "PRIME ", n
+  else
+       ##print  "COMPOSITE ", n
+  end
+  n = n - 1
+end

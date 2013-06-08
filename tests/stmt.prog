@@ -1,0 +1,12 @@
+def dosth( x )
+ if ( x )
+   s = x + 1
+ else
+   s = x - 1 
+ end
+ print ( s )
+ return  s
+end
+
+dosth( 9 )
+dosth( -9 )

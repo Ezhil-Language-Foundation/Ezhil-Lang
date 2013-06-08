@@ -1,0 +1,24 @@
+print 3 + 4 + 5
+def hello ( x , y , z )
+    print x + y + z, x - y , z + x
+    return x + y + z
+end
+
+def boom ( )
+    z = hello ( 3 , 4 , 5 )
+    print z
+end
+
+boom ( )
+
+print cos ( 0 )
+print log10 ( 100 )
+
+z = max ( 5 , 10 )
+print z
+z = pow ( 2 , 10 ) 
+print z
+
+x = boom  ( )
+
+print hello( 3 , 5, 6 )

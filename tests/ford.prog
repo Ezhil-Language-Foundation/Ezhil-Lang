@@ -1,0 +1,24 @@
+x = 45
+## well, I hate semi-colons anyway!
+for ( x = -1 , 0, 0 )
+
+end
+
+print x
+
+for ( x = 45 , x > 0,  x = x - 1 )
+    if ( ( x % 2) == 0 ) 
+        continue ##skip the evens
+     end
+    print x    
+    if ( x == 13 )
+       break
+    end
+end
+
+for ( x = 45 , x > 0,  x = x - 1 )
+    if ( ( x % 2) == 1 ) 
+        continue ##skip the odds
+     end
+    print x    
+end

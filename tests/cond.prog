@@ -1,0 +1,6 @@
+if ( 0 )
+   print "I-have-a-condition"
+   print "Alan-Kay"
+else
+   print "McCarthy-LISP"
+end

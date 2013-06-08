@@ -1,0 +1,17 @@
+def transpose( X )
+    ## move rows & colums into each other.	
+    Z = []
+
+    for ( i = 0, i < len(X), i = i + 1 )
+    	for ( j = 0, j < len(X[i]), j = j + 1 )
+	    Z[j][i]=X[i][j]
+	end
+    end
+end
+
+array2d = [ [ 1, 2, 3],
+            [ 4, 5, 6],
+	    [ 8, 9, 10] ]
+ 
+array = [1, 3, 4 ,5,6,8]
+

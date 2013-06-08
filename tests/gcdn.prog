@@ -1,0 +1,17 @@
+## gcd as a recursive function
+def gcdn ( x, y )
+  m = max(x,y)
+  q = min(x,y)
+
+  if ( q == 0 )
+     return m
+  end
+
+  return gcdn (m-q,q)
+end
+
+
+print gcdn ( 15, 11 ) ## 1
+print gcdn ( 15, 5 ) ## 5
+print gcdn ( 15, 12 ) ## 3
+

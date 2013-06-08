@@ -1,0 +1,8 @@
+def my_cool( prog )
+
+    raises = 1
+    an_error = 2
+
+    continue  ##mustnot be here
+
+end

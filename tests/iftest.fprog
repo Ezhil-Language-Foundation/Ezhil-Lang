@@ -1,0 +1,8 @@
+    raises = 1
+    an_error = 2
+
+    if ( 0 )
+       1  + 2 
+     elseif ( 2 )
+        exit ( )  
+     # missing end

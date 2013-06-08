@@ -1,0 +1,22 @@
+def print_skipr ( n , r )
+    while  ( n )
+      print n
+      n = n - r
+      if ( n )
+          print "n > 0 "
+      else
+         print  "n == 0"
+      end
+    end
+    return r
+end
+
+def printn ( n )
+    while  ( n )
+      print n
+      n = n - 1
+    end
+end
+
+printn ( 10 ) ## print 10 .. 1
+print_skipr ( 20, 5 ) #print 20, 15, 10, .. 0

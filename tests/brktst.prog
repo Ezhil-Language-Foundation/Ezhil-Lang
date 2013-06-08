@@ -1,0 +1,20 @@
+y = 3
+x = 10 
+breaks = 0
+while ( y )
+  x = x  + y
+  y = y - 1
+  while ( x > 0 )
+     print "Inner Loop", x 
+      if ( x == 5 )
+         print "loop broken"
+	 breaks = breaks  + 1 
+         break
+      end
+      x = x - 1
+    end
+   print "Outer Loop", x,y
+end
+
+print x #must be 5
+print "number of breaks = ",breaks

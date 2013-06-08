@@ -1,0 +1,6 @@
+def infini ( x )
+   print x
+   infini ( x - 1 )
+end
+
+print infini  ( 5 )

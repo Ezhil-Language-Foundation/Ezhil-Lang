@@ -1,0 +1,23 @@
+def disp_hanoi( x, y )
+    print "Move disk from ", x, "-> ",y
+end
+
+#
+# (C) 1993 Guido Van Rossum, derived from Python Code repository
+# Basic Towers-of-Hanoi algorithm: move n pieces from a to c, using b
+# as temporary.  For each move, call report()
+def solve_hanoi( n, a, b, c )
+    # a - src, b-dest, c-aux
+    if ( n <= 0 )
+         return 0
+    end
+    ## move from src to aux using dest as tmp.
+    solve_hanoi( n - 1 , a, c, b )
+    disp_hanoi( a, c )
+    ## move from aux to dest using src as temp.
+    solve_hanoi( n - 1 , b, a, c )
+    return 0
+end
+
+solve_hanoi(3,3,0,0)
+

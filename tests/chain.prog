@@ -1,0 +1,15 @@
+def x ( )
+   print "in-x"
+   y ( )
+end
+
+def y ( )
+   print "in-y"
+end
+
+def z ( )
+   print "in-z"
+   x ( )
+end
+
+z ( )

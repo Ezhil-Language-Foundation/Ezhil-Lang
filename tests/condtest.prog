@@ -1,0 +1,13 @@
+def numbers ( n )
+      if ( n ) 
+          return 0
+      elseif ( n - 1 )
+          return 1
+      else
+          return -1
+      end
+end
+
+print numbers( -1 )
+print numbers( 0 )
+print numbers( 1 )

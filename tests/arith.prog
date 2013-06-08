@@ -1,0 +1,10 @@
+ def hello_world ( ) 
+     print 1 , 2 , 3
+ end
+ 1 + 1
+ hello = 1 + 1
+ print hello
+ print hello , hello * 2 , 10 * hello
+ two = 2
+ hello + two
+ hello_world ( )

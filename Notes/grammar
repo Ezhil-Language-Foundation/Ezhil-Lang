@@ -1,0 +1,88 @@
+## Grammar:
+##
+##  PROG:  STMT; FUNCDEF
+##
+##  FUNCDEF : 'def' id '(' ARGLIST ')'  STMTLIST END
+##
+##  STMTLIST : STMT, STMTLIST | NONE
+##
+##  STMT: ASSIGNSTMT
+##  ASSIGNSTMT: id := EXPR 
+##  ## copying is a value based deep-copy, not a reference.
+##  ## later this may change however.
+##
+##  STMT: PRINTSTMT
+##  PRINTSTMT : 'print' EXPR
+##
+##  STMT : RETSTMT
+##  RETSTMT : 'return' EXPR
+##
+##  STMT: EVALSTMT
+##  EVALSTMT : EXPR
+##
+##  STMT : WHILESTMT 
+##  WHILESTMT : 'WHILE' EXPR  STMTLIST 'END'
+##
+##  STMT : FORSTMT 
+##  FORSTMT : 'FOR' '(' EXPR1 ',' EXPR2 ',' EXPR3 ')'  STMTLIST 'END'
+##
+##  STMT : SWITCHSTMT
+##  SWITCHSTMT : 'SWITCH' '(' EXPR1  ')' CASE_STMTLIST 'END'
+##
+##  CASE_STMTLIST : 'CASE' '(' EXPR ')' STMTLIST CASE_STMTLIST
+##                | 'OTHERWISE' STMTLIST 
+##  this forces otherwise to be last in a switch-case statement. 
+##
+##  ARGLIST : ID, ARGLIST | NONE
+##
+##  NONE : EOF | ""
+##
+##  EXPR : TERM OPTEXPR
+##       | ARRAY_FULL
+##
+##  ARRAY_FULL : '[' ARRAY_EXPR* ']'
+##  ARRAY_EXPR : expr | ARRAY_FULL | NONE
+##
+##  OPTEXPR : PLUS_MINUS EXPR
+##          | e
+##  
+##  ID : REGULAR_ID | ARRAY_ID
+##  ARRAY_ID : REGULAR_ID '[' expr ']'+    
+##
+##  REGULAR_ID : [a-zA-Z]+[0-9]*
+##
+##  TERM : PRIM OPTTERM
+##
+##  OPTERM : PROD_DIV TERM
+##         | e
+##
+##  PRIM : ( EXPR )
+##       | NUMBER
+##
+##  PROD_DIV : *
+##           | /
+##
+##  PLUS_MINUS : +
+##             | -
+#         """
+#         ##  EXPR : TERM OPTEXPR
+#         ## 
+#         ##  OPTEXPR : PLUS_MINUS EXPR
+#         ##          | e
+#         ##  
+#         ##  TERM : PRIM OPTTERM
+#         ##
+#         ##  OPTERM : PROD_DIV TERM
+#         ##         | e
+#         ##
+#         ##  PRIM : ( EXPR )
+#         ##       | NUMBER
+#         ##
+#         ##  PROD_DIV : *
+#         ##           | /
+#         ##
+#         ##
+#         ##  PLUS_MINUS : +
+#         ##             | -
+
+#         """    

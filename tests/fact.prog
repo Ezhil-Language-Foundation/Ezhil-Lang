@@ -1,0 +1,17 @@
+def fact ( n )
+    if ( n > 0 )
+      print "entering-recursion"
+
+      ## unary ops not supported yet
+      return  n * fact(n - 1)
+    elseif ( n == 0 )
+       print "recursion-over"      
+       return 1
+    end
+   
+    exit ( -1 ) ## some error
+end
+
+## print fact ( 5 )
+print fact( 3 )
+print fact ( 6 )

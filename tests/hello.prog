@@ -1,0 +1,6 @@
+ def hello_world ( x , stringy )  
+     print 1 , 2 , stringy , 3 , x
+     print stringy
+ end
+
+hello_world ( 0 , "hello-muthu!" )

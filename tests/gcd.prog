@@ -1,0 +1,12 @@
+def gcd ( x , y )
+    if ( min(x,y) > 0 )
+        return gcd ( max(x,y) - min( x,y), min(x,y) )
+    else
+        return max(x,y)
+    end
+    exit("Oops! Not Expected.")
+end
+
+print gcd( 15, 11 ) ## 1
+print gcd( 15, 5 ) ## 5
+print gcd( 15, 12 ) ## 3

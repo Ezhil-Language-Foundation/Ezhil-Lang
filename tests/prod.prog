@@ -1,0 +1,13 @@
+def prod3 ( x, y)
+    return x*y
+end
+
+def prod2 ( x , y )
+    return x * prod3(y,x)
+end
+
+def prod ( x , y )            
+    return  x * prod2(y,x)
+end
+
+print prod ( 10 , 10 )

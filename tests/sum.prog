@@ -1,0 +1,11 @@
+def my_sum ( n ) ## name_collides with the python's sum function
+    ## calculate sum of first n numbers
+    s = 0
+    if ( n )
+        s = my_sum( n - 1 ) + n
+    end
+    return s
+end
+
+print my_sum ( 4 )
+print my_sum ( 100 )

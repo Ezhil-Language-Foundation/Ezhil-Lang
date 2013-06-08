@@ -1,0 +1,15 @@
+## A - array semantics are such that lvalues
+## need not be defined before assignment. To
+## evaluate the assignments we need to create
+## the lvalue if the index dont exist, and then
+## make the rvalue assigned to the lvalue.
+def arraysum( A )
+    s = 0
+    for ( i = 0, i < len(A), i = i + 1 )
+    	s = s + A[i]
+    end
+    return s
+end 
+
+a = [1, 3, 5, 7, 9, 11]
+print "Sum [a] = ", arraysum(a)
