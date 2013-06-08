@@ -1,5 +1,8 @@
 *.py[cod]
 
+./Notes/TODO
+./Notes/builtins
+
 # C extensions
 *.so
 
