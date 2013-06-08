@@ -1,7 +1,7 @@
 *.py[cod]
 
-./Notes/TODO
-./Notes/builtins
+./Notes
+./Notes/*
 
 # C extensions
 *.so
