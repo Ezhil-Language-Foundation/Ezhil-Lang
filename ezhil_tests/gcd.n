@@ -1,0 +1,12 @@
+## gcd as a recursive function
+நிரல்பாகம்  gcd ( x, y )
+    மு = max(x,y);
+     q = min(x,y);
+
+  @( q == 0 ) ஆனால்
+           பின்கொடு  மு;
+     முடி
+
+    பின்கொடு  gcd(மு-q,q);
+முடி
+

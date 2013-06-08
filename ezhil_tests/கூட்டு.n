@@ -1,0 +1,11 @@
+# Arrays not implemented - so this test fails right now
+# sum / கூட்டு  all values of x.
+நிரல்பாகம்  கூட்டு ( x )
+    மு = 0
+    @( டி = 0; டி < len(x); டி = டி+1 )  ஆக
+               மு  =  மு  + x[டி];
+    முடி
+
+    பின்கொடு மு;
+முடி
+

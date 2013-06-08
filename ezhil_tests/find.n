@@ -1,0 +1,15 @@
+## finds y in list-x and returns its position
+## a -1 means not found.
+நிரல்பாகம்  find ( x, y )
+    மு = -1;
+
+    @( டி = 0; டி < len(x); டி = டி+1 )  ஆக
+    @( q == x[டி] ) ஆனால்
+               மு = டி ;
+               நேருத்து;
+          முடி
+    முடி
+
+    பின்கொடு மு;
+முடி
+
