@@ -1,0 +1,10 @@
+#!/bin/bash
+# Run Ezhil interpreter with a file input
+if [ $# -lt 1 ]
+then
+	echo "usage: ./ez <filename1> .. "
+	exit -1
+fi
+
+python ./ezhil/exprs.py -ezhil $@
+

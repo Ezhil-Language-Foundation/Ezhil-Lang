@@ -1,0 +1,50 @@
+if [ -e success.txt ];
+then
+    rm success.txt
+fi
+if [ -e failed.txt ];
+then
+    rm failed.txt
+fi
+
+
+touch success.txt
+touch failed.txt
+## run all the success programs
+for i in `ls ./tests/*.prog`;
+do
+    echo "Testing file", $i
+    python ./ezhil/exprs.py $i $1
+    if [ $? -eq 0 ]
+    then
+	echo $i >> success.txt
+    else
+	echo $i >> failed.txt
+    fi
+    sleep 0
+done
+
+echo "**************************************************"
+echo " Running all the failure programs, that must fail."
+echo "**************************************************"
+sleep 2
+for i in `ls ./tests/*.fprog`;
+do
+    echo "Testing file", $i
+    python exprs.py $i $1
+    if [ $? -eq 0 ]
+    then
+	echo $i >> failed.txt
+    else
+	echo $i >> success.txt
+    fi
+    sleep 0
+done
+
+echo "**********Successful Tests**********" 
+cat success.txt
+echo "*************************************"
+echo "***********Failed Tests**************" 
+cat failed.txt
+rm failed.txt
+rm success.txt
