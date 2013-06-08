@@ -218,6 +218,9 @@ if __name__ == "__main__":
                 ## FIXME: implement multiple line readline library
                 buffer = sys.stdin.readline();
                 buffer = buffer.strip()
+                line_no += 1
+    	        if ( buffer == 'exit' ):
+                     sys.exit(0)
             except EOFError, e:
                 print "End of Input reached\n"
                 do_quit = True ##evaluate the buffer 
@@ -231,6 +234,7 @@ if __name__ == "__main__":
                 parse_eval.parse()
                 if ( debug ):  print "*"*60;  print str(parse_eval)
                 [rval, env] = parse_eval.evaluate_interactive(env)
+                if rval : print rval
             except Exception, e:
                 print e
                 ## clear tokens in lexer
