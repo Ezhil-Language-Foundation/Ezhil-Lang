@@ -1,0 +1,24 @@
+# try out pi() acos() and e() functions
+y = acos(  pi() / -6 ) + e()
+print "acos(  pi() / -6 ) + e() = ", y
+
+# try out some random functions
+seed( 1729 + random()*500 )
+
+z = random()
+print "Print [0,1] = ",z
+assert( z >= 0 )
+assert( z <= 1 )
+
+z = randint( 5, 15 )
+print "Random [5,15] = ", z
+assert( z >= 5 )
+assert( z <= 15 )
+
+n = 0
+while ( n < 10 )
+      print choice(1,2,3)
+      n = n + 1
+end
+
+
