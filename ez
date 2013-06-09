@@ -6,5 +6,5 @@ then
 	exit -1
 fi
 
-python ./ezhil/exprs.py -ezhil $@
+python ./ezhil/ezhil.py  $@
 
