@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ -e success.txt ];
 then
     rm success.txt
@@ -46,5 +47,10 @@ cat success.txt
 echo "*************************************"
 echo "***********Failed Tests**************" 
 cat failed.txt
+
+echo "***********Summary******************"
+echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
+
+# cleanup
 rm failed.txt
 rm success.txt
