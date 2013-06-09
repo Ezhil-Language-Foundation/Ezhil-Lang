@@ -50,6 +50,7 @@ from transform import TreeWalker
 def get_prog_name(lang):
     prog_name=None
     debug=False
+    
     # by-default look in the stdin
     if ( len(sys.argv) < 2 ):
         sys.argv.append( '-stdin' );
@@ -126,11 +127,13 @@ class Interpreter(DebugUtils):
         for b in dir(sys):
             bfn = getattr( sys ,b)
             self.add_blind_fcns( bfn, b)
-            
-            
-        
+
     def install_builtins(self):
         """ populate with the builtin functions"""
+        
+        # input statements
+        self.builtin_map["input"]=BuiltinFunction(input,"input")
+        self.builtin_map["raw_input"]=BuiltinFunction(input,"raw_input")
         
         # assert
         self.builtin_map["assert"]=BuiltinFunction(lambda x: x and True or Exception('Assertion failed!'),"assert")
