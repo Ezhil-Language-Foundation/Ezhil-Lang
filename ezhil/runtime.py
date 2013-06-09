@@ -28,7 +28,8 @@ class BuiltinFunction:
         self.use_adicity = True
         self.padic = padic
         self.debug = dbg
-
+        self.aslist = False
+    
     def evaluate(self,env):
         ## push stuff into the call-stack
         env.call_function(self.name)
@@ -44,7 +45,10 @@ class BuiltinFunction:
             rval = apply( self.fn, args[0:self.padic] )
         else:
             try:
-                rval = apply( self.fn, args )
+                if ( self.aslist ):
+                    rval = apply( self.fn,[args])
+                else:
+                    rval = apply( self.fn,args)
             except Exception, e:
                 raise RuntimeException( str(e) )
         env.clear_call()
@@ -56,13 +60,15 @@ class BlindBuiltins(BuiltinFunction):
     """ also blindly include all functions from the 
         os, sys, curses.ascii, math etc. donot check arguments 
         here.    """
-    def __init__(self,fn,name,dbg = False):
+    def __init__(self,fn,name,dbg = False,aslist=False):
         self.fn = fn
         self.name = name
-        self.padic = -1;
+        self.padic = -1
         self.use_adicity = False
         self.debug = dbg
+        self.aslist = aslist
 
+    
 ## <<Side-Effects>>: computation is side-effect of programming.
 class Environment:
     """ used to manage the side-effects of an interpreter """

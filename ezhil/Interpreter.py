@@ -30,6 +30,9 @@ from errors import RuntimeException, ParseException
 from runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils
 
+## builtins
+import random
+
 ## AST elements
 from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
@@ -68,6 +71,7 @@ class Interpreter(DebugUtils):
     and its evaluate methods. Also add a parser method """
     def __init__(self,lexer, dbg = False):
         DebugUtils.__init__(self,dbg)
+        self.debug = dbg
         self.lexer=lexer
         self.ast=None
         self.function_map = dict()#parsed functions
@@ -110,7 +114,7 @@ class Interpreter(DebugUtils):
         for b in dir(__builtins__):
             bfn = getattr( __builtins__ ,b)
             self.add_blind_fcns( bfn , b )
-
+            
         for b in dir(os):
             bfn = getattr( os ,b)
             self.add_blind_fcns( bfn, b)
@@ -127,6 +131,18 @@ class Interpreter(DebugUtils):
         
     def install_builtins(self):
         """ populate with the builtin functions"""
+        
+        # assert
+        self.builtin_map["assert"]=BuiltinFunction(lambda x: x and True or Exception('Assertion failed!'),"assert")
+        
+        # random functions
+        aslist = True;
+        self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)
+        self.builtin_map["random"]=BuiltinFunction(random.random,"random",0)
+        self.builtin_map["seed"]=BuiltinFunction(random.seed,"seed")
+        self.builtin_map["randint"]=BuiltinFunction(random.randint,"randint",2)
+        
+        # math functions
         self.builtin_map["acos"]=BuiltinFunction(acos,"acos")
         self.builtin_map["asin"]=BuiltinFunction(asin,"asin")
         self.builtin_map["atan"]=BuiltinFunction(atan,"atan")
@@ -135,7 +151,7 @@ class Interpreter(DebugUtils):
         self.builtin_map["cos"]=BuiltinFunction(cos,"cos")
         self.builtin_map["cosh"]=BuiltinFunction(cosh,"cosh")
         self.builtin_map["degrees"]=BuiltinFunction(degrees,"degrees")
-        self.builtin_map["e"]=BuiltinFunction(e,"e")
+        self.builtin_map["e"]=BuiltinFunction(lambda : e,"e",0)
         self.builtin_map["exp"]=BuiltinFunction(exp,"exp")
         self.builtin_map["fabs"]=BuiltinFunction(fabs,"fabs")
         self.builtin_map["floor"]=BuiltinFunction(floor,"floor")
@@ -146,7 +162,7 @@ class Interpreter(DebugUtils):
         self.builtin_map["log"]=BuiltinFunction(log,"log")
         self.builtin_map["log10"]=BuiltinFunction(log10,"log10")
         self.builtin_map["modf"]=BuiltinFunction(modf,"modf",2)
-        self.builtin_map["pi"]=BuiltinFunction(pi,"pi",0)
+        self.builtin_map["pi"]=BuiltinFunction(lambda : pi,"pi",0)
         self.builtin_map["pow"]=BuiltinFunction(pow,"pow",2)
         self.builtin_map["radians"]=BuiltinFunction(radians,"radians")
         self.builtin_map["sin"]=BuiltinFunction(sin,"sin")
