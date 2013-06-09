@@ -1,4 +1,4 @@
-## -*- coding: UTF-8 -*-
+## -*- coding: utf-8 -*-
 ## (C) 2007, 2008, 2013 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
@@ -42,6 +42,25 @@ from parser import Parser
 
 ## Transform / Visitor
 from transform import TreeWalker
+
+# program name
+def get_prog_name(lang):
+    prog_name=None
+    debug=False
+    # by-default look in the stdin
+    if ( len(sys.argv) < 2 ):
+        sys.argv.append( '-stdin' );
+    
+    if ( '--help' in sys.argv ):
+        print "usage: %s.py {-stdin|filename} {-debug}"%(lang)
+        sys.exit(-1)
+    
+    if ( len(sys.argv) >= 2 ):
+        prog_name=sys.argv[1]
+    
+    if ( len(sys.argv) >= 3 ):
+        debug = (sys.argv[2] == "-debug")
+    return [prog_name, debug]
 
 ## Gandalf the Grey. One ring to rule them all.
 class Interpreter(DebugUtils):
