@@ -232,17 +232,23 @@ def REPL(lang, lexer, parse_eval, debug=False):
     while not sys.stdin.closed :
         try:
             print "%s %d> "%(lang,line_no),
-                ## FIXME: implement multiple line readline library
+            ## FIXME: implement multiple line readline library
             buffer = sys.stdin.readline();
             buffer = buffer.strip()
             line_no += 1
             if ( buffer == 'exit' ):
-                sys.exit(0)
+                do_quit = True
         except EOFError, e:
             print "End of Input reached\n"
             do_quit = True ##evaluate the buffer 
             ## line-no broke
-        print "evaluating buffer", buffer
+        if ( debug ): print "evaluating buffer", buffer
+        if ( do_quit ):
+            if ( lang == 'ezhil' ):
+                print "******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******" 
+            else:
+                print "******* Goodbye! Now have a nice day *******" 
+            sys.exit( 0 )
         try:
             lexer.set_line_col([line_no, 0])
             lexer.tokenize(buffer)
@@ -251,17 +257,14 @@ def REPL(lang, lexer, parse_eval, debug=False):
             parse_eval.parse()
             if ( debug ):  print "*"*60;  print str(parse_eval)
             [rval, env] = parse_eval.evaluate_interactive(env)
-            if rval : print rval
+            if rval:
+                if hasattr( rval, 'evaluate' ):
+                    rval.evaluate(env)
+                else:
+                    print rval
         except Exception, e:
             print e
             ## clear tokens in lexer
             lexer.tokens = list()
         
-        if ( do_quit ):
-            if ( lang == 'ezhil' ):
-                print "******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******" 
-            else:
-                print "******* Goodbye! Now have a nice day *******" 
-            sys.exit( 0 )
-
     return
