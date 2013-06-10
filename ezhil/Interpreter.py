@@ -20,6 +20,8 @@ from math import *
 import copy
 import os, sys, string, inspect
 
+from ast import String, Number
+
 ## scanner for exprs language
 from scanner import Token, Lexeme, Lex
 
@@ -127,13 +129,26 @@ class Interpreter(DebugUtils):
         for b in dir(sys):
             bfn = getattr( sys ,b)
             self.add_blind_fcns( bfn, b)
+    
+    # marshalling
+    @staticmethod
+    def RAWINPUT(args):
+        op = raw_input(args)
+        return String(op)
 
+    @staticmethod
+    def INPUT(args):
+        op = input(args)
+        if ( isinstance(op,int) or isinstance(op,float) ):
+            return Number(0.0+op)
+        return String( op )
+    
     def install_builtins(self):
         """ populate with the builtin functions"""
         
         # input statements
-        self.builtin_map["input"]=BuiltinFunction(input,"input")
-        self.builtin_map["raw_input"]=BuiltinFunction(input,"raw_input")
+        self.builtin_map["input"]=BuiltinFunction(Interpreter.INPUT,"input")
+        self.builtin_map["raw_input"]=BuiltinFunction(Interpreter.RAWINPUT,"raw_input")
         
         # assert
         self.builtin_map["assert"]=BuiltinFunction(lambda x: x and True or Exception('Assertion failed!'),"assert")

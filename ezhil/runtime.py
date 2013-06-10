@@ -242,5 +242,3 @@ class Environment:
             return self.function_map[fn] 
         
         raise RuntimeException("Environment error on fetching function "+fn)
-
-
