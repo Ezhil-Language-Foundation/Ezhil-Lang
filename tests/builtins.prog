@@ -1,0 +1,6 @@
+assert( abs( -5 ) == 5 )
+assert( getattr(complex(5,1),"real") == 5 )
+assert( getattr(complex(5,3),"imag") == 3 )
+assert( len("ezhil") == 5 )
+print abs( -5 ), getattr(complex(5,1),"real"), getattr(complex(5,1),"imag"), len("ezhil")
+
