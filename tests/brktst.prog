@@ -1,4 +1,4 @@
-y = 3
+y = 5
 x = 10 
 breaks = 0
 while ( y )
@@ -8,7 +8,7 @@ while ( y )
      print "Inner Loop", x 
       if ( x == 5 )
          print "loop broken"
-	 breaks = breaks  + 1 
+  	     breaks = breaks  + 1
          break
       end
       x = x - 1
