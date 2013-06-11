@@ -201,7 +201,12 @@ class Lex:
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
             tval = Lexeme( chunks[1:-1], Token.STRING )
         elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
-            tval=Lexeme(float(chunks),Token.NUMBER)
+            # deduce a float or integer
+            if ( chunks.find('.') >= 0 or chunks.find('e') >= 0 or chunks.find('E') >= 0 ):
+                tval=Lexeme(float(chunks),Token.NUMBER)
+            else:
+                tval=Lexeme(int(chunks),Token.NUMBER)
+            
         elif isalpha(chunks[0]):
             tval=Lexeme(chunks,Token.ID)
         else:

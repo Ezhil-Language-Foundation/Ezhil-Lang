@@ -90,9 +90,12 @@ class Number:
         self.line = l
         self.col = c
 
-    def __float__(self):
-        return self.num
+    def __int__(self):
+        return int(self.num)
 
+    def __float__(self):
+        return float(self.num)
+    
     def __repr__(self):
         return " [Number [" + str(self.num) +"]]"
     
@@ -205,18 +208,22 @@ class Stmt:
         rval = False
         self.dbg_msg("is_true_value? "+ str(val.__class__))
         try:
-            if ( val.__class__ == Number ):
-                fval = val.num
-            elif ( val.__class__ == float ):
+            #print val, type(val)
+            #if hasattr(val,'num'):
+            #    fval = val.num
+            if ( hasattr(val,'evaluate') ):
+                fval = val.evaluate(None);
+            elif ( isinstance(val,float) or isinstance(val,int) ):
                 fval = val
             else:
                 raise  Exception("Unknown case, cannot identify truth")
-
+            
             if ( fval > 0.0 ):
                 rval = True
             ## all other cases later.
-        except Exception, e:
+        except Exception as e:
             """ objects where is_true_value() is not supported """
+            print e
             raise RuntimeException(e)
         self.dbg_msg('Is True Value? ' + str(rval) + str(val.__class__) )
         return rval

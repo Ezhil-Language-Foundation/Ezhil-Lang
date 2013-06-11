@@ -121,7 +121,13 @@ class EzhilLex ( Lex ) :
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
             tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )
         elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
-            tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
+            #tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
+            # deduce a float or integer
+            if ( chunks.find('.') >= 0 or chunks.find('e') >= 0 or chunks.find('E') >= 0 ):
+                tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
+            else:
+                tval=EzhilLexeme(int(chunks),EzhilToken.NUMBER)
+            
         elif isalpha(chunks[0]) or has_tamil(chunks):
             ## check for tamil indentifiers
             tval=EzhilLexeme(chunks,EzhilToken.ID)
