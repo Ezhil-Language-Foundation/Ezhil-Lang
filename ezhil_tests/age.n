@@ -3,7 +3,6 @@
       பதிப்பி "வாழ்த்துக்கள்! you can vote"
    இல்லை
 	பதிப்பி "உங்கள் age  குறைத்து உள்ளது"
-	பதிப்பி "you have to wait for ", (18-age)
-	பதிப்பி "years more!"
+	பதிப்பி "you have to wait for ", (18-age), "years more!"
    முடி
    exit()
