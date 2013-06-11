@@ -25,6 +25,22 @@ do
     sleep 0
 done
 
+# run tests for Ezhil as well
+cd ./ezhil_tests
+for i in hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n
+do
+    echo "Testing Ezhil script",$i
+    python ../ezhil/ezhil.py $i $1
+    if [ $? -eq 0 ]
+    then
+       echo $i >> ../success.txt
+    else
+       echo $i >> ../failed.txt
+    fi
+    sleep 0
+done
+cd ../
+
 echo "**************************************************"
 echo " Running all the failure programs, that must fail."
 echo "**************************************************"
