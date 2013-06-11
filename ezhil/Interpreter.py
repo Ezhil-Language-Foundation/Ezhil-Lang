@@ -334,11 +334,10 @@ def REPL(lang, lexer, parse_eval, debug=False):
             parse_eval.parse()
             if ( debug ):  print "*"*60;  print str(parse_eval)
             [rval, env] = parse_eval.evaluate_interactive(env)
-            if rval:
-                if hasattr( rval, 'evaluate' ):
-                    rval.evaluate(env)
-                else:
-                    print rval
+            if hasattr( rval, 'evaluate' ):
+                print rval.__str__()
+            else:
+                print rval
         except Exception, e:
             print e
             ## clear tokens in lexer

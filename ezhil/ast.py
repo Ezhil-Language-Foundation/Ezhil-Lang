@@ -317,7 +317,7 @@ class Expr(Stmt):
                 ## tval = term.evaluate( env )
                 raise RuntimeException( " unknown clause to evaluate ");
         else:
-            tval = float(term)
+            tval = (term) #float cast not required.
         return tval
 
     def evaluate(self,env):
