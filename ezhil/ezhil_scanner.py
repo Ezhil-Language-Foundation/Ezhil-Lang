@@ -43,8 +43,8 @@ class EzhilToken( Token):
 class EzhilLex ( Lex ) :
     """ Lex Tamil characters """
 
-    def __init__(self,fname=None):
-        Lex.__init__(self,fname)
+    def __init__(self,fname=None,dbg=False):
+        Lex.__init__(self,fname,dbg)
         
     def get_lexeme(self,chunks , pos):
         if chunks == None:
@@ -144,7 +144,7 @@ class EzhilLex ( Lex ) :
         """ do hard-work of tokenizing and
         put EzhilLexemes into the tokens[] Q """
         if ( self.stdin_mode ):
-            print self.tokens
+            if ( self.debug ): print self.tokens
             ## cleanup the Q for stdin_mode of any EOF that can remain.
             if ( len(self.tokens) != 0 ):
                 self.match( EzhilToken.EOF )
