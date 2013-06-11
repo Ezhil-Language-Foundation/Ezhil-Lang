@@ -69,9 +69,12 @@ class String:
         self.debug = dbg
         self.line = l
         self.col = c
-
+    
     def __repr__(self):
         return " [String [" + str(self.string) +"]] "
+    
+    def __str__(self):
+        return self.string
 
     def evaluate(self,env):
         return self.string
@@ -92,6 +95,9 @@ class Number:
 
     def __repr__(self):
         return " [Number [" + str(self.num) +"]]"
+    
+    def __str__(self):
+        return self.num.__str__()
 
     def evaluate(self,env):
         return self.num
@@ -572,7 +578,8 @@ class PrintStmt(Stmt):
     def do_printop(self,env):
         val = ""
         val = self.exprlst.evaluate( env  )
-        ## print operator
+        if hasattr(val,'evaluate') :
+            val = val.evaluate( env )
         print val
         return val
     
@@ -601,8 +608,6 @@ class EvalStmt(Stmt):
     def visit_eval_stmt(self, walker):
         walker.visit_eval_stmt(self)
         return
-
-
 
 ## PLACEHOLDER
 class ArgList:
