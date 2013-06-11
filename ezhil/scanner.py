@@ -104,8 +104,9 @@ class Lex:
     """ Lexer automatically starts lexing on init.
     Maybe use some Library module? """
 
-    def __init__(self,fname=None):
+    def __init__(self,fname=None,dbg=False):
         self.stdin_mode = False
+        self.debug = dbg;
         if ( fname ):
             self.fname = fname
             self.File=open(fname)
@@ -236,7 +237,7 @@ class Lex:
         """ do hard-work of tokenizing and
         put Lexemes into the tokens[] Q """
         if ( self.stdin_mode ):
-            print self.tokens
+            if ( self.debug ): print self.tokens
             ## cleanup the Q for stdin_mode of any EOF that can remain.
             if ( len(self.tokens) != 0 ):
                 self.match( Token.EOF )
