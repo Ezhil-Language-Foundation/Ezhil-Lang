@@ -113,19 +113,11 @@ class Interpreter(DebugUtils):
         """ we dont know the arity of these functions,
         hence we call-em the blind builtins, but we 
         still add them to the builtin_map """
-
-        for b in dir(__builtins__):
-            bfn = getattr( __builtins__ ,b)
-            self.add_blind_fcns( bfn , b )
-            
+        
         for b in dir(os):
             bfn = getattr( os ,b)
             self.add_blind_fcns( bfn, b)
-
-        for b in dir(__builtins__):
-            bfn = getattr( __builtins__ ,b)
-            self.add_blind_fcns( bfn , b )
-
+        
         for b in dir(sys):
             bfn = getattr( sys ,b)
             self.add_blind_fcns( bfn, b)
@@ -145,11 +137,96 @@ class Interpreter(DebugUtils):
     
     def install_builtins(self):
         """ populate with the builtin functions"""
-        
+
+        self.builtin_map['abs']=BlindBuiltins(abs,'abs',self.debug)
+        self.builtin_map['all']=BlindBuiltins(all,'all',self.debug)
+        self.builtin_map['any']=BlindBuiltins(any,'any',self.debug)
+        self.builtin_map['apply']=BlindBuiltins(apply,'apply',self.debug)
+        self.builtin_map['basestring']=BlindBuiltins(basestring,'basestring',self.debug)
+        self.builtin_map['bin']=BlindBuiltins(bin,'bin',self.debug)
+        self.builtin_map['bool']=BlindBuiltins(bool,'bool',self.debug)
+        self.builtin_map['buffer']=BlindBuiltins(buffer,'buffer',self.debug)
+        self.builtin_map['bytearray']=BlindBuiltins(bytearray,'bytearray',self.debug)
+        self.builtin_map['bytes']=BlindBuiltins(bytes,'bytes',self.debug)
+        self.builtin_map['callable']=BlindBuiltins(callable,'callable',self.debug)
+        self.builtin_map['chr']=BlindBuiltins(chr,'chr',self.debug)
+        self.builtin_map['classmethod']=BlindBuiltins(classmethod,'classmethod',self.debug)
+        self.builtin_map['cmp']=BlindBuiltins(cmp,'cmp',self.debug)
+        self.builtin_map['coerce']=BlindBuiltins(coerce,'coerce',self.debug)
+        self.builtin_map['compile']=BlindBuiltins(compile,'compile',self.debug)
+        self.builtin_map['complex']=BlindBuiltins(complex,'complex',self.debug)
+        self.builtin_map['copyright']=BlindBuiltins(copyright,'copyright',self.debug)
+        self.builtin_map['credits']=BlindBuiltins(credits,'credits',self.debug)
+        self.builtin_map['delattr']=BlindBuiltins(delattr,'delattr',self.debug)
+        self.builtin_map['dict']=BlindBuiltins(dict,'dict',self.debug)
+        self.builtin_map['dir']=BlindBuiltins(dir,'dir',self.debug)
+        self.builtin_map['divmod']=BlindBuiltins(divmod,'divmod',self.debug)
+        self.builtin_map['enumerate']=BlindBuiltins(enumerate,'enumerate',self.debug)
+        self.builtin_map['eval']=BlindBuiltins(eval,'eval',self.debug)
+        self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
+        self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
+        self.builtin_map['file']=BlindBuiltins(file,'file',self.debug)
+        self.builtin_map['filter']=BlindBuiltins(filter,'filter',self.debug)
+        self.builtin_map['float']=BlindBuiltins(float,'float',self.debug)
+        self.builtin_map['format']=BlindBuiltins(format,'format',self.debug)
+        self.builtin_map['frozenset']=BlindBuiltins(frozenset,'frozenset',self.debug)
+        self.builtin_map['getattr']=BlindBuiltins(getattr,'getattr',self.debug)
+        self.builtin_map['globals']=BlindBuiltins(globals,'globals',self.debug)
+        self.builtin_map['hasattr']=BlindBuiltins(hasattr,'hasattr',self.debug)
+        self.builtin_map['hash']=BlindBuiltins(hash,'hash',self.debug)
+        self.builtin_map['help']=BlindBuiltins(help,'help',self.debug)
+        self.builtin_map['hex']=BlindBuiltins(hex,'hex',self.debug)
+        self.builtin_map['id']=BlindBuiltins(id,'id',self.debug)
+        self.builtin_map['input']=BlindBuiltins(input,'input',self.debug)
+        self.builtin_map['int']=BlindBuiltins(int,'int',self.debug)
+        self.builtin_map['intern']=BlindBuiltins(intern,'intern',self.debug)
+        self.builtin_map['isinstance']=BlindBuiltins(isinstance,'isinstance',self.debug)
+        self.builtin_map['issubclass']=BlindBuiltins(issubclass,'issubclass',self.debug)
+        self.builtin_map['iter']=BlindBuiltins(iter,'iter',self.debug)
+        self.builtin_map['len']=BlindBuiltins(len,'len',self.debug)
+        self.builtin_map['license']=BlindBuiltins(license,'license',self.debug)
+        self.builtin_map['list']=BlindBuiltins(list,'list',self.debug)
+        self.builtin_map['locals']=BlindBuiltins(locals,'locals',self.debug)
+        self.builtin_map['long']=BlindBuiltins(long,'long',self.debug)
+        self.builtin_map['map']=BlindBuiltins(map,'map',self.debug)
+        self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
+        self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
+        self.builtin_map['min']=BlindBuiltins(min,'min',self.debug)
+        self.builtin_map['next']=BlindBuiltins(next,'next',self.debug)
+        self.builtin_map['object']=BlindBuiltins(object,'object',self.debug)
+        self.builtin_map['oct']=BlindBuiltins(oct,'oct',self.debug)
+        self.builtin_map['open']=BlindBuiltins(open,'open',self.debug)
+        self.builtin_map['ord']=BlindBuiltins(ord,'ord',self.debug)
+        self.builtin_map['pow']=BlindBuiltins(pow,'pow',self.debug)
+        self.builtin_map['property']=BlindBuiltins(property,'property',self.debug)
+        self.builtin_map['quit']=BlindBuiltins(quit,'quit',self.debug)
+        self.builtin_map['range']=BlindBuiltins(range,'range',self.debug)
+        self.builtin_map['raw_input']=BlindBuiltins(raw_input,'raw_input',self.debug)
+        self.builtin_map['reduce']=BlindBuiltins(reduce,'reduce',self.debug)
+        self.builtin_map['reload']=BlindBuiltins(reload,'reload',self.debug)
+        self.builtin_map['repr']=BlindBuiltins(repr,'repr',self.debug)
+        self.builtin_map['reversed']=BlindBuiltins(reversed,'reversed',self.debug)
+        self.builtin_map['round']=BlindBuiltins(round,'round',self.debug)
+        self.builtin_map['set']=BlindBuiltins(set,'set',self.debug)
+        self.builtin_map['setattr']=BlindBuiltins(setattr,'setattr',self.debug)
+        self.builtin_map['slice']=BlindBuiltins(slice,'slice',self.debug)
+        self.builtin_map['sorted']=BlindBuiltins(sorted,'sorted',self.debug)
+        self.builtin_map['staticmethod']=BlindBuiltins(staticmethod,'staticmethod',self.debug)
+        self.builtin_map['str']=BlindBuiltins(str,'str',self.debug)
+        self.builtin_map['sum']=BlindBuiltins(sum,'sum',self.debug)
+        self.builtin_map['super']=BlindBuiltins(super,'super',self.debug)
+        self.builtin_map['tuple']=BlindBuiltins(tuple,'tuple',self.debug)
+        self.builtin_map['type']=BlindBuiltins(type,'type',self.debug)
+        self.builtin_map['unichr']=BlindBuiltins(unichr,'unichr',self.debug)
+        self.builtin_map['unicode']=BlindBuiltins(unicode,'unicode',self.debug)
+        self.builtin_map['vars']=BlindBuiltins(vars,'vars',self.debug)
+        self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
+        self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
+
         # input statements
         self.builtin_map["input"]=BuiltinFunction(Interpreter.INPUT,"input")
         self.builtin_map["raw_input"]=BuiltinFunction(Interpreter.RAWINPUT,"raw_input")
-        
+
         # assert
         self.builtin_map["assert"]=BuiltinFunction(lambda x: x and True or Exception('Assertion failed!'),"assert")
         

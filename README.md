@@ -40,5 +40,3 @@ where you should see the output above. For usage, try,
 
 $ ./ez 
 usage: ./ez <filename1> .. 
-
-
