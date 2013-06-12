@@ -119,7 +119,7 @@ class EzhilLex ( Lex ) :
         elif chunks == "^":
             tval=EzhilLexeme(chunks,EzhilToken.EXP)
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
-            tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )
+            tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )            
         elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
             #tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             # deduce a float or integer
@@ -203,7 +203,7 @@ class EzhilLex ( Lex ) :
                 s = c; idx = idx + 1
                 ## FIXME temporary hack doesnt handle unary ops well.
                 while ( idx < len( data ) 
-                        and ( not data[idx] in [ " ", "\t","\n", "-","+","=","*" ] )):
+                        and ( not data[idx] in [ " ", "\t","\n", "-","+","=","*",")","(" ] )):
                     s = s + data[idx]
                     idx = idx + 1
                 self.get_lexeme(s, tok_start_idx )
