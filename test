@@ -27,7 +27,7 @@ done
 
 # run tests for Ezhil as well
 cd ./ezhil_tests
-for i in hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n
+for i in hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n ifchain.n fern.n கூட்டு.n
 do
     echo "Testing Ezhil script",$i
     python ../ezhil/ezhil.py $i $1
