@@ -1,0 +1,7 @@
+<!-- ~/.local/share/mime/packages -->
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="text/x-ezhil">
+    <comment>Ezhil Language Source</comment>
+    <glob pattern="*.n"/>
+  </mime-type>
+</mime-info>
