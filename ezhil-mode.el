@@ -34,11 +34,23 @@
     ;; would be highlighted.
 ))
 
+;; syntax table
+(defvar ezhil-syntax-table nil "Syntax table for `ezhil-mode'.")
+(setq ezhil-syntax-table
+      (let ((synTable (make-syntax-table)))
+
+        ;; bash style comment: “# …” 
+        (modify-syntax-entry ?# "< b" synTable)
+        (modify-syntax-entry ?\n "> b" synTable)
+
+        synTable))
+
 ;; define the mode
 (define-derived-mode ezhil-mode fundamental-mode
   "ezhil-lang mode"
   "Major mode for editing ezhil (Ezhil-Lang : Write imperative programs in Indian language Tamil …"
-
+  :syntax-table ezhil-syntax-table
+  
   ;; code for syntax highlighting
   (setq font-lock-defaults '((ezhil-font-lock-keywords)))
 
@@ -50,4 +62,5 @@
   (setq ezhil-functions-regexp nil)
 )
 
+(add-to-list 'auto-mode-alist '("\\.n\\'" . ezhil-mode))
 (provide 'ezhil-mode)
