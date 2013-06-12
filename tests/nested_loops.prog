@@ -1,0 +1,21 @@
+# test nested loops
+size0 = 0
+size = 0
+while ( size0 < 10 )
+    size1 = 0
+    while( size1 < 10 )
+        size2 = 0
+        while ( size2 < 10 )
+            size = size + 1
+            size2 = size2 + 1
+        end
+        size1 = size1 + 1
+    end
+    size0 = size0 + 1
+end
+
+print size0 
+print size1
+print size2
+print size
+
