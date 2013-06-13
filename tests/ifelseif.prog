@@ -1,0 +1,17 @@
+# அளவு ஆழம் பார்ப்பது ;-)
+size = -10
+while ( size < 40 )
+   size = size + 10
+   print "mea$ure of a wo/man ", size, ">> "
+   if ( size < 1 )
+        print "negative or zero = non-positive"
+   elseif ( size < 15 )
+        print "too-low"
+   elseif( size < 25 )
+        print "pesant"  
+   elseif ( size < 35 )
+        print "worker/bourgeious"
+   else
+        print "elite"
+   end
+end
