@@ -1,7 +1,7 @@
 #!/usr/bin/python
-## coding=UTF-8
-##
-## (C) 2008 Muthiah Annamalai
+## -*- coding: utf-8 -*-
+## 
+## (C) 2008, 2013 Muthiah Annamalai
 ## Licensed under GPL Version 3
 ##
 ## This module is the scanner for the Ezhil language.
@@ -156,9 +156,9 @@ class EzhilLex ( Lex ) :
         print data
         idx = 0
         tok_start_idx = 0
-
+        
         while ( idx < len( data ) ):
-            c = data[idx]            
+            c = data[idx]
             if  ( c == ' 'or c == '\t' or c == '\n' ):
                 if ( c == '\n' ):
                     ##actual col = idx - col_idx
@@ -196,7 +196,7 @@ class EzhilLex ( Lex ) :
                 s = s+data[idx]
                 idx  = idx + 1
                 self.get_lexeme( s , tok_start_idx )
-            elif ( istamil( c ) ):                
+            elif ( istamil( c ) ):
                 ## allow tamil-prefix numeric-suffix id's
                 ## allow tamil-english id's
                 tok_start_idx = idx

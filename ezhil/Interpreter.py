@@ -15,7 +15,7 @@
 ## FEATURES: add array / list syntax.
 ## TODO: extract scanner and AST members into a module for sharing.
 ## FIXME: grammar for expression maybe broke. precedence.
-
+import argparse
 from math import *
 import copy
 import os, sys, string, inspect
@@ -53,20 +53,25 @@ def get_prog_name(lang):
     prog_name=None
     debug=False
     
-    # by-default look in the stdin
-    if ( len(sys.argv) < 2 ):
-        sys.argv.append( '-stdin' );
+    parser = argparse.ArgumentParser(prog=lang)
+    parser.add_argument(u"files",nargs='*',default=[])
+    parser.add_argument(u"-debug",action=u"store_true",
+                        default=False,
+                        help=u"enable debugging information on screen")
+    parser.add_argument(u"-stdin",action=u"store_true",
+                        default=None,
+                        help=u"read input from the standard input")
+    args = parser.parse_args()
     
-    if ( '--help' in sys.argv ):
-        print "usage: %s.py {-stdin|filename} {-debug}"%(lang)
+    if len(args.files) == 0 and (not args.stdin):
+        parser.print_help()
         sys.exit(-1)
     
-    if ( len(sys.argv) >= 2 ):
-        prog_name=sys.argv[1]
+    prog_name = args.files
+    debug = args.debug
+    dostdin = args.stdin
     
-    if ( len(sys.argv) >= 3 ):
-        debug = (sys.argv[2] == "-debug")
-    return [prog_name, debug]
+    return [prog_name, debug, dostdin]
 
 ## Gandalf the Grey. One ring to rule them all.
 class Interpreter(DebugUtils):
@@ -85,7 +90,7 @@ class Interpreter(DebugUtils):
         lang_parser = Parser(self.lexer,self.function_map, \
                              self.builtin_map, self.debug )
         self.parser = lang_parser
-
+        
         ## run the installation code last
         self.install_builtins()
         self.install_blind_builtins()

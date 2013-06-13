@@ -28,18 +28,20 @@ class EzhilInterpreter( Interpreter ):
     
 if __name__ == "__main__":
     lang = 'ezhil';
-    [fname, debug]= get_prog_name(lang)
-    if ( fname == "-stdin" or fname == None):
+    [fname, debug, dostdin ]= get_prog_name(lang)
+    if ( dostdin ):
         ## interactive interpreter
         lexer = EzhilLex( )
         parse_eval = EzhilInterpreter( lexer, debug )
         REPL( lang, lexer, parse_eval, debug )
     else:
-        ## evaluate a file
-        lexer = EzhilLex(fname)
-        if ( debug ): lexer.dump_tokens()
-        parse_eval = EzhilInterpreter( lexer, debug )
-        parse_eval.parse()
-        if ( debug ):  print "*"*60;  print str(parse_eval)
-        env = parse_eval.evaluate()
+        ## evaluate a files sequentially
+        for files in fname:
+            lexer = EzhilLex(files)
+            if ( debug ): lexer.dump_tokens()
+            parse_eval = EzhilInterpreter( lexer, debug )
+            parse_eval.parse()
+            if ( debug ):  print "*"*60;  print str(parse_eval)
+            env = parse_eval.evaluate()
+        
     pass

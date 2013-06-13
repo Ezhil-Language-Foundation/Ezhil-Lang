@@ -10,18 +10,20 @@ from Interpreter import Interpreter, REPL, Lex, get_prog_name
 
 if __name__ == "__main__":      
     lang = 'exprs';
-    [fname, debug]= get_prog_name(lang)
-    if ( fname == "-stdin" or fname == None):
+    [fname, debug, dostdin ]= get_prog_name(lang)
+    if ( dostdin ):
         ## interactive interpreter
         lexer = Lex( )
         parse_eval = Interpreter( lexer, debug )
         REPL( lang, lexer, parse_eval, debug )
     else:
-        ## evaluate a file
-        lexer = Lex(fname)       
-        if ( debug ): lexer.dump_tokens()
-        parse_eval = Interpreter( lexer, debug )  
-        parse_eval.parse()
-        if ( debug ):  print "*"*60;  print str(parse_eval)
-        env = parse_eval.evaluate()
+        ## evaluate a files sequentially
+        for files in fname:
+            ## evaluate a file
+            lexer = Lex(files)
+            if ( debug ): lexer.dump_tokens()
+            parse_eval = Interpreter( lexer, debug )  
+            parse_eval.parse()
+            if ( debug ):  print "*"*60;  print str(parse_eval)
+            env = parse_eval.evaluate()
     pass
