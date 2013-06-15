@@ -42,7 +42,7 @@ class BuiltinFunction:
             raise RuntimeException("Too few args to bulitin function " + self.name)
 
         if ( self.use_adicity ):
-            if ( True or self.dbg ): print self.fn, args, self.padic
+            if ( self.debug ): print self.fn, args, self.padic
             rval = apply( self.fn, args[0:self.padic] )
         else:
             try:
@@ -86,11 +86,6 @@ class Environment:
         """ get if break or return was set for use in loops """
         val = self.Break or self.Return
         return val
-
-    def clear_break(self):
-        """ execute a break statement """
-        self.Break = False
-        return False
 
     def clear_break(self):
         """ reset after a break statement """
@@ -203,8 +198,8 @@ class Environment:
         val = None
         if not self.has_id(idee):
             raise RuntimeException("Identifier %s not found"%idee)
-        vars = self.local_vars[-1]
-        val = vars[idee]
+        variables = self.local_vars[-1]
+        val = variables[idee]
         self.dbg_msg("get_id: val = "+str(val))
         return val
 

@@ -13,7 +13,7 @@ about 1500LOC.
 
 If you would like to tryout the code, all you need
 is a python interpreter, and the code from 
-http://omega.uta.edu/~mxa6471/exprs.tar.gz
+https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zi
 
 Interesting features include support for recursion,
 and an interactive interpreter. Ezhil supports a Turtle module

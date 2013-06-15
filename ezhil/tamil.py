@@ -129,8 +129,8 @@ def agaram_len( ):
 def uyirmei_len( ):
         return TA_UYIRMEI_LEN ##216
 
-def tamil_len( ):
-        return len();
+def tamil_len(  ):
+        return len(tamil_letters)
 
 ## access the letters
 def uyir( idx ):
@@ -149,7 +149,7 @@ def uyirmei( idx ):
        assert( idx >= 0 and idx < uyirmei_len() )
        return uyirmei_letters[idx]
 
-def uyirmei( mei_idx, uyir_idx):
+def uyirmei_constructed( mei_idx, uyir_idx):
        idx = mei_idx; idy = uyir_idx;
        assert ( idy >= 0 and idy < uyir_len() )
        assert ( idx >= 0 and idx < mei_len() )
