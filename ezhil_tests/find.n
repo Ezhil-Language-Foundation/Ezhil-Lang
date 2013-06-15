@@ -1,5 +1,7 @@
-## finds y in list-x and returns its position
-## a -1 means not found.
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+# finds y in list-x and returns its position
+# a -1 means not found.
 நிரல்பாகம்  find ( x, y )
     மு = -1;
 
@@ -12,4 +14,3 @@
 
     பின்கொடு மு;
 முடி
-
