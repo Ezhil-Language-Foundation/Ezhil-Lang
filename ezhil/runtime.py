@@ -42,6 +42,7 @@ class BuiltinFunction:
             raise RuntimeException("Too few args to bulitin function " + self.name)
 
         if ( self.use_adicity ):
+            #print self.fn, args, self.padic
             rval = apply( self.fn, args[0:self.padic] )
         else:
             try:
@@ -49,8 +50,8 @@ class BuiltinFunction:
                     rval = apply( self.fn,[args])
                 else:
                     rval = apply( self.fn,args)
-            except Exception, e:
-                raise RuntimeException( str(e) )
+            except Exception as excep:
+                raise RuntimeException( str(excep) )
         env.clear_call()
         ## pop stuff into the call-stack
         env.return_function(self.name)
@@ -61,11 +62,9 @@ class BlindBuiltins(BuiltinFunction):
         os, sys, curses.ascii, math etc. donot check arguments 
         here.    """
     def __init__(self,fn,name,dbg = False,aslist=False):
-        self.fn = fn
-        self.name = name
-        self.padic = -1
+        self.padic = -1;
+        BuiltinFunction.__init__(self,fn,name,self.padic,dbg)
         self.use_adicity = False
-        self.debug = dbg
         self.aslist = aslist
 
     
@@ -180,32 +179,32 @@ class Environment:
         self.local_vars.pop()
         return
 
-    def has_id(self, id):
+    def has_id(self, idee):
         """ check various 'scopes' for ID variable """
         rval = False
         if ( len( self.local_vars ) == 0 ):
             return False
-        vars = self.local_vars[-1]
-        rval = vars.has_key(id)
+        variables = self.local_vars[-1]
+        rval = variables.has_key(idee)
         return rval
 
-    def set_id(self, id, val, global_id = False):
+    def set_id(self, idee, val, global_id = False):
         """ someday do global_id """
         if ( len(self.local_vars) > 0 ):
             d=self.local_vars[-1]
         else:
             d=dict()
             self.local_vars.append(d)
-        d[id]=val
-        self.dbg_msg("set_id: " + str(id) +" = "+str(val))
+        d[idee]=val
+        self.dbg_msg("set_id: " + str(idee) +" = "+str(val))
         return
 
-    def get_id(self, id):
+    def get_id(self, idee):
         val = None
-        if not self.has_id(id):
-            raise RuntimeException("Identifier %s not found"%id)
+        if not self.has_id(idee):
+            raise RuntimeException("Identifier %s not found"%idee)
         vars = self.local_vars[-1]
-        val = vars[id]
+        val = vars[idee]
         self.dbg_msg("get_id: val = "+str(val))
         return val
 

@@ -32,6 +32,9 @@ from errors import RuntimeException, ParseException
 from runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils
 
+# turtle graphics
+from EZTurtle import EZTurtle
+
 ## builtins
 import random
 
@@ -274,6 +277,16 @@ class Interpreter(DebugUtils):
         self.builtin_map["max"]=BuiltinFunction(max,"max",2)
         self.builtin_map["min"]=BuiltinFunction(min,"min",2)
         self.builtin_map["exit"]=BuiltinFunction(min,"exit",1)
+
+        # turtle functions
+        turtle_attrib = EZTurtle.functionAttributes();
+        for nargs,fcnName in turtle_attrib.items():
+            for vv in fcnName:
+                turtlefcn = "turtle_"+vv;
+                print nargs, vv
+                self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
+            
+        
         return True
 
     def __repr__(self):
