@@ -16,7 +16,8 @@ is a python interpreter, and the code from
 http://omega.uta.edu/~mxa6471/exprs.tar.gz
 
 Interesting features include support for recursion,
-and an interactive interpreter, if only skeletal.
+and an interactive interpreter. Ezhil supports a Turtle module
+for simple on-screen graphics, similar to LOGO language from 1960s.
 
 USAGE
 =====
