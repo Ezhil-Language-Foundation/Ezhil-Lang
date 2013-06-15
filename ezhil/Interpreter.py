@@ -283,7 +283,7 @@ class Interpreter(DebugUtils):
         for nargs,fcnName in turtle_attrib.items():
             for vv in fcnName:
                 turtlefcn = "turtle_"+vv;
-                print nargs, vv
+                #print nargs, vv
                 self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
             
         

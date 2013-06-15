@@ -42,7 +42,7 @@ class BuiltinFunction:
             raise RuntimeException("Too few args to bulitin function " + self.name)
 
         if ( self.use_adicity ):
-            #print self.fn, args, self.padic
+            if ( True or self.dbg ): print self.fn, args, self.padic
             rval = apply( self.fn, args[0:self.padic] )
         else:
             try:
