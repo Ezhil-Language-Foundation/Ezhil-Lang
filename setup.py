@@ -16,4 +16,3 @@ setup(name='ezhil',
       long_description=open('README.md','r','UTF-8').read(),
       download_url='https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip',#pip
       )
-
