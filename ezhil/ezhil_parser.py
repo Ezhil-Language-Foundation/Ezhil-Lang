@@ -366,7 +366,7 @@ class EzhilParser(Parser):
              or  tok.kind in  EzhilToken.COMPARE 
              or tok.kind in  EzhilToken.EXPMOD  ):
             binop=self.dequeue()
-            val2=self.expr()
+            val2=self.term()
             [l,c] = binop.get_line_col()
             res=Expr(val1,binop,val2, l, c, self.debug)
 
