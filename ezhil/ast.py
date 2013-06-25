@@ -46,12 +46,12 @@ class Identifier:
     def evaluate(self,env):
         if ( env.has_id(self.id)):
             val = env.get_id(self.id)
-            if ( hasattr( val, '__float__' ) ):
-                val = float(val)
+            if ( hasattr( val, 'evaluate' ) ):
+                val = val.evaluate(env)
             elif ( val.__class__ == str ):
                 val = val
             else:
-                val = val.evaluate(env)
+                val = val
             self.dbg_msg( str(self) + " = val ["+str(val) + "]" )
             return val
         raise RuntimeException("Cannot Find Identifier %s at \
@@ -61,7 +61,6 @@ class Identifier:
     def visit_identifier(self, walker):
         walker.visit_identifier(self)
         return
-
 
 class String:
     def __init__(self,s, l = 0, c = -1, dbg = False):
