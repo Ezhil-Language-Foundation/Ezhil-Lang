@@ -19,6 +19,7 @@ import argparse
 from math import *
 import copy
 import os, sys, string, inspect
+import string
 
 from ast import String, Number
 
@@ -142,10 +143,32 @@ class Interpreter(DebugUtils):
         if ( isinstance(op,int) or isinstance(op,float) ):
             return Number(0.0+op)
         return String( op )
+
+    @staticmethod   
+    def SPRINTF_worker(*args):        
+        if ( len(args) < 1 ):
+            raise Exception('Not enough arguments to printf() function')
+        fmt = args[0]
+        arg = tuple( args[1:] );
+        opstr = fmt%arg;
+        return opstr
+
+    @staticmethod
+    def SPRINTF(*args):
+        opstr = apply( Interpreter.SPRINTF_worker, args );
+        return String(opstr)
+    
+    @staticmethod   
+    def PRINTF(*args):
+        str_op = apply(Interpreter.SPRINTF_worker,args);
+        print str_op
+        return Number(len(str_op))
     
     def install_builtins(self):
         """ populate with the builtin functions"""
-
+        self.builtin_map['printf']=BlindBuiltins(Interpreter.PRINTF,'printf',self.debug)
+        self.builtin_map['sprintf']=BlindBuiltins(Interpreter.SPRINTF,'sprintf',self.debug)
+        
         self.builtin_map['abs']=BlindBuiltins(abs,'abs',self.debug)
         self.builtin_map['all']=BlindBuiltins(all,'all',self.debug)
         self.builtin_map['any']=BlindBuiltins(any,'any',self.debug)
@@ -285,7 +308,58 @@ class Interpreter(DebugUtils):
                 turtlefcn = "turtle_"+vv;
                 #print nargs, vv
                 self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
-            
+        
+        #string functions
+#       for x in dir(string):
+#            if ( x.__str__()[0] != '_' ):
+#                name = x.__str__()
+#                print "self.builtin_map[\"%s\"] = BuiltinFunction(getattr(string,\"%s\"),\"%s\")"%(name,name,name)
+        
+        self.builtin_map["ascii_letters"] = BuiltinFunction(getattr(string,"ascii_letters"),"ascii_letters",0)
+        self.builtin_map["ascii_lowercase"] = BuiltinFunction(getattr(string,"ascii_lowercase"),"ascii_lowercase",0)
+        self.builtin_map["ascii_uppercase"] = BuiltinFunction(getattr(string,"ascii_uppercase"),"ascii_uppercase",0)
+        self.builtin_map["atof"] = BuiltinFunction(getattr(string,"atof"),"atof")
+        self.builtin_map["atof_error"] = BuiltinFunction(getattr(string,"atof_error"),"atof_error")
+        self.builtin_map["atoi"] = BuiltinFunction(getattr(string,"atoi"),"atoi")
+        self.builtin_map["atoi_error"] = BuiltinFunction(getattr(string,"atoi_error"),"atoi_error")
+        self.builtin_map["atol"] = BuiltinFunction(getattr(string,"atol"),"atol")
+        self.builtin_map["atol_error"] = BuiltinFunction(getattr(string,"atol_error"),"atol_error")
+        self.builtin_map["capitalize"] = BuiltinFunction(getattr(string,"capitalize"),"capitalize")
+        self.builtin_map["capwords"] = BuiltinFunction(getattr(string,"capwords"),"capwords")
+        self.builtin_map["center"] = BuiltinFunction(getattr(string,"center"),"center")
+        self.builtin_map["count"] = BuiltinFunction(getattr(string,"count"),"count")
+        self.builtin_map["digits"] = BuiltinFunction(getattr(string,"digits"),"digits")
+        self.builtin_map["expandtabs"] = BuiltinFunction(getattr(string,"expandtabs"),"expandtabs")
+        self.builtin_map["find"] = BuiltinFunction(getattr(string,"find"),"find",2)
+        self.builtin_map["hexdigits"] = BuiltinFunction(getattr(string,"hexdigits"),"hexdigits")
+        self.builtin_map["index"] = BuiltinFunction(getattr(string,"index"),"index",2)
+        self.builtin_map["index_error"] = BuiltinFunction(getattr(string,"index_error"),"index_error")
+        self.builtin_map["join"] = BuiltinFunction(getattr(string,"join"),"join")
+        self.builtin_map["joinfields"] = BuiltinFunction(getattr(string,"joinfields"),"joinfields")
+        self.builtin_map["letters"] = BuiltinFunction(getattr(string,"letters"),"letters")
+        self.builtin_map["ljust"] = BuiltinFunction(getattr(string,"ljust"),"ljust")
+        self.builtin_map["lower"] = BuiltinFunction(getattr(string,"lower"),"lower")
+        self.builtin_map["lowercase"] = BuiltinFunction(getattr(string,"lowercase"),"lowercase")
+        self.builtin_map["lstrip"] = BuiltinFunction(getattr(string,"lstrip"),"lstrip")
+        self.builtin_map["maketrans"] = BuiltinFunction(getattr(string,"maketrans"),"maketrans")
+        self.builtin_map["octdigits"] = BuiltinFunction(getattr(string,"octdigits"),"octdigits")
+        self.builtin_map["printable"] = BuiltinFunction(getattr(string,"printable"),"printable")
+        self.builtin_map["punctuation"] = BuiltinFunction(getattr(string,"punctuation"),"punctuation")
+        self.builtin_map["replace"] = BuiltinFunction(getattr(string,"replace"),"replace",3)
+        self.builtin_map["rfind"] = BuiltinFunction(getattr(string,"rfind"),"rfind",2)
+        self.builtin_map["rindex"] = BuiltinFunction(getattr(string,"rindex"),"rindex",2)
+        self.builtin_map["rjust"] = BuiltinFunction(getattr(string,"rjust"),"rjust")
+        self.builtin_map["rsplit"] = BuiltinFunction(getattr(string,"rsplit"),"rsplit")
+        self.builtin_map["rstrip"] = BuiltinFunction(getattr(string,"rstrip"),"rstrip")
+        self.builtin_map["split"] = BuiltinFunction(getattr(string,"split"),"split",2)
+        self.builtin_map["splitfields"] = BuiltinFunction(getattr(string,"splitfields"),"splitfields")
+        self.builtin_map["strip"] = BuiltinFunction(getattr(string,"strip"),"strip")
+        self.builtin_map["swapcase"] = BuiltinFunction(getattr(string,"swapcase"),"swapcase")
+        self.builtin_map["translate"] = BuiltinFunction(getattr(string,"translate"),"translate")
+        self.builtin_map["upper"] = BuiltinFunction(getattr(string,"upper"),"upper")
+        self.builtin_map["uppercase"] = BuiltinFunction(getattr(string,"uppercase"),"uppercase")
+        self.builtin_map["whitespace"] = BuiltinFunction(getattr(string,"whitespace"),"whitespace")
+        self.builtin_map["zfill"] = BuiltinFunction(getattr(string,"zfill"),"zfill",2)
         
         return True
 

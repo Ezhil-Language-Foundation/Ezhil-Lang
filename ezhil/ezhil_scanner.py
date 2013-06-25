@@ -203,7 +203,7 @@ class EzhilLex ( Lex ) :
                 s = c; idx = idx + 1
                 ## FIXME temporary hack doesnt handle unary ops well.
                 while ( idx < len( data ) 
-                        and ( not data[idx] in [ " ", "\t","\n","/", "-","+","^","=","*",")","(" ] )):
+                        and ( not data[idx] in [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(" ] )):
                     s = s + data[idx]
                     idx = idx + 1
                 self.get_lexeme(s, tok_start_idx )
@@ -240,4 +240,4 @@ class EzhilLex ( Lex ) :
         self.tokens.append( eof_tok )
 
         self.tokens.reverse()
-        return 
+        return
