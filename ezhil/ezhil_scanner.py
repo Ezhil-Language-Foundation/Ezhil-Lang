@@ -153,7 +153,7 @@ class EzhilLex ( Lex ) :
             self.tokens = list()
         else:
             data = "".join(self.File.readlines())
-        print data
+        if ( self.debug ): print data
         idx = 0
         tok_start_idx = 0
         

@@ -8,7 +8,6 @@ then
     rm failed.txt
 fi
 
-
 touch success.txt
 touch failed.txt
 ## run all the success programs
@@ -27,7 +26,8 @@ done
 
 # run tests for Ezhil as well
 cd ./ezhil_tests
-for i in hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n
+for i in hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n \
+string_demo.n 
 do
     echo "Testing Ezhil script",$i
     python ../ezhil/ezhil.py $i $1

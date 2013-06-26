@@ -436,7 +436,7 @@ def REPL(lang, lexer, parse_eval, debug=False):
             buffer = sys.stdin.readline();
             buffer = buffer.strip()
             line_no += 1
-            if ( buffer == 'exit' ):
+            if ( buffer.strip() == 'exit' ):
                 do_quit = True
         except EOFError, e:
             print "End of Input reached\n"

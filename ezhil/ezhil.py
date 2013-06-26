@@ -20,10 +20,12 @@ class EzhilInterpreter( Interpreter ):
     def install_builtins(self):
         """ populate with the builtin functions, while adding our own flavors"""
         Interpreter.install_builtins(self)
-        
-        # input statements        
-        self.builtin_map["உள்ளீடு"]=self.builtin_map["input"];
-        self.builtin_map["சரம்_உள்ளீடு"]=self.builtin_map["raw_input"];
+                        
+        #input statements, length constructs
+        tamil_equiv = {"சரம்_பதிலீடு":"replace",            "சரம்_கண்டுபிடிக்க":"find",         "நீளம்":"len",
+                                "சரம்_உள்ளீடு":"raw_input",       "உள்ளீடு" : "input" }
+        for k,v in tamil_equiv.items():
+            self.builtin_map[k]=self.builtin_map[v];
         
         # translations for turtle module
         turtle_map = { "முன்னாடி":"forward", "பின்னாடி" :"backward",
