@@ -360,7 +360,38 @@ class Interpreter(DebugUtils):
         self.builtin_map["uppercase"] = BuiltinFunction(getattr(string,"uppercase"),"uppercase")
         self.builtin_map["whitespace"] = BuiltinFunction(getattr(string,"whitespace"),"whitespace")
         self.builtin_map["zfill"] = BuiltinFunction(getattr(string,"zfill"),"zfill",2)
+
+        #add list methods - first argument, when required, is always a list obj
+        self.builtin_map["append"] = BuiltinFunction(list.append,"append",2)
+        self.builtin_map["insert"] = BuiltinFunction(list.insert,"insert",3)
+        self.builtin_map["index"] = BuiltinFunction(list.index,"index",2)
+        self.builtin_map["list"] = BuiltinFunction(list,"list",0)
+        self.builtin_map["pop"] = BuiltinFunction(list.pop,"pop",1)
+        self.builtin_map["sort"] = BuiltinFunction(list.sort,"sort",1)
+        self.builtin_map["count"]= BuiltinFunction(list.count,"count",2)
+        self.builtin_map["extend"]= BuiltinFunction(list.extend,"extend",2)
+        self.builtin_map["reverse"]= BuiltinFunction(list.reverse,"resverse",1)
         
+        # #dictionary methods - 
+        # self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
+        # self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
+        # self.builtin_map["fromkeys"]= BuiltinFunction(dict.fromkeys,"fromkeys",1)
+        # self.builtin_map["get"]= BuiltinFunction(dict.get,"get",1)
+        # self.builtin_map["has_key"]= BuiltinFunction(dict.has_key,"has_key",1)
+        # self.builtin_map["items"]= BuiltinFunction(dict.items,"items",1)
+        # self.builtin_map["iteritems"]= BuiltinFunction(dict.iteritems,"iteritems",1)
+        # self.builtin_map["iterkeys"]= BuiltinFunction(dict.iterkeys,"iterkeys",1)
+        # self.builtin_map["itervalues"]= BuiltinFunction(dict.itervalues,"itervalues",1)
+        # self.builtin_map["keys"]= BuiltinFunction(dict.keys,"keys",1)
+        # self.builtin_map["pop"]= BuiltinFunction(dict.pop,"pop",1)
+        # self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
+        # self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
+        # self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
+        # self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
+        # self.builtin_map["viewitems"]= BuiltinFunction(dict.viewitems,"viewitems",1)
+        # self.builtin_map["viewkeys"]= BuiltinFunction(dict.viewkeys,"viewkeys",1)
+        # self.builtin_map["viewvalues"]= BuiltinFunction(dict.viewvalues,"viewvalues",1)
+
         return True
 
     def __repr__(self):

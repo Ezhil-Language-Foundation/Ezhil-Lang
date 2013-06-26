@@ -1,0 +1,23 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+
+பதிப்பி " சேர்க்க செய்வது"
+
+ப = list()
+append( ப , 15 )
+append( ப , -1 )
+append( ப , 10 )
+பதிப்பி ப
+
+reverse( ப )
+பதிப்பி "list is reversed", ப
+
+sort( ப )
+பதிப்பி "list is sorted", ப
+
+extend( ப , ப  )
+பதிப்பி "list was doubled in size", ப
+
+append( ப , "பதிப்பி" )
+பதிப்பி "list can hold different types", ப
