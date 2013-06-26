@@ -189,9 +189,16 @@ class EzhilLex ( Lex ) :
                 s = c; idx = idx + 1
                 while ( idx < len( data ) and
                          ( data[idx] != '\"' ) ):
-                    s = s + data[idx]
                     if ( data[idx] == '\\' ):
                         idx = idx + 1
+                        if ( data[idx] == 'n' ):
+                            s = s + '\n'
+                        elif ( data[idx] == 't' ):
+                            s = s + '\t'
+                        else:
+                            s = s + data[idx]
+                    else:
+                        s = s + data[idx]
                     idx  = idx + 1
                 s = s+data[idx]
                 idx  = idx + 1
