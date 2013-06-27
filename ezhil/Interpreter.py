@@ -370,7 +370,8 @@ class Interpreter(DebugUtils):
         self.builtin_map["sort"] = BuiltinFunction(list.sort,"sort",1)
         self.builtin_map["count"]= BuiltinFunction(list.count,"count",2)
         self.builtin_map["extend"]= BuiltinFunction(list.extend,"extend",2)
-        self.builtin_map["reverse"]= BuiltinFunction(list.reverse,"resverse",1)
+        self.builtin_map["reverse"]= BuiltinFunction(list.reverse,"reverse",1)
+        self.builtin_map["get"]= BuiltinFunction(list.__getitem__,"get",2)
         
         # #dictionary methods - 
         # self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
