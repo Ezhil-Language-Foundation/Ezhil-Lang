@@ -150,7 +150,7 @@ class ExprCall:
             eval_arglist = [ i.evaluate(env) for i in self.arglist.get_list()];
             env.set_args(  eval_arglist )
             rval = fval.evaluate(env)
-            self.dbg_msg( "function retval ="+str(rval))
+            self.dbg_msg( "function retval ="+str(rval)+str(type(rval)))
         else:
             raise RuntimeException("undefined function: %s near ( %d, %d )"%(self.fname, self.line, self.col) )
         return rval
@@ -321,13 +321,16 @@ class Expr(Stmt):
 
     def evaluate(self,env):
         term=self.term.evaluate(env)
+        #print term, type(term)
         if self.binop.kind in Token.BINOP:
             tnext = self.next_expr.evaluate(env)
             tval = self.normalize_values( term, env)
             tval2 = self.normalize_values( tnext, env)
+            #print tval, type(tval), tval2, type(tval2)
             term = self.do_binop(tval,
                                  tval2,
                                  self.binop.kind)
+        #print "term = ",term, term.__class__
         return term
 
     def visit_expr(self, walker):
@@ -606,7 +609,8 @@ class EvalStmt(Stmt):
         self.col = c
 
     def __repr__(self):
-        return "\n\t [EvalStmt[ "+ str(self.expr)+"]]"
+        #print type(self.expr)
+        return "\n\t [EvalStmt[ "+ str(self.expr)+"/"+str((self.expr.__class__))+"]]"
 
     def evaluate(self,env):
         return self.expr.evaluate(env)
@@ -651,6 +655,11 @@ class ValueList:
 
     def get_list(self):
         return self.args
+
+    #def evaluate(self):
+    #    if ( isinstance(self.args,list) and len(self.args) == 1):
+    #        return self.args[0]
+    #    return self.args
 
     def __repr__(self):
         return "\n\t [ValueList["+ ",".join(map(str,self.args))+"]]"

@@ -43,9 +43,10 @@ class BuiltinFunction:
 
         if ( self.use_adicity ):
             if ( self.debug ): print self.fn, args, self.padic
-            rval = apply( self.fn, args[0:self.padic] )
+            rval = apply( self.fn, [hasattr(a,'evaluate') and a.evaluate(env) or a for a in args[0:self.padic]] )
         else:
             try:
+                args = [hasattr(a,'evaluate') and a.evaluate(env) or a for a in args];
                 if ( self.aslist ):
                     rval = apply( self.fn,[args])
                 else:

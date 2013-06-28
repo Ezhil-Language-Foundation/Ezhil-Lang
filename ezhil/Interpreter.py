@@ -52,6 +52,16 @@ from parser import Parser
 ## Transform / Visitor
 from transform import TreeWalker
 
+def ezhil_copyright():
+	return u"(C) 2007-2013 Muthiah Annamalai"
+
+# you can also, get your name here, its easy!
+def ezhil_credits():
+	return u"Ezhil language was created by Muthiah Annamalai in 2007-2008"
+
+def ezhil_license():
+	return u"Licensed under GPL Version 3"
+
 # program name
 def get_prog_name(lang):
     prog_name=None
@@ -186,8 +196,8 @@ class Interpreter(DebugUtils):
         self.builtin_map['coerce']=BlindBuiltins(coerce,'coerce',self.debug)
         self.builtin_map['compile']=BlindBuiltins(compile,'compile',self.debug)
         self.builtin_map['complex']=BlindBuiltins(complex,'complex',self.debug)
-        self.builtin_map['copyright']=BlindBuiltins(copyright,'copyright',self.debug)
-        self.builtin_map['credits']=BlindBuiltins(credits,'credits',self.debug)
+        self.builtin_map['copyright']=BlindBuiltins(ezhil_copyright,'copyright',self.debug)
+        self.builtin_map['credits']=BlindBuiltins(ezhil_credits,'credits',self.debug)
         self.builtin_map['delattr']=BlindBuiltins(delattr,'delattr',self.debug)
         self.builtin_map['dict']=BlindBuiltins(dict,'dict',self.debug)
         self.builtin_map['dir']=BlindBuiltins(dir,'dir',self.debug)
@@ -208,16 +218,16 @@ class Interpreter(DebugUtils):
         self.builtin_map['help']=BlindBuiltins(help,'help',self.debug)
         self.builtin_map['hex']=BlindBuiltins(hex,'hex',self.debug)
         self.builtin_map['id']=BlindBuiltins(id,'id',self.debug)
-        self.builtin_map['input']=BlindBuiltins(input,'input',self.debug)
+        #self.builtin_map['input']=BlindBuiltins(input,'input',self.debug)
         self.builtin_map['int']=BlindBuiltins(int,'int',self.debug)
         self.builtin_map['intern']=BlindBuiltins(intern,'intern',self.debug)
         self.builtin_map['isinstance']=BlindBuiltins(isinstance,'isinstance',self.debug)
         self.builtin_map['issubclass']=BlindBuiltins(issubclass,'issubclass',self.debug)
         self.builtin_map['iter']=BlindBuiltins(iter,'iter',self.debug)
         self.builtin_map['len']=BlindBuiltins(len,'len',self.debug)
-        self.builtin_map['license']=BlindBuiltins(license,'license',self.debug)
-        self.builtin_map['list']=BlindBuiltins(list,'list',self.debug)
-        self.builtin_map['locals']=BlindBuiltins(locals,'locals',self.debug)
+        self.builtin_map['license']=BlindBuiltins(ezhil_license,'license',self.debug)
+        #self.builtin_map['list']=BlindBuiltins(list,'list',self.debug)
+        #self.builtin_map['locals']=BlindBuiltins(locals,'locals',self.debug)
         self.builtin_map['long']=BlindBuiltins(long,'long',self.debug)
         self.builtin_map['map']=BlindBuiltins(map,'map',self.debug)
         self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
@@ -232,7 +242,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['property']=BlindBuiltins(property,'property',self.debug)
         self.builtin_map['quit']=BlindBuiltins(quit,'quit',self.debug)
         self.builtin_map['range']=BlindBuiltins(range,'range',self.debug)
-        self.builtin_map['raw_input']=BlindBuiltins(raw_input,'raw_input',self.debug)
+        #self.builtin_map['raw_input']=BlindBuiltins(raw_input,'raw_input',self.debug)
         self.builtin_map['reduce']=BlindBuiltins(reduce,'reduce',self.debug)
         self.builtin_map['reload']=BlindBuiltins(reload,'reload',self.debug)
         self.builtin_map['repr']=BlindBuiltins(repr,'repr',self.debug)
