@@ -1,1 +1,2 @@
-python ./ezhil/ezhil.py -stdin
+python ./ezhil/ezhil.py  %options%
+::-stdin

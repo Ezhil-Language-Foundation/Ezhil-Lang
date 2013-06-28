@@ -6,10 +6,9 @@
 ## This module is the scanner for the exprs language.
 ## It contains classes Token, Lexeme, and  Lex.
 ## 
-from curses.ascii import *
+from EzhilUtils import *
 from errors import ScannerException
 import re
-
 
 ## SCANNER
 class Token:
