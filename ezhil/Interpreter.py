@@ -316,8 +316,11 @@ class Interpreter(DebugUtils):
         for nargs,fcnName in turtle_attrib.items():
             for vv in fcnName:
                 turtlefcn = "turtle_"+vv;
-                #print nargs, vv
-                self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
+                if ( self.debug ): print nargs, vv
+                if ( nargs == -1 ):
+                    self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv),vv,self.debug)
+                else:
+                    self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
         
         #string functions
 #       for x in dir(string):

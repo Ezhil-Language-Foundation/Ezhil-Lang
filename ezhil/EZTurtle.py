@@ -16,11 +16,12 @@ class EZTurtle:
     
     @staticmethod
     def functionAttributes():
-        attrib = {0:['home','showturtle','hideturtle','penup','pendown','clear','isvisible',],
-                  1:['rt','lt','forward','backward'],
-                  2:['goto'], }
+        attrib = {0:['ht','home','showturtle','hideturtle','reset','penup','up','down','pendown','clear','isvisible',],
+                  1:['rt','lt','left','right','forward','fd','bd','backward','color','fill'],
+                  2:['goto'],
+                  -1:['circle'] } #-1 => indicates varargs
         return attrib
-        
+    
     # 0-arg functions
     @staticmethod
     def home():
@@ -41,27 +42,51 @@ class EZTurtle:
     @staticmethod
     def penup():
         apply(EZTurtle.getInstance().penup,[])
+    up = penup;
+    #@staticmethod
+    #def up():
+    #   EZTurtle.penup()
     
     @staticmethod
     def pendown():
         apply(EZTurtle.getInstance().pendown,[])
+        
+    @staticmethod
+    def down():
+        EZTurtle.pendown()
     
     # 1-arg functions
     @staticmethod
     def rt(x):
         apply(EZTurtle.getInstance().rt,[x])
+
+    @staticmethod
+    def right(x):
+        EZTurtle.rt(x)
     
     @staticmethod
     def lt(x):
         apply(EZTurtle.getInstance().lt,[x])
-
+    
+    @staticmethod
+    def left(x):
+        EZTurtle.lt(x)
+        
     @staticmethod
     def forward(x):
         apply( EZTurtle.getInstance().forward,[x])
-    
+
+    @staticmethod
+    def fd(x):
+        EZTurtle.forward(x)
+            
     @staticmethod
     def backward(x):
         apply(EZTurtle.getInstance().backward,[x])
+
+    @staticmethod
+    def bd(x):
+        EZTurtle.backward(x)
     
     @staticmethod
     def back(x):
@@ -72,8 +97,8 @@ class EZTurtle:
         apply(EZTurtle.getInstance().bk,[x])
 
     @staticmethod
-    def circle(x):
-        apply(EZTurtle.getInstance().circle,[x])
+    def circle(*x): #polymorphic invocation supported here
+        apply(EZTurtle.getInstance().circle,x)
 
     @staticmethod
     def clearstamp(x):
@@ -88,8 +113,8 @@ class EZTurtle:
         apply(EZTurtle.getInstance().clone,[x])
 
     @staticmethod
-    def color(x,y):
-        apply(EZTurtle.getInstance().color,[x,y])
+    def color(x):
+        apply(EZTurtle.getInstance().color,[x])
 
     @staticmethod
     def degrees(x):
@@ -102,10 +127,6 @@ class EZTurtle:
     @staticmethod
     def dot(x):
         apply(EZTurtle.getInstance().dot,[x])
-
-    @staticmethod
-    def down(x):
-        apply(EZTurtle.getInstance().down,[x])
 
     @staticmethod
     def fd(x):
@@ -140,8 +161,8 @@ class EZTurtle:
         apply(EZTurtle.getInstance().heading,[x])
 
     @staticmethod
-    def ht(x):
-        apply(EZTurtle.getInstance().ht,[x])
+    def ht():
+        apply(EZTurtle.getInstance().ht,[])
 
     @staticmethod
     def isdown(x):
@@ -282,10 +303,6 @@ class EZTurtle:
     @staticmethod
     def undobufferentries(x):
         apply(EZTurtle.getInstance().undobufferentries,[x])
-
-    @staticmethod
-    def up(x):
-        apply(EZTurtle.getInstance().up,[x])
 
     @staticmethod
     def width(x):

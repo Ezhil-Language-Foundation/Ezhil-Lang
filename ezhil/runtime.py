@@ -178,6 +178,8 @@ class Environment:
     def has_id(self, idee):
         """ check various 'scopes' for ID variable """
         rval = False
+        if idee in ['True', 'False']:
+            return True
         if ( len( self.local_vars ) == 0 ):
             return False
         variables = self.local_vars[-1]
@@ -197,6 +199,8 @@ class Environment:
 
     def get_id(self, idee):
         val = None
+        if idee in ['True', 'False']:
+            return bool(idee)
         if not self.has_id(idee):
             raise RuntimeException("Identifier %s not found"%idee)
         variables = self.local_vars[-1]
