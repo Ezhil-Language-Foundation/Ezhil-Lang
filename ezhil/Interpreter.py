@@ -47,7 +47,7 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  String
 
 ## Parser
-from parser import Parser
+from ExprsParser import Parser
 
 ## Transform / Visitor
 from transform import TreeWalker

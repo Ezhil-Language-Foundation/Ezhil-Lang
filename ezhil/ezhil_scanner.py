@@ -8,7 +8,7 @@
 ## It contains classes EzhilLex.
 ## 
 
-from curses.ascii import *
+from EzhilUtils import *
 import re
 from scanner import Token, Lexeme, Lex
 from tamil import has_tamil, istamil, istamil_alnum

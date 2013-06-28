@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 ##
 ## (C) 2007, 2008 Muthiah Annamalai,
 ## Licensed under GPL Version 3
@@ -36,7 +36,7 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  String
 
 ## use exprs language parser
-from parser import Parser
+from ExprsParser import Parser
 
 ## Parser implementes the grammar for 'exprs' language.
 ## Entry point is parse(), after appropriate ctor-setup.

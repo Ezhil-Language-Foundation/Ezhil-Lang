@@ -6,7 +6,7 @@
 ## This module is the runtime elements for the exprs language.
 ## It contains classes 
 ## 
-from curses.ascii import *
+#from curses.ascii import *
 from errors import RuntimeException
 
 ## RUNTIME / LIBRARY etc

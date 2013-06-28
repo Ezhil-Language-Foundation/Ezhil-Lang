@@ -1,9 +1,9 @@
-##This Python file uses the following encoding: utf-8
+﻿##This Python file uses the following encoding: utf-8
 ##
 # (C) 2007, 2008 Muthiah Annamalai <gnumuthu@user.sf.net>
 ## Licensed under GPL Version 3
 
-from curses.ascii import *
+from EzhilUtils import *
 
 ## constants
 TA_ACCENT_LEN = 13 #12 + 1
