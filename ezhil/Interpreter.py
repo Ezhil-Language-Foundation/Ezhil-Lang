@@ -142,7 +142,17 @@ class Interpreter(DebugUtils):
             bfn = getattr( sys ,b)
             self.add_blind_fcns( bfn, b)
     
-    # marshalling
+    @staticmethod
+    def ezhil_assert( x  ):
+        try:
+           assert x
+        except Exception as excep:
+           print str(excep)
+           raise Exception('Assertion failed!')
+           return False
+	return True
+
+    # marshalling    	    
     @staticmethod
     def RAWINPUT(args):
         op = raw_input(args)
@@ -270,7 +280,7 @@ class Interpreter(DebugUtils):
         self.builtin_map["raw_input"]=BuiltinFunction(Interpreter.RAWINPUT,"raw_input")
 
         # assert
-        self.builtin_map["assert"]=BuiltinFunction(lambda x: x and True or Exception('Assertion failed!'),"assert")
+        self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
         
         # random functions
         aslist = True;

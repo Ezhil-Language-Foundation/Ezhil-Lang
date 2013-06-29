@@ -121,7 +121,7 @@ class Lex:
         self.spc=re.compile("\s+")
         self.newlines=re.compile("\n+")        
         self.unary_binary_ops = \
-            [ '+','-','=','*','/','>','<','%','^']
+            [ '+','-','=','*','/','>','<','%','^','!=','!']
             #['[',']','(', ')', '+','-','=','*','/','>','<','%','^']
 
         ## need to be the last on init & only for files

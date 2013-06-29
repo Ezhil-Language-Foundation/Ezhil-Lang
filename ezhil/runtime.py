@@ -200,7 +200,7 @@ class Environment:
     def get_id(self, idee):
         val = None
         if idee in ['True', 'False']:
-            return bool(idee)
+            return (idee == 'True')
         if not self.has_id(idee):
             raise RuntimeException("Identifier %s not found"%idee)
         variables = self.local_vars[-1]
