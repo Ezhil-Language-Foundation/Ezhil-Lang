@@ -85,7 +85,7 @@ class Parser(DebugUtils):
     def __repr__(self):
         rval =  "[Interpreter: "
         rval = rval + "[Functions["
-        for k in self.function_map.keys():
+        for k in list(self.function_map.keys()):
             rval = rval + "\n "+ str(self.function_map[k]) 
         rval = rval +"]] "+ str(self.ast) +"]\n"
         return rval
@@ -93,10 +93,10 @@ class Parser(DebugUtils):
     def warn_function_overrides( self, func_name ):
         ## used in defining user-functions to see
         ## if they shadow builtins.
-        val =  ( self.function_map.has_key(func_name) \
-                     or self.builtin_map.has_key(func_name) )
+        val =  ( func_name in self.function_map \
+                     or func_name in self.builtin_map )
         if ( val ):
-            print "WARNING: function %s overrides builtin"%(func_name)
+            print("WARNING: function %s overrides builtin"%(func_name))
         return val
 
     def parse(self):
@@ -438,5 +438,3 @@ class Parser(DebugUtils):
         
         self.dbg_msg( "factor-returning: "+str(val) )
         return val
-
-

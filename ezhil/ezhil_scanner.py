@@ -144,7 +144,7 @@ class EzhilLex ( Lex ) :
         """ do hard-work of tokenizing and
         put EzhilLexemes into the tokens[] Q """
         if ( self.stdin_mode ):
-            if ( self.debug ): print self.tokens
+            if ( self.debug ): print(self.tokens)
             ## cleanup the Q for stdin_mode of any EOF that can remain.
             if ( len(self.tokens) != 0 ):
                 self.match( EzhilToken.EOF )
@@ -153,7 +153,7 @@ class EzhilLex ( Lex ) :
             self.tokens = list()
         else:
             data = "".join(self.File.readlines())
-        if ( self.debug ): print data
+        if ( self.debug ): print(data)
         idx = 0
         tok_start_idx = 0
         

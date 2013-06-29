@@ -24,6 +24,6 @@ if __name__ == "__main__":
             if ( debug ): lexer.dump_tokens()
             parse_eval = Interpreter( lexer, debug )  
             parse_eval.parse()
-            if ( debug ):  print "*"*60;  print str(parse_eval)
+            if ( debug ):  print("*"*60);  print(str(parse_eval))
             env = parse_eval.evaluate()
     pass

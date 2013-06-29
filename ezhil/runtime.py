@@ -17,7 +17,7 @@ class DebugUtils:
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
-            print "## ",msg
+            print("## ",msg)
         return
 
 class BuiltinFunction:
@@ -42,15 +42,15 @@ class BuiltinFunction:
             raise RuntimeException("Too few args to bulitin function " + self.name)
 
         if ( self.use_adicity ):
-            if ( self.debug ): print self.fn, args, self.padic
-            rval = apply( self.fn, [hasattr(a,'evaluate') and a.evaluate(env) or a for a in args[0:self.padic]] )
+            if ( self.debug ): print(self.fn, args, self.padic)
+            rval = self.fn(*[hasattr(a,'evaluate') and a.evaluate(env) or a for a in args[0:self.padic]])
         else:
             try:
                 args = [hasattr(a,'evaluate') and a.evaluate(env) or a for a in args];
                 if ( self.aslist ):
-                    rval = apply( self.fn,[args])
+                    rval = self.fn(*[args])
                 else:
-                    rval = apply( self.fn,args)
+                    rval = self.fn(*args)
             except Exception as excep:
                 raise RuntimeException( str(excep) )
         env.clear_call()
@@ -120,7 +120,7 @@ class Environment:
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
-            print msg
+            print(msg)
         return
 
     def __repr__(self):
@@ -183,7 +183,7 @@ class Environment:
         if ( len( self.local_vars ) == 0 ):
             return False
         variables = self.local_vars[-1]
-        rval = variables.has_key(idee)
+        rval = idee in variables
         return rval
 
     def set_id(self, idee, val, global_id = False):
@@ -223,9 +223,9 @@ class Environment:
         return va
     
     def has_function(self, fn):
-        if ( self.builtin_map.has_key(fn) ):
+        if ( fn in self.builtin_map ):
             return True
-        if ( self.function_map.has_key(fn) ):
+        if ( fn in self.function_map ):
             return True
         return False
     
@@ -234,10 +234,10 @@ class Environment:
         if not self.has_function(fn):
             raise RuntimeException("undefined function: "+fn)
 
-        if ( self.builtin_map.has_key(fn) ):
+        if ( fn in self.builtin_map ):
             return self.builtin_map[fn]
 
-        if ( self.function_map.has_key(fn) ):
+        if ( fn in self.function_map ):
             return self.function_map[fn] 
         
         raise RuntimeException("Environment error on fetching function "+fn)

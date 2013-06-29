@@ -28,14 +28,14 @@ class EzhilInterpreter( Interpreter ):
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
                                          "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
                                          "வெளியேஎடு":"pop","பொருந்தியஎண்":"count", "எடு":"get"} )
-        for k,v in tamil_equiv.items():
+        for k,v in list(tamil_equiv.items()):
             self.builtin_map[k]=self.builtin_map[v];
         
         # translations for turtle module
         turtle_map = { "முன்னாடி":"forward", "பின்னாடி" :"backward",
                        "வலது":"lt", "இடது":"rt",
                        "எழுதுகோல்மேலே":"penup",  "எழுதுகோல்கிழே":"pendown"}
-        for k,v in turtle_map.items():
+        for k,v in list(turtle_map.items()):
             vv = "turtle_"+v;
             self.builtin_map[k] = self.builtin_map[vv]
         
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             if ( debug ): lexer.dump_tokens()
             parse_eval = EzhilInterpreter( lexer, debug )
             parse_eval.parse()
-            if ( debug ):  print "*"*60;  print str(parse_eval)
+            if ( debug ):  print("*"*60);  print(str(parse_eval))
             env = parse_eval.evaluate()
         
     pass

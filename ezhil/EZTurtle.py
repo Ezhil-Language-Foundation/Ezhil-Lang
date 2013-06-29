@@ -25,23 +25,23 @@ class EZTurtle:
     # 0-arg functions
     @staticmethod
     def home():
-        apply(EZTurtle.getInstance().home,[])
+        EZTurtle.getInstance().home(*[])
 
     @staticmethod
     def clear():
-        apply(EZTurtle.getInstance().clear,[])
+        EZTurtle.getInstance().clear(*[])
 
     @staticmethod
     def showturtle( ):
-        apply(EZTurtle.getInstance().showturtle,[])
+        EZTurtle.getInstance().showturtle(*[])
 
     @staticmethod
     def hideturtle():
-        apply(EZTurtle.getInstance().hideturtle,[])
+        EZTurtle.getInstance().hideturtle(*[])
     
     @staticmethod
     def penup():
-        apply(EZTurtle.getInstance().penup,[])
+        EZTurtle.getInstance().penup(*[])
     up = penup;
     #@staticmethod
     #def up():
@@ -49,7 +49,7 @@ class EZTurtle:
     
     @staticmethod
     def pendown():
-        apply(EZTurtle.getInstance().pendown,[])
+        EZTurtle.getInstance().pendown(*[])
         
     @staticmethod
     def down():
@@ -58,7 +58,7 @@ class EZTurtle:
     # 1-arg functions
     @staticmethod
     def rt(x):
-        apply(EZTurtle.getInstance().rt,[x])
+        EZTurtle.getInstance().rt(*[x])
 
     @staticmethod
     def right(x):
@@ -66,7 +66,7 @@ class EZTurtle:
     
     @staticmethod
     def lt(x):
-        apply(EZTurtle.getInstance().lt,[x])
+        EZTurtle.getInstance().lt(*[x])
     
     @staticmethod
     def left(x):
@@ -74,7 +74,7 @@ class EZTurtle:
         
     @staticmethod
     def forward(x):
-        apply( EZTurtle.getInstance().forward,[x])
+        EZTurtle.getInstance().forward(*[x])
 
     @staticmethod
     def fd(x):
@@ -82,7 +82,7 @@ class EZTurtle:
             
     @staticmethod
     def backward(x):
-        apply(EZTurtle.getInstance().backward,[x])
+        EZTurtle.getInstance().backward(*[x])
 
     @staticmethod
     def bd(x):
@@ -90,232 +90,232 @@ class EZTurtle:
     
     @staticmethod
     def back(x):
-        apply(EZTurtle.getInstance().back,[x])
+        EZTurtle.getInstance().back(*[x])
 
     @staticmethod
     def bk(x):
-        apply(EZTurtle.getInstance().bk,[x])
+        EZTurtle.getInstance().bk(*[x])
 
     @staticmethod
     def circle(*x): #polymorphic invocation supported here
-        apply(EZTurtle.getInstance().circle,x)
+        EZTurtle.getInstance().circle(*x)
 
     @staticmethod
     def clearstamp(x):
-        apply(EZTurtle.getInstance().clearstamp,[x])
+        EZTurtle.getInstance().clearstamp(*[x])
 
     @staticmethod
     def clearstamps(x):
-        apply(EZTurtle.getInstance().clearstamps,[x])
+        EZTurtle.getInstance().clearstamps(*[x])
 
     @staticmethod
     def clone(x):
-        apply(EZTurtle.getInstance().clone,[x])
+        EZTurtle.getInstance().clone(*[x])
 
     @staticmethod
     def color(x):
-        apply(EZTurtle.getInstance().color,[x])
+        EZTurtle.getInstance().color(*[x])
 
     @staticmethod
     def degrees(x):
-        apply(EZTurtle.getInstance().degrees,[x])
+        EZTurtle.getInstance().degrees(*[x])
 
     @staticmethod
     def distance(x):
-        apply(EZTurtle.getInstance().distance,[x])
+        EZTurtle.getInstance().distance(*[x])
 
     @staticmethod
     def dot(x):
-        apply(EZTurtle.getInstance().dot,[x])
+        EZTurtle.getInstance().dot(*[x])
 
     @staticmethod
     def fd(x):
-        apply(EZTurtle.getInstance().fd,[x])
+        EZTurtle.getInstance().fd(*[x])
 
     @staticmethod
     def fill(x):
-        apply(EZTurtle.getInstance().fill,[x])
+        EZTurtle.getInstance().fill(*[x])
 
     @staticmethod
     def fillcolor(x):
-        apply(EZTurtle.getInstance().fillcolor,[x])
+        EZTurtle.getInstance().fillcolor(*[x])
 
     @staticmethod
     def getpen(x):
-        apply(EZTurtle.getInstance().getpen,[x])
+        EZTurtle.getInstance().getpen(*[x])
 
     @staticmethod
     def getscreen(x):
-        apply(EZTurtle.getInstance().getscreen,[x])
+        EZTurtle.getInstance().getscreen(*[x])
 
     @staticmethod
     def getturtle(x):
-        apply(EZTurtle.getInstance().getturtle,[x])
+        EZTurtle.getInstance().getturtle(*[x])
 
     @staticmethod
     def goto(x,y):
-        apply(EZTurtle.getInstance().goto,[x,y])
+        EZTurtle.getInstance().goto(*[x,y])
 
     @staticmethod
     def heading(x):
-        apply(EZTurtle.getInstance().heading,[x])
+        EZTurtle.getInstance().heading(*[x])
 
     @staticmethod
     def ht():
-        apply(EZTurtle.getInstance().ht,[])
+        EZTurtle.getInstance().ht(*[])
 
     @staticmethod
     def isdown(x):
-        apply(EZTurtle.getInstance().isdown,[x])
+        EZTurtle.getInstance().isdown(*[x])
 
     @staticmethod
     def isvisible():
-        apply(EZTurtle.getInstance().isvisible,[])
+        EZTurtle.getInstance().isvisible(*[])
 
     @staticmethod
     def left(x):
-        apply(EZTurtle.getInstance().left,[x])
+        EZTurtle.getInstance().left(*[x])
 
     @staticmethod
     def ondrag(x):
-        apply(EZTurtle.getInstance().ondrag,[x])
+        EZTurtle.getInstance().ondrag(*[x])
 
     @staticmethod
     def onrelease(x):
-        apply(EZTurtle.getInstance().onrelease,[x])
+        EZTurtle.getInstance().onrelease(*[x])
 
     @staticmethod
     def pd(x):
-        apply(EZTurtle.getInstance().pd,[x])
+        EZTurtle.getInstance().pd(*[x])
 
     @staticmethod
     def pen(x):
-        apply(EZTurtle.getInstance().pen,[x])
+        EZTurtle.getInstance().pen(*[x])
 
     @staticmethod
     def pencolor(x):
-        apply(EZTurtle.getInstance().pencolor,[x])
+        EZTurtle.getInstance().pencolor(*[x])
 
     @staticmethod
     def pensize(x):
-        apply(EZTurtle.getInstance().pensize,[x])
+        EZTurtle.getInstance().pensize(*[x])
 
     @staticmethod
     def pos(x):
-        apply(EZTurtle.getInstance().pos,[x])
+        EZTurtle.getInstance().pos(*[x])
     
     @staticmethod
     def position(x):
-        apply(EZTurtle.getInstance().position,[x])
+        EZTurtle.getInstance().position(*[x])
 
     @staticmethod
     def pu(x):
-        apply(EZTurtle.getInstance().pu,[x])
+        EZTurtle.getInstance().pu(*[x])
 
     @staticmethod
     def radians(x):
-        apply(EZTurtle.getInstance().radians,[x])
+        EZTurtle.getInstance().radians(*[x])
 
     @staticmethod
     def reset(x):
-        apply(EZTurtle.getInstance().reset,[x])
+        EZTurtle.getInstance().reset(*[x])
 
     @staticmethod
     def resizemode(x):
-        apply(EZTurtle.getInstance().resizemode,[x])
+        EZTurtle.getInstance().resizemode(*[x])
 
     @staticmethod
     def right(x):
-        apply(EZTurtle.getInstance().right,[x])
+        EZTurtle.getInstance().right(*[x])
 
     @staticmethod
     def seth(x):
-        apply(EZTurtle.getInstance().seth,[x])
+        EZTurtle.getInstance().seth(*[x])
 
     @staticmethod
     def setpos(x):
-        apply(EZTurtle.getInstance().setpos,[x])
+        EZTurtle.getInstance().setpos(*[x])
 
     @staticmethod
     def setposition(x):
-        apply(EZTurtle.getInstance().setposition,[x])
+        EZTurtle.getInstance().setposition(*[x])
 
     @staticmethod
     def settiltangle(x):
-        apply(EZTurtle.getInstance().settiltangle,[x])
+        EZTurtle.getInstance().settiltangle(*[x])
 
     @staticmethod
     def setundobuffer(x):
-        apply(EZTurtle.getInstance().setundobuffer,[x])
+        EZTurtle.getInstance().setundobuffer(*[x])
 
     @staticmethod
     def setx(x):
-        apply(EZTurtle.getInstance().setx,[x])
+        EZTurtle.getInstance().setx(*[x])
 
     @staticmethod
     def sety(x):
-        apply(EZTurtle.getInstance().sety,[x])
+        EZTurtle.getInstance().sety(*[x])
 
     @staticmethod
     def shape(x):
-        apply(EZTurtle.getInstance().shape,[x])
+        EZTurtle.getInstance().shape(*[x])
 
     @staticmethod
     def shapesize(x):
-        apply(EZTurtle.getInstance().shapesize,[x])
+        EZTurtle.getInstance().shapesize(*[x])
 
     @staticmethod
     def speed(x):
-        apply(EZTurtle.getInstance().speed,[x])
+        EZTurtle.getInstance().speed(*[x])
 
     @staticmethod
     def st(x):
-        apply(EZTurtle.getInstance().st,[x])
+        EZTurtle.getInstance().st(*[x])
 
     @staticmethod
     def stamp(x):
-        apply(EZTurtle.getInstance().stamp,[x])
+        EZTurtle.getInstance().stamp(*[x])
 
     @staticmethod
     def tilt(x):
-        apply(EZTurtle.getInstance().tilt,[x])
+        EZTurtle.getInstance().tilt(*[x])
 
     @staticmethod
     def tiltangle(x):
-        apply(EZTurtle.getInstance().tiltangle,[x])
+        EZTurtle.getInstance().tiltangle(*[x])
 
     @staticmethod
     def towards(x):
-        apply(EZTurtle.getInstance().towards,[x])
+        EZTurtle.getInstance().towards(*[x])
 
     @staticmethod
     def tracer(x):
-        apply(EZTurtle.getInstance().tracer,[x])
+        EZTurtle.getInstance().tracer(*[x])
 
     @staticmethod
     def turtlesize(x):
-        apply(EZTurtle.getInstance().turtlesize,[x])
+        EZTurtle.getInstance().turtlesize(*[x])
 
     @staticmethod
     def undo(x):
-        apply(EZTurtle.getInstance().undo,[x])
+        EZTurtle.getInstance().undo(*[x])
 
     @staticmethod
     def undobufferentries(x):
-        apply(EZTurtle.getInstance().undobufferentries,[x])
+        EZTurtle.getInstance().undobufferentries(*[x])
 
     @staticmethod
     def width(x):
-        apply(EZTurtle.getInstance().width,[x])
+        EZTurtle.getInstance().width(*[x])
 
     @staticmethod
     def write(x):
-        apply(EZTurtle.getInstance().write,[x])
+        EZTurtle.getInstance().write(*[x])
 
     @staticmethod
     def xcor(x):
-        apply(EZTurtle.getInstance().xcor,[x])
+        EZTurtle.getInstance().xcor(*[x])
 
     @staticmethod
     def ycor(x):
-        apply(EZTurtle.getInstance().ycor,[x])
+        EZTurtle.getInstance().ycor(*[x])

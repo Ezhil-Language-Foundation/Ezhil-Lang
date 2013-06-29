@@ -37,7 +37,7 @@ class Identifier:
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
-            print "## "+msg
+            print("## "+msg)
         return
 
     def __repr__(self):
@@ -134,7 +134,7 @@ class ExprCall:
 
     def dbg_msg(self, msg):
         if ( self.debug ):
-            print "## ",msg
+            print("## ",msg)
         return
 
     def __repr__(self):
@@ -191,7 +191,7 @@ class Stmt:
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
-            print msg
+            print(msg)
         return
         
     def __repr__(self):
@@ -222,7 +222,7 @@ class Stmt:
             ## all other cases later.
         except Exception as e:
             """ objects where is_true_value() is not supported """
-            print e
+            print(e)
             raise RuntimeException(e)
         self.dbg_msg('Is True Value? ' + str(rval) + str(val.__class__) )
         return rval
@@ -589,7 +589,7 @@ class PrintStmt(Stmt):
         val = self.exprlst.evaluate( env  )
         if hasattr(val,'evaluate') :
             val = val.evaluate( env )
-        print val
+        print(val)
         return val
     
     def evaluate(self,env):
@@ -712,7 +712,7 @@ class Function:
         
     def dbg_msg(self, msg):
         if ( self.debug ):
-            print "## ",msg
+            print("## ",msg)
         return
 
     def __repr__(self):

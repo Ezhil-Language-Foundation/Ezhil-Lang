@@ -131,7 +131,7 @@ class Lex:
         
     def __repr__(self):
         for idx in range(0,len(self.tokens)):
-            print "%d] %s"%(idx,repr(self.tokens.pop()))
+            print("%d] %s"%(idx,repr(self.tokens.pop())))
         return ""
 
     def get_lexeme(self,chunks , pos):
@@ -236,7 +236,7 @@ class Lex:
         """ do hard-work of tokenizing and
         put Lexemes into the tokens[] Q """
         if ( self.stdin_mode ):
-            if ( self.debug ): print self.tokens
+            if ( self.debug ): print(self.tokens)
             ## cleanup the Q for stdin_mode of any EOF that can remain.
             if ( len(self.tokens) != 0 ):
                 self.match( Token.EOF )
@@ -325,7 +325,7 @@ class Lex:
         return 
         
     def dump_tokens(self):
-        print " \n".join([str(self.tokens[i]) for i in range(len(self.tokens)-1,-1,-1)])
+        print(" \n".join([str(self.tokens[i]) for i in range(len(self.tokens)-1,-1,-1)]))
         return
 
     def dequeue(self):

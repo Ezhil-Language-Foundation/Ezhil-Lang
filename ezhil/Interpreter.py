@@ -51,16 +51,17 @@ from ExprsParser import Parser
 
 ## Transform / Visitor
 from transform import TreeWalker
+import collections
 
 def ezhil_copyright():
-	return u"(C) 2007-2013 Muthiah Annamalai"
+	return "(C) 2007-2013 Muthiah Annamalai"
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-	return u"Ezhil language was created by Muthiah Annamalai in 2007-2008"
+	return "Ezhil language was created by Muthiah Annamalai in 2007-2008"
 
 def ezhil_license():
-	return u"Licensed under GPL Version 3"
+	return "Licensed under GPL Version 3"
 
 # program name
 def get_prog_name(lang):
@@ -68,13 +69,13 @@ def get_prog_name(lang):
     debug=False
     
     parser = argparse.ArgumentParser(prog=lang)
-    parser.add_argument(u"files",nargs='*',default=[])
-    parser.add_argument(u"-debug",action=u"store_true",
+    parser.add_argument("files",nargs='*',default=[])
+    parser.add_argument("-debug",action="store_true",
                         default=False,
-                        help=u"enable debugging information on screen")
-    parser.add_argument(u"-stdin",action=u"store_true",
+                        help="enable debugging information on screen")
+    parser.add_argument("-stdin",action="store_true",
                         default=None,
-                        help=u"read input from the standard input")
+                        help="read input from the standard input")
     args = parser.parse_args()
     
     if len(args.files) == 0 and (not args.stdin):
@@ -121,7 +122,7 @@ class Interpreter(DebugUtils):
         """ an internal method to reduce repetition """
         if ( not inspect.ismethod(bfn) 
              and not inspect.isclass(bfn)
-             and callable(bfn) ):
+             and isinstance(bfn, collections.Callable) ):
             self.dbg_msg("adding: "+b);
             self.builtin_map[b] = BlindBuiltins( bfn, b);
         else:
@@ -149,7 +150,7 @@ class Interpreter(DebugUtils):
 
     @staticmethod
     def INPUT(args):
-        op = input(args)
+        op = eval(input(args))
         if ( isinstance(op,int) or isinstance(op,float) ):
             return Number(0.0+op)
         return String( op )
@@ -165,13 +166,13 @@ class Interpreter(DebugUtils):
 
     @staticmethod
     def SPRINTF(*args):
-        opstr = apply( Interpreter.SPRINTF_worker, args );
+        opstr = Interpreter.SPRINTF_worker(*args);
         return String(opstr)
     
     @staticmethod   
     def PRINTF(*args):
-        str_op = apply(Interpreter.SPRINTF_worker,args);
-        print str_op
+        str_op = Interpreter.SPRINTF_worker(*args);
+        print(str_op)
         return Number(len(str_op))
     
     def install_builtins(self):
@@ -183,7 +184,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['all']=BlindBuiltins(all,'all',self.debug)
         self.builtin_map['any']=BlindBuiltins(any,'any',self.debug)
         self.builtin_map['apply']=BlindBuiltins(apply,'apply',self.debug)
-        self.builtin_map['basestring']=BlindBuiltins(basestring,'basestring',self.debug)
+        self.builtin_map['basestring']=BlindBuiltins(str,'basestring',self.debug)
         self.builtin_map['bin']=BlindBuiltins(bin,'bin',self.debug)
         self.builtin_map['bool']=BlindBuiltins(bool,'bool',self.debug)
         self.builtin_map['buffer']=BlindBuiltins(buffer,'buffer',self.debug)
@@ -228,7 +229,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['license']=BlindBuiltins(ezhil_license,'license',self.debug)
         #self.builtin_map['list']=BlindBuiltins(list,'list',self.debug)
         #self.builtin_map['locals']=BlindBuiltins(locals,'locals',self.debug)
-        self.builtin_map['long']=BlindBuiltins(long,'long',self.debug)
+        self.builtin_map['long']=BlindBuiltins(int,'long',self.debug)
         self.builtin_map['map']=BlindBuiltins(map,'map',self.debug)
         self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
         self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
@@ -258,8 +259,8 @@ class Interpreter(DebugUtils):
         self.builtin_map['super']=BlindBuiltins(super,'super',self.debug)
         self.builtin_map['tuple']=BlindBuiltins(tuple,'tuple',self.debug)
         self.builtin_map['type']=BlindBuiltins(type,'type',self.debug)
-        self.builtin_map['unichr']=BlindBuiltins(unichr,'unichr',self.debug)
-        self.builtin_map['unicode']=BlindBuiltins(unicode,'unicode',self.debug)
+        self.builtin_map['unichr']=BlindBuiltins(chr,'unichr',self.debug)
+        self.builtin_map['unicode']=BlindBuiltins(str,'unicode',self.debug)
         self.builtin_map['vars']=BlindBuiltins(vars,'vars',self.debug)
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
@@ -313,10 +314,10 @@ class Interpreter(DebugUtils):
 
         # turtle functions
         turtle_attrib = EZTurtle.functionAttributes();
-        for nargs,fcnName in turtle_attrib.items():
+        for nargs,fcnName in list(turtle_attrib.items()):
             for vv in fcnName:
                 turtlefcn = "turtle_"+vv;
-                if ( self.debug ): print nargs, vv
+                if ( self.debug ): print(nargs, vv)
                 if ( nargs == -1 ):
                     self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv),vv,self.debug)
                 else:
@@ -411,7 +412,7 @@ class Interpreter(DebugUtils):
     def __repr__(self):
         rval =  "[Interpreter: "
         rval = rval + "[Functions["
-        for k in self.function_map.keys():
+        for k in list(self.function_map.keys()):
             rval = rval + "\n "+ str(self.function_map[k]) 
         rval = rval +"]] "+ str(self.ast) +"]\n"
         return rval
@@ -445,23 +446,23 @@ def REPL(lang, lexer, parse_eval, debug=False):
         ## world-famous REPL
     while not sys.stdin.closed :
         try:
-            print "%s %d> "%(lang,line_no),
+            sys.stdout.write("%s %d> "%(lang,line_no))
             ## FIXME: implement multiple line readline library
             buffer = sys.stdin.readline();
             buffer = buffer.strip()
             line_no += 1
             if ( buffer.strip() == 'exit' ):
                 do_quit = True
-        except EOFError, e:
-            print "End of Input reached\n"
+        except EOFError as e:
+            print("End of Input reached\n")
             do_quit = True ##evaluate the buffer 
             ## line-no broke
-        if ( debug ): print "evaluating buffer", buffer
+        if ( debug ): print("evaluating buffer", buffer)
         if ( do_quit ):
             if ( lang == 'ezhil' ):
-                print "******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******" 
+                print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
             else:
-                print "******* Goodbye! Now have a nice day *******" 
+                print("******* Goodbye! Now have a nice day *******") 
             sys.exit( 0 )
         try:
             lexer.set_line_col([line_no, 0])
@@ -469,14 +470,14 @@ def REPL(lang, lexer, parse_eval, debug=False):
             [line_no,c] = lexer.get_line_col( 0 )
             if ( debug ): lexer.dump_tokens()
             parse_eval.parse()
-            if ( debug ):  print "*"*60;  print str(parse_eval)
+            if ( debug ):  print("*"*60);  print(str(parse_eval))
             [rval, env] = parse_eval.evaluate_interactive(env)
             if hasattr( rval, 'evaluate' ):
-                print rval.__str__()
+                print(rval.__str__())
             else:
-                print rval
-        except Exception, e:
-            print e
+                print(rval)
+        except Exception as e:
+            print(e)
             ## clear tokens in lexer
             lexer.tokens = list()
         
