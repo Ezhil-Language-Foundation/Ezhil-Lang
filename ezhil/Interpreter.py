@@ -20,6 +20,7 @@ from math import *
 import copy
 import os, sys, string, inspect
 import string
+from time import sleep as ezhil_sleep
 
 from ast import String, Number
 
@@ -184,6 +185,16 @@ class Interpreter(DebugUtils):
         str_op = Interpreter.SPRINTF_worker(*args);
         print(str_op)
         return Number(len(str_op))
+
+    @staticmethod
+    def ezhil_pause(*args):
+        if ( len(args) >= 1 ):
+             print(args[0])
+        if ( len(args) < 2 ):
+             ezhil_sleep( 5 )
+        else:
+             ezhil_sleep( args[1] )
+	return
     
     def install_builtins(self):
         """ populate with the builtin functions"""
@@ -281,7 +292,10 @@ class Interpreter(DebugUtils):
 
         # assert
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
-        
+        # sleep/pausee
+	self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
+	self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
+	
         # random functions
         aslist = True;
         self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)

@@ -45,7 +45,7 @@
     yin(200, "white", "black")
     yin(200, "black", "white")
     turtle_ht()
-    raw_input( "Done! Hit enter to quit")
+    pause( "Done! Hit enter to quit", 5)
 முடி
 
 main()

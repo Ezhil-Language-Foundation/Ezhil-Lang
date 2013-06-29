@@ -17,7 +17,7 @@ class EZTurtle:
     @staticmethod
     def functionAttributes():
         attrib = {0:['ht','home','showturtle','hideturtle','reset','penup','up','down','pendown','clear','isvisible',],
-                  1:['rt','lt','left','right','forward','fd','bd','backward','color','fill'],
+                  1:['rt','lt','left','right','forward','fd','bd','backward','color','fill','speed','pencolor','dot'],
                   2:['goto'],
                   -1:['circle'] } #-1 => indicates varargs
         return attrib
@@ -95,7 +95,11 @@ class EZTurtle:
     @staticmethod
     def bk(x):
         EZTurtle.getInstance().bk(*[x])
-
+    
+    #@staticmethod
+    #def setworldcoordinates(*x): #polymorphic invocation supported here
+    #    EZTurtle.getInstance().setworldcoordinates(*x)
+    
     @staticmethod
     def circle(*x): #polymorphic invocation supported here
         EZTurtle.getInstance().circle(*x)
@@ -217,9 +221,9 @@ class EZTurtle:
         EZTurtle.getInstance().radians(*[x])
 
     @staticmethod
-    def reset(x):
-        EZTurtle.getInstance().reset(*[x])
-
+    def reset():
+        EZTurtle.getInstance().reset()
+    
     @staticmethod
     def resizemode(x):
         EZTurtle.getInstance().resizemode(*[x])
