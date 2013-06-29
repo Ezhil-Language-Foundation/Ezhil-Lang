@@ -403,6 +403,11 @@ class EzhilParser(Parser):
             str_tok = self.dequeue()
             [l,c] = str_tok.get_line_col()
             val = String( tok.val , l, c, self.debug )
+        elif tok.kind in EzhilToken.ADDSUB:
+            unop = self.dequeue();
+            [l, c] = unop.get_line_col()
+            res=Expr(Number(0),unop,self.term(),l,c,self.debug);
+            return res
         else:
             raise ParseException("Expected Number, found something "+str(tok))
         

@@ -4,7 +4,7 @@
 ## (C) 2007, 2008, 2013 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ## 
-## Interpreter for EXRS language
+## Interpreter for Ezhil language
 
 import os, sys, string, inspect
 from Interpreter import Interpreter, REPL, Lex, get_prog_name
