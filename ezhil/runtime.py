@@ -41,12 +41,22 @@ class BuiltinFunction:
         if ( self.use_adicity and len(args) < self.padic ):
             raise RuntimeException("Too few args to bulitin function " + self.name)
 
+        # keep evaluating for as many evaluate object-methods are available
+        # because Python libraries don't recognize ezhil AST objects.
+        while( any(filter(lambda x: hasattr(x,'evaluate'),args)) ):            
+            args_ = []
+            for a in args:
+                if hasattr(a,'evaluate'):
+                    a = a.evaluate(env)
+                #print(a,a.__class__)
+                args_.append(a)
+            args = args_
+        
         if ( self.use_adicity ):
             if ( self.debug ): print(self.fn, args, self.padic)
-            rval = self.fn(*[hasattr(a,'evaluate') and a.evaluate(env) or a for a in args[0:self.padic]])
+            rval = self.fn(*args)
         else:
-            try:
-                args = [hasattr(a,'evaluate') and a.evaluate(env) or a for a in args];
+            try:                
                 if ( self.aslist ):
                     rval = self.fn(*[args])
                 else:

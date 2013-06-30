@@ -7,7 +7,7 @@ import turtle
 class EZTurtle:
     """ EZTurtle class implements a singleton for famed Turtle module"""
     instance = None
-
+    
     @staticmethod
     def getInstance( ):
         if not EZTurtle.instance:
@@ -19,7 +19,7 @@ class EZTurtle:
         attrib = {0:['ht','home','showturtle','hideturtle','reset','penup','up','down','pendown','clear','isvisible',],
                   1:['rt','lt','left','right','forward','fd','bd','backward','color','fill','speed','pencolor','dot'],
                   2:['goto'],
-                  -1:['circle'] } #-1 => indicates varargs
+                  -1:['circle','setworldcoordinates'] } #-1 => indicates varargs
         return attrib
     
     # 0-arg functions
@@ -96,9 +96,9 @@ class EZTurtle:
     def bk(x):
         EZTurtle.getInstance().bk(*[x])
     
-    #@staticmethod
-    #def setworldcoordinates(*x): #polymorphic invocation supported here
-    #    EZTurtle.getInstance().setworldcoordinates(*x)
+    @staticmethod
+    def setworldcoordinates(*x): #polymorphic invocation supported here
+        turtle.setworldcoordinates(*x)
     
     @staticmethod
     def circle(*x): #polymorphic invocation supported here

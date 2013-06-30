@@ -8,7 +8,8 @@
 
 # A demonstration of chaos
 
-
+# Ezhil does not have first-class function handle variables (yet). 
+# So some code duplication is necessary.
 
 நிரல்பாகம் f(x)
     பின்கொடு 3.9*x*(1 - x)
@@ -90,7 +91,7 @@
 நிரல்பாகம் main()
     N = 80
     turtle_reset()
-    #turtle_setworldcoordinates( -1.0, -0.1, N + 1, 1.1)
+    turtle_setworldcoordinates( -1.0, -0.1, N + 1, 1.1)
     turtle_speed(0)
     turtle_hideturtle()
     coosys()
@@ -98,9 +99,12 @@
     plot_g( 0.35, "green")
     plot_h( 0.35, "red")
     # Now zoom in:
-    #@( s < 100 ) வரை
-    #     turtle_setworldcoordinates(0.5*s, -0.1, N + 1, 1.1)
-   # முடி
+    s = 0
+    @( s < 100 ) வரை
+         printf( "iteration %d \n",s)
+         turtle_setworldcoordinates( 0.5*s ,  -0.1 , N + 1, 1.1 )
+	 s = s + 1
+    முடி
     printf( "Done!\n" )
 முடி
 
