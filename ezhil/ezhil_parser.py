@@ -342,7 +342,10 @@ class EzhilParser(Parser):
         ptok = self.peek()
         if ptok.kind in  EzhilToken.ADDSUB:
             binop=self.dequeue()
-            val2=self.expr()
+            if ( ptok.kind == EzhilToken.MINUS ):
+                val2 = self.term()
+            else:
+                val2=self.expr()
             [l,c] = binop.get_line_col()
             res=Expr(val1,binop,val2, l, c, self.debug )
         elif ptok.kind ==  EzhilToken.LPAREN:
@@ -352,8 +355,14 @@ class EzhilParser(Parser):
             [l,c] = ptok.get_line_col()
             vallist = self.valuelist()
             res=ExprCall( res, vallist, l, c, self.debug )
+        ptok = self.peek()
+        while  ptok.kind in EzhilToken.BINOP:
+            binop = self.dequeue()
+            [l,c] = binop.get_line_col()
+            res = Expr( res, binop,self.expr(), l,c,self.debug)
+            ptok = self.peek()
         return res
-
+    
     def term(self):
         """ this is a grammar abstraction; 
         but AST only has Expr elements"""
@@ -413,5 +422,3 @@ class EzhilParser(Parser):
         
         self.dbg_msg( "factor-returning: "+str(val) )
         return val
-
-

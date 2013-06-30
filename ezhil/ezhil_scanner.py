@@ -168,7 +168,7 @@ class EzhilLex ( Lex ) :
                 ## single line skip comments like Python/Octave
                 while ( idx < len( data ) and data[idx] !='\n' ):
                     idx = idx + 1                    
-            elif ( isdigit(c) or c == '+' or c == '-'  ):
+            elif ( isdigit(c) ): #or c == '+' or c == '-'  ):
                 num = c
                 tok_start_idx = idx
                 idx = idx + 1
