@@ -349,12 +349,13 @@ class EzhilParser(Parser):
             [l,c] = binop.get_line_col()
             res=Expr(val1,binop,val2, l, c, self.debug )
         elif ptok.kind ==  EzhilToken.LPAREN:
-            ## function call -OR- array type.
+            ## function call
             if ( res.__class__ != Identifier ):
                 raise ParseException("invalid function call"+str(ptok))
             [l,c] = ptok.get_line_col()
             vallist = self.valuelist()
             res=ExprCall( res, vallist, l, c, self.debug )
+        
         ptok = self.peek()
         while  ptok.kind in EzhilToken.BINOP:
             binop = self.dequeue()
@@ -421,7 +422,9 @@ class EzhilParser(Parser):
             list_start = self.dequeue();
             val = Array()
             while( True ):
-                val.append( self.factor() )
+                exprval = self.expr()
+                #if exprval :
+                val.append( exprval  )
                 if self.debug : print(self.peek().__class__,self.peek())
                 if ( self.peek().kind == EzhilToken.RSQRBRACE ):
                     break
