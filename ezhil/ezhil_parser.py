@@ -33,7 +33,7 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
- String
+ String, Array
 
 ## use exprs language parser
 from ExprsParser import Parser
@@ -378,7 +378,7 @@ class EzhilParser(Parser):
             val2=self.term()
             [l,c] = binop.get_line_col()
             res=Expr(val1,binop,val2, l, c, self.debug)
-
+            
         return res
     
     def factor(self):
@@ -405,7 +405,7 @@ class EzhilParser(Parser):
                 vallist = self.valuelist()
                 val=ExprCall( val, vallist, l, c, self.debug )
             elif ( ptok.kind ==  EzhilToken.LSQRBRACE ):
-                ## array type
+                ## indexing a array type variable or ID
                 val=None
                 raise ParseException("arrays not implemented"+str(ptok));
         elif tok.kind ==  EzhilToken.STRING :
@@ -415,8 +415,21 @@ class EzhilParser(Parser):
         elif tok.kind in EzhilToken.ADDSUB:
             unop = self.dequeue();
             [l, c] = unop.get_line_col()
-            res=Expr(Number(0),unop,self.term(),l,c,self.debug);
-            return res
+            val=Expr(Number(0),unop,self.term(),l,c,self.debug);
+        elif tok.kind == EzhilToken.LSQRBRACE:
+            # creating a list/array expression
+            list_start = self.dequeue();
+            val = Array()
+            while( True ):
+                val.append( self.factor() )
+                if self.debug : print(self.peek().__class__,self.peek())
+                if ( self.peek().kind == EzhilToken.RSQRBRACE ):
+                    break
+                else:
+                    assert( self.peek().kind == EzhilToken.COMMA)
+                    self.dequeue()
+            assert( self.peek().kind == EzhilToken.RSQRBRACE )
+            list_end = self.dequeue()
         else:
             raise ParseException("Expected Number, found something "+str(tok))
         

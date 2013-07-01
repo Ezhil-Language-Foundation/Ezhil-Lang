@@ -114,8 +114,14 @@ class Array(list):
     def __init__(self):
         pass
 
+    def base_evaluate(self,env):
+        rval = []
+        for v in self:
+            rval.append( v.evaluate(env) )
+        return rval
+
     def evaluate(self,env):
-        pass
+        return self.base_evaluate( env )
 
 class Hash(dict):
     pass
