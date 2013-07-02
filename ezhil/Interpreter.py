@@ -161,7 +161,7 @@ class Interpreter(DebugUtils):
 
     @staticmethod
     def INPUT(args):
-        op = eval(input(args))
+        op = (raw_input(args))
         if ( isinstance(op,int) or isinstance(op,float) ):
             return Number(0.0+op)
         return String( op )
