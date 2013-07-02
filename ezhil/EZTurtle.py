@@ -133,10 +133,6 @@ class EZTurtle:
         EZTurtle.getInstance().dot(*[x])
 
     @staticmethod
-    def fd(x):
-        EZTurtle.getInstance().fd(*[x])
-
-    @staticmethod
     def fill(x):
         EZTurtle.getInstance().fill(*[x])
 
@@ -175,10 +171,6 @@ class EZTurtle:
     @staticmethod
     def isvisible():
         EZTurtle.getInstance().isvisible(*[])
-
-    @staticmethod
-    def left(x):
-        EZTurtle.getInstance().left(*[x])
 
     @staticmethod
     def ondrag(x):
@@ -227,10 +219,6 @@ class EZTurtle:
     @staticmethod
     def resizemode(x):
         EZTurtle.getInstance().resizemode(*[x])
-
-    @staticmethod
-    def right(x):
-        EZTurtle.getInstance().right(*[x])
 
     @staticmethod
     def seth(x):

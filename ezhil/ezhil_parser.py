@@ -13,7 +13,6 @@
 ## TODO: extract scanner and AST members into a module for sharing.
 ## and use them here.
 
-from math import *
 import copy
 import os, sys, string, inspect
 
@@ -44,7 +43,7 @@ class EzhilParser(Parser):
     """ when you add new language feature, add a AST class 
     and its evaluate methods. Also add a parser method """
     def __init__(self,lexer,fcn_map, builtin_map, dbg = False):
-        if ( lexer.__class__ != EzhilLex ):
+        if ( not isinstance(lexer, EzhilLex) ):
                 raise RuntimeException("Cannot find Ezhil lexer class")
         Parser.__init__(self,lexer,fcn_map,builtin_map,dbg)
 

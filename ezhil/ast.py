@@ -11,8 +11,7 @@
 ## Array, Hash
 
 import copy
-from math import *
-
+import math
 ## scanner for exprs language
 from scanner import Token, Lexeme, Lex
 
@@ -49,9 +48,11 @@ class Identifier:
             if ( hasattr( val, 'evaluate' ) ):
                 val = val.evaluate(env)
             elif ( val.__class__ == str ):
-                val = val
+                #val = val
+                pass
             else:
-                val = val
+                #val = val
+                pass
             self.dbg_msg( str(self) + " = val ["+str(val) + "]" )
             return val
         raise RuntimeException("Cannot Find Identifier %s at \
@@ -241,12 +242,10 @@ class Expr(Stmt):
     One = Number ( 1 );
     Zero = Number ( 0 );
     def __init__(self,t,op,next_expr,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.term=t
         self.binop=op
-        self.next_expr=next_expr
-        self.debug = dbg;
-        self.line = l
-        self.col = c
+        self.next_expr=next_expr        
 
     def __repr__(self):
         return "\n\t [Expr[ "+ str(self.term)+"] " + \
@@ -269,10 +268,10 @@ class Expr(Stmt):
             val = Number(opr1/opr2)
         elif binop == Token.MOD:
             self.dbg_msg("modulo")
-            val = Number(fmod(opr1,opr2));
+            val = Number(math.fmod(opr1,opr2));
         elif binop == Token.EXP:
             self.dbg_msg("exponent")
-            val = Number(pow(opr1,opr2));
+            val = Number(math.pow(opr1,opr2));
         elif binop == Token.GT:
             self.dbg_msg("GT > ")
             val = self.Zero;
@@ -346,11 +345,9 @@ class Expr(Stmt):
 class ReturnStmt(Stmt):
     """ return expr """
     def __init__(self,rval,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.rvalue=rval
-        self.debug = dbg
-        self.line = l
-        self.col = c
-
+        
     def __repr__(self):
         return "\n\t [ReturnStmt[ "+ str(self.rvalue)+"]]\n"
 
@@ -367,9 +364,7 @@ class ReturnStmt(Stmt):
 class BreakStmt(Stmt):
     """ return expr """
     def __init__(self,l,c,dbg=False):
-        self.debug = dbg
-        self.line = l
-        self.col = c
+        Stmt.__init__(self,l,c,dbg)
 
     def __repr__(self):
         return "\n\t [BreakStmt]\n"
@@ -386,10 +381,8 @@ class BreakStmt(Stmt):
 class ContinueStmt(Stmt):
     """ return expr """
     def __init__(self,l,c,dbg=False):
-        self.debug = dbg
-        self.line = l
-        self.col = c
-
+        Stmt.__init__(self,l,c,dbg)
+    
     def __repr__(self):
         return "\n\t [ContinueStmt]\n"
 
@@ -404,11 +397,9 @@ class ContinueStmt(Stmt):
 
 class ElseStmt(Stmt):
     def __init__(self,stmt,l,c, dbg):
+        Stmt.__init__(self,l,c,dbg)
         self.stmt = stmt
         self.class_name = "ElseStmt"
-        self.debug = dbg
-        self.line = l
-        self.col = c
 
     def __repr__(self):
         return "\t [ElseStmt ["+str(self.stmt)+"]]\n"
@@ -423,15 +414,13 @@ class ElseStmt(Stmt):
 class IfStmt(Stmt):
     """ if ( op ) stmtlist {else | elseif ( op )| stmt } end"""
     def __init__(self,expr,body,next_stmt,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.expr = expr
         self.body = body
         self.class_name = "IfStmt"
         ## this is either another IfStmt or an Else Stmt.
         self.next_stmt = next_stmt
-        self.debug = dbg
-        self.line = l
-        self.col = c
-
+        
     def __repr__(self):
         rval = "\t\n [IfStmt[["+str(self.expr)+ "]] "+str(self.body)
         if ( self.next_stmt ):
@@ -464,12 +453,10 @@ class IfStmt(Stmt):
 class WhileStmt(Stmt):
     """ while ( exp ) stmtlist  end"""
     def __init__(self,expr,body,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.expr = expr
         self.body = body
         self.class_name = "WhileStmt"
-        self.debug = dbg
-        self.line = l
-        self.col = c
 
     def __repr__(self):
         rval = "\t\n [WhileStmt[["+str(self.expr)+ "]] "+str(self.body) +"]"
@@ -496,15 +483,13 @@ class WhileStmt(Stmt):
 class ForStmt(Stmt):
     """ For ( exp1 ; exp2 ; exp3 ) stmtlist  end"""
     def __init__(self,expr1,expr2, expr3,body,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.expr_init = expr1;
         self.expr_cond = expr2;
         self.expr_update = expr3;        
         self.body = body
         self.class_name = "ForStmt"
-        self.debug = dbg
-        self.line = l
-        self.col = c
-
+    
     def __repr__(self):
         rval = "\t\n [ForStmt[[ ("+str(self.expr_init)+"; "+\
             str(self.expr_cond) + "; " +\
@@ -538,13 +523,11 @@ class ForStmt(Stmt):
 class AssignStmt(Stmt):
     """ lhs = rhs """
     def __init__(self,lvalue,op,rvalue,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.lvalue=lvalue
         self.assignop=op
         self.rvalue=rvalue
         self.class_name = "AssignStmt"
-        self.debug = dbg;
-        self.line = l
-        self.col = c
 
     def __repr__(self):
         return "\n\t [AssignStmt[ "+ str(self.lvalue)+"] " + \
@@ -582,11 +565,9 @@ class AssignStmt(Stmt):
 class PrintStmt(Stmt):
     """ print EXPR """
     def __init__(self,exprlst, l, c, dbg):
+        Stmt.__init__(self,l,c,dbg)
         self.exprlst = exprlst
-        self.debug = dbg
-        self.line = l
-        self.col = c
-
+        
     def __repr__(self):
         return "\n\t [PrintStmt[ "+ str(self.exprlst)+"]]"
 
@@ -609,11 +590,9 @@ class PrintStmt(Stmt):
 class EvalStmt(Stmt):
     """ EXPR """
     def __init__(self,expr, l, c, dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.expr = expr
-        self.debug = dbg
-        self.line = l
-        self.col = c
-
+        
     def __repr__(self):
         #print type(self.expr)
         return "\n\t [EvalStmt[ "+ str(self.expr)+"/"+str((self.expr.__class__))+"]]"
@@ -677,9 +656,9 @@ class ValueList:
     
 class StmtList(Stmt):
     def __init__(self,stmt=[], dbg=False):
+        Stmt.__init__(self,0,0,dbg)
         self.List = copy.copy(stmt)
-        self.debug = dbg
-
+        
     def __len__(self):
         return len(self.List)
 

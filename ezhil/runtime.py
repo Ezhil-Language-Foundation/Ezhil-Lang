@@ -240,13 +240,12 @@ class Environment:
         return False
     
     def get_function(self, fn):
-        val = None
         if not self.has_function(fn):
             raise RuntimeException("undefined function: "+fn)
 
         if ( fn in self.builtin_map ):
             return self.builtin_map[fn]
-
+        
         if ( fn in self.function_map ):
             return self.function_map[fn] 
         
