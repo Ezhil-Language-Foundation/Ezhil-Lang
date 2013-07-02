@@ -20,6 +20,9 @@ from math import *
 import copy
 import os, sys, string, inspect
 import string
+
+from cmd import Cmd
+
 from time import sleep as ezhil_sleep
 
 from ast import String, Number
@@ -502,47 +505,71 @@ class Interpreter(DebugUtils):
         rval = self.ast.evaluate(env)
         return [ rval, env ]
 
-def REPL(lang, lexer, parse_eval, debug=False):    
-    #refactor out REPL for ezhil and exprs
-    env = None ## get the first instance from evaluate_interactive
-    line_no = 1
-    do_quit = False
-        ## world-famous REPL
-    while not sys.stdin.closed :
-        try:
-            sys.stdout.write("%s %d> "%(lang,line_no))
-            ## FIXME: implement multiple line readline library
-            buffer = sys.stdin.readline();
-            buffer = buffer.strip()
-            line_no += 1
-            if ( buffer.strip() == 'exit' ):
-                do_quit = True
-        except EOFError as e:
-            print("End of Input reached\n")
-            do_quit = True ##evaluate the buffer 
-            ## line-no broke
-        if ( debug ): print("evaluating buffer", buffer)
-        if ( do_quit ):
-            if ( lang == 'ezhil' ):
-                print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
-            else:
-                print("******* Goodbye! Now have a nice day *******") 
-            sys.exit( 0 )
-        try:
-            lexer.set_line_col([line_no, 0])
-            lexer.tokenize(buffer)
-            [line_no,c] = lexer.get_line_col( 0 )
-            if ( debug ): lexer.dump_tokens()
-            parse_eval.parse()
-            if ( debug ):  print("*"*60);  print(str(parse_eval))
-            [rval, env] = parse_eval.evaluate_interactive(env)
-            if hasattr( rval, 'evaluate' ):
-                print(rval.__str__())
-            else:
-                print(rval)
-        except Exception as e:
-            print(e)
-            ## clear tokens in lexer
-            lexer.tokens = list()
-        
-    return
+# world-famous REPL
+# derive from the Python standard library - Cmd
+# refactor out REPL for ezhil and exprs
+class REPL(Cmd):
+	def __init__(self,lang, lexer, parse_eval, debug=False):
+		Cmd.__init__(self)
+		self.lang = lang
+		self.lexer = lexer
+		self.parse_eval = parse_eval
+		self.debug = debug
+		self.line_no = 1
+		self.env = None ## get the first instance from evaluate_interactive
+		self.cmdloop()
+	
+	def parseline(self,line):
+		arg,cmd = "",""
+		if line in ["exit","help","EOF"]:
+			cmd = line		
+		return [cmd,arg,line]
+
+	def update_prompt(self):
+		self.prompt = ("%s %d> "%(self.lang,self.line_no))
+
+	def preloop(self):
+		self.update_prompt()
+	
+	def emptyline(self):
+		pass
+	
+	def default(self,line):
+		self.line_no += 1
+		
+		if ( self.debug ): print("evaluating line", line)
+		if ( line == 'exit' ): self.exit_hook(doExit=True)
+		try:
+			self.lexer.set_line_col([self.line_no, 0])
+			self.lexer.tokenize(line)
+			[line_no,c] = self.lexer.get_line_col( 0 )
+			if ( self.debug ): self.lexer.dump_tokens()
+			self.parse_eval.parse()
+			if ( self.debug ):  print("*"*60);  print(str(parse_eval))
+			[rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
+			if hasattr( rval, 'evaluate' ):
+				print(rval.__str__())
+			else:
+				print(rval)
+		except Exception as e:
+			print("Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,str(e)))
+                ## clear tokens in lexer
+		self.lexer.tokens = list()
+		self.update_prompt()
+	
+	def do_EOF(self,line):
+		print("\n")
+		self.exit_hook()
+		return True
+	
+	def exit_hook(self,doExit=False):
+		if ( self.lang == 'ezhil' ):
+			print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
+		else:
+			print("******* Goodbye! Now have a nice day *******") 				
+			
+		if doExit:
+			sys.exit( 0 )
+		
+		return
+	
