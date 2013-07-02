@@ -152,7 +152,39 @@ class Interpreter(DebugUtils):
            raise Exception('Assertion failed!')
            return False
 	return True
+    
+    # file IO functions - 6 total
+    @staticmethod
+    def file_open(*args):
+        fp = open(*args)
+        return fp
+    
+    @staticmethod
+    def file_close(*args):
+        assert( len(args) == 1 )
+        getattr(args[0],'close')()
+        return
+    
+    @staticmethod
+    def file_read(*args):
+        assert( len(args) == 1 )
+        return String( getattr(args[0],'read')())
+    
+    @staticmethod
+    def file_readlines(*args):
+        assert( len(args) == 1 )
+        return getattr(args[0],'readlines')()
 
+    @staticmethod
+    def file_write(*args):
+        assert( len(args) == 2 )
+        return getattr(args[0],'write')(args[1])
+
+    @staticmethod
+    def file_writelines(*args):
+        assert( len(args) == 2 )
+        return getattr(args[0],'writelines')(args[1])
+    
     # marshalling    	    
     @staticmethod
     def RAWINPUT(args):
@@ -286,6 +318,14 @@ class Interpreter(DebugUtils):
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
 
+	#file-IO functions
+	self.builtin_map["file_open"]=BlindBuiltins(Interpreter.file_open,"file_open")
+	self.builtin_map["file_close"]=BuiltinFunction(Interpreter.file_close,"file_close")
+	self.builtin_map["file_read"]=BuiltinFunction(Interpreter.file_read,"file_read")
+	self.builtin_map["file_readlines"]=BuiltinFunction(Interpreter.file_readlines,"file_readlines")
+	self.builtin_map["file_write"]=BuiltinFunction(Interpreter.file_write,"file_write",2)
+	self.builtin_map["file_writelines"]=BuiltinFunction(Interpreter.file_writelines,"file_writelines",2)
+	
         # input statements
         self.builtin_map["input"]=BuiltinFunction(Interpreter.INPUT,"input")
         self.builtin_map["raw_input"]=BuiltinFunction(Interpreter.RAWINPUT,"raw_input")
