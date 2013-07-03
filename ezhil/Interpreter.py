@@ -516,8 +516,7 @@ class REPL(Cmd):
 		self.banner = """எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
 Ezhil : A Tamil Programming Language, (C) 2007-2013
 Type "help", "copyright", "credits" or "license" for more information."""
-		if ( lang == "ezhil" ):
-			lang = "எழில் "
+		
 		self.lang = lang
 		self.lexer = lexer
 		self.parse_eval = parse_eval
@@ -572,7 +571,7 @@ Type "help", "copyright", "credits" or "license" for more information."""
 		return True
 	
 	def exit_hook(self,doExit=False):
-		if ( self.lang == 'ezhil' ):
+		if ( self.lang == "எழில்"):
 			print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
 		else:
 			print("******* Goodbye! Now have a nice day *******") 				

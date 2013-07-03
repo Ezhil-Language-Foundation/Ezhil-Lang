@@ -47,7 +47,7 @@ class EzhilInterpreter( Interpreter ):
         return
     
 if __name__ == "__main__":
-    lang = 'ezhil';
+    lang = "எழில்"
     [fname, debug, dostdin ]= get_prog_name(lang)
     if ( dostdin ):
         ## interactive interpreter
