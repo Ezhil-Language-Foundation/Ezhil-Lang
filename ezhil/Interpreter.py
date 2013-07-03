@@ -512,6 +512,12 @@ class Interpreter(DebugUtils):
 class REPL(Cmd):
 	def __init__(self,lang, lexer, parse_eval, debug=False):
 		Cmd.__init__(self)
+		## ala-Python like
+		self.banner = """எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
+Ezhil : A Tamil Programming Language, (C) 2007-2013
+Type "help", "copyright", "credits" or "license" for more information."""
+		if ( lang == "ezhil" ):
+			lang = "எழில் "
 		self.lang = lang
 		self.lexer = lexer
 		self.parse_eval = parse_eval
@@ -522,15 +528,17 @@ class REPL(Cmd):
 	
 	def parseline(self,line):
 		arg,cmd = "",""
-		if line in ["exit","help","EOF"]:
-			cmd = line		
+		if line in ["exit","help","EOF","copyright","credits","license"]:
+			cmd = line
+			line = line+"()"
 		return [cmd,arg,line]
 
 	def update_prompt(self):
-		self.prompt = ("%s %d> "%(self.lang,self.line_no))
+		self.prompt = "%s %d>> "%(self.lang,self.line_no)
 
 	def preloop(self):
 		self.update_prompt()
+		print(self.banner)
 	
 	def emptyline(self):
 		pass
