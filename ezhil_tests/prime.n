@@ -8,7 +8,7 @@
        @( fmod( n, p ) == 0 )  ஆனால் 
           ##print "breaking not-prime"
           rval = 0       	   
-          நேருத்து
+	  நிறுத்து          
        முடி
        p = p - 1
     முடி

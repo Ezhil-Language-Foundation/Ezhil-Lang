@@ -78,7 +78,7 @@ class EzhilLex ( Lex ) :
             tval=EzhilLexeme(chunks,EzhilToken.DEF)
         elif chunks == "தொடர்":
             tval=EzhilLexeme(chunks,EzhilToken.CONTINUE)
-        elif chunks == "நேருத்து":
+        elif chunks == "நிறுத்து":
             tval=EzhilLexeme(chunks,EzhilToken.BREAK)
         elif chunks == "@":
             tval=EzhilLexeme(chunks,EzhilToken.ATRATEOF)
