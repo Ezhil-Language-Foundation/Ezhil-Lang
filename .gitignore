@@ -4,7 +4,7 @@ MANIFEST
 *~
 ./Notes
 ./Notes/*
-
+./ezhil_tests/names.txt
 # C extensions
 *.so
 
