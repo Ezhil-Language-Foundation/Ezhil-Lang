@@ -222,6 +222,15 @@ class Interpreter(DebugUtils):
         return Number(len(str_op))
 
     @staticmethod
+    def ezhil_reverse(*args):
+       if ( len(args) != 1 ): raise Exception('One argument alone expected to reverse function')
+       if ( isinstance( args[0], str ) or isinstance( args[0], unicode) ):
+           return String(args[0][::-1]) #string-reverse
+       
+       return list.reverse(args[0])
+       
+
+    @staticmethod
     def ezhil_pause(*args):
         if ( len(args) >= 1 ):
              print(args[0])
@@ -452,7 +461,7 @@ class Interpreter(DebugUtils):
         self.builtin_map["sort"] = BuiltinFunction(list.sort,"sort",1)
         self.builtin_map["count"]= BuiltinFunction(list.count,"count",2)
         self.builtin_map["extend"]= BuiltinFunction(list.extend,"extend",2)
-        self.builtin_map["reverse"]= BuiltinFunction(list.reverse,"reverse",1)
+        self.builtin_map["reverse"]= BuiltinFunction(Interpreter.ezhil_reverse,"reverse",1)
         self.builtin_map["get"]= BuiltinFunction(list.__getitem__,"get",2)
         
         # #dictionary methods - 
