@@ -4,8 +4,8 @@ from distutils.core import setup
 from codecs import open
 
 setup(name='ezhil',
-      version='0.1-dev',
-      description='Python library for Tamil programming language Ezhil',
+      version='0.5-dev',
+      description='Ezhil - Tamil programming language implemented in Python',
       author='Muthiah Annamalai',
       author_email='muthuspost@gmail.com',
       url='https://github.com/arcturusannamalai/Ezhil-Lang',
