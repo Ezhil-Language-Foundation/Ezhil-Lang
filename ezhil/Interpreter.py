@@ -564,9 +564,10 @@ Type "help", "copyright", "credits" or "license" for more information."""
 			self.parse_eval.parse()
 			if ( self.debug ):  print("*"*60);  print(str(self.parse_eval))
 			[rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
+			if ( self.debug ): print( "return value", str(rval) )
 			if hasattr( rval, 'evaluate' ):
 				print(rval.__str__())
-			else:
+			elif rval: #print everything except a None object
 				print(rval)
 		except Exception as excep:
 			print("Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,str(excep)))

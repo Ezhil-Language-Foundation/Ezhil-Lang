@@ -10,13 +10,15 @@
 
 import time
 from ezhil import EzhilFileExecuter, EzhilInterpExecuter
-import BaseHTTPServer, tempfile
+import BaseHTTPServer, tempfile, threading
+from SocketServer import ThreadingMixIn
 from os import unlink
 import cgi
 
-class EzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
+class BaseEzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):        
-        print str(self.headers)
+        print(str(self.headers), "in thread =", threading.currentThread().getName())
+
         if self.path.find('/ezhil') >= 0:
             GETvars = cgi.parse_qs( self.path )
             print str(GETvars)
@@ -74,6 +76,9 @@ class EzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
         self.wfile.write("<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n"%op)
         
         return op
+
+class EzhilOnTheWeb(ThreadingMixIn,BaseEzhilOnTheWeb):
+    """ Add threading to handle requests in separate thread """
 
 HOST_NAME = "localhost"
 PORT_NUMBER = 8080
