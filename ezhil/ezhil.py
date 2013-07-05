@@ -141,12 +141,12 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
             [lexer_line_no,c] = lexer.get_line_col( 0 )
             if ( debug ): lexer.dump_tokens()
             try:
-                print ("parsing buffer item => ",totbuffer)
+                if ( debug ): print ("parsing buffer item => ",totbuffer)
                 parse_eval.parse()
             except Exception as pexp:
                 ## clear tokens in lexer
                 lexer.tokens = list()
-                print ("offending buffer item => ",totbuffer)
+                if ( debug ): print ("offending buffer item => ",totbuffer)
                 if ( debug ): print(str(pexp),str(pexp.__class__))
                 # Greedy strategy to keep avoiding parse-errors by accumulating more of input.
                 # this allows a line-by-line execution strategy. When all else fails we report.
