@@ -61,11 +61,13 @@ class EzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
         
         # delete the temporary file
         unlink(tmpf.name)
-        
+        op = """<script>
+    document.write('<a href="' + document.referrer + '">Go Back</a>');
+</script><HR/>"""
         if failed:
-            op = "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>"+op
+            op += "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>"+op
         else:
-            op = "<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>"+op            
+            op += "<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>"+op            
         
         self.wfile.write("<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n"%op)
         
