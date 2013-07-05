@@ -1,0 +1,60 @@
+<!-- (C) 2013 Muthiah Annamalai 
+     This HTML file is part of Ezhil - A Tamil Programming Language
+-->
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>எழில் - தமிழ் நிரலாக்க மொழி  // Ezhil-Lang: Ezhil on the web</title>
+  </head>
+  <body bgcolor="white">
+    <H2>Run Ezhil Programs on your Web Browser!</H2>
+    <div>Enter your program in the form below, and click submit to execute the code!</div>
+    <hr />
+
+    <form action="http://localhost:8080/ezhil" method="GET">
+      <input type="hidden" value="true" name="eval" />
+      <textarea rows="10" cols="80" name="prog"># enter your ezhil program below
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+பதிப்பி "வணக்கம்! எழில் அழைக்கிரது"
+sin( pi() / 2 )
+
+  # 'வரை' வாக்கியத்தால் பயன்படுத்தி  செய்யலாம்
+  # demo of a while loop
+  i = 10
+  பதிப்பி 5/i
+  பதிப்பி 5.0/i
+  பதிப்பி i
+  @( i > 0 ) வரை
+          பதிப்பி i
+           i = i  - 1
+  முடி
+
+பதிப்பி "******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******"
+</textarea>
+      <br />
+      <input type="submit" value="Execute program!"/>
+<HR />
+
+<DIV>
+If you have completed the previous program try executing, the following, 
+<pre>
+# பெருக்கல் வாய்ப்பாடு - 1 முதல் 10, 12 வரை
+# இரண்டு 'வரை' வாக்கியத்தால் பயன்படுத்தி  செய்யலாம்
+அ = 1
+@( அ <= 10 ) வரை
+    ஆ = 1
+    பதிப்பி  "################################"
+    பதிப்பி  "வாய்ப்பாடு ",  அ , "- 1 முதல் 12 வரை"
+    @( ஆ  <= 12 ) வரை
+         பதிப்பி  அ , "*" , ஆ ,  " = ",  ( ஆ*அ )
+         ஆ = ஆ + 1
+    முடி
+    அ =  அ + 1
+முடி
+</pre>
+</DIV>
+
+<HR />
+<DIV><B>(C) 2013 முத்தையா அண்ணாமலை; எழில் - தமிழ் நிரலாக்க மொழி</B></DIV>
+  </body>
+</html>

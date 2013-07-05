@@ -10,6 +10,7 @@ import os, sys, string, tempfile
 from Interpreter import Interpreter, REPL, Lex, get_prog_name
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
+from errors import RuntimeException, ParseException
 
 class EzhilInterpreter( Interpreter ):
     def __init__(self, lexer, debug ):
@@ -110,46 +111,58 @@ class EzhilFileExecuter(EzhilRedirectOutput):
 def local_REPL( file_input, lang, lexer, parse_eval, debug=False):    
     #refactor out REPL for ezhil and exprs
     env = None ## get the first instance from evaluate_interactive
-    line_no = 1
     do_quit = False
         ## world-famous REPL
     with open(file_input) as fp:
         lines = fp.readlines()
-    for buffer in lines:
+    #lines = "\n".join([line.strip() for line in lines])
+    totbuffer = ""
+    max_lines = len(lines)
+    for line_no,Lbuffer in enumerate(lines):        
         try:
-            sys.stdout.write("%s %d> "%(lang,line_no))
-            ## FIXME: implement multiple line readline library
-            buffer = buffer.strip()
-            line_no += 1
-            if ( buffer.strip() == 'exit' ):
+            curr_line_no = "%s %d> "%(lang,line_no)
+            Lbuffer = Lbuffer.strip()
+            if ( Lbuffer == 'exit' ):
                 do_quit = True
         except EOFError as e:
             print("End of Input reached\n")
-            do_quit = True ##evaluate the buffer 
-            ## line-no broke
-        if ( debug ): print("evaluating buffer", buffer)
+            do_quit = True ##evaluate the Lbuffer             
+        if ( debug ): print("evaluating buffer", Lbuffer)
         if ( do_quit ):
-            if ( lang == 'ezhil' ):
-                print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
-            else:
-                print("******* Goodbye! Now have a nice day *******") 
+            print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
             return
         try:
             lexer.set_line_col([line_no, 0])
-            lexer.tokenize(buffer)
-            [line_no,c] = lexer.get_line_col( 0 )
+            if len(totbuffer) == 0:
+                totbuffer = Lbuffer
+            else:
+                totbuffer += "\n"+ Lbuffer
+            lexer.tokenize(totbuffer)
+            [lexer_line_no,c] = lexer.get_line_col( 0 )
             if ( debug ): lexer.dump_tokens()
-            parse_eval.parse()
+            try:
+                print ("parsing buffer item => ",totbuffer)
+                parse_eval.parse()
+            except Exception as pexp:
+                ## clear tokens in lexer
+                lexer.tokens = list()
+                print ("offending buffer item => ",totbuffer)
+                if ( debug ): print(str(pexp),str(pexp.__class__))
+                # Greedy strategy to keep avoiding parse-errors by accumulating more of input.
+                # this allows a line-by-line execution strategy. When all else fails we report.
+                if ( (line_no + 1) ==  max_lines ):
+                    raise pexp
+                continue 
+            totbuffer = ""
+            sys.stdout.write(curr_line_no)
             if ( debug ):  print("*"*60);  print(str(parse_eval))
             [rval, env] = parse_eval.evaluate_interactive(env)
             if hasattr( rval, 'evaluate' ):
                 print(rval.__str__())
-            else:
+            elif rval:
                 print(rval)
         except Exception as e:
             print(e)
-            ## clear tokens in lexer
-            lexer.tokens = list()
             raise e
     return
 

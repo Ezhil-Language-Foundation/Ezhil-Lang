@@ -21,11 +21,9 @@ class EzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
             GETvars = cgi.parse_qs( self.path )
             print str(GETvars)
             if GETvars.has_key('prog'):
-                program = "".join(GETvars['prog'])
+                program = "\n".join(GETvars['prog'])
             else:
                 program = 'printf("Welcome to Ezhil! You can type a program and see its output here!")\n'
-            # add exit symbol
-            #program = program + "\n exit()";
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
@@ -39,22 +37,24 @@ class EzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
         tmpf=tempfile.NamedTemporaryFile(suffix='.n',delete=False)
         tmpf.write(program)
         tmpf.close()
-
+        
         print( "Source program" )
         print( open(tmpf.name).read() )
         print( "*"*60 )
         
+        program_fmt = "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))]);
+
         # run the interpreter in a sandbox and capture the output hopefully
         try:
             failed = False
             #obj = EzhilFileExecuter( file_input = tmpf.name, redirectop = True )
             obj = EzhilInterpExecuter( file_input = tmpf.name, redirectop = True )
-            progout = obj.get_output()
-            op = "<B>Succeeded Execution</B> for program <font color=\"blue\"><pre>%s</pre></font> as <br/> <font color=\"green\"><pre>%s</pre></font>"%(program,progout)
+            progout = obj.get_output()            
+            op = "<B>Succeeded Execution</B> for program <font color=\"blue\"><ol>%s</ol></font> as <br/> <font color=\"green\"><pre>%s</pre></font>"%(program_fmt,progout)
         except Exception as e:
             print str(e)
             failed = True
-            op = "<B>FAILED Execution</B> for program <font color=\"blue\"><pre>%s</pre></font> with <font color=\"red\">error <pre>%s</pre> </font>"%(program,str(e))
+            op = "<B>FAILED Execution</B> for program <font color=\"blue\"><ol>%s</ol></font> with <font color=\"red\">error <pre>%s</pre> </font>"%(program_fmt,str(e))
         else:
             print "Output file"
             obj.get_output()
