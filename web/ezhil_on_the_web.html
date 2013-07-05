@@ -5,12 +5,40 @@
   <head>
     <title>எழில் - தமிழ் நிரலாக்க மொழி  // Ezhil-Lang: Ezhil on the web</title>
     <script language="javascript" type="text/javascript" >
+      //Ref: http://alexking.org/blog/2003/06/02/inserting-at-the-cursor-using-javascript
+      // This function GPL licensed - part of PHPMyAdmin
+      // (C) 1998-2013 phpMyAdmin project www.phpmyadmin.net/‎
+      function insertAtCursor(myField, myValue) {
+         //window.alert(myValue)
+         //IE support
+         if (document.selection) {
+            myField.focus();
+            sel = document.selection.createRange();
+            sel.text = myValue;
+          }
+          //MOZILLA/NETSCAPE support
+          else if (myField.selectionStart || myField.selectionStart == '0') {
+            var startPos = myField.selectionStart;
+            var endPos = myField.selectionEnd;
+            myField.value = myField.value.substring(0, startPos)
+	       + myValue
+               + myField.value.substring(endPos, myField.value.length);
+          } else {
+            myField.value += myValue;
+          }
+          //window.alert(myField.value)
+      }
+      
       /* (C) 2013 Muthiah Annamalai */
       function appendText( text_elements  ) {
-	var ezCodeWidget = document.getElementById('EzhilCodeWidget');
-        ezCodeWidget.value += text_elements + " ";
-        ezCodeWidget.scrollTop = ezCodeWidget.scrollHeight;
-        ezCodeWidget.focus();
+        var ezCodeWidget = document.getElementById('EzhilCodeWidget');
+        //ezCodeWidget.value += text_elements + " ";
+        //ezCodeWidget.scrollTop = ezCodeWidget.scrollHeight;
+        //ezCodeWidget.focus();
+        //insertAtCursor( ezCodeWidget, text_elements )
+        //window.alert('hello world '+text_elements + ' ends here\n')
+        // calling the function
+        insertAtCursor(ezCodeWidget, text_elements);
       }
     </script>
   </head>
@@ -61,7 +89,7 @@
 </form>
 <HR />
 <div align="center">
-    <form  action="http://localhost:8080/ezhil" method="GET">
+    <form   id="EzhilWebEditor" action="http://localhost:8080/ezhil" method="GET">
       <input type="hidden" value="true" name="eval" />
       <textarea id="EzhilCodeWidget" rows="20" cols="80" name="prog"># enter your ezhil program below
 # இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
