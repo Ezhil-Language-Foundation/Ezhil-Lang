@@ -23,7 +23,9 @@ import string
 
 from cmd import Cmd
 
-from time import sleep as ezhil_sleep
+import time
+ezhil_sleep = time.sleep
+ezhil_date_time = time.asctime
 
 from ast import String, Number
 
@@ -240,6 +242,20 @@ class Interpreter(DebugUtils):
              ezhil_sleep( args[1] )
 	return
     
+    def add_builtin(self,call_name,call_handle,nargin=1,ta_alias=None):	    
+	    # make sure you don't clobber yourself
+	    assert not self.builtin_map.has_key(call_name)
+	    if ( nargin == -1 ):
+		    self.builtin_map[call_name] = BlindBuiltins( call_handle, call_name, self.debug)
+            else:
+		    self.builtin_map[call_name] = BuiltinFunction( call_handle, call_name, nargin, self.debug )
+	    # update the alias if something was supplied
+	    if ( ta_alias ):
+		    assert not self.builtin_map.has_key(ta_alias) #noclobber
+		    self.builtin_map[ta_alias] = self.builtin_map[call_name]
+	    
+	    return True
+    
     def install_builtins(self):
         """ populate with the builtin functions"""
         self.builtin_map['printf']=BlindBuiltins(Interpreter.PRINTF,'printf',self.debug)
@@ -347,7 +363,8 @@ class Interpreter(DebugUtils):
         # sleep/pausee
 	self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
 	self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
-	
+	# date/time
+	self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias="தேதி_நேரம்")
         # random functions
         aslist = True;
         self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)
