@@ -62,7 +62,10 @@ class BaseEzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
             obj.get_output()
         
         # delete the temporary file
-        unlink(tmpf.name)
+	try:
+            unlink(tmpf.name)
+        except Exception as e:
+            print("Exception %s but we pass it"%str(e))
         
         prev_page = """<script>
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");
