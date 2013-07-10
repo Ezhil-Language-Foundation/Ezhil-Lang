@@ -1,3 +1,3 @@
 #!/bin/sh
-python ./ezhil/EZWeb.py
+cd ./web && python ../ezhil/EZWeb.py
 

@@ -11,11 +11,12 @@
 import time
 from ezhil import EzhilFileExecuter, EzhilInterpExecuter
 import BaseHTTPServer, tempfile, threading
+from SimpleHTTPServer import SimpleHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 from os import unlink
 import cgi
 
-class BaseEzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
+class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
     def do_GET(self):        
         print(str(self.headers), "in thread =", threading.currentThread().getName())
 
@@ -31,7 +32,8 @@ class BaseEzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
             self.end_headers()
             self.do_ezhil_execute( program )
         else: 
-            self.send_error(404)
+            #delegat to parent
+            SimpleHTTPRequestHandler.do_GET(self)
         return
     
     def do_ezhil_execute(self,program):
