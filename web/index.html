@@ -45,7 +45,7 @@
   <body bgcolor="white">
     <table>
       <tr><td>
-    <img src="./ezhil-logo.png"/></td><td><H3>உங்கள் வலை உலாவியில் எழில் நிரல்கள் இயக்கவும்!<BR/>
+    <img src="ezhil-logo.png"/></td><td><H3>உங்கள் வலை உலாவியில் எழில் நிரல்கள் இயக்கவும்!<BR/>
        (Run Ezhil Programs from your Web Browser)</H3></td></tr>
 </table>
     <div>கீழே உள்ள படிவத்தில் உங்கள் நிரல் உள்ளிடவும், மற்றும்  "இயக்கவும்"  பொத்தானை கிளிக் செய்யவும்! (Enter your program in the form below, and click submit to execute the code!)</div> 
@@ -92,10 +92,17 @@
     <form   id="EzhilWebEditor" action="http://localhost:8080/ezhil" method="GET">
       <input type="hidden" value="true" name="eval" />
       <textarea id="EzhilCodeWidget" rows="20" cols="80" name="prog"># enter your ezhil program below
-# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+ ## இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+ ## செயல்பாடு எடுத்துக்காட்டு
+  நிரல்பாகம் sine_pi( )
+    ## முக்கோண இயல் செயல்முறை சைன் கணக்கிட
+  ## calculate trigonometric function sine
+    பின்கொடு sin( pi() / 2 )
+  முடி
+ 
+ sine_pi( )
 
-பதிப்பி "வணக்கம்! எழில் அழைக்கிரது"
-sin( pi() / 2 )
+  பதிப்பி "வணக்கம்! எழில் அழைக்கிரது"
 
   # 'வரை' வாக்கியத்தால் பயன்படுத்தி  செய்யலாம்
   # demo of a while loop
@@ -107,7 +114,7 @@ sin( pi() / 2 )
           பதிப்பி i
            i = i  - 1
   முடி
-
+ 
 பதிப்பி "******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******"
 </textarea>
       <br />

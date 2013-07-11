@@ -25,14 +25,18 @@ class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
             print str(GETvars)
             if GETvars.has_key('prog'):
                 program = "\n".join(GETvars['prog'])
-            else:
+            elif GETvars.has_key('eval'):
                 program = 'printf("Welcome to Ezhil! You can type a program and see its output here!")\n'
+            else:                
+                # delegate upward
+                SimpleHTTPRequestHandler.do_GET(self)
+                return
             self.send_response(200)
-            self.send_header("Content-type", "text/html")
+            self.send_header("Content-type", "text/html")            
             self.end_headers()
             self.do_ezhil_execute( program )
-        else: 
-            #delegat to parent
+        else:
+            #delegate to parent
             SimpleHTTPRequestHandler.do_GET(self)
         return
     
