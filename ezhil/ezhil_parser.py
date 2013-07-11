@@ -250,6 +250,7 @@ class EzhilParser(Parser):
     def function(self):
         """ def[kw] fname[id] (arglist) {body} end[kw] """
         if ( self.parsing_function ):
+            self.parsing_function = False
             raise ParseException(" Nested functions not allowed! ")
 
         self.parsing_function = True

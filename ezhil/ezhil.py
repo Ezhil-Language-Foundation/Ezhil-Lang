@@ -127,7 +127,12 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
         except EOFError as e:
             print("End of Input reached\n")
             do_quit = True ##evaluate the Lbuffer             
-        if ( debug ): print("evaluating buffer", Lbuffer)
+        if ( debug ):
+            print("evaluating buffer", Lbuffer)
+            if ( len(totbuffer) > 0 ):
+                print("tot buffer %s"%totbuffer) #debugging aid
+            
+        
         if ( do_quit ):
             print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
             return
@@ -142,8 +147,8 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
             if ( debug ): lexer.dump_tokens()
             try:
                 if ( debug ): print ("parsing buffer item => ",totbuffer)
-                parse_eval.parse()
-            except Exception as pexp:
+                parse_eval.parse()                
+            except Exception as pexp:                
                 ## clear tokens in lexer
                 lexer.tokens = list()
                 if ( debug ): print ("offending buffer item => ",totbuffer)
@@ -152,7 +157,7 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 # this allows a line-by-line execution strategy. When all else fails we report.
                 if ( (line_no + 1) ==  max_lines ):
                     raise pexp
-                continue 
+                continue
             totbuffer = ""
             sys.stdout.write(curr_line_no)
             if ( debug ):  print("*"*60);  print(str(parse_eval))
@@ -161,6 +166,8 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 print(rval.__str__())
             elif rval:
                 print(rval)
+            else:
+                print("\n")
         except Exception as e:
             print(e)
             raise e

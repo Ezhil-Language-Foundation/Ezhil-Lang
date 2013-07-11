@@ -738,5 +738,3 @@ class Function:
     def visit_function(self,walker):
         walker.visit_function(self)
         return
-
-
