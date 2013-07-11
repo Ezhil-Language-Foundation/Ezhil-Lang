@@ -204,6 +204,9 @@ class Stmt:
     def __repr__(self):
         return "\n\t [%s[empty-statement]] "%(self.class_name)
 
+    def get_pos(self):
+        return "line %d, col %d"%(self.line,self.col)
+        
     def evaluate(self, env):
         """ empty statement """
         return None
@@ -222,7 +225,7 @@ class Stmt:
             elif ( isinstance(val,float) or isinstance(val,int) ):
                 fval = val
             else:
-                raise  Exception("Unknown case, cannot identify truth")
+                raise  Exception("Unknown case, cannot identify truth @ "+self.get_pos())
             
             if ( fval > 0.0 ):
                 rval = True
@@ -305,7 +308,7 @@ class Expr(Stmt):
             if ( opr1 == opr2 ):
                 val = self.One;
         else:
-            raise SyntaxError("Binary operator syntax not OK")
+            raise SyntaxError("Binary operator syntax not OK @ "+self.get_pos())
         
         self.dbg_msg("value = "+str(val))
         return val
@@ -319,23 +322,23 @@ class Expr(Stmt):
             else:
                 ## possibly leads to inf- recursion
                 ## tval = term.evaluate( env )
-                raise RuntimeException( " unknown clause to evaluate ");
+                raise RuntimeException( " unknown clause to evaluate @ "+self.get_pos());
         else:
             tval = (term) #float cast not required.
         return tval
 
     def evaluate(self,env):
         term=self.term.evaluate(env)
-        #print term, type(term)
+        if ( self.debug ): print term, type(term)
         if self.binop.kind in Token.BINOP:
             tnext = self.next_expr.evaluate(env)
             tval = self.normalize_values( term, env)
             tval2 = self.normalize_values( tnext, env)
-            #print tval, type(tval), tval2, type(tval2)
+            if ( self.debug ): print tval, type(tval), tval2, type(tval2)
             term = self.do_binop(tval,
                                  tval2,
                                  self.binop.kind)
-        #print "term = ",term, term.__class__
+        if ( self.debug ): print "term = ",term, term.__class__
         return term
 
     def visit_expr(self, walker):
@@ -540,7 +543,7 @@ class AssignStmt(Stmt):
             env.set_id( lvalue.id, rhs )
             rval = rhs
         else:
-            raise Exception("Unknown assign operator")
+            raise Exception("Unknown assign operator @ "+self.get_pos())
         return rval
     
     def evaluate(self,env):
@@ -556,7 +559,7 @@ class AssignStmt(Stmt):
                              str(self.lvalue))
                              #str(env.get_id(self.lvalue.id)) )
             return rhs
-        raise Exception("Unknown assign operator")
+        raise Exception("Unknown assign operator @ "+self.get_pos())
     
     def visit_assign_stmt(self, walker):
         walker.visit_assign_stmt(self)
@@ -684,15 +687,13 @@ class StmtList(Stmt):
         walker.visit_stmt_list(self)
         return
 
-class Function:
+class Function(Stmt):
     """ function definition itself """
     def __init__(self,fname,arglist,body,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.name = fname
         self.arglist = arglist
         self.body = body
-        self.debug = dbg
-        self.line = l
-        self.col = c
         self.dbg_msg( "function "+fname+" was defined" )
         
     def dbg_msg(self, msg):
@@ -714,7 +715,7 @@ class Function:
         fargs = self.arglist.get_list()
         if ( len(args) != len(fargs) ):
             raise Exception("Call Arguments donot match with" + \
-                                "function definition")
+                                "function definition @ "+self.get_pos())
         
         ## create local variables on the stack in order of definitions
         lut={}
