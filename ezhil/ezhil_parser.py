@@ -251,7 +251,7 @@ class EzhilParser(Parser):
         """ def[kw] fname[id] (arglist) {body} end[kw] """
         if ( self.parsing_function ):
             self.parsing_function = False
-            raise ParseException(" Nested functions not allowed! ")
+            raise ParseException(" Nested functions not allowed! "+str(self.last_token()))
 
         self.parsing_function = True
         def_tok = self.dequeue()
@@ -334,7 +334,6 @@ class EzhilParser(Parser):
         self.dbg_msg("finished expression list")
         return ExprList(exprs, l, c, self.debug)
 
-
     def expr(self):
         self.dbg_msg( " EXPR " )
         val1=self.term()
@@ -389,7 +388,7 @@ class EzhilParser(Parser):
             lparen_tok = self.dequeue()
             val=self.expr()
             if self.dequeue().kind!= EzhilToken.RPAREN:
-                raise SyntaxError("Missing Parens")
+                raise SyntaxError("Missing Parens "+str(self.last_token()))
         elif tok.kind ==  EzhilToken.NUMBER:
             tok_num = self.dequeue()
             [l, c] = tok_num.get_line_col()
