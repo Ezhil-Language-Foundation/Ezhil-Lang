@@ -64,8 +64,6 @@ class EzhilRedirectOutput:
             sys.stderr = self.tmpf
         pass
     
-        
-    
     def get_output( self ):
         """ read the output from tmpfile once and delete it. Use cached copy for later. Memoized. """ 
         if ( not isinstance(self.op,str) ):
@@ -78,14 +76,12 @@ class EzhilRedirectOutput:
         
         return self.op
 
-
 class EzhilRedirectInputOutput(EzhilRedirectOutput):
     def __init__(self,input_file,redirectop):
         EzhilRedirectOutput.__init__(self,redirectop)
         self.old_stdin = sys.stdin
         self.stdin = open( input_file )
     
-
 class EzhilFileExecuter(EzhilRedirectOutput):
     """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files """
     def __init__(self,file_input,debug=False,redirectop=False):        
@@ -108,7 +104,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 sys.stderr = self.old_stderr
         
 
-def local_REPL( file_input, lang, lexer, parse_eval, debug=False):    
+def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):    
     #refactor out REPL for ezhil and exprs
     env = None ## get the first instance from evaluate_interactive
     do_quit = False
@@ -183,7 +179,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
             lang = "எழில்"
             lexer = EzhilLex( )
             parse_eval = EzhilInterpreter( lexer, debug )
-            local_REPL( file_input, lang, lexer, parse_eval, debug )
+            ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
         except Exception as e:            
             print("exception ",str(e))
             raise e
@@ -194,14 +190,22 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
                 sys.stderr = self.old_stderr
                 sys.stdin = self.old_stdin
 
+    @staticmethod
+    def runforever():
+        EzhilInterpExecuter(sys.stdin)
+        return
+
+def ezhil_interactive_interpreter(lang = "எழில்",debug=False):
+    ## interactive interpreter
+    lexer = EzhilLex( )
+    parse_eval = EzhilInterpreter( lexer, debug )
+    REPL( lang, lexer, parse_eval, debug )    
+
 if __name__ == "__main__":
     lang = "எழில்"
     [fname, debug, dostdin ]= get_prog_name(lang)
     if ( dostdin ):
-        ## interactive interpreter
-        lexer = EzhilLex( )
-        parse_eval = EzhilInterpreter( lexer, debug )
-        REPL( lang, lexer, parse_eval, debug )
+        ezhil_interactive_interpreter(lang,debug)
     else:
         ## evaluate a files sequentially
         for files in fname:
