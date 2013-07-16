@@ -33,7 +33,8 @@ $ cd ./ezhil-lang/
 
 and then typing, 
 
-===Batch Mode===
+Batch Mode
+==========
 $ ./ez ./ezhil_tests/hello.n 
 பதிப்பி "வணக்கம்!"
 பதிப்பி "எழில் அழைக்கிரது"
@@ -53,7 +54,8 @@ optional arguments:
   -debug      enable debugging information on screen
   -stdin      read input from the standard input
 
-===Interactive Mode===
+Interactive Mode
+================
 $ ./ez
 எழில் 1>> 1 + 5
 6
@@ -61,7 +63,8 @@ $ ./ez
 வணக்கம்! எழில் அழைக்கிரது
 எழில் 3>> exit()
 
-===Web Mode===
+Web Mode
+========
 You can also run ezhil as a web service by launching the webserver,
 $ ./webserver.sh
 and open the webpage, http://localhost:8080 in google-chrome or firefox,
