@@ -629,6 +629,7 @@ class ArgList:
         walker.visit_arg_list(self)
         return
 
+#TODO : derive from 'list' and 'Stmt' class and update code
 class ValueList:
     """ defines value list in a function definition """
     def __init__(self,argvals, l, c, dbg =False):
@@ -640,7 +641,11 @@ class ValueList:
 
     def __len__(self):
         return len(self.args)
-
+        
+    def __getitem__(self,idx):
+        """ index into the object like a list : @idx - caveat emptor """
+        return self.args[idx]
+    
     def get_list(self):
         return self.args
 

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 ##
 ## (C) 2007, 2008 Muthiah Annamalai,
 ## Licensed under GPL Version 3
@@ -105,7 +105,7 @@ class EzhilParser(Parser):
         self.dbg_msg(" STMT ")
         ptok = self.peek()
         self.dbg_msg("stmt: peeking at "+str(ptok))
-        if ( ptok.kind ==  EzhilToken.RETURN ):             
+        if ( ptok.kind ==  EzhilToken.RETURN ):
             ## return <expression>
             self.dbg_msg('enter->return: <expression>')
             ret_tok = self.dequeue()
@@ -132,13 +132,14 @@ class EzhilParser(Parser):
         elif ( ptok.kind ==  EzhilToken.ATRATEOF ):
             ## @ <expression> {if | while | elseif}
             at_tok = self.match(EzhilToken.ATRATEOF)
-            exp = self.expr();
+            exp = self.valuelist();
+            if( self.debug ): print ("return from valuelist ",str(exp))
             ptok = self.peek();
             if ( ptok.kind == EzhilToken.IF ):
                 ## @ <expression> if { stmtlist }
                 if_tok = self.dequeue()
-                [l,c]=if_tok.get_line_col();
-                ifstmt = IfStmt( exp, None, None, l, c, self.debug)
+                [l,c]=if_tok.get_line_col();                
+                ifstmt = IfStmt( exp[0], None, None, l, c, self.debug)
                 self.if_stack.append(ifstmt)
                 body = self.stmtlist()
                 ifstmt.set_body( body )
@@ -155,7 +156,7 @@ class EzhilParser(Parser):
                 elseif_tok = self.dequeue()
                 [l,c]=elseif_tok.get_line_col();
                 self.check_if_stack()
-                elseif_stmt = IfStmt( exp, None, None, l, c, self.debug )
+                elseif_stmt = IfStmt( exp[0], None, None, l, c, self.debug )
                 ifstmt = self.if_stack[-1]
                 ifstmt.set_next_stmt( elseif_stmt )
                 self.if_stack.pop()
@@ -169,51 +170,33 @@ class EzhilParser(Parser):
                self.dbg_msg("while-statement");
                while_tok = self.dequeue();
                [l,c]=while_tok.get_line_col()
-               wexpr = exp;
+               wexpr = exp[0];
                body = self.stmtlist( )
                self.match( EzhilToken.END)
                whilestmt = WhileStmt(wexpr, body, l, c, self.debug);
                self.loop_stack.pop();
                return whilestmt
-        elif ( ptok.kind ==  EzhilToken.FOR ):
-            ## Fixme : empty for loops not allowed.
-            """ For ( exp1 , exp2 , exp3 ) stmtlist  end"""
-            self.loop_stack.append(True)
-            self.dbg_msg("for-statement")
-            for_tok = self.dequeue()
-            self.match( EzhilToken.LPAREN)
-
-            lhs = self.expr()
-            init = lhs 
-            ptok = self.peek()
-            if ( ptok.kind in  EzhilToken.ASSIGNOP ):
-                assign_tok = self.dequeue()
-                [l,c]=assign_tok.get_line_col();
-                rhs = self.expr()
-                init = AssignStmt( lhs, assign_tok, rhs, l, c, self.debug)
-
-            self.match( EzhilToken.COMMA )
-
-            cond = self.expr();
-            self.match( EzhilToken.COMMA )
-
-            lhs = self.expr()
-            update = lhs 
-            ptok = self.peek()
-            if ( ptok.kind in  EzhilToken.ASSIGNOP ):
-                assign_tok = self.dequeue()
-                [l,c]=assign_tok.get_line_col()
-                rhs = self.expr()
-                update = AssignStmt( lhs, assign_tok, rhs, l, c, self.debug)
-
-            
-            self.match( EzhilToken.RPAREN);
-            body = self.stmtlist( )
-            self.match( EzhilToken.END)
-            [l,c]= for_tok.get_line_col();
-            forstmt = ForStmt(init, cond, update, body, l, c, self.debug);
-            self.loop_stack.pop();
-            return forstmt
+            elif ( ptok.kind ==  EzhilToken.FOR ):
+                ## Fixme : empty for loops not allowed.
+                """ For ( exp1 , exp2 , exp3 ) stmtlist  end"""
+                if ( self.debug ): print("parsing FOR stmt")
+                self.loop_stack.append(True)
+                self.dbg_msg("for-statement")
+                
+                for_tok = self.peek()
+                if ( self.debug ): print("matching for STMT",str(self.peek()))
+                self.match( EzhilToken.FOR )
+                if ( self.debug ): print("matched for STMT",str(self.peek()))
+                [l,c]= for_tok.get_line_col();
+                init,cond,update = exp[0],exp[1],exp[2]            
+                if ( self.debug ): print("extract 3 parts",str(init),str(cond),str(update))
+                body = self.stmtlist()
+                self.match( EzhilToken.END)
+                if ( self.debug ): print("body of loop",str(body))
+                forstmt = ForStmt(init, cond, update, body, l, c, self.debug);
+                self.loop_stack.pop();
+                if ( self.debug ): print("completed parsing FOR loop",str(forstmt))
+                return forstmt
         elif ( ptok.kind ==  EzhilToken.BREAK ):
             ## break, must be in loop-environment
             self.dbg_msg("break-statement");
@@ -231,7 +214,6 @@ class EzhilParser(Parser):
             self.check_loop_stack(); ##raises a parse error
             cntstmt = ContinueStmt( l, c, self.debug);
             return cntstmt
-
         else:
             ## lval := rval
             ptok = self.peek()
@@ -278,11 +260,23 @@ class EzhilParser(Parser):
         valueList = list()
         self.dbg_msg("valuelist: ")
         lparen_tok = self.match(  EzhilToken.LPAREN )
-        while ( self.peek().kind !=  EzhilToken.RPAREN ):
+        while ( self.peek().kind !=  EzhilToken.RPAREN ):            
             val = self.expr()
+            if ( self.debug ): print("val = ",str(val))
+            ptok = self.peek()
+            if ( self.debug ) : print("ptok = ",str(ptok),str(ptok.kind),str(EzhilToken.ASSIGNOP))
+            if ( ptok.kind in  EzhilToken.ASSIGNOP ):
+                assign_tok = self.dequeue()
+                rhs = self.expr()
+                [l,c]=assign_tok.get_line_col()
+                lhs = val
+                val =  AssignStmt( lhs, assign_tok, rhs, l, c, self.debug)
+                if ( self.debug ): print("AssignStmt = ",str(val))
+                ptok = self.peek()
+            else:
+                if ( self.debug ): print("No-Assign // Expr =",str(val))
             self.dbg_msg("valuelist-expr: "+str(val))
             valueList.append( val )
-            ptok = self.peek()
             if  ( ptok.kind ==  EzhilToken.RPAREN ):
                 break
             elif ( ptok.kind ==  EzhilToken.COMMA ):
@@ -292,7 +286,6 @@ class EzhilParser(Parser):
         self.match(  EzhilToken.RPAREN )
         [l,c] = lparen_tok.get_line_col()
         return ValueList(valueList, l, c, self.debug )
-
 
     def arglist(self):
         """parse: ( arg_1, arg_2, ... ) """
