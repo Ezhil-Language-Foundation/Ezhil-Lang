@@ -88,8 +88,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         EzhilRedirectOutput.__init__(self,redirectop)
         
         try:
-            lexer = EzhilLex(file_input)
-            if ( debug ): lexer.dump_tokens()        
+            lexer = EzhilLex(file_input,debug)
+            if ( debug ): lexer.dump_tokens()
             parse_eval = EzhilInterpreter( lexer, debug )
             parse_eval.parse()
             if ( debug ):  print("*"*60);  print(str(parse_eval))
@@ -177,7 +177,8 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         
         try:
             lang = "எழில்"
-            lexer = EzhilLex( )
+            lexer = EzhilLex(self.debug)
+            if ( self.debug ): print( str(lexer) )
             parse_eval = EzhilInterpreter( lexer, debug )
             ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
         except Exception as e:            
@@ -197,7 +198,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
 
 def ezhil_interactive_interpreter(lang = "எழில்",debug=False):
     ## interactive interpreter
-    lexer = EzhilLex( )
+    lexer = EzhilLex(debug)
     parse_eval = EzhilInterpreter( lexer, debug )
     REPL( lang, lexer, parse_eval, debug )    
 
@@ -209,5 +210,5 @@ if __name__ == "__main__":
     else:
         ## evaluate a files sequentially
         for files in fname:
-            EzhilFileExecuter( files )
+            EzhilFileExecuter( files, debug )
     pass

@@ -30,9 +30,15 @@ class EzhilLexeme(Lexeme):
 
 class EzhilToken( Token):
     """ add '@' token in extending the Token type """    
-    val = len(Token.token_types)+1 
     Token.token_types.append("@")
-    Token.ATRATEOF = val
+    Token.ATRATEOF = len(Token.token_types)    
+    
+    Token.token_types.append("FOREACH|ஒவ்வொன்றாக")
+    Token.FOREACH = len(Token.token_types)
+    
+    Token.token_types.append("IN|இல்")
+    Token.IN = Token.COMMA #short-circuit!
+    
 ## Keep it this way, so we share maximum amount of code.
 ##    def get_name(kind):
 ##        return Token.token_types[kind]
@@ -66,6 +72,10 @@ class EzhilLex ( Lex ) :
             tval = EzhilLexeme( chunks, EzhilToken.ELSE )
         elif chunks == "ஆக":
             tval = EzhilLexeme( chunks, EzhilToken.FOR )
+        elif chunks == "ஒவ்வொன்றாக":
+            tval = EzhilLexeme( chunks, EzhilToken.FOREACH )
+        elif chunks == "இல்":
+            tval = EzhilLexeme( chunks, EzhilToken.COMMA )
         elif chunks == "வரை":
             tval = EzhilLexeme( chunks, EzhilToken.WHILE )
         elif chunks == "செய்":
@@ -127,7 +137,6 @@ class EzhilLex ( Lex ) :
                 tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             else:
                 tval=EzhilLexeme(int(chunks),EzhilToken.NUMBER)
-            
         elif isalpha(chunks[0]) or has_tamil(chunks):
             ## check for tamil indentifiers
             tval=EzhilLexeme(chunks,EzhilToken.ID)
@@ -138,6 +147,9 @@ class EzhilLex ( Lex ) :
         tval.set_line_col( [l,c] )
         tval.set_file_name( self.fname )
         self.tokens.append( tval )
+        
+        if ( self.debug ): print("Lexer token = ",str(tval))
+        
         return l
     
     def tokenize(self,data=None):
@@ -240,11 +252,12 @@ class EzhilLex ( Lex ) :
 
         ## close the file if not stdin_mode
         if ( not self.stdin_mode ): self.File.close()
-
+        
         ## and manually add an EOF statement.
         eof_tok = EzhilLexeme("",EzhilToken.EOF )
         eof_tok.set_line_col( self.get_line_col( tok_start_idx ) )
         self.tokens.append( eof_tok )
-
+        if ( self.debug ):  print("before reverse"); self.dump_tokens()
         self.tokens.reverse()
+        if ( self.debug ):  print("after reverse"); self.dump_tokens()
         return

@@ -176,6 +176,9 @@ class EzhilParser(Parser):
                whilestmt = WhileStmt(wexpr, body, l, c, self.debug);
                self.loop_stack.pop();
                return whilestmt
+            elif ( ptok.kind ==  EzhilToken.FOREACH ):
+                if ( self.debug ): print("parsing FOREACH stmt")
+                # convert to a for 
             elif ( ptok.kind ==  EzhilToken.FOR ):
                 ## Fixme : empty for loops not allowed.
                 """ For ( exp1 , exp2 , exp3 ) stmtlist  end"""
