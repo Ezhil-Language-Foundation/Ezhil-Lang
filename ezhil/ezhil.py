@@ -177,11 +177,11 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         
         try:
             lang = "எழில்"
-            lexer = EzhilLex(self.debug)
-            if ( self.debug ): print( str(lexer) )
+            lexer = EzhilLex(debug)
+            if ( debug ): print( str(lexer) )
             parse_eval = EzhilInterpreter( lexer, debug )
             ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
-        except Exception as e:            
+        except Exception as e:
             print("exception ",str(e))
             raise e
         finally:
