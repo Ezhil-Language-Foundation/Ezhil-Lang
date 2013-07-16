@@ -69,3 +69,14 @@ You can also run ezhil as a web service by launching the webserver,
 $ ./webserver.sh
 and open the webpage, http://localhost:8080 in google-chrome or firefox,
 to enter your program and evaluate it.
+
+Python Library
+==============
+Ezhil Tamil programming Python package can be invoked from within the Python shell or IDLE on Windows, by simply typing,
+
+>> import ezhil
+>> ezhil.start()
+
+But to do all of this, you need to build and install the Python packages from this source, by,
+$ cd ezhil-lang/ && python setup.py build
+$ cd ezhil-lang/ && python setup.py install
