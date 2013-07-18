@@ -462,7 +462,7 @@ class WhileStmt(Stmt):
         self.class_name = "WhileStmt"
 
     def __repr__(self):
-        rval = "\t\n [WhileStmt[["+str(self.expr)+ "]] "+str(self.body) +"]"
+        rval = "\t\n [%s[["%str(self.__class__)+str(self.expr)+ "]] "+str(self.body) +"]"
         return rval
 
     def evaluate(self,env):
@@ -482,6 +482,28 @@ class WhileStmt(Stmt):
     def visit_while_stmt(self,walker):
         walker.visit_while_stmt(self)
         return
+
+class DoWhileStmt(WhileStmt):
+    """ do stmtlist  while ( exp )"""
+    def __init__(self,expr,body,l,c,dbg=False):
+        WhileStmt.__init__(self,expr,body,l,c,dbg)
+        
+    def evaluate(self,env):
+        """ first run is on the house, but then we keep count. Dog bites American style """
+        rval = None
+        first_time = True
+        self.dbg_msg("eval-Do-While stmt")
+        while ( first_time or self.is_true_value ( self.expr.evaluate(env) ) 
+                and not env.get_break_return() ):
+            ## everytime of loop clear any continues
+            env.clear_continue()
+            self.dbg_msg("ifstmt: true condition")
+            rval = self.body.evaluate( env )
+            first_time = False
+        ## clear break if-any
+        env.clear_break();
+        self.dbg_msg("exiting Do-While-stmt with rval="+str(rval))
+        return rval
 
 class ForStmt(Stmt):
     """ For ( exp1 ; exp2 ; exp3 ) stmtlist  end"""

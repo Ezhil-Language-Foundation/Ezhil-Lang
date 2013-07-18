@@ -35,9 +35,12 @@ class EzhilToken( Token):
     
     Token.token_types.append("FOREACH|ஒவ்வொன்றாக")
     Token.FOREACH = len(Token.token_types)
-    
+        
     Token.token_types.append("IN|இல்")
     Token.IN = Token.COMMA #short-circuit!
+    
+    Token.token_types.append("DOWHILE|முடியேனில்")
+    Token.DOWHILE = len(Token.token_types)
     
 ## Keep it this way, so we share maximum amount of code.
 ##    def get_name(kind):
@@ -55,7 +58,7 @@ class EzhilLex ( Lex ) :
     def get_lexeme(self,chunks , pos):
         if chunks == None:
             return None
-
+        
         if chunks == "பதிப்பி":
             tval = EzhilLexeme(chunks,EzhilToken.PRINT )
         elif chunks == "தேர்ந்தெடு":
@@ -75,11 +78,13 @@ class EzhilLex ( Lex ) :
         elif chunks == "ஒவ்வொன்றாக":
             tval = EzhilLexeme( chunks, EzhilToken.FOREACH )
         elif chunks == "இல்":
-            tval = EzhilLexeme( chunks, EzhilToken.COMMA )
+            tval = EzhilLexeme( chunks, EzhilToken.COMMA )        
         elif chunks == "வரை":
             tval = EzhilLexeme( chunks, EzhilToken.WHILE )
         elif chunks == "செய்":
             tval = EzhilLexeme( chunks, EzhilToken.DO )
+        elif chunks == "முடியேனில்":
+            tval = EzhilLexeme( chunks, EzhilToken.DOWHILE )
         elif chunks == "பின்கொடு":
             tval=EzhilLexeme(chunks,EzhilToken.RETURN)
         elif chunks == "முடி":

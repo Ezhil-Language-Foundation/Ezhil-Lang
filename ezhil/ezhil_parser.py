@@ -28,7 +28,7 @@ from runtime import  Environment, BuiltinFunction, \
 
 ## AST elements
 from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
- BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
+ BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
  String, Array
@@ -88,8 +88,12 @@ class EzhilParser(Parser):
         while( not self.lex.end_of_tokens() ):
             self.dbg_msg("STMTLIST => STMT")
             ptok = self.peek()
-            if ( ptok.kind ==  EzhilToken.END ):
+            if ( self.debug ): print("peek @ ",str(ptok))
+            if ( ptok.kind == EzhilToken.END ):
                 self.dbg_msg("End token found");
+                break
+            elif ( ptok.kind == EzhilToken.DOWHILE ):
+                if ( self.debug ): print("DOWHILE token found")
                 break
             if ( not self.inside_if and 
                  ( ptok.kind ==  EzhilToken.ELSE
@@ -231,6 +235,20 @@ class EzhilParser(Parser):
                 self.loop_stack.pop();
                 if ( self.debug ): print("completed parsing FOR loop",str(forstmt))
                 return forstmt
+        elif ( ptok.kind == EzhilToken.DO ):
+            if ( self.debug ): print("parsing DO-WHILE statement")
+            self.loop_stack.append(True)
+            do_tok = self.dequeue()
+            [l,c]=do_tok.get_line_col()
+            body = self.stmtlist()
+            if ( self.debug ): print("parsed body")
+            self.match(EzhilToken.DOWHILE)            
+            self.match(EzhilToken.ATRATEOF)
+            exp = self.valuelist();
+            if ( self.debug ): print("parsed EXP",exp[0])
+            doWhileStmt = DoWhileStmt(exp[0], body, l, c, self.debug)
+            self.loop_stack.pop()
+            return doWhileStmt
         elif ( ptok.kind ==  EzhilToken.BREAK ):
             ## break, must be in loop-environment
             self.dbg_msg("break-statement");
@@ -239,7 +257,6 @@ class EzhilParser(Parser):
             self.check_loop_stack(); ##raises a parse error
             brkstmt = BreakStmt( l, c, self.debug);
             return brkstmt
-
         elif ( ptok.kind ==  EzhilToken.CONTINUE ):
             ## continue, must be in loop-environment
             self.dbg_msg("continue-statement");
