@@ -508,12 +508,13 @@ class ForStmt(Stmt):
         while ( self.is_true_value ( self.expr_cond.evaluate(env) )
                 and not env.get_break_return() ):
             ## everytime of loop clear any continues
-            env.clear_continue()
+            env.clear_continue()            
+            rval = self.body.evaluate( env )
+            # update happens after body evaluates - this is C-style
             if ( not first_time ):
                 self.expr_update.evaluate( env )
             else:
                 first_time = False
-            rval = self.body.evaluate( env )
         ## clear break if-any
         env.clear_break();
         self.dbg_msg("exiting For-stmt with rval="+str(rval))
