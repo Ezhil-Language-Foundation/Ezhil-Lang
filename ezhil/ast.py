@@ -503,18 +503,14 @@ class ForStmt(Stmt):
         self.dbg_msg( "Eval-For-stmt: ")
         rval = None
         self.dbg_msg("eval-For-stmt")
-        rval = self.expr_init.evaluate(env)
-        first_time = True
+        rval = self.expr_init.evaluate(env)        
         while ( self.is_true_value ( self.expr_cond.evaluate(env) )
                 and not env.get_break_return() ):
             ## everytime of loop clear any continues
-            env.clear_continue()            
+            env.clear_continue()
             rval = self.body.evaluate( env )
-            # update happens after body evaluates - this is C-style
-            if ( not first_time ):
-                self.expr_update.evaluate( env )
-            else:
-                first_time = False
+            # update happens after body evaluates - this is C-style            
+            self.expr_update.evaluate( env )
         ## clear break if-any
         env.clear_break();
         self.dbg_msg("exiting For-stmt with rval="+str(rval))
@@ -669,8 +665,8 @@ class StmtList(Stmt):
         self.List = copy.copy(stmt)
         
     def __len__(self):
-        return len(self.List)
-
+        return len(self.List)        
+    
     def append(self,stmt_x):
         self.dbg_msg("adding new statement " + str(stmt_x) )
         self.List.append(stmt_x)

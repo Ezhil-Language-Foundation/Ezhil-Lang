@@ -17,8 +17,7 @@ import copy
 import os, sys, string, inspect
 
 ## scanner for Ezhil language
-from ezhil_scanner import EzhilToken
-from ezhil_scanner import EzhilLex
+from ezhil_scanner import EzhilToken, EzhilLex, EzhilLexeme
 
 ## exceptions
 from errors import RuntimeException, ParseException
@@ -166,19 +165,51 @@ class EzhilParser(Parser):
                 return elseif_stmt
             elif ( ptok.kind ==  EzhilToken.WHILE ):
                 ## @ ( expr ) while { body } end
-               self.loop_stack.append(True);
-               self.dbg_msg("while-statement");
-               while_tok = self.dequeue();
+               self.loop_stack.append(True)
+               self.dbg_msg("while-statement")
+               while_tok = self.dequeue()
                [l,c]=while_tok.get_line_col()
                wexpr = exp[0];
                body = self.stmtlist( )
                self.match( EzhilToken.END)
-               whilestmt = WhileStmt(wexpr, body, l, c, self.debug);
-               self.loop_stack.pop();
+               whilestmt = WhileStmt(wexpr, body, l, c, self.debug)
+               self.loop_stack.pop()
                return whilestmt
             elif ( ptok.kind ==  EzhilToken.FOREACH ):
+                foreach_tok = self.dequeue()
+                [l,c]=foreach_tok.get_line_col()
                 if ( self.debug ): print("parsing FOREACH stmt")
-                # convert to a for 
+                self.loop_stack.append(True)
+                self.dbg_msg("foreach-statement")
+                # convert to a for statement - building Ezhil AST - transformations
+                if not isinstance( exp[1], Identifier ):
+                    raise ParseError(" FOR-EACH statement "+str(foreach_tok) )
+                foreach_iter = exp[1];
+                iter = Identifier("__"+foreach_iter.id,l=0,c=-1);
+                eq_token = EzhilLexeme("=",EzhilToken.EQUALS)
+                plus_token = EzhilLexeme("+",EzhilToken.PLUS)
+                lt_token = EzhilLexeme("<",EzhilToken.LT)
+                if ( self.debug ): print("build init assign stmt")
+                init = AssignStmt( iter, eq_token , Number(0),l,c,self.debug)
+                if ( self.debug ): print("build cond expr")
+                VL1 = ValueList([exp[0]],l,c,self.debug)
+                cond = Expr( iter, lt_token, ExprCall( Identifier("len",l,c), VL1, l, c, self.debug ), l, c, self.debug )
+                if ( self.debug ): print("build plus1 stmt")
+                plus1_iter = Expr( iter, plus_token, Number(1), l, c, self.debug  )
+                if ( self.debug ): print("build equals stmt")
+                update = AssignStmt( iter, eq_token , plus1_iter ,l,c,self.debug)
+                body = self.stmtlist() #parse body
+                # and insert artifical update variable in body
+                VL2 = ValueList([exp[0],iter],l,c,self.debug)
+                extract_foreach_iter_from_list = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug);
+                foreach_iter_Assign = AssignStmt( foreach_iter, eq_token , extract_foreach_iter_from_list, l,c,self.debug )
+                body.List.insert( 0,foreach_iter_Assign)
+                # complete FOREACH stmt
+                self.match( EzhilToken.END)
+                foreach_stmt = ForStmt(init, cond, update, body, l, c, self.debug);                
+                self.loop_stack.pop();                
+                if ( self.debug ): print("completed parsing FOR-EACH loop",str(foreach_stmt))
+                return foreach_stmt
             elif ( ptok.kind ==  EzhilToken.FOR ):
                 ## Fixme : empty for loops not allowed.
                 """ For ( exp1 , exp2 , exp3 ) stmtlist  end"""

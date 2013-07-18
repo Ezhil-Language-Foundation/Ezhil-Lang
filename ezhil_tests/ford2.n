@@ -9,7 +9,14 @@
    பதிப்பி x, "கருவேபில"
    நிறுத்து #without this stmt it is a infinite loop
 முடி
+assert( x == - 1 )
 
 @( x = -1 , x < 0, x = x + 1 ) ஆக
    பதிப்பி x, "கருவேபில"
 முடி
+assert( x == 0 )
+
+@( x = 1 , x <= 10, x = x + 1 ) ஆக
+   பதிப்பி x, "கருவேபில"
+முடி
+assert( x == 11 )
