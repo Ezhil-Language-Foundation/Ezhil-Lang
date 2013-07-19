@@ -223,7 +223,7 @@ class Stmt:
             elif ( isinstance(val,float) or isinstance(val,int) ):
                 fval = val
             else:
-                raise  Exception("Unknown case, cannot identify truth @ "+self.get_pos())
+                raise  Exception("Unknown case, cannot identify truth @ "+self.get_pos()+" for value "+str(val))
             
             if ( fval > 0.0 ):
                 rval = True

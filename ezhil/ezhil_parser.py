@@ -98,11 +98,69 @@ class EzhilParser(Parser):
                 break            
             elif( self.inside_if and 
                  ( ptok.kind ==  EzhilToken.ELSE
-                   or ptok.kind == EzhilToken.ATRATEOF ) ):
+                   or ptok.kind == EzhilToken.ATRATEOF 
+                   or ptok.kind == EzhilToken.CASE 
+                   or ptok.kind == EzhilToken.OTHERWISE ) ):
                 break
             st = self.stmt()
             stlist.append( st )
         return stlist
+    
+    def parseSwitchStmt(self,exp):
+        ## @ <ID/EXPR> SWITCH @( expr ) CASE {stmtlist} @( expr ) CASE {stmtlist} OTHERWISE {stmtlist} END
+        ## implement as an if-elseif-else statement
+        self.dbg_msg("parsing SWITCH statement")
+        sw_tok = self.dequeue()
+        [l,c]=sw_tok.get_line_col()
+        self.inside_if = True
+        lhs=exp[0]
+        # enter this if-statement always
+        ifstmt = IfStmt( Number(1), None, None, l, c, self.debug)
+        self.if_stack.append(ifstmt)
+        self.dbg_msg("parsing SWITCH-body") #self.dbg_msg        
+        ptok = self.peek()
+        equality_token = EzhilLexeme("=",EzhilToken.EQUALITY)
+        while ( ptok.kind == EzhilToken.ATRATEOF or ptok.kind == EzhilToken.OTHERWISE ):
+            self.inside_if = True
+            [l,c]=ptok.get_line_col()
+            if ( ptok.kind == EzhilToken.ATRATEOF ):
+                # parse elseif branch
+                self.dbg_msg("parsing CASE")
+                self.match( EzhilToken.ATRATEOF )
+                exp = self.valuelist();
+                self.dbg_msg("parsing CASE EXPR")
+                self.match( EzhilToken.CASE )
+                next_stmt = self.stmtlist()                
+                expr = Expr( lhs, equality_token, exp[0], l, c, self.debug )
+                self.dbg_msg("building an Expr "+str(expr))                
+                if not ifstmt.body :
+                    ifstmt.expr = expr
+                    ifstmt.body = next_stmt
+                else:
+                    case_stmt = IfStmt(expr,next_stmt,None,l,c,self.debug);
+                    ifstmt.append_stmt( case_stmt )
+            elif ( ptok.kind == EzhilToken.OTHERWISE ):
+                #parse else branch
+                self.dbg_msg("parsing OTHERWISE: ")
+                self.match( EzhilToken.OTHERWISE )
+                self.dbg_msg("parsing OTHERWISE-Body")
+                self.inside_if = False
+                body = self.stmtlist()
+                else_stmt = ElseStmt( body , l, c, self.debug)
+                if not ifstmt.body :
+                    ifstmt.body = else_stmt
+                else:
+                    ifstmt.append_stmt( else_stmt )
+                break
+            else:
+                self.inside_if = False
+                raise ParseError("SWITCH-CASE-OTHERWISE statement syntax is messed up")
+            ptok = self.peek()
+            self.dbg_msg("parsing SWITCH-CASE next bits "+str(ptok))
+        self.match( EzhilToken.END )
+        self.inside_if = False
+        self.dbg_msg("parsing -SWITCH-CASE- complete")
+        return ifstmt
     
     def parseIfStmt(self,exp):
         ## @ <expression> if { stmtlist } @<expr> ELSEIF {stmtlist} ELSE <stmtlist> END
@@ -187,6 +245,8 @@ class EzhilParser(Parser):
                whilestmt = WhileStmt(wexpr, body, l, c, self.debug)
                self.loop_stack.pop()
                return whilestmt
+            elif ( ptok.kind ==  EzhilToken.SWITCH ):
+                return self.parseSwitchStmt(exp)
             elif ( ptok.kind ==  EzhilToken.FOREACH ):
                 foreach_tok = self.dequeue()
                 [l,c]=foreach_tok.get_line_col()
