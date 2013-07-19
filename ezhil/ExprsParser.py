@@ -28,8 +28,6 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  ValueList, Function, StmtList, Identifier, Number, \
  String
 
-
-
 ## Parser implementes the grammar for 'exprs' language.
 ## Entry point is parse(), after appropriate ctor-setup.
 class Parser(DebugUtils):
@@ -166,7 +164,7 @@ class Parser(DebugUtils):
                 self.inside_if = True
                 next_stmt = self.stmtlist()
                 self.inside_if = False
-                ifstmt.set_next_stmt( next_stmt )
+                ifstmt.append_stmt( next_stmt )
             self.match(Token.END)
             return ifstmt
         elif ( ptok.kind == Token.ELSEIF ):
@@ -177,7 +175,7 @@ class Parser(DebugUtils):
             exp = self.expr()
             elseif_stmt = IfStmt( exp, None, None, l, c, self.debug )
             ifstmt = self.if_stack[-1]
-            ifstmt.set_next_stmt( elseif_stmt )
+            ifstmt.append_stmt( elseif_stmt )
             self.if_stack.pop()
             self.if_stack.append( elseif_stmt )
             body = self.stmtlist( )
@@ -192,7 +190,7 @@ class Parser(DebugUtils):
             [l,c]=else_tok.get_line_col()
             body = self.stmtlist()
             else_stmt = ElseStmt( body , l, c, self.debug)
-            ifstmt.set_next_stmt( else_stmt )
+            ifstmt.append_stmt( else_stmt )
             return else_stmt
         elif ( ptok.kind == Token.FOR ):
             ## Fixme : empty for loops not allowed.

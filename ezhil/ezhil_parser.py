@@ -88,20 +88,66 @@ class EzhilParser(Parser):
         while( not self.lex.end_of_tokens() ):
             self.dbg_msg("STMTLIST => STMT")
             ptok = self.peek()
+            self.dbg_msg("STMTLIST "+str(ptok))
             if ( self.debug ): print("peek @ ",str(ptok))
             if ( ptok.kind == EzhilToken.END ):
                 self.dbg_msg("End token found");
                 break
             elif ( ptok.kind == EzhilToken.DOWHILE ):
                 if ( self.debug ): print("DOWHILE token found")
-                break
-            if ( not self.inside_if and 
+                break            
+            elif( self.inside_if and 
                  ( ptok.kind ==  EzhilToken.ELSE
-                   or ptok.kind ==  EzhilToken.ELSEIF ) ):
+                   or ptok.kind == EzhilToken.ATRATEOF ) ):
                 break
             st = self.stmt()
             stlist.append( st )
         return stlist
+    
+    def parseIfStmt(self,exp):
+        ## @ <expression> if { stmtlist } @<expr> ELSEIF {stmtlist} ELSE <stmtlist> END
+        self.dbg_msg("parsing IF statement")
+        if_tok = self.dequeue()
+        [l,c]=if_tok.get_line_col()
+        self.inside_if = True
+        ifstmt = IfStmt( exp[0], None, None, l, c, self.debug)
+        self.if_stack.append(ifstmt)
+        self.dbg_msg("parsing IF-body")
+        body = self.stmtlist()
+        ifstmt.set_body( body )
+        ptok = self.peek()
+        while ( ptok.kind == EzhilToken.ATRATEOF or ptok.kind == EzhilToken.ELSE ):
+            self.inside_if = True        
+            [l,c]=ptok.get_line_col()
+            if ( ptok.kind == EzhilToken.ATRATEOF ):
+                # parse elseif branch
+                self.dbg_msg("parsing ELSE-IF")                
+                self.match( EzhilToken.ATRATEOF )
+                exp = self.valuelist();
+                self.dbg_msg("parsing ELSE-IF EXPR")
+                self.match( EzhilToken.ELSEIF )
+                next_stmt = self.stmtlist()
+                self.dbg_msg("parsing ELSE-IF-body")
+                ifstmt.append_stmt( IfStmt(exp[0],next_stmt,None,l,c,self.debug) )                
+            elif ( ptok.kind == EzhilToken.ELSE ):
+                #parse else branch                
+                self.dbg_msg("parsing stmt else: ")
+                self.match( EzhilToken.ELSE )
+                self.dbg_msg("parsing ELSE-Body")
+                self.inside_if = False
+                body = self.stmtlist()
+                else_stmt = ElseStmt( body , l, c, self.debug)                
+                ifstmt.append_stmt( else_stmt )
+                break
+            else:
+                self.inside_if = False
+                raise ParseError("If-Else-If statement syntax is messed up")      
+            ptok = self.peek()
+            self.dbg_msg("parsing -IF next bits "+str(ptok))
+        self.match( EzhilToken.END )
+        self.inside_if = False
+        self.dbg_msg("parsing -IF-complete")
+        return ifstmt
     
     def stmt(self):
         """ try an assign, print, return, if or eval statement """
@@ -120,18 +166,7 @@ class EzhilParser(Parser):
             ## print <expression>
             print_tok = self.dequeue()
             [l,c]=print_tok.get_line_col();
-            return PrintStmt(self.exprlist(),l,c,self.debug)
-        elif ( ptok.kind ==  EzhilToken.ELSE ):
-            ## else stmtlist
-            self.check_if_stack()
-            ifstmt = self.if_stack.pop()
-            self.dbg_msg("stmt-else: ")
-            else_tok = self.dequeue()
-            [l,c]=else_tok.get_line_col()
-            body = self.stmtlist()
-            else_stmt = ElseStmt( body , l, c, self.debug)
-            ifstmt.set_next_stmt( else_stmt )
-            return else_stmt
+            return PrintStmt(self.exprlist(),l,c,self.debug)        
         elif ( ptok.kind ==  EzhilToken.ATRATEOF ):
             ## @ <expression> {if | while | elseif}
             at_tok = self.match(EzhilToken.ATRATEOF)
@@ -139,34 +174,7 @@ class EzhilParser(Parser):
             if( self.debug ): print ("return from valuelist ",str(exp))
             ptok = self.peek();
             if ( ptok.kind == EzhilToken.IF ):
-                ## @ <expression> if { stmtlist }
-                if_tok = self.dequeue()
-                [l,c]=if_tok.get_line_col();                
-                ifstmt = IfStmt( exp[0], None, None, l, c, self.debug)
-                self.if_stack.append(ifstmt)
-                body = self.stmtlist()
-                ifstmt.set_body( body )
-                ptok = self.peek()
-                if ( ptok.kind in [ EzhilToken.ATRATEOF,  EzhilToken.ELSE] ):
-                    self.inside_if = True
-                    next_stmt = self.stmtlist()
-                    self.inside_if = False
-                    ifstmt.set_next_stmt( next_stmt )
-                self.match( EzhilToken.END)
-                return ifstmt
-            elif ( ptok.kind ==  EzhilToken.ELSEIF ):
-                ## @ <expression> elseif { stmtlist }
-                elseif_tok = self.dequeue()
-                [l,c]=elseif_tok.get_line_col();
-                self.check_if_stack()
-                elseif_stmt = IfStmt( exp[0], None, None, l, c, self.debug )
-                ifstmt = self.if_stack[-1]
-                ifstmt.set_next_stmt( elseif_stmt )
-                self.if_stack.pop()
-                self.if_stack.append( elseif_stmt )
-                body = self.stmtlist( )
-                elseif_stmt.set_body ( body )
-                return elseif_stmt
+                return self.parseIfStmt(exp)            
             elif ( ptok.kind ==  EzhilToken.WHILE ):
                 ## @ ( expr ) while { body } end
                self.loop_stack.append(True)
@@ -466,7 +474,6 @@ class EzhilParser(Parser):
             val = Array()
             while( True ):
                 exprval = self.expr()
-                #if exprval :
                 val.append( exprval  )
                 if self.debug : print(self.peek().__class__,self.peek())
                 if ( self.peek().kind == EzhilToken.RSQRBRACE ):

@@ -127,8 +127,6 @@ class Array(list):
 class Hash(dict):
     pass
 
-
-
 class ExprCall:
     """handle function call statement etc."""
     def __init__(self,func_id,arglist, l, c, dbg = False):
@@ -422,7 +420,10 @@ class IfStmt(Stmt):
         self.body = body
         self.class_name = "IfStmt"
         ## this is either another IfStmt or an Else Stmt.
-        self.next_stmt = next_stmt
+        if not next_stmt:
+            self.next_stmt = []
+        else:
+            self.next_stmt = next_stmt
         
     def __repr__(self):
         rval = "\t\n [IfStmt[["+str(self.expr)+ "]] "+str(self.body)
@@ -433,6 +434,10 @@ class IfStmt(Stmt):
 
     def set_body(self,body):
         self.body = body
+    
+    def append_stmt(self,stmt):
+        self.next_stmt.append(stmt)
+        return
         
     def set_next_stmt(self, stmt):
         self.next_stmt = stmt
@@ -444,11 +449,24 @@ class IfStmt(Stmt):
         if ( self.is_true_value ( self.expr.evaluate(env) ) ):
             self.dbg_msg("ifstmt: true condition")
             rval = self.body.evaluate( env )
-        elif ( self.next_stmt != None ):
-            self.dbg_msg("ifstmt: false condition")
-            rval = self.next_stmt.evaluate( env )
-        return rval
-
+            return rval
+        self.dbg_msg("ifstmt: false condition")
+        for elseif_or_else in self.next_stmt:
+            if ( isinstance( elseif_or_else, IfStmt ) ):
+                if ( self.is_true_value( elseif_or_else.expr.evaluate(env) ) ):
+                    rval = elseif_or_else.body.evaluate( env )
+                    return rval
+                else:
+                    # elseif branch was found to be false. Continue
+                    continue;
+            elif( isinstance( elseif_or_else, ElseStmt ) ):
+                rval = elseif_or_else.evaluate( env )
+                return rval
+            else:
+                raise RuntimeException("IF-ELSEIF-ELSE was parsed wrongly, unknown construct found")
+        # its perfectly legal to not have an else statement
+        return rval 
+    
     def visit_if_elseif_stmt(self,walker):
         walker.visit_if_elseif_stmt(self)
         return
