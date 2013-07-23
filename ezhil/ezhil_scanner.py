@@ -15,7 +15,7 @@ from tamil import has_tamil, istamil, istamil_alnum
 from errors import ScannerException
 
 class EzhilLexeme(Lexeme):
-
+    """ Ezhil Lexeme - """ 
     def __init__(self,val,kind,fname=""):
         Lexeme.__init__(self,val,kind,fname)
 
@@ -58,7 +58,7 @@ class EzhilLex ( Lex ) :
     def get_lexeme(self,chunks , pos):
         if chunks == None:
             return None
-        
+        if ( self.debug ): print("chunks",chunks)
         if chunks == "பதிப்பி":
             tval = EzhilLexeme(chunks,EzhilToken.PRINT )
         elif chunks == "தேர்ந்தெடு":
@@ -133,6 +133,14 @@ class EzhilLex ( Lex ) :
             tval=EzhilLexeme(chunks,EzhilToken.MOD)
         elif chunks == "^":
             tval=EzhilLexeme(chunks,EzhilToken.EXP)
+        elif chunks == "&&":            
+            tval=Lexeme(chunks,EzhilToken.LOGICAL_AND)
+        elif chunks == "&":
+            tval=Lexeme(chunks,EzhilToken.BITWISE_AND)
+        elif chunks == "||":
+            tval=Lexeme(chunks,EzhilToken.LOGICAL_OR)
+        elif chunks == "|":
+            tval=Lexeme(chunks,EzhilToken.BITWISE_OR)
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
             tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )            
         elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
@@ -227,7 +235,7 @@ class EzhilLex ( Lex ) :
                 s = c; idx = idx + 1
                 ## FIXME temporary hack doesnt handle unary ops well.
                 while ( idx < len( data ) 
-                        and ( not data[idx] in [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(",">","<" ] )):
+                        and ( not data[idx] in [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||" ] )):
                     s = s + data[idx]
                     idx = idx + 1
                 self.get_lexeme(s, tok_start_idx )
@@ -243,7 +251,7 @@ class EzhilLex ( Lex ) :
             elif ( c in self.unary_binary_ops ):
                 tok_start_idx = idx 
                 if ( len(data) > ( 1 + idx  ) 
-                     and data[idx+1] == '=' ):
+                     and data[idx+1] in ['=','|','&'] ):
                     c = c +data[idx+1]
                     idx = idx + 1
                 self.get_lexeme(  c , tok_start_idx )

@@ -485,7 +485,8 @@ class EzhilParser(Parser):
         tok = self.peek()
         if ( tok.kind in  EzhilToken.MULDIV 
              or  tok.kind in  EzhilToken.COMPARE 
-             or tok.kind in  EzhilToken.EXPMOD  ):
+             or tok.kind in  EzhilToken.EXPMOD 
+             or tok.kind in EzhilToken.BITWISE_AND_LOGICAL ):
             binop=self.dequeue()
             val2=self.term()
             [l,c] = binop.get_line_col()

@@ -305,9 +305,20 @@ class Expr(Stmt):
             val =  self.Zero;
             if ( opr1 == opr2 ):
                 val = self.One;
+        elif binop == Token.LOGICAL_AND:
+            self.dbg_msg("LOGICAL AND")
+            val = self.Zero
+            if ( opr1 and opr2 ):
+                val = self.One;
+        elif binop == Token.LOGICAL_OR:
+            self.dbg_msg("LOGICAL OR")
+            val = self.Zero
+            if ( opr1 or opr2 ):
+                val = self.One;
+        elif binop in [Token.BITWISE_AND, Token.BITWISE_OR]:
+            raise Exception("Ezhil : Bitwise operators AND '&' and OR '|' are not supported currently!")
         else:
             raise SyntaxError("Binary operator syntax not OK @ "+self.get_pos())
-        
         self.dbg_msg("value = "+str(val))
         return val
 
@@ -336,6 +347,8 @@ class Expr(Stmt):
             term = self.do_binop(tval,
                                  tval2,
                                  self.binop.kind)
+        else:
+            raise RuntimeException(" unknown Binary Operation - Binary operation "+str(self.binop)+" not supported")
         if ( self.debug ): print "term = ",term, term.__class__
         return term
 
