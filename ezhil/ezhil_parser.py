@@ -27,7 +27,7 @@ from runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils
 
 ## AST elements
-from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
+from ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
@@ -506,6 +506,11 @@ class EzhilParser(Parser):
             tok_num = self.dequeue()
             [l, c] = tok_num.get_line_col()
             val = Number( tok.val , l, c, self.debug )
+        elif tok.kind == EzhilToken.LOGICAL_NOT:
+            tok_not = self.dequeue()
+            [l, c] = tok_not.get_line_col()
+            val = UnaryExpr( self.expr(), tok_not , l, c, self.debug )
+            self.dbg_msg("completed parsing unary expression"+str(val))
         elif tok.kind ==  EzhilToken.ID:
             tok_id = self.dequeue()
             [l, c] = tok_id.get_line_col()

@@ -109,6 +109,13 @@ class Number:
         walker.visit_number(self)
         return
 
+class Boolean(Number):
+    def __init__(self,n, l = 0, c = -1, dbg = False):
+        Number.__init__(self,n,l,c,dbg)
+    def __str__(self):
+        if ( self.num ):
+            return "True"
+        return "False"
 
 ## FIXME: implement arrays
 class Array(list):
@@ -238,6 +245,34 @@ class Stmt:
     def visit_stmt( self, walker):
         walker.visit_stmt( self )
         return
+    
+class UnaryExpr(Stmt):
+    def __init__(self,t,op,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
+        self.term=t
+        self.unaryop=op
+
+    def do_unaryop(self,tval):
+        if ( self.unaryop.kind == Token.LOGICAL_NOT ):
+            if not tval:
+                return Boolean( True )
+            else:
+                return Boolean( False )
+        else:
+            raise RuntimeException(" unknown Unary Operation - "+str(self.unaryop)+" not supported")
+        return
+
+    def evaluate(self,env):
+        term=self.term.evaluate(env)
+        if ( self.debug ): print(term, type(term))
+        if self.unaryop.kind in Token.UNARYOP:
+            tval = Expr.normalize_values( term, env)
+            if ( self.debug ): print(tval, type(tval), tval2, type(tval2))
+            term = self.do_unaryop( tval )
+        else:
+            raise RuntimeException(" unknown Unary Operation - "+str(self.unaryop)+" not supported")
+        if ( self.debug ): print("term = ",term, term.__class__)
+        return term
 
 class Expr(Stmt):
     One = Number ( 1 );
@@ -322,7 +357,8 @@ class Expr(Stmt):
         self.dbg_msg("value = "+str(val))
         return val
 
-    def normalize_values( self, term, env ):
+    @staticmethod
+    def normalize_values(term, env ):
         if ( hasattr(term,'evaluate') ):
             if ( term.__class__ == Number ):
                 tval = term.num
@@ -341,8 +377,8 @@ class Expr(Stmt):
         if ( self.debug ): print term, type(term)
         if self.binop.kind in Token.BINOP:
             tnext = self.next_expr.evaluate(env)
-            tval = self.normalize_values( term, env)
-            tval2 = self.normalize_values( tnext, env)
+            tval = Expr.normalize_values( term, env)
+            tval2 = Expr.normalize_values( tnext, env)
             if ( self.debug ): print tval, type(tval), tval2, type(tval2)
             term = self.do_binop(tval,
                                  tval2,

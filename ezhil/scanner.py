@@ -17,7 +17,7 @@ class Token:
                  "EQUALS","END","DEF","RETURN","IF","ELSEIF","ELSE",
                  "DO","WHILE","FOR","STRING",">","<",">=","<=","!=",
                  "==","[","]","^","%","BREAK","CONTINUE","SWITCH",
-                 "CASE","OTHERWISE","&&","||","&","|"]
+                 "CASE","OTHERWISE","&&","||","&","|","!"]
 
     def get_name(kind):
         """ used in reporting errors in match() on parsing stage """
@@ -68,7 +68,9 @@ class Token:
     LOGICAL_OR = 38
     BITWISE_AND = 39
     BITWISE_OR = 40
+    LOGICAL_NOT = 41
     
+    UNARYOP = [LOGICAL_NOT]
     ADDSUB = [PLUS, MINUS]
     MULDIV = [PROD,DIV]
     COMPARE = [ GT, LT, GTEQ, LTEQ, NEQ, EQUALITY ]
@@ -124,9 +126,9 @@ class Lex:
         ##for popping is elegant.
         self.tokens=[]
         self.spc=re.compile("\s+")
-        self.newlines=re.compile("\n+")        
+        self.newlines=re.compile("\n+")
         self.unary_binary_ops = \
-            [ '+','-','=','*','/','>','<','%','^','!=','!','&&','||','|','&']            
+            [ '+','-','=','*','/','>','<','%','^','!=','!','&&','||','|','&','!']
         ## need to be the last on init & only for files
         if ( not self.stdin_mode  ): self.tokenize()
         ## REPL loop can call tokenize_string whenever it
