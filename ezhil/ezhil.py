@@ -28,7 +28,7 @@ class EzhilInterpreter( Interpreter ):
         #list operators        
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
                              "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
-                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count", "எடு":"get"} )
+                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count", "எடு":"__getitem__"} )
         
         #file operators
         tamil_equiv.update({"கோப்பை_திற":"file_open", "கோப்பை_மூடு":"file_close","கோப்பை_படி":"file_read",

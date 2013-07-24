@@ -67,6 +67,12 @@ def ezhil_credits():
 def ezhil_license():
 	return "Licensed under GPL Version 3"
 
+def ezhil_getitem(x,idx):
+    #print("dispatching ezhil getitem",type(x),type(idx),x,idx,x[idx])
+    if ( isinstance(x,list) or hasattr( x, '__getitem__') ):
+        return x.__getitem__(idx)
+    return x[idx]
+
 # program name
 def get_prog_name(lang):
     prog_name=None
@@ -329,7 +335,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['vars']=BlindBuiltins(vars,'vars',self.debug)
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
-        self.builtin_map['__getitem__']=BuiltinFunction(lambda x,idx: x.__getitem__(idx),"__getitem__",2)
+        self.builtin_map['__getitem__']=BuiltinFunction(ezhil_getitem,"__getitem__",2)
 
         #file-IO functions
         self.builtin_map["file_open"]=BlindBuiltins(Interpreter.file_open,"file_open")
@@ -345,7 +351,7 @@ class Interpreter(DebugUtils):
 
         # assert
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
-        # sleep/pausee
+        # sleep/pause
         self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
         self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
     	
