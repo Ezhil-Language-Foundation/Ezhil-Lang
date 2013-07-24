@@ -30,6 +30,7 @@ class EzhilLexeme(Lexeme):
 
 class EzhilToken( Token):
     """ add '@' token in extending the Token type """    
+    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!" ]
     Token.token_types.append("@")
     Token.ATRATEOF = len(Token.token_types)    
     
@@ -237,7 +238,7 @@ class EzhilLex ( Lex ) :
                 s = c; idx = idx + 1
                 ## FIXME temporary hack doesnt handle unary ops well.
                 while ( idx < len( data ) 
-                        and ( not data[idx] in [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!" ] )):
+                        and ( not data[idx] in EzhilToken.FORBIDDEN_FOR_IDENTIFIERS )):
                     s = s + data[idx]
                     idx = idx + 1
                 self.get_lexeme(s, tok_start_idx )
@@ -245,10 +246,9 @@ class EzhilLex ( Lex ) :
                 tok_start_idx = idx 
                 s = c; idx = idx + 1
                 while ( ( idx < len( data ) )
-                            and ( isalpha(data[idx]) or isdigit( data[idx] )
-                                  or data[idx] in [ "\"", "_" ] ) ):
+                            and ( not data[idx] in EzhilToken.FORBIDDEN_FOR_IDENTIFIERS ) ):
                     s = s + data[idx]
-                    idx = idx + 1
+                    idx = idx + 1                
                 self.get_lexeme( s , tok_start_idx )
             elif ( c in self.unary_binary_ops ):
                 tok_start_idx = idx                 
