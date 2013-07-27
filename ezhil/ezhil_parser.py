@@ -172,6 +172,7 @@ class EzhilParser(Parser):
         self.if_stack.append(ifstmt)
         self.dbg_msg("parsing IF-body")
         body = self.stmtlist()
+        prev_body = body;
         ifstmt.set_body( body )
         ptok = self.peek()
         while ( ptok.kind == EzhilToken.ATRATEOF or ptok.kind == EzhilToken.ELSE ):
@@ -186,13 +187,16 @@ class EzhilParser(Parser):
                 tok = self.peek()
                 if ( tok.kind != EzhilToken.ELSEIF ):
                     # maybe another IF statement, SWITCH-CASE or a WHILE loop, DO-WHILE loop etc.
-                    next_stmt = self.stmtlist(exp) #pass in the expression
+                    next_stmt = self.stmtlist(exp) #pass in the expression                                        
+                    prev_body.append( next_stmt )
+                    # append to previously scanned body.
                 else:
                     self.dbg_msg("parsing ELSE-IF-body")
                     self.match( EzhilToken.ELSEIF )
-                    next_stmt = self.stmtlist()
-                    
-                ifstmt.append_stmt( IfStmt(exp[0],next_stmt,None,l,c,self.debug) )                
+                    body = self.stmtlist()
+                    prev_body = body
+                    next_stmt = IfStmt(exp[0],body,None,l,c,self.debug)                    
+                    ifstmt.append_stmt( next_stmt )
             elif ( ptok.kind == EzhilToken.ELSE ):
                 #parse else branch                
                 self.dbg_msg("parsing stmt else: ")
@@ -200,6 +204,7 @@ class EzhilParser(Parser):
                 self.dbg_msg("parsing ELSE-Body")
                 self.inside_if = False
                 body = self.stmtlist()
+                prev_body = body;
                 else_stmt = ElseStmt( body , l, c, self.debug)                
                 ifstmt.append_stmt( else_stmt )
                 break

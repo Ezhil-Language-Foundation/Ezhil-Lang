@@ -1,0 +1,22 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+## nested if statements tested this way.
+
+x = 0
+@( x < 10 ) வரை
+x = x + 1
+@( True ) ஆனால்  
+  assert( True )
+  printf("once - only! "+str(x))
+  printf("1+once - only! "+str(x))  
+  @( True ) ஆனால்
+         assert( True )
+         printf("second - only!\n")
+         நிறுத்து #this aborts the loop, and ends program execution
+  முடி  
+  assert( False ) #never gets hit
+  printf("2+once - only! "+str(x))   
+  நிறுத்து
+முடி
+முடி
