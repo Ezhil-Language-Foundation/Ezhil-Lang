@@ -38,6 +38,7 @@ class Parser(DebugUtils):
         self.parsing_function = False
         self.lex=lexer
         self.ast=None
+        self.currently_parsing = [] # stack, just in case we should have parse errors
         self.function_map = fcn_map #parsed functions
         self.builtin_map = builtin_map #pointers to builtin functions
         self.if_stack = [] #parsing if-statements

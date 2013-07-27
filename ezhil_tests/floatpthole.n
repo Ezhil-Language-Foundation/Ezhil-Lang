@@ -5,11 +5,12 @@
 ## Ref: John V. Guttag, "Introduction to Computation and Programming Using Python",Ch.3, pp 30-31
 இ = 0.0
 @( range(10) இல் இ1 ) ஒவ்வொன்றாக
-இ = இ + 0.1
+   இ = இ + 0.1
 முடி
 
 @( இ == 1.0 ) ஆனால்
-   பதிப்பி இ," = 1.0 "
+   பதிப்பி இ, " = 1.0 "
+   assert( false ) #இது இயக்க கூடாது
 இல்லை
-   பதிப்பி இ," != 1.0 "
+   பதிப்பி இ, " != 1.0 "
 முடி
