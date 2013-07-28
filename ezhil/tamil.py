@@ -1,6 +1,6 @@
-﻿##This Python file uses the following encoding: utf-8
+﻿## This Python file uses the following encoding: utf-8
 ##
-# (C) 2007, 2008 Muthiah Annamalai <gnumuthu@user.sf.net>
+## (C) 2007, 2008, 2013 Muthiah Annamalai <gnumuthu@user.sf.net>
 ## Licensed under GPL Version 3
 
 from EzhilUtils import *
@@ -15,24 +15,24 @@ TA_SANSKRIT_LEN = 4
 TA_UYIRMEI_LEN = 216 # 18*12
 
 # List of letters you can use
-uyir_letters = ["அ","ஆ","இ", 
-	"ஈ","உ","ஊ","எ","ஏ","ஐ","ஒ","ஓ","ஔ"]
+uyir_letters = [u"அ",u"ஆ",u"இ", 
+	u"ஈ",u"உ",u"ஊ",u"எ",u"ஏ",u"ஐ",u"ஒ",u"ஓ",u"ஔ"]
 
-ayudha_letter = "ஃ"
+ayudha_letter = u"ஃ"
 
-mei_letters = ["க்","ச்","ட்","த்","ப்","ற்",
-                                       "ஞ்","ங்","ண்","ந்","ம்","ன்",
-                                        "ய்","ர்","ல்","வ்","ழ்","ள்" ]
+mei_letters = [u"க்",u"ச்",u"ட்",u"த்",u"ப்",u"ற்",
+	       u"ஞ்",u"ங்",u"ண்",u"ந்",u"ம்",u"ன்",
+	       u"ய்",u"ர்",u"ல்",u"வ்",u"ழ்",u"ள்" ]
 
-accent_symbols = ["","ா","ி","ீ","ு","ூ",
-			"ெ","ே","ை","ொ","ோ","ௌ","ஃ"]
+accent_symbols = [u"",u"ா",u"ி",u"ீ",u"ு",u"ூ",
+		  u"ெ",u"ே",u"ை",u"ொ",u"ோ",u"ௌ",u"ஃ"]
 
-agaram_letters = ["க","ச","ட","த","ப","ற",
-		     "ஞ","ங","ண","ந","ம","ன",
-		     "ய","ர","ல","வ","ழ","ள"]
+agaram_letters = [u"க",u"ச",u"ட",u"த",u"ப",u"ற",
+		  u"ஞ",u"ங",u"ண",u"ந",u"ம",u"ன",
+		  u"ய",u"ர",u"ல",u"வ",u"ழ",u"ள"]
 
-sanskrit_letters = ["ஜ","ஷ", "ஸ","ஹ"]
-sanskrit_mei_letters =["ஜ்","ஷ்", "ஸ்","ஹ்"]
+sanskrit_letters = [u"ஜ",u"ஷ", u"ஸ",u"ஹ"]
+sanskrit_mei_letters =[u"ஜ்",u"ஷ்", u"ஸ்",u"ஹ்"]
 
 uyirmei_letters = [
  "க"  ,"கா"  ,"கி"  ,"கீ"  ,"கு"  ,"கூ"  ,"கெ"  ,"கே"  ,"கை"  ,"கொ"  ,"கோ"  ,"கௌ"  ,
@@ -194,12 +194,41 @@ def istamil_alnum( tchar ):
                 return True
         return False
 
-##
-## hard problems are to split a tamil-character stream into
+## reverse a Tamil word according to letters not unicode-points
+def reverse_word( word ):
+	op = get_letters( word )
+	op.reverse()
+	return u"".join(op)
+
+## Split a tamil-unicode stream into
 ## tamil characters (individuals).
-##
 def get_letters( word ):
         """ splits the word into a character-list of tamil/english
         characters present in the stream """
-        raise Exception("Not Implemented")
-
+	#word = unicode(word) #.encode('utf-8')
+	prev = u''
+	ta_letters = []
+        for c in word:
+		if c in uyir_letters or c == ayudha_letter:
+			ta_letters.append(prev+c)
+			prev = u''
+		elif c in agaram_letters or c in sanskrit_letters:
+			if prev != u'':
+				ta_letters.append(prev)
+			prev = c;
+		elif c in accent_symbols:
+			ta_letters.append(prev+c)
+			prev = u''
+		else:
+			if prev != u'':
+				ta_letters.append(prev+c)
+				prev = u''
+			elif ord(c) < 256:
+				# plain-old ascii
+				ta_letters.append( c )
+			else:
+				assert False #unknown/expected state
+	if prev != u'': #if prev is not null it is $c
+		ta_letters.append( prev )
+	
+	return ta_letters
