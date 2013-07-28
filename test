@@ -29,9 +29,15 @@ cd ./ezhil_tests
 for i in hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n \
 string_demo.n list_ta.n yinyang.n unaryop.n boolean.n chaos.n \
 prime.n array1.n array2.n filedemo.n filerw.n reverse.n friends.n  \
+<<<<<<< HEAD
 palindromes.n datetime.n
+=======
+palindromes.n ford2.n trials.n fornested.n loopupdate.n foreach.n foriter.n \
+dowhile.n select_case2.n magic_coins.n rich_poor.n peanut_candy.n logical_not.n \
+binary.n fibo.n floatpthole.n ifnested.n
+>>>>>>> fb77f83e0bf43239e9194e5e0070914c4f0cf768
 do
-    echo "Testing Ezhil script",$i
+    echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
     python ../ezhil/ezhil.py $i $1
     if [ $? -eq 0 ]
     then

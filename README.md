@@ -33,15 +33,50 @@ $ cd ./ezhil-lang/
 
 and then typing, 
 
+Batch Mode
+==========
 $ ./ez ./ezhil_tests/hello.n 
 பதிப்பி "வணக்கம்!"
-பதிப்பி "நக்கீரண்  அழைக்கிரது"
-
+பதிப்பி "எழில் அழைக்கிரது"
 
 வணக்கம்!
-நக்கீரண்  அழைக்கிரது
+எழில் அழைக்கிரது
 
 where you should see the output above. For usage, try,
+$ ./ez --help
+usage:  [-h] [-debug] [-stdin] [files [files ...]]
 
-$ ./ez 
-usage: ./ez <filename1> .. 
+positional arguments:
+  files
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -debug      enable debugging information on screen
+  -stdin      read input from the standard input
+
+Interactive Mode
+================
+$ ./ez
+எழில் 1>> 1 + 5
+6
+எழில் 2>> பதிப்பி "வணக்கம்! எழில் அழைக்கிரது"
+வணக்கம்! எழில் அழைக்கிரது
+எழில் 3>> exit()
+
+Web Mode
+========
+You can also run ezhil as a web service by launching the webserver,
+$ ./webserver.sh
+and open the webpage, http://localhost:8080 in google-chrome or firefox,
+to enter your program and evaluate it.
+
+Python Library
+==============
+Ezhil Tamil programming Python package can be invoked from within the Python shell or IDLE on Windows, by simply typing,
+
+>> import ezhil
+>> ezhil.start()
+
+But to do all of this, you need to build and install the Python packages from this source, by,
+$ cd ezhil-lang/ && python setup.py build
+$ cd ezhil-lang/ && python setup.py install

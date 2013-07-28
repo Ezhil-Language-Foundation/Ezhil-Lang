@@ -28,7 +28,7 @@ class EzhilInterpreter( Interpreter ):
         #list operators        
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
                              "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
-                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count", "எடு":"get"} )
+                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count", "எடு":"__getitem__"} )
         
         #file operators
         tamil_equiv.update({"கோப்பை_திற":"file_open", "கோப்பை_மூடு":"file_close","கோப்பை_படி":"file_read",
@@ -64,8 +64,6 @@ class EzhilRedirectOutput:
             sys.stderr = self.tmpf
         pass
     
-        
-    
     def get_output( self ):
         """ read the output from tmpfile once and delete it. Use cached copy for later. Memoized. """ 
         if ( not isinstance(self.op,str) ):
@@ -78,22 +76,20 @@ class EzhilRedirectOutput:
         
         return self.op
 
-
 class EzhilRedirectInputOutput(EzhilRedirectOutput):
     def __init__(self,input_file,redirectop):
         EzhilRedirectOutput.__init__(self,redirectop)
         self.old_stdin = sys.stdin
         self.stdin = open( input_file )
     
-
 class EzhilFileExecuter(EzhilRedirectOutput):
     """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files """
     def __init__(self,file_input,debug=False,redirectop=False):        
         EzhilRedirectOutput.__init__(self,redirectop)
         
         try:
-            lexer = EzhilLex(file_input)
-            if ( debug ): lexer.dump_tokens()        
+            lexer = EzhilLex(file_input,debug)
+            if ( debug ): lexer.dump_tokens()
             parse_eval = EzhilInterpreter( lexer, debug )
             parse_eval.parse()
             if ( debug ):  print("*"*60);  print(str(parse_eval))
@@ -108,7 +104,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 sys.stderr = self.old_stderr
         
 
-def local_REPL( file_input, lang, lexer, parse_eval, debug=False):    
+def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):    
     #refactor out REPL for ezhil and exprs
     env = None ## get the first instance from evaluate_interactive
     do_quit = False
@@ -127,7 +123,12 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
         except EOFError as e:
             print("End of Input reached\n")
             do_quit = True ##evaluate the Lbuffer             
-        if ( debug ): print("evaluating buffer", Lbuffer)
+        if ( debug ):
+            print("evaluating buffer", Lbuffer)
+            if ( len(totbuffer) > 0 ):
+                print("tot buffer %s"%totbuffer) #debugging aid
+            
+        
         if ( do_quit ):
             print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
             return
@@ -142,8 +143,8 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
             if ( debug ): lexer.dump_tokens()
             try:
                 if ( debug ): print ("parsing buffer item => ",totbuffer)
-                parse_eval.parse()
-            except Exception as pexp:
+                parse_eval.parse()                
+            except Exception as pexp:                
                 ## clear tokens in lexer
                 lexer.tokens = list()
                 if ( debug ): print ("offending buffer item => ",totbuffer)
@@ -152,7 +153,7 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 # this allows a line-by-line execution strategy. When all else fails we report.
                 if ( (line_no + 1) ==  max_lines ):
                     raise pexp
-                continue 
+                continue
             totbuffer = ""
             sys.stdout.write(curr_line_no)
             if ( debug ):  print("*"*60);  print(str(parse_eval))
@@ -161,6 +162,8 @@ def local_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 print(rval.__str__())
             elif rval:
                 print(rval)
+            else:
+                print("\n")
         except Exception as e:
             print(e)
             raise e
@@ -174,10 +177,11 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         
         try:
             lang = "எழில்"
-            lexer = EzhilLex( )
+            lexer = EzhilLex(debug)
+            if ( debug ): print( str(lexer) )
             parse_eval = EzhilInterpreter( lexer, debug )
-            local_REPL( file_input, lang, lexer, parse_eval, debug )
-        except Exception as e:            
+            ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
+        except Exception as e:
             print("exception ",str(e))
             raise e
         finally:
@@ -187,16 +191,24 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
                 sys.stderr = self.old_stderr
                 sys.stdin = self.old_stdin
 
+    @staticmethod
+    def runforever():
+        EzhilInterpExecuter(sys.stdin)
+        return
+
+def ezhil_interactive_interpreter(lang = "எழில்",debug=False):
+    ## interactive interpreter
+    lexer = EzhilLex(debug)
+    parse_eval = EzhilInterpreter( lexer, debug )
+    REPL( lang, lexer, parse_eval, debug )    
+
 if __name__ == "__main__":
     lang = "எழில்"
     [fname, debug, dostdin ]= get_prog_name(lang)
     if ( dostdin ):
-        ## interactive interpreter
-        lexer = EzhilLex( )
-        parse_eval = EzhilInterpreter( lexer, debug )
-        REPL( lang, lexer, parse_eval, debug )
+        ezhil_interactive_interpreter(lang,debug)
     else:
         ## evaluate a files sequentially
         for files in fname:
-            EzhilFileExecuter( files )
+            EzhilFileExecuter( files, debug )
     pass

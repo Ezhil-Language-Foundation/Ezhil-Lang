@@ -109,6 +109,13 @@ class Number:
         walker.visit_number(self)
         return
 
+class Boolean(Number):
+    def __init__(self,n, l = 0, c = -1, dbg = False):
+        Number.__init__(self,n,l,c,dbg)
+    def __str__(self):
+        if ( self.num ):
+            return "True"
+        return "False"
 
 ## FIXME: implement arrays
 class Array(list):
@@ -126,8 +133,6 @@ class Array(list):
 
 class Hash(dict):
     pass
-
-
 
 class ExprCall:
     """handle function call statement etc."""
@@ -204,6 +209,9 @@ class Stmt:
     def __repr__(self):
         return "\n\t [%s[empty-statement]] "%(self.class_name)
 
+    def get_pos(self):
+        return "line %d, col %d"%(self.line,self.col)
+        
     def evaluate(self, env):
         """ empty statement """
         return None
@@ -222,7 +230,7 @@ class Stmt:
             elif ( isinstance(val,float) or isinstance(val,int) ):
                 fval = val
             else:
-                raise  Exception("Unknown case, cannot identify truth")
+                raise  Exception("Unknown case, cannot identify truth @ "+self.get_pos()+" for value "+str(val))
             
             if ( fval > 0.0 ):
                 rval = True
@@ -237,6 +245,34 @@ class Stmt:
     def visit_stmt( self, walker):
         walker.visit_stmt( self )
         return
+    
+class UnaryExpr(Stmt):
+    def __init__(self,t,op,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
+        self.term=t
+        self.unaryop=op
+
+    def do_unaryop(self,tval):
+        if ( self.unaryop.kind == Token.LOGICAL_NOT ):
+            if not tval:
+                return Boolean( True )
+            else:
+                return Boolean( False )
+        else:
+            raise RuntimeException(" unknown Unary Operation - "+str(self.unaryop)+" not supported")
+        return
+
+    def evaluate(self,env):
+        term=self.term.evaluate(env)
+        if ( self.debug ): print(term, type(term))
+        if self.unaryop.kind in Token.UNARYOP:
+            tval = Expr.normalize_values( term, env)
+            if ( self.debug ): print(tval, type(tval), tval2, type(tval2))
+            term = self.do_unaryop( tval )
+        else:
+            raise RuntimeException(" unknown Unary Operation - "+str(self.unaryop)+" not supported")
+        if ( self.debug ): print("term = ",term, term.__class__)
+        return term
 
 class Expr(Stmt):
     One = Number ( 1 );
@@ -304,13 +340,25 @@ class Expr(Stmt):
             val =  self.Zero;
             if ( opr1 == opr2 ):
                 val = self.One;
+        elif binop == Token.LOGICAL_AND:
+            self.dbg_msg("LOGICAL AND")
+            val = self.Zero
+            if ( opr1 and opr2 ):
+                val = self.One;
+        elif binop == Token.LOGICAL_OR:
+            self.dbg_msg("LOGICAL OR")
+            val = self.Zero
+            if ( opr1 or opr2 ):
+                val = self.One;
+        elif binop in [Token.BITWISE_AND, Token.BITWISE_OR]:
+            raise Exception("Ezhil : Bitwise operators AND '&' and OR '|' are not supported currently!")
         else:
-            raise SyntaxError("Binary operator syntax not OK")
-        
+            raise SyntaxError("Binary operator syntax not OK @ "+self.get_pos())
         self.dbg_msg("value = "+str(val))
         return val
 
-    def normalize_values( self, term, env ):
+    @staticmethod
+    def normalize_values(term, env ):
         if ( hasattr(term,'evaluate') ):
             if ( term.__class__ == Number ):
                 tval = term.num
@@ -319,23 +367,25 @@ class Expr(Stmt):
             else:
                 ## possibly leads to inf- recursion
                 ## tval = term.evaluate( env )
-                raise RuntimeException( " unknown clause to evaluate ");
+                raise RuntimeException( " unknown clause to evaluate @ "+self.get_pos());
         else:
             tval = (term) #float cast not required.
         return tval
 
     def evaluate(self,env):
         term=self.term.evaluate(env)
-        #print term, type(term)
+        if ( self.debug ): print term, type(term)
         if self.binop.kind in Token.BINOP:
             tnext = self.next_expr.evaluate(env)
-            tval = self.normalize_values( term, env)
-            tval2 = self.normalize_values( tnext, env)
-            #print tval, type(tval), tval2, type(tval2)
+            tval = Expr.normalize_values( term, env)
+            tval2 = Expr.normalize_values( tnext, env)
+            if ( self.debug ): print tval, type(tval), tval2, type(tval2)
             term = self.do_binop(tval,
                                  tval2,
                                  self.binop.kind)
-        #print "term = ",term, term.__class__
+        else:
+            raise RuntimeException(" unknown Binary Operation - Binary operation "+str(self.binop)+" not supported")
+        if ( self.debug ): print "term = ",term, term.__class__
         return term
 
     def visit_expr(self, walker):
@@ -419,7 +469,10 @@ class IfStmt(Stmt):
         self.body = body
         self.class_name = "IfStmt"
         ## this is either another IfStmt or an Else Stmt.
-        self.next_stmt = next_stmt
+        if not next_stmt:
+            self.next_stmt = []
+        else:
+            self.next_stmt = next_stmt
         
     def __repr__(self):
         rval = "\t\n [IfStmt[["+str(self.expr)+ "]] "+str(self.body)
@@ -430,6 +483,10 @@ class IfStmt(Stmt):
 
     def set_body(self,body):
         self.body = body
+    
+    def append_stmt(self,stmt):
+        self.next_stmt.append(stmt)
+        return
         
     def set_next_stmt(self, stmt):
         self.next_stmt = stmt
@@ -441,11 +498,24 @@ class IfStmt(Stmt):
         if ( self.is_true_value ( self.expr.evaluate(env) ) ):
             self.dbg_msg("ifstmt: true condition")
             rval = self.body.evaluate( env )
-        elif ( self.next_stmt != None ):
-            self.dbg_msg("ifstmt: false condition")
-            rval = self.next_stmt.evaluate( env )
-        return rval
-
+            return rval
+        self.dbg_msg("ifstmt: false condition")
+        for elseif_or_else in self.next_stmt:
+            if ( isinstance( elseif_or_else, IfStmt ) ):
+                if ( self.is_true_value( elseif_or_else.expr.evaluate(env) ) ):
+                    rval = elseif_or_else.body.evaluate( env )
+                    return rval
+                else:
+                    # elseif branch was found to be false. Continue
+                    continue;
+            elif( isinstance( elseif_or_else, ElseStmt ) ):
+                rval = elseif_or_else.evaluate( env )
+                return rval
+            else:
+                raise RuntimeException("IF-ELSEIF-ELSE was parsed wrongly, unknown construct found")
+        # its perfectly legal to not have an else statement
+        return rval 
+    
     def visit_if_elseif_stmt(self,walker):
         walker.visit_if_elseif_stmt(self)
         return
@@ -459,7 +529,7 @@ class WhileStmt(Stmt):
         self.class_name = "WhileStmt"
 
     def __repr__(self):
-        rval = "\t\n [WhileStmt[["+str(self.expr)+ "]] "+str(self.body) +"]"
+        rval = "\t\n [%s[["%str(self.__class__)+str(self.expr)+ "]] "+str(self.body) +"]"
         return rval
 
     def evaluate(self,env):
@@ -479,6 +549,28 @@ class WhileStmt(Stmt):
     def visit_while_stmt(self,walker):
         walker.visit_while_stmt(self)
         return
+
+class DoWhileStmt(WhileStmt):
+    """ do stmtlist  while ( exp )"""
+    def __init__(self,expr,body,l,c,dbg=False):
+        WhileStmt.__init__(self,expr,body,l,c,dbg)
+        
+    def evaluate(self,env):
+        """ first run is on the house, but then we keep count. Dog bites American style """
+        rval = None
+        first_time = True
+        self.dbg_msg("eval-Do-While stmt")
+        while ( first_time or self.is_true_value ( self.expr.evaluate(env) ) 
+                and not env.get_break_return() ):
+            ## everytime of loop clear any continues
+            env.clear_continue()
+            self.dbg_msg("ifstmt: true condition")
+            rval = self.body.evaluate( env )
+            first_time = False
+        ## clear break if-any
+        env.clear_break();
+        self.dbg_msg("exiting Do-While-stmt with rval="+str(rval))
+        return rval
 
 class ForStmt(Stmt):
     """ For ( exp1 ; exp2 ; exp3 ) stmtlist  end"""
@@ -500,17 +592,14 @@ class ForStmt(Stmt):
         self.dbg_msg( "Eval-For-stmt: ")
         rval = None
         self.dbg_msg("eval-For-stmt")
-        rval = self.expr_init.evaluate(env)
-        first_time = True
+        rval = self.expr_init.evaluate(env)        
         while ( self.is_true_value ( self.expr_cond.evaluate(env) )
                 and not env.get_break_return() ):
             ## everytime of loop clear any continues
             env.clear_continue()
-            if ( not first_time ):
-                self.expr_update.evaluate( env )
-            else:
-                first_time = False
             rval = self.body.evaluate( env )
+            # update happens after body evaluates - this is C-style            
+            self.expr_update.evaluate( env )
         ## clear break if-any
         env.clear_break();
         self.dbg_msg("exiting For-stmt with rval="+str(rval))
@@ -540,7 +629,7 @@ class AssignStmt(Stmt):
             env.set_id( lvalue.id, rhs )
             rval = rhs
         else:
-            raise Exception("Unknown assign operator")
+            raise Exception("Unknown assign operator @ "+self.get_pos())
         return rval
     
     def evaluate(self,env):
@@ -556,7 +645,7 @@ class AssignStmt(Stmt):
                              str(self.lvalue))
                              #str(env.get_id(self.lvalue.id)) )
             return rhs
-        raise Exception("Unknown assign operator")
+        raise Exception("Unknown assign operator @ "+self.get_pos())
     
     def visit_assign_stmt(self, walker):
         walker.visit_assign_stmt(self)
@@ -626,6 +715,7 @@ class ArgList:
         walker.visit_arg_list(self)
         return
 
+#TODO : derive from 'list' and 'Stmt' class and update code
 class ValueList:
     """ defines value list in a function definition """
     def __init__(self,argvals, l, c, dbg =False):
@@ -637,7 +727,11 @@ class ValueList:
 
     def __len__(self):
         return len(self.args)
-
+        
+    def __getitem__(self,idx):
+        """ index into the object like a list : @idx - caveat emptor """
+        return self.args[idx]
+    
     def get_list(self):
         return self.args
 
@@ -660,8 +754,8 @@ class StmtList(Stmt):
         self.List = copy.copy(stmt)
         
     def __len__(self):
-        return len(self.List)
-
+        return len(self.List)        
+    
     def append(self,stmt_x):
         self.dbg_msg("adding new statement " + str(stmt_x) )
         self.List.append(stmt_x)
@@ -684,15 +778,13 @@ class StmtList(Stmt):
         walker.visit_stmt_list(self)
         return
 
-class Function:
+class Function(Stmt):
     """ function definition itself """
     def __init__(self,fname,arglist,body,l,c,dbg=False):
+        Stmt.__init__(self,l,c,dbg)
         self.name = fname
         self.arglist = arglist
         self.body = body
-        self.debug = dbg
-        self.line = l
-        self.col = c
         self.dbg_msg( "function "+fname+" was defined" )
         
     def dbg_msg(self, msg):
@@ -714,7 +806,7 @@ class Function:
         fargs = self.arglist.get_list()
         if ( len(args) != len(fargs) ):
             raise Exception("Call Arguments donot match with" + \
-                                "function definition")
+                                "function definition @ "+self.get_pos())
         
         ## create local variables on the stack in order of definitions
         lut={}
@@ -738,5 +830,3 @@ class Function:
     def visit_function(self,walker):
         walker.visit_function(self)
         return
-
-

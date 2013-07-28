@@ -11,11 +11,12 @@
 import time
 from ezhil import EzhilFileExecuter, EzhilInterpExecuter
 import BaseHTTPServer, tempfile, threading
+from SimpleHTTPServer import SimpleHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 from os import unlink
 import cgi
 
-class BaseEzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
+class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
     def do_GET(self):        
         print(str(self.headers), "in thread =", threading.currentThread().getName())
 
@@ -24,14 +25,19 @@ class BaseEzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
             print str(GETvars)
             if GETvars.has_key('prog'):
                 program = "\n".join(GETvars['prog'])
-            else:
+            elif GETvars.has_key('eval'):
                 program = 'printf("Welcome to Ezhil! You can type a program and see its output here!")\n'
+            else:                
+                # delegate upward
+                SimpleHTTPRequestHandler.do_GET(self)
+                return
             self.send_response(200)
-            self.send_header("Content-type", "text/html")
+            self.send_header("Content-type", "text/html")            
             self.end_headers()
             self.do_ezhil_execute( program )
-        else: 
-            self.send_error(404)
+        else:
+            #delegate to parent
+            SimpleHTTPRequestHandler.do_GET(self)
         return
     
     def do_ezhil_execute(self,program):
@@ -62,7 +68,10 @@ class BaseEzhilOnTheWeb(BaseHTTPServer.BaseHTTPRequestHandler):
             obj.get_output()
         
         # delete the temporary file
-        unlink(tmpf.name)
+	try:
+            unlink(tmpf.name)
+        except Exception as e:
+            print("Exception %s but we pass it"%str(e))
         
         prev_page = """<script>
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");

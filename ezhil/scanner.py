@@ -17,7 +17,7 @@ class Token:
                  "EQUALS","END","DEF","RETURN","IF","ELSEIF","ELSE",
                  "DO","WHILE","FOR","STRING",">","<",">=","<=","!=",
                  "==","[","]","^","%","BREAK","CONTINUE","SWITCH",
-                 "CASE","OTHERWISE"]
+                 "CASE","OTHERWISE","&&","||","&","|","!"]
 
     def get_name(kind):
         """ used in reporting errors in match() on parsing stage """
@@ -64,13 +64,20 @@ class Token:
     SWITCH = 34
     CASE = 35
     OTHERWISE = 36
-
+    LOGICAL_AND = 37
+    LOGICAL_OR = 38
+    BITWISE_AND = 39
+    BITWISE_OR = 40
+    LOGICAL_NOT = 41
+    
+    UNARYOP = [LOGICAL_NOT]
     ADDSUB = [PLUS, MINUS]
     MULDIV = [PROD,DIV]
     COMPARE = [ GT, LT, GTEQ, LTEQ, NEQ, EQUALITY ]
     EXPMOD = [EXP, MOD]
+    BITWISE_AND_LOGICAL = [LOGICAL_AND, LOGICAL_OR, BITWISE_AND, BITWISE_OR];
     BINOP = []
-    for i in [ADDSUB, MULDIV, COMPARE, EXPMOD]:
+    for i in [ADDSUB, MULDIV, COMPARE, EXPMOD, BITWISE_AND_LOGICAL]:
         BINOP.extend( i )
     ASSIGNOP = [EQUALS]
     
@@ -119,11 +126,9 @@ class Lex:
         ##for popping is elegant.
         self.tokens=[]
         self.spc=re.compile("\s+")
-        self.newlines=re.compile("\n+")        
+        self.newlines=re.compile("\n+")
         self.unary_binary_ops = \
-            [ '+','-','=','*','/','>','<','%','^','!=','!']
-            #['[',']','(', ')', '+','-','=','*','/','>','<','%','^']
-
+            [ '+','-','=','*','/','>','<','%','^','!=','!','&&','||','|','&','!']
         ## need to be the last on init & only for files
         if ( not self.stdin_mode  ): self.tokenize()
         ## REPL loop can call tokenize_string whenever it
@@ -198,6 +203,14 @@ class Lex:
             tval=Lexeme(chunks,Token.MOD)
         elif chunks == "^":
             tval=Lexeme(chunks,Token.EXP)
+        elif chunks == "&&":
+            tval=Lexeme(chunks,Token.LOGICAL_AND)
+        elif chunks == "&":
+            tval=Lexeme(chunks,Token.BITWISE_AND)
+        elif chunks == "||":
+            tval=Lexeme(chunks,Token.LOGICAL_OR)
+        elif chunks == "|":
+            tval=Lexeme(chunks,Token.BITWISE_OR)
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
             tval = Lexeme( chunks[1:-1], Token.STRING )
         elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
@@ -301,7 +314,7 @@ class Lex:
             elif ( c in self.unary_binary_ops ):
                 tok_start_idx = idx 
                 if ( len(data) > ( 1 + idx  ) 
-                     and data[idx+1] == '=' ):
+                     and data[idx+1] in ['=','|','&']  ):
                     c = c +data[idx+1]
                     idx = idx + 1
                 self.get_lexeme(  c , tok_start_idx )

@@ -15,7 +15,7 @@ from tamil import has_tamil, istamil, istamil_alnum
 from errors import ScannerException
 
 class EzhilLexeme(Lexeme):
-
+    """ Ezhil Lexeme - """ 
     def __init__(self,val,kind,fname=""):
         Lexeme.__init__(self,val,kind,fname)
 
@@ -30,9 +30,19 @@ class EzhilLexeme(Lexeme):
 
 class EzhilToken( Token):
     """ add '@' token in extending the Token type """    
-    val = len(Token.token_types)+1 
+    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!" ]
     Token.token_types.append("@")
-    Token.ATRATEOF = val
+    Token.ATRATEOF = len(Token.token_types)    
+    
+    Token.token_types.append("FOREACH|ஒவ்வொன்றாக")
+    Token.FOREACH = len(Token.token_types)
+        
+    Token.token_types.append("IN|இல்")
+    Token.IN = Token.COMMA #short-circuit!
+    
+    Token.token_types.append("DOWHILE|முடியேனில்")
+    Token.DOWHILE = len(Token.token_types)        
+
 ## Keep it this way, so we share maximum amount of code.
 ##    def get_name(kind):
 ##        return Token.token_types[kind]
@@ -46,10 +56,10 @@ class EzhilLex ( Lex ) :
     def __init__(self,fname=None,dbg=False):
         Lex.__init__(self,fname,dbg)
         
-    def get_lexeme(self,chunks , pos):
+    def get_lexeme(self,chunks , pos):        
         if chunks == None:
             return None
-
+        if ( self.debug ): print("chunks",chunks)
         if chunks == "பதிப்பி":
             tval = EzhilLexeme(chunks,EzhilToken.PRINT )
         elif chunks == "தேர்ந்தெடு":
@@ -66,10 +76,16 @@ class EzhilLex ( Lex ) :
             tval = EzhilLexeme( chunks, EzhilToken.ELSE )
         elif chunks == "ஆக":
             tval = EzhilLexeme( chunks, EzhilToken.FOR )
+        elif chunks == "ஒவ்வொன்றாக":
+            tval = EzhilLexeme( chunks, EzhilToken.FOREACH )
+        elif chunks == "இல்":
+            tval = EzhilLexeme( chunks, EzhilToken.COMMA )
         elif chunks == "வரை":
             tval = EzhilLexeme( chunks, EzhilToken.WHILE )
         elif chunks == "செய்":
             tval = EzhilLexeme( chunks, EzhilToken.DO )
+        elif chunks == "முடியேனில்":
+            tval = EzhilLexeme( chunks, EzhilToken.DOWHILE )
         elif chunks == "பின்கொடு":
             tval=EzhilLexeme(chunks,EzhilToken.RETURN)
         elif chunks == "முடி":
@@ -118,8 +134,18 @@ class EzhilLex ( Lex ) :
             tval=EzhilLexeme(chunks,EzhilToken.MOD)
         elif chunks == "^":
             tval=EzhilLexeme(chunks,EzhilToken.EXP)
+        elif chunks == "&&":            
+            tval=Lexeme(chunks,EzhilToken.LOGICAL_AND)
+        elif chunks == "&":
+            tval=Lexeme(chunks,EzhilToken.BITWISE_AND)
+        elif chunks == "||":
+            tval=Lexeme(chunks,EzhilToken.LOGICAL_OR)
+        elif chunks == "|":
+            tval=Lexeme(chunks,EzhilToken.BITWISE_OR)
+        elif chunks == "!":
+            tval=Lexeme(chunks,EzhilToken.LOGICAL_NOT)
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
-            tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )            
+            tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )
         elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
             #tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             # deduce a float or integer
@@ -127,10 +153,9 @@ class EzhilLex ( Lex ) :
                 tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             else:
                 tval=EzhilLexeme(int(chunks),EzhilToken.NUMBER)
-            
         elif isalpha(chunks[0]) or has_tamil(chunks):
             ## check for tamil indentifiers
-            tval=EzhilLexeme(chunks,EzhilToken.ID)
+            tval=EzhilLexeme(chunks,EzhilToken.ID)        
         else:
             raise ScannerException("Lexical error: " + str(chunks) + " at Line , Col "+str(self.get_line_col( pos )) +" in file "+self.fname )
         
@@ -138,6 +163,9 @@ class EzhilLex ( Lex ) :
         tval.set_line_col( [l,c] )
         tval.set_file_name( self.fname )
         self.tokens.append( tval )
+        
+        if ( self.debug ): print("Lexer token = ",str(tval))
+        
         return l
     
     def tokenize(self,data=None):
@@ -210,7 +238,7 @@ class EzhilLex ( Lex ) :
                 s = c; idx = idx + 1
                 ## FIXME temporary hack doesnt handle unary ops well.
                 while ( idx < len( data ) 
-                        and ( not data[idx] in [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(" ] )):
+                        and ( not data[idx] in EzhilToken.FORBIDDEN_FOR_IDENTIFIERS )):
                     s = s + data[idx]
                     idx = idx + 1
                 self.get_lexeme(s, tok_start_idx )
@@ -218,15 +246,14 @@ class EzhilLex ( Lex ) :
                 tok_start_idx = idx 
                 s = c; idx = idx + 1
                 while ( ( idx < len( data ) )
-                            and ( isalpha(data[idx]) or isdigit( data[idx] )
-                                  or data[idx] in [ "\"", "_" ] ) ):
+                            and ( not data[idx] in EzhilToken.FORBIDDEN_FOR_IDENTIFIERS ) ):
                     s = s + data[idx]
-                    idx = idx + 1
+                    idx = idx + 1                
                 self.get_lexeme( s , tok_start_idx )
             elif ( c in self.unary_binary_ops ):
-                tok_start_idx = idx 
+                tok_start_idx = idx                 
                 if ( len(data) > ( 1 + idx  ) 
-                     and data[idx+1] == '=' ):
+                     and data[idx+1] in ['=','|','&'] ):
                     c = c +data[idx+1]
                     idx = idx + 1
                 self.get_lexeme(  c , tok_start_idx )
@@ -236,15 +263,15 @@ class EzhilLex ( Lex ) :
                 idx = idx + 1
                 self.get_lexeme( c , tok_start_idx )
         
-        tok_start_idx = idx 
-
+        tok_start_idx = idx
         ## close the file if not stdin_mode
         if ( not self.stdin_mode ): self.File.close()
-
+        
         ## and manually add an EOF statement.
         eof_tok = EzhilLexeme("",EzhilToken.EOF )
         eof_tok.set_line_col( self.get_line_col( tok_start_idx ) )
         self.tokens.append( eof_tok )
-
+        if ( self.debug ):  print("before reverse"); self.dump_tokens()
         self.tokens.reverse()
+        if ( self.debug ):  print("after reverse"); self.dump_tokens()
         return

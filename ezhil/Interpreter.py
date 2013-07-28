@@ -69,6 +69,12 @@ def ezhil_credits():
 def ezhil_license():
 	return "Licensed under GPL Version 3"
 
+def ezhil_getitem(x,idx):
+    #print("dispatching ezhil getitem",type(x),type(idx),x,idx,x[idx])
+    if ( isinstance(x,list) or hasattr( x, '__getitem__') ):
+        return x.__getitem__(idx)
+    return x[idx]
+
 # program name
 def get_prog_name(lang):
     prog_name=None
@@ -345,26 +351,30 @@ class Interpreter(DebugUtils):
         self.builtin_map['vars']=BlindBuiltins(vars,'vars',self.debug)
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
+        self.builtin_map['__getitem__']=BuiltinFunction(ezhil_getitem,"__getitem__",2)
 
-	#file-IO functions
-	self.builtin_map["file_open"]=BlindBuiltins(Interpreter.file_open,"file_open")
-	self.builtin_map["file_close"]=BuiltinFunction(Interpreter.file_close,"file_close")
-	self.builtin_map["file_read"]=BuiltinFunction(Interpreter.file_read,"file_read")
-	self.builtin_map["file_readlines"]=BuiltinFunction(Interpreter.file_readlines,"file_readlines")
-	self.builtin_map["file_write"]=BuiltinFunction(Interpreter.file_write,"file_write",2)
-	self.builtin_map["file_writelines"]=BuiltinFunction(Interpreter.file_writelines,"file_writelines",2)
-	
+        #file-IO functions
+        self.builtin_map["file_open"]=BlindBuiltins(Interpreter.file_open,"file_open")
+        self.builtin_map["file_close"]=BuiltinFunction(Interpreter.file_close,"file_close")
+        self.builtin_map["file_read"]=BuiltinFunction(Interpreter.file_read,"file_read")
+        self.builtin_map["file_readlines"]=BuiltinFunction(Interpreter.file_readlines,"file_readlines")
+        self.builtin_map["file_write"]=BuiltinFunction(Interpreter.file_write,"file_write",2)
+        self.builtin_map["file_writelines"]=BuiltinFunction(Interpreter.file_writelines,"file_writelines",2)
+    	
         # input statements
         self.builtin_map["input"]=BuiltinFunction(Interpreter.INPUT,"input")
         self.builtin_map["raw_input"]=BuiltinFunction(Interpreter.RAWINPUT,"raw_input")
 
         # assert
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
-        # sleep/pausee
+	
+        # sleep/pause
 	self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
 	self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
+	
 	# date/time
 	self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias="தேதி_நேரம்")
+	
         # random functions
         aslist = True;
         self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)
@@ -423,52 +433,52 @@ class Interpreter(DebugUtils):
 #                print "self.builtin_map[\"%s\"] = BuiltinFunction(getattr(string,\"%s\"),\"%s\")"%(name,name,name)
         
 
-	self.builtin_map["ascii_letters"] = BuiltinFunction(string.ascii_letters,"ascii_letters",0)
-	self.builtin_map["ascii_lowercase"] = BuiltinFunction(string.ascii_lowercase,"ascii_lowercase",0)
-	self.builtin_map["ascii_uppercase"] = BuiltinFunction(string.ascii_uppercase,"ascii_uppercase",0)
-	self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
-	self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
-	self.builtin_map["atoi"] = BuiltinFunction(string.atoi,"atoi",1)
-	self.builtin_map["atoi_error"] = BuiltinFunction(string.atoi_error,"atoi_error",1)
-	self.builtin_map["atol"] = BuiltinFunction(string.atol,"atol",1)
-	self.builtin_map["atol_error"] = BuiltinFunction(string.atol_error,"atol_error",1)
-	self.builtin_map["capitalize"] = BuiltinFunction(string.capitalize,"capitalize",1)
-	self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
-	self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
-	self.builtin_map["count"] = BuiltinFunction(string.count,"count",1)
-	self.builtin_map["digits"] = BuiltinFunction(string.digits,"digits",1)
-	self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
-	self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
-	self.builtin_map["hexdigits"] = BuiltinFunction(string.hexdigits,"hexdigits",1)
-	self.builtin_map["index"] = BuiltinFunction(string.index,"index",2)
-	self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
-	self.builtin_map["join"] = BuiltinFunction(string.join,"join",1)
-	self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
-	self.builtin_map["letters"] = BuiltinFunction(string.letters,"letters",1)
-	self.builtin_map["ljust"] = BuiltinFunction(string.ljust,"ljust",1)
-	self.builtin_map["lower"] = BuiltinFunction(string.lower,"lower",1)
-	self.builtin_map["lowercase"] = BuiltinFunction(string.lowercase,"lowercase",1)
-	self.builtin_map["lstrip"] = BuiltinFunction(string.lstrip,"lstrip",1)
-	self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
-	self.builtin_map["octdigits"] = BuiltinFunction(string.octdigits,"octdigits",1)
-	self.builtin_map["printable"] = BuiltinFunction(string.printable,"printable",1)
-	self.builtin_map["punctuation"] = BuiltinFunction(string.punctuation,"punctuation",1)
-	self.builtin_map["replace"] = BuiltinFunction(string.replace,"replace",3)
-	self.builtin_map["rfind"] = BuiltinFunction(string.rfind,"rfind",2)
-	self.builtin_map["rindex"] = BuiltinFunction(string.rindex,"rindex",1)
-	self.builtin_map["rjust"] = BuiltinFunction(string.rjust,"rjust",1)
-	self.builtin_map["rsplit"] = BuiltinFunction(string.rsplit,"rsplit",1)
-	self.builtin_map["rstrip"] = BuiltinFunction(string.rstrip,"rstrip",1)
-	self.builtin_map["split"] = BuiltinFunction(string.split,"split",2)
-	self.builtin_map["splitfields"] = BuiltinFunction(string.splitfields,"splitfields",1)
-	self.builtin_map["strip"] = BuiltinFunction(string.strip,"strip",1)
-	self.builtin_map["swapcase"] = BuiltinFunction(string.swapcase,"swapcase",1)
-	self.builtin_map["translate"] = BuiltinFunction(string.translate,"translate",1)
-	self.builtin_map["upper"] = BuiltinFunction(string.upper,"upper",1)
-	self.builtin_map["uppercase"] = BuiltinFunction(string.uppercase,"uppercase",1)
-	self.builtin_map["whitespace"] = BuiltinFunction(string.whitespace,"whitespace",1)
-	self.builtin_map["zfill"] = BuiltinFunction(string.zfill,"zfill",2)
-	
+    	self.builtin_map["ascii_letters"] = BuiltinFunction(string.ascii_letters,"ascii_letters",0)
+    	self.builtin_map["ascii_lowercase"] = BuiltinFunction(string.ascii_lowercase,"ascii_lowercase",0)
+    	self.builtin_map["ascii_uppercase"] = BuiltinFunction(string.ascii_uppercase,"ascii_uppercase",0)
+    	self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
+    	self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
+    	self.builtin_map["atoi"] = BuiltinFunction(string.atoi,"atoi",1)
+    	self.builtin_map["atoi_error"] = BuiltinFunction(string.atoi_error,"atoi_error",1)
+    	self.builtin_map["atol"] = BuiltinFunction(string.atol,"atol",1)
+    	self.builtin_map["atol_error"] = BuiltinFunction(string.atol_error,"atol_error",1)
+    	self.builtin_map["capitalize"] = BuiltinFunction(string.capitalize,"capitalize",1)
+    	self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
+    	self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
+    	self.builtin_map["count"] = BuiltinFunction(string.count,"count",1)
+    	self.builtin_map["digits"] = BuiltinFunction(string.digits,"digits",1)
+    	self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
+    	self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
+    	self.builtin_map["hexdigits"] = BuiltinFunction(string.hexdigits,"hexdigits",1)
+    	self.builtin_map["index"] = BuiltinFunction(string.index,"index",2)
+    	self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
+    	self.builtin_map["join"] = BuiltinFunction(string.join,"join",1)
+    	self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
+    	self.builtin_map["letters"] = BuiltinFunction(string.letters,"letters",1)
+    	self.builtin_map["ljust"] = BuiltinFunction(string.ljust,"ljust",1)
+    	self.builtin_map["lower"] = BuiltinFunction(string.lower,"lower",1)
+    	self.builtin_map["lowercase"] = BuiltinFunction(string.lowercase,"lowercase",1)
+    	self.builtin_map["lstrip"] = BuiltinFunction(string.lstrip,"lstrip",1)
+    	self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
+    	self.builtin_map["octdigits"] = BuiltinFunction(string.octdigits,"octdigits",1)
+    	self.builtin_map["printable"] = BuiltinFunction(string.printable,"printable",1)
+    	self.builtin_map["punctuation"] = BuiltinFunction(string.punctuation,"punctuation",1)
+    	self.builtin_map["replace"] = BuiltinFunction(string.replace,"replace",3)
+    	self.builtin_map["rfind"] = BuiltinFunction(string.rfind,"rfind",2)
+    	self.builtin_map["rindex"] = BuiltinFunction(string.rindex,"rindex",1)
+    	self.builtin_map["rjust"] = BuiltinFunction(string.rjust,"rjust",1)
+    	self.builtin_map["rsplit"] = BuiltinFunction(string.rsplit,"rsplit",1)
+    	self.builtin_map["rstrip"] = BuiltinFunction(string.rstrip,"rstrip",1)
+    	self.builtin_map["split"] = BuiltinFunction(string.split,"split",2)
+    	self.builtin_map["splitfields"] = BuiltinFunction(string.splitfields,"splitfields",1)
+    	self.builtin_map["strip"] = BuiltinFunction(string.strip,"strip",1)
+    	self.builtin_map["swapcase"] = BuiltinFunction(string.swapcase,"swapcase",1)
+    	self.builtin_map["translate"] = BuiltinFunction(string.translate,"translate",1)
+    	self.builtin_map["upper"] = BuiltinFunction(string.upper,"upper",1)
+    	self.builtin_map["uppercase"] = BuiltinFunction(string.uppercase,"uppercase",1)
+    	self.builtin_map["whitespace"] = BuiltinFunction(string.whitespace,"whitespace",1)
+    	self.builtin_map["zfill"] = BuiltinFunction(string.zfill,"zfill",2)
+    	
         #add list methods - first argument, when required, is always a list obj
         self.builtin_map["append"] = BuiltinFunction(list.append,"append",2)
         self.builtin_map["insert"] = BuiltinFunction(list.insert,"insert",3)
