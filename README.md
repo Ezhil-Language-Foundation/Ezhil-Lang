@@ -8,8 +8,7 @@ with for-end, while-end, if-elseif-else-end statements,
 break, continue and def-end for defining functions.
 
 Ezhil language is implemented in a handwritten scanner
-and parser using the Python programming language in
-about 1500LOC.
+and parser using the Python programming language. Latest version of Ezhil-Language is v0.6.
 
 If you would like to tryout the code, all you need
 is a python interpreter, and the code from 
@@ -80,3 +79,4 @@ Ezhil Tamil programming Python package can be invoked from within the Python she
 But to do all of this, you need to build and install the Python packages from this source, by,
 $ cd ezhil-lang/ && python setup.py build
 $ cd ezhil-lang/ && python setup.py install
+
