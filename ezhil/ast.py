@@ -380,9 +380,12 @@ class Expr(Stmt):
             tval = Expr.normalize_values( self, term, env)
             tval2 = Expr.normalize_values( self, tnext, env)
             if ( self.debug ): print tval, type(tval), tval2, type(tval2)
-            term = self.do_binop(tval,
-                                 tval2,
-                                 self.binop.kind)
+            try:
+                term = self.do_binop(tval,
+                                     tval2,
+                                     self.binop.kind)
+            except Exception as binOp_Except:
+                raise RuntimeException("binary operation "+str(self.term)+str(self.binop)+str(self.next_expr)+" failed with exception "+str(binOp_Except))
         else:
             raise RuntimeException(" unknown Binary Operation - Binary operation "+str(self.binop)+" not supported")
         if ( self.debug ): print "term = ",term, term.__class__
