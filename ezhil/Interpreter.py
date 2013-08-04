@@ -173,42 +173,47 @@ class Interpreter(DebugUtils):
     @staticmethod
     def file_close(*args):
         assert( len(args) == 1 )
-        getattr(args[0],'close')()
+	assert( hasattr(args[0],'close') )
+        args[0].close()
         return
     
     @staticmethod
     def file_read(*args):
         assert( len(args) == 1 )
-        return String( getattr(args[0],'read')())
+	assert( hasattr(args[0],'read') )
+        return String( args[0].read() )
     
     @staticmethod
     def file_readlines(*args):
         assert( len(args) == 1 )
-        return getattr(args[0],'readlines')()
+	assert( hasattr(args[0],'readlines') )
+        return args[0].readlines()
 
     @staticmethod
     def file_write(*args):
         assert( len(args) == 2 )
-        return getattr(args[0],'write')(args[1])
-
+	assert( hasattr(args[0],'write') )
+        return args[0].write(args[1])
+    
     @staticmethod
     def file_writelines(*args):
         assert( len(args) == 2 )
-        return getattr(args[0],'writelines')(args[1])
+	assert( hasattr(args[0],'writelines') )
+        return args[0].writelines(args[1])
     
     # marshalling    	    
     @staticmethod
     def RAWINPUT(args):
         op = raw_input(args)
         return String(op)
-
+    
     @staticmethod
     def INPUT(args):
         op = (raw_input(args))
         if ( isinstance(op,int) or isinstance(op,float) ):
             return Number(0.0+op)
         return String( op )
-
+    
     @staticmethod   
     def SPRINTF_worker(*args):        
         if ( len(args) < 1 ):
@@ -217,7 +222,7 @@ class Interpreter(DebugUtils):
         arg = tuple( args[1:] );
         opstr = fmt%arg;
         return opstr
-
+    
     @staticmethod
     def SPRINTF(*args):
         opstr = Interpreter.SPRINTF_worker(*args);
@@ -228,7 +233,7 @@ class Interpreter(DebugUtils):
         str_op = Interpreter.SPRINTF_worker(*args);
         print(str_op)
         return Number(len(str_op))
-
+    
     @staticmethod
     def ezhil_reverse(*args):
        if ( len(args) != 1 ): raise Exception('One argument alone expected to reverse function')

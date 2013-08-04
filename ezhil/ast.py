@@ -184,10 +184,10 @@ class ExprList:
     def evaluate(self,env):
         """evaluate  a, b, c ... z to a string"""
         z = []
-        for exp in self.exprs:
-            z.append(exp.evaluate(env))
+        for exp_itr in self.exprs:
+            z.append(exp_itr.evaluate(env))
         return ", ".join(map(str,z))
-
+    
     def visit_expr_list(self, walker):
         walker.visit_expr_list(self)
         return    
@@ -235,13 +235,13 @@ class Stmt:
             if ( fval > 0.0 ):
                 rval = True
             ## all other cases later.
-        except Exception as e:
+        except Exception as pyEx:
             """ objects where is_true_value() is not supported """
-            print(e)
-            raise RuntimeException(e)
+            print(pyEx)
+            raise RuntimeException(pyEx)
         self.dbg_msg('Is True Value? ' + str(rval) + str(val.__class__) )
         return rval
-
+    
     def visit_stmt( self, walker):
         walker.visit_stmt( self )
         return
@@ -266,8 +266,8 @@ class UnaryExpr(Stmt):
         term=self.term.evaluate(env)
         if ( self.debug ): print(term, type(term))
         if self.unaryop.kind in Token.UNARYOP:
-            tval = Expr.normalize_values( term, env)
-            if ( self.debug ): print(tval, type(tval), tval2, type(tval2))
+            tval = Expr.normalize_values( self, term, env)
+            if ( self.debug ): print(tval, type(tval))
             term = self.do_unaryop( tval )
         else:
             raise RuntimeException(" unknown Unary Operation - "+str(self.unaryop)+" not supported")
@@ -358,7 +358,7 @@ class Expr(Stmt):
         return val
 
     @staticmethod
-    def normalize_values(term, env ):
+    def normalize_values( obj, term, env ):
         if ( hasattr(term,'evaluate') ):
             if ( term.__class__ == Number ):
                 tval = term.num
@@ -367,18 +367,18 @@ class Expr(Stmt):
             else:
                 ## possibly leads to inf- recursion
                 ## tval = term.evaluate( env )
-                raise RuntimeException( " unknown clause to evaluate @ "+self.get_pos());
+                raise RuntimeException( " unknown clause to evaluate @ "+obj.get_pos());
         else:
             tval = (term) #float cast not required.
         return tval
-
+    
     def evaluate(self,env):
         term=self.term.evaluate(env)
         if ( self.debug ): print term, type(term)
         if self.binop.kind in Token.BINOP:
             tnext = self.next_expr.evaluate(env)
-            tval = Expr.normalize_values( term, env)
-            tval2 = Expr.normalize_values( tnext, env)
+            tval = Expr.normalize_values( self, term, env)
+            tval2 = Expr.normalize_values( self, tnext, env)
             if ( self.debug ): print tval, type(tval), tval2, type(tval2)
             term = self.do_binop(tval,
                                  tval2,
