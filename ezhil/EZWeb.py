@@ -55,8 +55,8 @@ class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
         # run the interpreter in a sandbox and capture the output hopefully
         try:
             failed = False
-            #obj = EzhilFileExecuter( file_input = tmpf.name, redirectop = True )
-            obj = EzhilInterpExecuter( file_input = tmpf.name, redirectop = True )
+            obj = EzhilFileExecuter( file_input = tmpf.name, redirectop = True )
+            #obj = EzhilInterpExecuter( file_input = tmpf.name, redirectop = True )
             progout = obj.get_output()            
             op = "<B>Succeeded Execution</B> for program <font color=\"blue\"><ol>%s</ol></font> as <br/> <font color=\"green\"><pre>%s</pre></font>"%(program_fmt,progout)
         except Exception as e:
