@@ -248,10 +248,11 @@ class EzhilParser(Parser):
                 self.currently_parsing.pop()
             else:
                 exp = pass_in_ATexpr
+                pass_in_ATexpr = None #use it just once
             if( self.debug ): print ("return from valuelist ",str(exp))
             ptok = self.peek();
             if ( ptok.kind == EzhilToken.IF ):                
-                return self.parseIfStmt(exp)            
+                return self.parseIfStmt(exp)
             elif ( ptok.kind ==  EzhilToken.WHILE ):
                 ## @ ( expr ) while { body } end               
                self.loop_stack.append(True)
@@ -375,7 +376,7 @@ class EzhilParser(Parser):
                 return AssignStmt( lhs, assign_tok, rhs, l, c, self.debug)
             self.currently_parsing.pop()
             return EvalStmt( lhs, l, c, self.debug )
-        raise ParseException("parsing Statement, unkown operators" + str(ptok))
+        raise ParseException("parsing Statement, unknown operators" + str(ptok))
     
     def function(self):
         """ def[kw] fname[id] (arglist) {body} end[kw] """
