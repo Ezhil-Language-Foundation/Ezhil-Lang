@@ -22,3 +22,7 @@
 பின்இணை( ப , "பதிப்பி" )
 பதிப்பி "list can hold different types - last element", எடு(ப ,-1)
 
+# insert into a list
+x = [1,2,3]
+நுழைக்க( x, 0, -5 )
+பதிப்பி x
