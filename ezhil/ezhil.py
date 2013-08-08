@@ -146,7 +146,7 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 parse_eval.parse()                
             except Exception as pexp:                
                 ## clear tokens in lexer
-                lexer.tokens = list()
+                lexer.reset() #parse_eval
                 if ( debug ): print ("offending buffer item => ",totbuffer)
                 if ( debug ): print(str(pexp),str(pexp.__class__))
                 # Greedy strategy to keep avoiding parse-errors by accumulating more of input.

@@ -122,6 +122,12 @@ class Interpreter(DebugUtils):
         self.install_builtins()
         self.install_blind_builtins()
 
+    def reset(self):
+        """ reset lexer and parser """
+        self.parser.reset()
+        self.lexer.reset()
+        return
+
     def change_parser(self,parser_ctor):
         """ change the parser to your-cool-language using
          a lambda function parser_ctor the constructor """
@@ -565,7 +571,7 @@ Type "help", "copyright", "credits" or "license" for more information."""
 		self.line_no = 1
 		self.env = None ## get the first instance from evaluate_interactive
 		self.cmdloop()
-	
+    
 	def parseline(self,line):
 		arg,cmd = "",""
 		if line in ["exit","help","EOF","copyright","credits","license"]:

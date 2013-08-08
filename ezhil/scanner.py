@@ -133,7 +133,12 @@ class Lex:
         if ( not self.stdin_mode  ): self.tokenize()
         ## REPL loop can call tokenize_string whenever it
         ## desires so.
-        
+
+    def reset(self):
+        """ reset the lexer """
+        if (self.debug): print("Dumping out "+ len(self.tokens)+"Lexemes ")
+        self.tokens = [];
+    
     def __repr__(self):
         for idx in range(0,len(self.tokens)):
             print("%d] %s"%(idx,repr(self.tokens.pop())))

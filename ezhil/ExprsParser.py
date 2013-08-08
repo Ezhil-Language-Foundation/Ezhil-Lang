@@ -44,9 +44,17 @@ class Parser(DebugUtils):
         self.if_stack = [] #parsing if-statements
         self.loop_stack = [] #parsing while-statements
         self.last_tok = None ## handle to last token dequeued
-        self.inside_if = False;
-        
-
+        self.inside_if = False
+    
+    def reset(self):
+        """reset parser, and lexer, when stuff gets messed up"""
+        self.inside_if = False
+        self.loop_stack = []
+        self.if_stack = []
+        self.currently_parsing = []
+        self.lex.reset()
+        return
+	
     def check_loop_stack(self):
         if ( len(self.loop_stack) == 0 ):
             raise ParseException("break/continue statement outside any loop, near" + str(self.last_token()));
