@@ -20,3 +20,43 @@ x = x + 1
   நிறுத்து
 முடி
 முடி
+
+# nested if-elseif-else
+z = 1
+@( True ) ஆனால்
+  z = 2*z + 1
+  @( True ) ஆனால்
+    z = 2*z + 1     
+  @( False ) இல்லைஆனால்
+    z = -z 
+  இல்லை
+    z = -z/2
+  முடி
+முடி
+assert( z == 7 )
+
+# this seems broke now... damn
+# more nested if-elseif-else
+z = 1
+
+@( True ) ஆனால்
+ z = 2*z + 1
+@( False ) இல்லைஆனால்
+ z = -z
+முடி
+
+
+@( True ) ஆனால்
+  z = z*2 + 1
+  @( True ) ஆனால்
+        z = 2*z + 1
+        @( True ) ஆனால்
+            z = 2*z + 1            
+        முடி
+  @( False ) இல்லைஆனால்
+    z = -z
+  முடி  
+முடி
+
+printf(str(z))
+assert( z == 31 )
