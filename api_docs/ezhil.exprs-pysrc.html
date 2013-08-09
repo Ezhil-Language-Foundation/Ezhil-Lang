@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>ezhil.exprs</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="ezhil-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
+        Module&nbsp;exprs
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="ezhil.exprs-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="ezhil.exprs-module.html">Module ezhil.exprs</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment">## (C) 2007, 2008, 2013 Muthiah Annamalai,</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment">## Licensed under GPL Version 3</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment">## Interpreter for EXRS language </tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">,</tt> <tt class="py-name">string</tt><tt class="py-op">,</tt> <tt class="py-name">inspect</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Class ezhil.Interpreter'.Interpreter=ezhil.Interpreter%27.Interpreter-class.html"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-0', 'Interpreter', 'link-0');">Interpreter</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-1', 'Interpreter', 'link-0');">Interpreter</a></tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Class ezhil.Interpreter'.REPL=ezhil.Interpreter%27.REPL-class.html"><a title="ezhil.Interpreter'.REPL" class="py-name" href="#" onclick="return doclink('link-2', 'REPL', 'link-2');">REPL</a></tt><tt class="py-op">,</tt> <tt id="link-3" class="py-name" targets="Class ezhil.scanner.Lex=ezhil.scanner.Lex-class.html"><a title="ezhil.scanner.Lex" class="py-name" href="#" onclick="return doclink('link-3', 'Lex', 'link-3');">Lex</a></tt><tt class="py-op">,</tt> <tt id="link-4" class="py-name" targets="Function ezhil.Interpreter'.get_prog_name()=ezhil.Interpreter%27-module.html#get_prog_name"><a title="ezhil.Interpreter'.get_prog_name" class="py-name" href="#" onclick="return doclink('link-4', 'get_prog_name', 'link-4');">get_prog_name</a></tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt>       </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">    <tt class="py-name">lang</tt> <tt class="py-op">=</tt> <tt class="py-string">'exprs'</tt><tt class="py-op">;</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt class="py-op">[</tt><tt class="py-name">fname</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt><tt class="py-op">,</tt> <tt class="py-name">dostdin</tt> <tt class="py-op">]</tt><tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="ezhil.Interpreter'.get_prog_name" class="py-name" href="#" onclick="return doclink('link-5', 'get_prog_name', 'link-4');">get_prog_name</a></tt><tt class="py-op">(</tt><tt class="py-name">lang</tt><tt class="py-op">)</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">dostdin</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-comment">## interactive interpreter</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">        <tt class="py-name">lexer</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="ezhil.scanner.Lex" class="py-name" href="#" onclick="return doclink('link-6', 'Lex', 'link-3');">Lex</a></tt><tt class="py-op">(</tt> <tt class="py-op">)</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">        <tt class="py-name">parse_eval</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-7', 'Interpreter', 'link-0');">Interpreter</a></tt><tt class="py-op">(</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt id="link-8" class="py-name"><a title="ezhil.Interpreter'.REPL" class="py-name" href="#" onclick="return doclink('link-8', 'REPL', 'link-2');">REPL</a></tt><tt class="py-op">(</tt> <tt class="py-name">lang</tt><tt class="py-op">,</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">parse_eval</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-comment">## evaluate a files sequentially</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">files</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fname</tt><tt class="py-op">:</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">            <tt class="py-comment">## evaluate a file</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">            <tt class="py-name">lexer</tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="ezhil.scanner.Lex" class="py-name" href="#" onclick="return doclink('link-9', 'Lex', 'link-3');">Lex</a></tt><tt class="py-op">(</tt><tt class="py-name">files</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">lexer</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Method ezhil.scanner.Lex.dump_tokens()=ezhil.scanner.Lex-class.html#dump_tokens"><a title="ezhil.scanner.Lex.dump_tokens" class="py-name" href="#" onclick="return doclink('link-10', 'dump_tokens', 'link-10');">dump_tokens</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">            <tt class="py-name">parse_eval</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-11', 'Interpreter', 'link-0');">Interpreter</a></tt><tt class="py-op">(</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt>   </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">            <tt class="py-name">parse_eval</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method ezhil.ExprsParser.Parser.parse()=ezhil.ExprsParser.Parser-class.html#parse,Method ezhil.Interpreter'.Interpreter.parse()=ezhil.Interpreter%27.Interpreter-class.html#parse,Method ezhil.ezhil_parser.EzhilParser.parse()=ezhil.ezhil_parser.EzhilParser-class.html#parse,Method ezhil.parser.Parser.parse()=ezhil.parser.Parser-class.html#parse"><a title="ezhil.ExprsParser.Parser.parse
+ezhil.Interpreter'.Interpreter.parse
+ezhil.ezhil_parser.EzhilParser.parse
+ezhil.parser.Parser.parse" class="py-name" href="#" onclick="return doclink('link-12', 'parse', 'link-12');">parse</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"*"</tt><tt class="py-op">*</tt><tt class="py-number">60</tt><tt class="py-op">)</tt><tt class="py-op">;</tt>  <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">parse_eval</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">            <tt class="py-name">env</tt> <tt class="py-op">=</tt> <tt class="py-name">parse_eval</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method ezhil.Interpreter'.Interpreter.evaluate()=ezhil.Interpreter%27.Interpreter-class.html#evaluate,Method ezhil.ast.Array.evaluate()=ezhil.ast.Array-class.html#evaluate,Method ezhil.ast.AssignStmt.evaluate()=ezhil.ast.AssignStmt-class.html#evaluate,Method ezhil.ast.BreakStmt.evaluate()=ezhil.ast.BreakStmt-class.html#evaluate,Method ezhil.ast.ContinueStmt.evaluate()=ezhil.ast.ContinueStmt-class.html#evaluate,Method ezhil.ast.DoWhileStmt.evaluate()=ezhil.ast.DoWhileStmt-class.html#evaluate,Method ezhil.ast.ElseStmt.evaluate()=ezhil.ast.ElseStmt-class.html#evaluate,Method ezhil.ast.EvalStmt.evaluate()=ezhil.ast.EvalStmt-class.html#evaluate,Method ezhil.ast.Expr.evaluate()=ezhil.ast.Expr-class.html#evaluate,Method ezhil.ast.ExprCall.evaluate()=ezhil.ast.ExprCall-class.html#evaluate,Method ezhil.ast.ExprList.evaluate()=ezhil.ast.ExprList-class.html#evaluate,Method ezhil.ast.ForStmt.evaluate()=ezhil.ast.ForStmt-class.html#evaluate,Method ezhil.ast.Function.evaluate()=ezhil.ast.Function-class.html#evaluate,Method ezhil.ast.Identifier.evaluate()=ezhil.ast.Identifier-class.html#evaluate,Method ezhil.ast.IfStmt.evaluate()=ezhil.ast.IfStmt-class.html#evaluate,Method ezhil.ast.Number.evaluate()=ezhil.ast.Number-class.html#evaluate,Method ezhil.ast.PrintStmt.evaluate()=ezhil.ast.PrintStmt-class.html#evaluate,Method ezhil.ast.ReturnStmt.evaluate()=ezhil.ast.ReturnStmt-class.html#evaluate,Method ezhil.ast.Stmt.evaluate()=ezhil.ast.Stmt-class.html#evaluate,Method ezhil.ast.StmtList.evaluate()=ezhil.ast.StmtList-class.html#evaluate,Method ezhil.ast.String.evaluate()=ezhil.ast.String-class.html#evaluate,Method ezhil.ast.UnaryExpr.evaluate()=ezhil.ast.UnaryExpr-class.html#evaluate,Method ezhil.ast.WhileStmt.evaluate()=ezhil.ast.WhileStmt-class.html#evaluate,Method ezhil.runtime.BuiltinFunction.evaluate()=ezhil.runtime.BuiltinFunction-class.html#evaluate"><a title="ezhil.Interpreter'.Interpreter.evaluate
+ezhil.ast.Array.evaluate
+ezhil.ast.AssignStmt.evaluate
+ezhil.ast.BreakStmt.evaluate
+ezhil.ast.ContinueStmt.evaluate
+ezhil.ast.DoWhileStmt.evaluate
+ezhil.ast.ElseStmt.evaluate
+ezhil.ast.EvalStmt.evaluate
+ezhil.ast.Expr.evaluate
+ezhil.ast.ExprCall.evaluate
+ezhil.ast.ExprList.evaluate
+ezhil.ast.ForStmt.evaluate
+ezhil.ast.Function.evaluate
+ezhil.ast.Identifier.evaluate
+ezhil.ast.IfStmt.evaluate
+ezhil.ast.Number.evaluate
+ezhil.ast.PrintStmt.evaluate
+ezhil.ast.ReturnStmt.evaluate
+ezhil.ast.Stmt.evaluate
+ezhil.ast.StmtList.evaluate
+ezhil.ast.String.evaluate
+ezhil.ast.UnaryExpr.evaluate
+ezhil.ast.WhileStmt.evaluate
+ezhil.runtime.BuiltinFunction.evaluate" class="py-name" href="#" onclick="return doclink('link-13', 'evaluate', 'link-13');">evaluate</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="ezhil-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Fri Aug  9 00:00:01 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

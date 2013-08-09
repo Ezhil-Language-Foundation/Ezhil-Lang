@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>ezhil.transform</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="ezhil-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
+        Module&nbsp;transform
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="ezhil.transform-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="ezhil.transform-module.html">Module ezhil.transform</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">##This Python file uses the following encoding: utf-8</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment">## (C) 2008 Muthiah Annamalai,</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment">## Licensed under GPL Version 3</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment">## </tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment">## Module has elements of PARSE-TREE  AST </tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment">## class TreeWalker</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment">## Visitor template</tt> </tt>
+<a name="TreeWalker"></a><div id="TreeWalker-def"><a name="L11"></a><tt class="py-lineno">11</tt> <a class="py-toggle" href="#" id="TreeWalker-toggle" onclick="return toggle('TreeWalker');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html">TreeWalker</a><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="TreeWalker-expanded"><a name="TreeWalker.__init__"></a><div id="TreeWalker.__init__-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="TreeWalker.__init__-toggle" onclick="return toggle('TreeWalker.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.__init__-expanded"><a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">        <tt class="py-docstring">""" initialize data structures"""</tt> </tt>
+</div><a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">        <tt class="py-comment"># self.codegen, pretty-printer, </tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-comment"># tree-source-transformer etc.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">         </tt>
+<a name="TreeWalker.visit_identifier"></a><div id="TreeWalker.visit_identifier-def"><a name="L17"></a><tt class="py-lineno">17</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_identifier-toggle" onclick="return toggle('TreeWalker.visit_identifier');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_identifier">visit_identifier</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>   </tt>
+</div><a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt class="py-comment">## do something for id</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_string"></a><div id="TreeWalker.visit_string-def"><a name="L21"></a><tt class="py-lineno">21</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_string-toggle" onclick="return toggle('TreeWalker.visit_string');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_string">visit_string</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">str</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_string-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_string-expanded"><a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_number"></a><div id="TreeWalker.visit_number-def"><a name="L24"></a><tt class="py-lineno">24</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_number-toggle" onclick="return toggle('TreeWalker.visit_number');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_number">visit_number</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">num</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_number-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_number-expanded"><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_expr_call"></a><div id="TreeWalker.visit_expr_call-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_expr_call-toggle" onclick="return toggle('TreeWalker.visit_expr_call');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_expr_call">visit_expr_call</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">expr_call</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_expr_call-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_expr_call-expanded"><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_expr_list"></a><div id="TreeWalker.visit_expr_list-def"><a name="L30"></a><tt class="py-lineno">30</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_expr_list-toggle" onclick="return toggle('TreeWalker.visit_expr_list');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_expr_list">visit_expr_list</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">expr_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_expr_list-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_expr_list-expanded"><a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_stmt"></a><div id="TreeWalker.visit_stmt-def"><a name="L33"></a><tt class="py-lineno">33</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_stmt-toggle" onclick="return toggle('TreeWalker.visit_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_stmt">visit_stmt</a><tt class="py-op">(</tt> <tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_stmt-expanded"><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_expr"></a><div id="TreeWalker.visit_expr-def"><a name="L36"></a><tt class="py-lineno">36</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_expr-toggle" onclick="return toggle('TreeWalker.visit_expr');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_expr">visit_expr</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">expr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_expr-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_expr-expanded"><a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_return_stmt"></a><div id="TreeWalker.visit_return_stmt-def"><a name="L39"></a><tt class="py-lineno">39</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_return_stmt-toggle" onclick="return toggle('TreeWalker.visit_return_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_return_stmt">visit_return_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">ret_stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_return_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_return_stmt-expanded"><a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_break_stmt"></a><div id="TreeWalker.visit_break_stmt-def"><a name="L42"></a><tt class="py-lineno">42</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_break_stmt-toggle" onclick="return toggle('TreeWalker.visit_break_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_break_stmt">visit_break_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">break_stmt</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_break_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_break_stmt-expanded"><a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_continue_stmt"></a><div id="TreeWalker.visit_continue_stmt-def"><a name="L45"></a><tt class="py-lineno">45</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_continue_stmt-toggle" onclick="return toggle('TreeWalker.visit_continue_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_continue_stmt">visit_continue_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">cont_stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_continue_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_continue_stmt-expanded"><a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_else_stmt"></a><div id="TreeWalker.visit_else_stmt-def"><a name="L48"></a><tt class="py-lineno">48</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_else_stmt-toggle" onclick="return toggle('TreeWalker.visit_else_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_else_stmt">visit_else_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">else_stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_else_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_else_stmt-expanded"><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_if_elseif_stmt"></a><div id="TreeWalker.visit_if_elseif_stmt-def"><a name="L51"></a><tt class="py-lineno">51</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_if_elseif_stmt-toggle" onclick="return toggle('TreeWalker.visit_if_elseif_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_if_elseif_stmt">visit_if_elseif_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">if_elseif_stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_if_elseif_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_if_elseif_stmt-expanded"><a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_while_stmt"></a><div id="TreeWalker.visit_while_stmt-def"><a name="L54"></a><tt class="py-lineno">54</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_while_stmt-toggle" onclick="return toggle('TreeWalker.visit_while_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_while_stmt">visit_while_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_while_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_while_stmt-expanded"><a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_for_stmt"></a><div id="TreeWalker.visit_for_stmt-def"><a name="L57"></a><tt class="py-lineno">57</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_for_stmt-toggle" onclick="return toggle('TreeWalker.visit_for_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_for_stmt">visit_for_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">for_stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_for_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_for_stmt-expanded"><a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_assign_stmt"></a><div id="TreeWalker.visit_assign_stmt-def"><a name="L60"></a><tt class="py-lineno">60</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_assign_stmt-toggle" onclick="return toggle('TreeWalker.visit_assign_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_assign_stmt">visit_assign_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">assign_stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_assign_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_assign_stmt-expanded"><a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_print_stmt"></a><div id="TreeWalker.visit_print_stmt-def"><a name="L63"></a><tt class="py-lineno">63</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_print_stmt-toggle" onclick="return toggle('TreeWalker.visit_print_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_print_stmt">visit_print_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">print_stmt</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_print_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_print_stmt-expanded"><a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_eval_stmt"></a><div id="TreeWalker.visit_eval_stmt-def"><a name="L66"></a><tt class="py-lineno">66</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_eval_stmt-toggle" onclick="return toggle('TreeWalker.visit_eval_stmt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_eval_stmt">visit_eval_stmt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">eval_stmt</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_eval_stmt-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_eval_stmt-expanded"><a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_arg_list"></a><div id="TreeWalker.visit_arg_list-def"><a name="L69"></a><tt class="py-lineno">69</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_arg_list-toggle" onclick="return toggle('TreeWalker.visit_arg_list');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_arg_list">visit_arg_list</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">arg_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_arg_list-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_arg_list-expanded"><a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_value_list"></a><div id="TreeWalker.visit_value_list-def"><a name="L72"></a><tt class="py-lineno">72</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_value_list-toggle" onclick="return toggle('TreeWalker.visit_value_list');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_value_list">visit_value_list</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">value_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_value_list-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_value_list-expanded"><a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_stmt_list"></a><div id="TreeWalker.visit_stmt_list-def"><a name="L75"></a><tt class="py-lineno">75</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_stmt_list-toggle" onclick="return toggle('TreeWalker.visit_stmt_list');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_stmt_list">visit_stmt_list</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">stmt_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_stmt_list-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_stmt_list-expanded"><a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_function"></a><div id="TreeWalker.visit_function-def"><a name="L78"></a><tt class="py-lineno">78</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_function-toggle" onclick="return toggle('TreeWalker.visit_function');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_function">visit_function</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">function</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_function-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_function-expanded"><a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line"> </tt>
+<a name="TreeWalker.visit_program_or_script"></a><div id="TreeWalker.visit_program_or_script-def"><a name="L81"></a><tt class="py-lineno">81</tt> <a class="py-toggle" href="#" id="TreeWalker.visit_program_or_script-toggle" onclick="return toggle('TreeWalker.visit_program_or_script');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.transform.TreeWalker-class.html#visit_program_or_script">visit_program_or_script</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TreeWalker.visit_program_or_script-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="TreeWalker.visit_program_or_script-expanded"><a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line">        <tt class="py-comment">## entry point</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div></div><a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="ezhil-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Fri Aug  9 00:00:01 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

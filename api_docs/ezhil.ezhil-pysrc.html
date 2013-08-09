@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>ezhil.ezhil</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="ezhil-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
+        Module&nbsp;ezhil
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="ezhil.ezhil-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="ezhil.ezhil-module.html">Module ezhil.ezhil</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -*-</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment">## </tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">## (C) 2007, 2008, 2013 Muthiah Annamalai,</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment">## Licensed under GPL Version 3</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment">## </tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">## Interpreter for Ezhil language</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">,</tt> <tt class="py-name">string</tt><tt class="py-op">,</tt> <tt class="py-name">tempfile</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Class ezhil.Interpreter'.Interpreter=ezhil.Interpreter%27.Interpreter-class.html"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-0', 'Interpreter', 'link-0');">Interpreter</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-1', 'Interpreter', 'link-0');">Interpreter</a></tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Class ezhil.Interpreter'.REPL=ezhil.Interpreter%27.REPL-class.html"><a title="ezhil.Interpreter'.REPL" class="py-name" href="#" onclick="return doclink('link-2', 'REPL', 'link-2');">REPL</a></tt><tt class="py-op">,</tt> <tt id="link-3" class="py-name" targets="Class ezhil.scanner.Lex=ezhil.scanner.Lex-class.html"><a title="ezhil.scanner.Lex" class="py-name" href="#" onclick="return doclink('link-3', 'Lex', 'link-3');">Lex</a></tt><tt class="py-op">,</tt> <tt id="link-4" class="py-name" targets="Function ezhil.Interpreter'.get_prog_name()=ezhil.Interpreter%27-module.html#get_prog_name"><a title="ezhil.Interpreter'.get_prog_name" class="py-name" href="#" onclick="return doclink('link-4', 'get_prog_name', 'link-4');">get_prog_name</a></tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-5" class="py-name" targets="Module ezhil.ezhil_parser=ezhil.ezhil_parser-module.html"><a title="ezhil.ezhil_parser" class="py-name" href="#" onclick="return doclink('link-5', 'ezhil_parser', 'link-5');">ezhil_parser</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Class ezhil.ezhil_parser.EzhilParser=ezhil.ezhil_parser.EzhilParser-class.html"><a title="ezhil.ezhil_parser.EzhilParser" class="py-name" href="#" onclick="return doclink('link-6', 'EzhilParser', 'link-6');">EzhilParser</a></tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-7" class="py-name" targets="Module ezhil.ezhil_scanner=ezhil.ezhil_scanner-module.html"><a title="ezhil.ezhil_scanner" class="py-name" href="#" onclick="return doclink('link-7', 'ezhil_scanner', 'link-7');">ezhil_scanner</a></tt> <tt class="py-keyword">import</tt> <tt id="link-8" class="py-name" targets="Class ezhil.ezhil_scanner.EzhilLex=ezhil.ezhil_scanner.EzhilLex-class.html"><a title="ezhil.ezhil_scanner.EzhilLex" class="py-name" href="#" onclick="return doclink('link-8', 'EzhilLex', 'link-8');">EzhilLex</a></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-9" class="py-name" targets="Module ezhil.errors=ezhil.errors-module.html"><a title="ezhil.errors" class="py-name" href="#" onclick="return doclink('link-9', 'errors', 'link-9');">errors</a></tt> <tt class="py-keyword">import</tt> <tt id="link-10" class="py-name" targets="Class ezhil.errors.RuntimeException=ezhil.errors.RuntimeException-class.html"><a title="ezhil.errors.RuntimeException" class="py-name" href="#" onclick="return doclink('link-10', 'RuntimeException', 'link-10');">RuntimeException</a></tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name" targets="Class ezhil.errors.ParseException=ezhil.errors.ParseException-class.html"><a title="ezhil.errors.ParseException" class="py-name" href="#" onclick="return doclink('link-11', 'ParseException', 'link-11');">ParseException</a></tt> </tt>
+<a name="EzhilInterpreter"></a><div id="EzhilInterpreter-def"><a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt> <a class="py-toggle" href="#" id="EzhilInterpreter-toggle" onclick="return toggle('EzhilInterpreter');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilInterpreter-class.html">EzhilInterpreter</a><tt class="py-op">(</tt> <tt class="py-base-class">Interpreter</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilInterpreter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="EzhilInterpreter-expanded"><a name="EzhilInterpreter.__init__"></a><div id="EzhilInterpreter.__init__-def"><a name="L16"></a><tt class="py-lineno"> 16</tt> <a class="py-toggle" href="#" id="EzhilInterpreter.__init__-toggle" onclick="return toggle('EzhilInterpreter.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilInterpreter-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">lexer</tt><tt class="py-op">,</tt> <tt class="py-param">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilInterpreter.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EzhilInterpreter.__init__-expanded"><a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">        <tt id="link-12" class="py-name"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-12', 'Interpreter', 'link-0');">Interpreter</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method ezhil.ExprsParser.Parser.__init__()=ezhil.ExprsParser.Parser-class.html#__init__,Method ezhil.Interpreter'.Interpreter.__init__()=ezhil.Interpreter%27.Interpreter-class.html#__init__,Method ezhil.Interpreter'.REPL.__init__()=ezhil.Interpreter%27.REPL-class.html#__init__,Method ezhil.ast.ArgList.__init__()=ezhil.ast.ArgList-class.html#__init__,Method ezhil.ast.Array.__init__()=ezhil.ast.Array-class.html#__init__,Method ezhil.ast.AssignStmt.__init__()=ezhil.ast.AssignStmt-class.html#__init__,Method ezhil.ast.Boolean.__init__()=ezhil.ast.Boolean-class.html#__init__,Method ezhil.ast.BreakStmt.__init__()=ezhil.ast.BreakStmt-class.html#__init__,Method ezhil.ast.ContinueStmt.__init__()=ezhil.ast.ContinueStmt-class.html#__init__,Method ezhil.ast.DoWhileStmt.__init__()=ezhil.ast.DoWhileStmt-class.html#__init__,Method ezhil.ast.ElseStmt.__init__()=ezhil.ast.ElseStmt-class.html#__init__,Method ezhil.ast.EvalStmt.__init__()=ezhil.ast.EvalStmt-class.html#__init__,Method ezhil.ast.Expr.__init__()=ezhil.ast.Expr-class.html#__init__,Method ezhil.ast.ExprCall.__init__()=ezhil.ast.ExprCall-class.html#__init__,Method ezhil.ast.ExprList.__init__()=ezhil.ast.ExprList-class.html#__init__,Method ezhil.ast.ForStmt.__init__()=ezhil.ast.ForStmt-class.html#__init__,Method ezhil.ast.Function.__init__()=ezhil.ast.Function-class.html#__init__,Method ezhil.ast.Identifier.__init__()=ezhil.ast.Identifier-class.html#__init__,Method ezhil.ast.IfStmt.__init__()=ezhil.ast.IfStmt-class.html#__init__,Method ezhil.ast.Number.__init__()=ezhil.ast.Number-class.html#__init__,Method ezhil.ast.PrintStmt.__init__()=ezhil.ast.PrintStmt-class.html#__init__,Method ezhil.ast.ReturnStmt.__init__()=ezhil.ast.ReturnStmt-class.html#__init__,Method ezhil.ast.Stmt.__init__()=ezhil.ast.Stmt-class.html#__init__,Method ezhil.ast.StmtList.__init__()=ezhil.ast.StmtList-class.html#__init__,Method ezhil.ast.String.__init__()=ezhil.ast.String-class.html#__init__,Method ezhil.ast.UnaryExpr.__init__()=ezhil.ast.UnaryExpr-class.html#__init__,Method ezhil.ast.ValueList.__init__()=ezhil.ast.ValueList-class.html#__init__,Method ezhil.ast.WhileStmt.__init__()=ezhil.ast.WhileStmt-class.html#__init__,Method ezhil.errors.ParseException.__init__()=ezhil.errors.ParseException-class.html#__init__,Method ezhil.errors.RuntimeException.__init__()=ezhil.errors.RuntimeException-class.html#__init__,Method ezhil.errors.ScannerException.__init__()=ezhil.errors.ScannerException-class.html#__init__,Method ezhil.ezhil.EzhilFileExecuter.__init__()=ezhil.ezhil.EzhilFileExecuter-class.html#__init__,Method ezhil.ezhil.EzhilInterpExecuter.__init__()=ezhil.ezhil.EzhilInterpExecuter-class.html#__init__,Method ezhil.ezhil.EzhilInterpreter.__init__()=ezhil.ezhil.EzhilInterpreter-class.html#__init__,Method ezhil.ezhil.EzhilRedirectInputOutput.__init__()=ezhil.ezhil.EzhilRedirectInputOutput-class.html#__init__,Method ezhil.ezhil.EzhilRedirectOutput.__init__()=ezhil.ezhil.EzhilRedirectOutput-class.html#__init__,Method ezhil.ezhil_parser.EzhilParser.__init__()=ezhil.ezhil_parser.EzhilParser-class.html#__init__,Method ezhil.ezhil_scanner.EzhilLex.__init__()=ezhil.ezhil_scanner.EzhilLex-class.html#__init__,Method ezhil.ezhil_scanner.EzhilLexeme.__init__()=ezhil.ezhil_scanner.EzhilLexeme-class.html#__init__,Method ezhil.parser.Parser.__init__()=ezhil.parser.Parser-class.html#__init__,Method ezhil.runtime.BlindBuiltins.__init__()=ezhil.runtime.BlindBuiltins-class.html#__init__,Method ezhil.runtime.BuiltinFunction.__init__()=ezhil.runtime.BuiltinFunction-class.html#__init__,Method ezhil.runtime.DebugUtils.__init__()=ezhil.runtime.DebugUtils-class.html#__init__,Method ezhil.runtime.Environment.__init__()=ezhil.runtime.Environment-class.html#__init__,Method ezhil.scanner.Lex.__init__()=ezhil.scanner.Lex-class.html#__init__,Method ezhil.scanner.Lexeme.__init__()=ezhil.scanner.Lexeme-class.html#__init__,Method ezhil.transform.TreeWalker.__init__()=ezhil.transform.TreeWalker-class.html#__init__"><a title="ezhil.ExprsParser.Parser.__init__
+ezhil.Interpreter'.Interpreter.__init__
+ezhil.Interpreter'.REPL.__init__
+ezhil.ast.ArgList.__init__
+ezhil.ast.Array.__init__
+ezhil.ast.AssignStmt.__init__
+ezhil.ast.Boolean.__init__
+ezhil.ast.BreakStmt.__init__
+ezhil.ast.ContinueStmt.__init__
+ezhil.ast.DoWhileStmt.__init__
+ezhil.ast.ElseStmt.__init__
+ezhil.ast.EvalStmt.__init__
+ezhil.ast.Expr.__init__
+ezhil.ast.ExprCall.__init__
+ezhil.ast.ExprList.__init__
+ezhil.ast.ForStmt.__init__
+ezhil.ast.Function.__init__
+ezhil.ast.Identifier.__init__
+ezhil.ast.IfStmt.__init__
+ezhil.ast.Number.__init__
+ezhil.ast.PrintStmt.__init__
+ezhil.ast.ReturnStmt.__init__
+ezhil.ast.Stmt.__init__
+ezhil.ast.StmtList.__init__
+ezhil.ast.String.__init__
+ezhil.ast.UnaryExpr.__init__
+ezhil.ast.ValueList.__init__
+ezhil.ast.WhileStmt.__init__
+ezhil.errors.ParseException.__init__
+ezhil.errors.RuntimeException.__init__
+ezhil.errors.ScannerException.__init__
+ezhil.ezhil.EzhilFileExecuter.__init__
+ezhil.ezhil.EzhilInterpExecuter.__init__
+ezhil.ezhil.EzhilInterpreter.__init__
+ezhil.ezhil.EzhilRedirectInputOutput.__init__
+ezhil.ezhil.EzhilRedirectOutput.__init__
+ezhil.ezhil_parser.EzhilParser.__init__
+ezhil.ezhil_scanner.EzhilLex.__init__
+ezhil.ezhil_scanner.EzhilLexeme.__init__
+ezhil.parser.Parser.__init__
+ezhil.runtime.BlindBuiltins.__init__
+ezhil.runtime.BuiltinFunction.__init__
+ezhil.runtime.DebugUtils.__init__
+ezhil.runtime.Environment.__init__
+ezhil.scanner.Lex.__init__
+ezhil.scanner.Lexeme.__init__
+ezhil.transform.TreeWalker.__init__" class="py-name" href="#" onclick="return doclink('link-13', '__init__', 'link-13');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt><tt class="py-name">lexer</tt><tt class="py-op">,</tt><tt class="py-name">debug</tt><tt class="py-op">)</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">        <tt id="link-14" class="py-name"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-14', 'Interpreter', 'link-0');">Interpreter</a></tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method ezhil.Interpreter'.Interpreter.change_parser()=ezhil.Interpreter%27.Interpreter-class.html#change_parser"><a title="ezhil.Interpreter'.Interpreter.change_parser" class="py-name" href="#" onclick="return doclink('link-15', 'change_parser', 'link-15');">change_parser</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt><tt id="link-16" class="py-name"><a title="ezhil.ezhil_parser.EzhilParser" class="py-name" href="#" onclick="return doclink('link-16', 'EzhilParser', 'link-6');">EzhilParser</a></tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Static Method ezhil.ezhil_parser.EzhilParser.factory()=ezhil.ezhil_parser.EzhilParser-class.html#factory"><a title="ezhil.ezhil_parser.EzhilParser.factory" class="py-name" href="#" onclick="return doclink('link-17', 'factory', 'link-17');">factory</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div><a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">     </tt>
+<a name="EzhilInterpreter.install_builtins"></a><div id="EzhilInterpreter.install_builtins-def"><a name="L21"></a><tt class="py-lineno"> 21</tt> <a class="py-toggle" href="#" id="EzhilInterpreter.install_builtins-toggle" onclick="return toggle('EzhilInterpreter.install_builtins');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilInterpreter-class.html#install_builtins">install_builtins</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilInterpreter.install_builtins-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EzhilInterpreter.install_builtins-expanded"><a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-docstring">""" populate with the builtin functions, while adding our own flavors"""</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">        <tt id="link-18" class="py-name"><a title="ezhil.Interpreter'.Interpreter" class="py-name" href="#" onclick="return doclink('link-18', 'Interpreter', 'link-0');">Interpreter</a></tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method ezhil.Interpreter'.Interpreter.install_builtins()=ezhil.Interpreter%27.Interpreter-class.html#install_builtins,Method ezhil.ezhil.EzhilInterpreter.install_builtins()=ezhil.ezhil.EzhilInterpreter-class.html#install_builtins"><a title="ezhil.Interpreter'.Interpreter.install_builtins
+ezhil.ezhil.EzhilInterpreter.install_builtins" class="py-name" href="#" onclick="return doclink('link-19', 'install_builtins', 'link-19');">install_builtins</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">         </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">        <tt class="py-comment">#input statements, length constructs</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">        <tt class="py-name">tamil_equiv</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">"&#2970;&#2992;&#2990;&#3021;_&#2951;&#2975;&#2990;&#3006;&#2993;&#3021;&#2993;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"replace"</tt><tt class="py-op">,</tt> <tt class="py-string">"&#2970;&#2992;&#2990;&#3021;_&#2965;&#2979;&#3021;&#2975;&#3009;&#2986;&#3007;&#2975;&#3007;"</tt><tt class="py-op">:</tt><tt class="py-string">"find"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2984;&#3008;&#2995;&#2990;&#3021;"</tt><tt class="py-op">:</tt><tt class="py-string">"len"</tt><tt class="py-op">,</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">                       <tt class="py-string">"&#2970;&#2992;&#2990;&#3021;_&#2953;&#2995;&#3021;&#2995;&#3008;&#2975;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"raw_input"</tt><tt class="py-op">,</tt> <tt class="py-string">"&#2953;&#2995;&#3021;&#2995;&#3008;&#2975;&#3009;"</tt> <tt class="py-op">:</tt> <tt class="py-string">"input"</tt> <tt class="py-op">}</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-comment">#list operators        </tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">        <tt class="py-name">tamil_equiv</tt><tt class="py-op">.</tt><tt class="py-name">update</tt><tt class="py-op">(</tt> <tt class="py-op">{</tt><tt class="py-string">"&#2986;&#2975;&#3021;&#2975;&#3007;&#2991;&#2994;&#3021;"</tt><tt class="py-op">:</tt><tt class="py-string">"list"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2986;&#3007;&#2985;&#3021;&#2951;&#2979;&#3016;"</tt><tt class="py-op">:</tt><tt class="py-string">"append"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2980;&#2994;&#3016;&#2965;&#3008;&#2996;&#3021;"</tt><tt class="py-op">:</tt><tt class="py-string">"reverse"</tt><tt class="py-op">,</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">                             <tt class="py-string">"&#2997;&#2992;&#3007;&#2970;&#3016;&#2986;&#3021;&#2986;&#2975;&#3009;&#2980;&#3021;&#2980;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"sort"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2984;&#3008;&#2975;&#3021;&#2975;&#3007;&#2965;&#3021;&#2965;"</tt><tt class="py-op">:</tt><tt class="py-string">"extend"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2984;&#3009;&#2996;&#3016;&#2965;&#3021;&#2965;"</tt><tt class="py-op">:</tt><tt class="py-string">"insert"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2965;&#3009;&#2993;&#3007;&#2991;&#3008;&#2975;&#3021;&#2975;&#3014;&#2979;&#3021;"</tt><tt class="py-op">:</tt><tt class="py-string">"index"</tt><tt class="py-op">,</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">                             <tt class="py-string">"&#2997;&#3014;&#2995;&#3007;&#2991;&#3015;&#2958;&#2975;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"pop"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2986;&#3014;&#3006;&#2992;&#3009;&#2984;&#3021;&#2980;&#3007;&#2991;&#2958;&#2979;&#3021;"</tt><tt class="py-op">:</tt><tt class="py-string">"count"</tt><tt class="py-op">,</tt> <tt class="py-string">"&#2958;&#2975;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"__getitem__"</tt><tt class="py-op">}</tt> <tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">         </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-comment">#file operators</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-name">tamil_equiv</tt><tt class="py-op">.</tt><tt class="py-name">update</tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">"&#2965;&#3015;&#3006;&#2986;&#3021;&#2986;&#3016;_&#2980;&#3007;&#2993;"</tt><tt class="py-op">:</tt><tt class="py-string">"file_open"</tt><tt class="py-op">,</tt> <tt class="py-string">"&#2965;&#3015;&#3006;&#2986;&#3021;&#2986;&#3016;_&#2990;&#3010;&#2975;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"file_close"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2965;&#3015;&#3006;&#2986;&#3021;&#2986;&#3016;_&#2986;&#2975;&#3007;"</tt><tt class="py-op">:</tt><tt class="py-string">"file_read"</tt><tt class="py-op">,</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">                            <tt class="py-string">"&#2965;&#3015;&#3006;&#2986;&#3021;&#2986;&#3016;_&#2958;&#2996;&#3009;&#2980;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"file_write"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2965;&#3015;&#3006;&#2986;&#3021;&#2986;&#3016;_&#2958;&#2996;&#3009;&#2980;&#3009;_&#2997;&#2992;&#3007;&#2965;&#2995;&#3021;"</tt><tt class="py-op">:</tt><tt class="py-string">"file_writelines"</tt><tt class="py-op">,</tt><tt class="py-string">"&#2965;&#3015;&#3006;&#2986;&#3021;&#2986;&#3016;_&#2986;&#2975;&#3007;_&#2997;&#2992;&#3007;&#2965;&#2995;&#3021;"</tt><tt class="py-op">:</tt><tt class="py-string">"file_readlines"</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">         </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">k</tt><tt class="py-op">,</tt><tt class="py-name">v</tt> <tt class="py-keyword">in</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">tamil_equiv</tt><tt class="py-op">.</tt><tt class="py-name">items</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">builtin_map</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">builtin_map</tt><tt class="py-op">[</tt><tt class="py-name">v</tt><tt class="py-op">]</tt><tt class="py-op">;</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">         </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-comment"># translations for turtle module</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-name">turtle_map</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> <tt class="py-string">"&#2990;&#3009;&#2985;&#3021;&#2985;&#3006;&#2975;&#3007;"</tt><tt class="py-op">:</tt><tt class="py-string">"forward"</tt><tt class="py-op">,</tt> <tt class="py-string">"&#2986;&#3007;&#2985;&#3021;&#2985;&#3006;&#2975;&#3007;"</tt> <tt class="py-op">:</tt><tt class="py-string">"backward"</tt><tt class="py-op">,</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">                       <tt class="py-string">"&#2997;&#2994;&#2980;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"lt"</tt><tt class="py-op">,</tt> <tt class="py-string">"&#2951;&#2975;&#2980;&#3009;"</tt><tt class="py-op">:</tt><tt class="py-string">"rt"</tt><tt class="py-op">,</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">                       <tt class="py-string">"&#2958;&#2996;&#3009;&#2980;&#3009;&#2965;&#3019;&#2994;&#3021;&#2990;&#3015;&#2994;&#3015;"</tt><tt class="py-op">:</tt><tt class="py-string">"penup"</tt><tt class="py-op">,</tt>  <tt class="py-string">"&#2958;&#2996;&#3009;&#2980;&#3009;&#2965;&#3019;&#2994;&#3021;&#2965;&#3007;&#2996;&#3015;"</tt><tt class="py-op">:</tt><tt class="py-string">"pendown"</tt><tt class="py-op">}</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">k</tt><tt class="py-op">,</tt><tt class="py-name">v</tt> <tt class="py-keyword">in</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">turtle_map</tt><tt class="py-op">.</tt><tt class="py-name">items</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt class="py-name">vv</tt> <tt class="py-op">=</tt> <tt class="py-string">"turtle_"</tt><tt class="py-op">+</tt><tt class="py-name">v</tt><tt class="py-op">;</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">builtin_map</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">builtin_map</tt><tt class="py-op">[</tt><tt class="py-name">vv</tt><tt class="py-op">]</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">         </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div></div><a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"> </tt>
+<a name="EzhilRedirectOutput"></a><div id="EzhilRedirectOutput-def"><a name="L50"></a><tt class="py-lineno"> 50</tt> <a class="py-toggle" href="#" id="EzhilRedirectOutput-toggle" onclick="return toggle('EzhilRedirectOutput');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilRedirectOutput-class.html">EzhilRedirectOutput</a><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilRedirectOutput-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="EzhilRedirectOutput-expanded"><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">    <tt class="py-docstring">""" class provides the get_output method for reading from a temporary file, and deletes it after that.</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">        the file creation is also managed here. However restoring stdout, stderr have to be done in the user class</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="EzhilRedirectOutput.__init__"></a><div id="EzhilRedirectOutput.__init__-def"><a name="L54"></a><tt class="py-lineno"> 54</tt> <a class="py-toggle" href="#" id="EzhilRedirectOutput.__init__-toggle" onclick="return toggle('EzhilRedirectOutput.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilRedirectOutput-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">redirectop</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilRedirectOutput.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EzhilRedirectOutput.__init__-expanded"><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">op</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">redirectop</tt> <tt class="py-op">=</tt> <tt class="py-name">redirectop</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">redirectop</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt><tt class="py-op">=</tt><tt class="py-name">tempfile</tt><tt class="py-op">.</tt><tt class="py-name">NamedTemporaryFile</tt><tt class="py-op">(</tt><tt class="py-name">suffix</tt><tt class="py-op">=</tt><tt class="py-string">'.output'</tt><tt class="py-op">,</tt><tt class="py-name">delete</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stdout</tt> <tt class="py-op">=</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stderr</tt> <tt class="py-op">=</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stderr</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">            <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stderr</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">     </tt>
+<a name="EzhilRedirectOutput.get_output"></a><div id="EzhilRedirectOutput.get_output-def"><a name="L67"></a><tt class="py-lineno"> 67</tt> <a class="py-toggle" href="#" id="EzhilRedirectOutput.get_output-toggle" onclick="return toggle('EzhilRedirectOutput.get_output');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilRedirectOutput-class.html#get_output">get_output</a><tt class="py-op">(</tt> <tt class="py-param">self</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilRedirectOutput.get_output-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EzhilRedirectOutput.get_output-expanded"><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-docstring">""" read the output from tmpfile once and delete it. Use cached copy for later. Memoized. """</tt>  </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">op</tt><tt class="py-op">,</tt><tt class="py-name">str</tt><tt class="py-op">)</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">op</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">redirectop</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">                <tt class="py-keyword">with</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt><tt class="py-op">.</tt><tt class="py-name">name</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">fp</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">op</tt> <tt class="py-op">=</tt> <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt class="py-name">read</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">                <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">unlink</tt><tt class="py-op">(</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt><tt class="py-op">.</tt><tt class="py-name">name</tt> <tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">         </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">op</tt> </tt>
+</div></div><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="EzhilRedirectInputOutput"></a><div id="EzhilRedirectInputOutput-def"><a name="L79"></a><tt class="py-lineno"> 79</tt> <a class="py-toggle" href="#" id="EzhilRedirectInputOutput-toggle" onclick="return toggle('EzhilRedirectInputOutput');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilRedirectInputOutput-class.html">EzhilRedirectInputOutput</a><tt class="py-op">(</tt><tt class="py-base-class">EzhilRedirectOutput</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilRedirectInputOutput-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="EzhilRedirectInputOutput-expanded"><a name="EzhilRedirectInputOutput.__init__"></a><div id="EzhilRedirectInputOutput.__init__-def"><a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="EzhilRedirectInputOutput.__init__-toggle" onclick="return toggle('EzhilRedirectInputOutput.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilRedirectInputOutput-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">input_file</tt><tt class="py-op">,</tt><tt class="py-param">redirectop</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilRedirectInputOutput.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EzhilRedirectInputOutput.__init__-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt id="link-20" class="py-name" targets="Class ezhil.ezhil.EzhilRedirectOutput=ezhil.ezhil.EzhilRedirectOutput-class.html"><a title="ezhil.ezhil.EzhilRedirectOutput" class="py-name" href="#" onclick="return doclink('link-20', 'EzhilRedirectOutput', 'link-20');">EzhilRedirectOutput</a></tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="ezhil.ExprsParser.Parser.__init__
+ezhil.Interpreter'.Interpreter.__init__
+ezhil.Interpreter'.REPL.__init__
+ezhil.ast.ArgList.__init__
+ezhil.ast.Array.__init__
+ezhil.ast.AssignStmt.__init__
+ezhil.ast.Boolean.__init__
+ezhil.ast.BreakStmt.__init__
+ezhil.ast.ContinueStmt.__init__
+ezhil.ast.DoWhileStmt.__init__
+ezhil.ast.ElseStmt.__init__
+ezhil.ast.EvalStmt.__init__
+ezhil.ast.Expr.__init__
+ezhil.ast.ExprCall.__init__
+ezhil.ast.ExprList.__init__
+ezhil.ast.ForStmt.__init__
+ezhil.ast.Function.__init__
+ezhil.ast.Identifier.__init__
+ezhil.ast.IfStmt.__init__
+ezhil.ast.Number.__init__
+ezhil.ast.PrintStmt.__init__
+ezhil.ast.ReturnStmt.__init__
+ezhil.ast.Stmt.__init__
+ezhil.ast.StmtList.__init__
+ezhil.ast.String.__init__
+ezhil.ast.UnaryExpr.__init__
+ezhil.ast.ValueList.__init__
+ezhil.ast.WhileStmt.__init__
+ezhil.errors.ParseException.__init__
+ezhil.errors.RuntimeException.__init__
+ezhil.errors.ScannerException.__init__
+ezhil.ezhil.EzhilFileExecuter.__init__
+ezhil.ezhil.EzhilInterpExecuter.__init__
+ezhil.ezhil.EzhilInterpreter.__init__
+ezhil.ezhil.EzhilRedirectInputOutput.__init__
+ezhil.ezhil.EzhilRedirectOutput.__init__
+ezhil.ezhil_parser.EzhilParser.__init__
+ezhil.ezhil_scanner.EzhilLex.__init__
+ezhil.ezhil_scanner.EzhilLexeme.__init__
+ezhil.parser.Parser.__init__
+ezhil.runtime.BlindBuiltins.__init__
+ezhil.runtime.BuiltinFunction.__init__
+ezhil.runtime.DebugUtils.__init__
+ezhil.runtime.Environment.__init__
+ezhil.scanner.Lex.__init__
+ezhil.scanner.Lexeme.__init__
+ezhil.transform.TreeWalker.__init__" class="py-name" href="#" onclick="return doclink('link-21', '__init__', 'link-13');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt><tt class="py-name">redirectop</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stdin</tt> <tt class="py-op">=</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdin</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">stdin</tt> <tt class="py-op">=</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt> <tt class="py-name">input_file</tt> <tt class="py-op">)</tt> </tt>
+</div></div><a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">     </tt>
+<a name="EzhilFileExecuter"></a><div id="EzhilFileExecuter-def"><a name="L85"></a><tt class="py-lineno"> 85</tt> <a class="py-toggle" href="#" id="EzhilFileExecuter-toggle" onclick="return toggle('EzhilFileExecuter');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilFileExecuter-class.html">EzhilFileExecuter</a><tt class="py-op">(</tt><tt class="py-base-class">EzhilRedirectOutput</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilFileExecuter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="EzhilFileExecuter-expanded"><a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">    <tt class="py-docstring">""" run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files """</tt> </tt>
+<a name="EzhilFileExecuter.__init__"></a><div id="EzhilFileExecuter.__init__-def"><a name="L87"></a><tt class="py-lineno"> 87</tt> <a class="py-toggle" href="#" id="EzhilFileExecuter.__init__-toggle" onclick="return toggle('EzhilFileExecuter.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilFileExecuter-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">file_input</tt><tt class="py-op">,</tt><tt class="py-param">debug</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt><tt class="py-param">redirectop</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>         </tt>
+</div><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt id="link-22" class="py-name"><a title="ezhil.ezhil.EzhilRedirectOutput" class="py-name" href="#" onclick="return doclink('link-22', 'EzhilRedirectOutput', 'link-20');">EzhilRedirectOutput</a></tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="ezhil.ExprsParser.Parser.__init__
+ezhil.Interpreter'.Interpreter.__init__
+ezhil.Interpreter'.REPL.__init__
+ezhil.ast.ArgList.__init__
+ezhil.ast.Array.__init__
+ezhil.ast.AssignStmt.__init__
+ezhil.ast.Boolean.__init__
+ezhil.ast.BreakStmt.__init__
+ezhil.ast.ContinueStmt.__init__
+ezhil.ast.DoWhileStmt.__init__
+ezhil.ast.ElseStmt.__init__
+ezhil.ast.EvalStmt.__init__
+ezhil.ast.Expr.__init__
+ezhil.ast.ExprCall.__init__
+ezhil.ast.ExprList.__init__
+ezhil.ast.ForStmt.__init__
+ezhil.ast.Function.__init__
+ezhil.ast.Identifier.__init__
+ezhil.ast.IfStmt.__init__
+ezhil.ast.Number.__init__
+ezhil.ast.PrintStmt.__init__
+ezhil.ast.ReturnStmt.__init__
+ezhil.ast.Stmt.__init__
+ezhil.ast.StmtList.__init__
+ezhil.ast.String.__init__
+ezhil.ast.UnaryExpr.__init__
+ezhil.ast.ValueList.__init__
+ezhil.ast.WhileStmt.__init__
+ezhil.errors.ParseException.__init__
+ezhil.errors.RuntimeException.__init__
+ezhil.errors.ScannerException.__init__
+ezhil.ezhil.EzhilFileExecuter.__init__
+ezhil.ezhil.EzhilInterpExecuter.__init__
+ezhil.ezhil.EzhilInterpreter.__init__
+ezhil.ezhil.EzhilRedirectInputOutput.__init__
+ezhil.ezhil.EzhilRedirectOutput.__init__
+ezhil.ezhil_parser.EzhilParser.__init__
+ezhil.ezhil_scanner.EzhilLex.__init__
+ezhil.ezhil_scanner.EzhilLexeme.__init__
+ezhil.parser.Parser.__init__
+ezhil.runtime.BlindBuiltins.__init__
+ezhil.runtime.BuiltinFunction.__init__
+ezhil.runtime.DebugUtils.__init__
+ezhil.runtime.Environment.__init__
+ezhil.scanner.Lex.__init__
+ezhil.scanner.Lexeme.__init__
+ezhil.transform.TreeWalker.__init__" class="py-name" href="#" onclick="return doclink('link-23', '__init__', 'link-13');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt><tt class="py-name">redirectop</tt><tt class="py-op">)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">         </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">            <tt class="py-name">lexer</tt> <tt class="py-op">=</tt> <tt id="link-24" class="py-name"><a title="ezhil.ezhil_scanner.EzhilLex" class="py-name" href="#" onclick="return doclink('link-24', 'EzhilLex', 'link-8');">EzhilLex</a></tt><tt class="py-op">(</tt><tt class="py-name">file_input</tt><tt class="py-op">,</tt><tt class="py-name">debug</tt><tt class="py-op">)</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">lexer</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method ezhil.scanner.Lex.dump_tokens()=ezhil.scanner.Lex-class.html#dump_tokens"><a title="ezhil.scanner.Lex.dump_tokens" class="py-name" href="#" onclick="return doclink('link-25', 'dump_tokens', 'link-25');">dump_tokens</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-name">parse_eval</tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name" targets="Class ezhil.ezhil.EzhilInterpreter=ezhil.ezhil.EzhilInterpreter-class.html"><a title="ezhil.ezhil.EzhilInterpreter" class="py-name" href="#" onclick="return doclink('link-26', 'EzhilInterpreter', 'link-26');">EzhilInterpreter</a></tt><tt class="py-op">(</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">            <tt class="py-name">parse_eval</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Method ezhil.ExprsParser.Parser.parse()=ezhil.ExprsParser.Parser-class.html#parse,Method ezhil.Interpreter'.Interpreter.parse()=ezhil.Interpreter%27.Interpreter-class.html#parse,Method ezhil.ezhil_parser.EzhilParser.parse()=ezhil.ezhil_parser.EzhilParser-class.html#parse,Method ezhil.parser.Parser.parse()=ezhil.parser.Parser-class.html#parse"><a title="ezhil.ExprsParser.Parser.parse
+ezhil.Interpreter'.Interpreter.parse
+ezhil.ezhil_parser.EzhilParser.parse
+ezhil.parser.Parser.parse" class="py-name" href="#" onclick="return doclink('link-27', 'parse', 'link-27');">parse</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"*"</tt><tt class="py-op">*</tt><tt class="py-number">60</tt><tt class="py-op">)</tt><tt class="py-op">;</tt>  <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">parse_eval</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">            <tt class="py-name">env</tt> <tt class="py-op">=</tt> <tt class="py-name">parse_eval</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method ezhil.Interpreter'.Interpreter.evaluate()=ezhil.Interpreter%27.Interpreter-class.html#evaluate,Method ezhil.ast.Array.evaluate()=ezhil.ast.Array-class.html#evaluate,Method ezhil.ast.AssignStmt.evaluate()=ezhil.ast.AssignStmt-class.html#evaluate,Method ezhil.ast.BreakStmt.evaluate()=ezhil.ast.BreakStmt-class.html#evaluate,Method ezhil.ast.ContinueStmt.evaluate()=ezhil.ast.ContinueStmt-class.html#evaluate,Method ezhil.ast.DoWhileStmt.evaluate()=ezhil.ast.DoWhileStmt-class.html#evaluate,Method ezhil.ast.ElseStmt.evaluate()=ezhil.ast.ElseStmt-class.html#evaluate,Method ezhil.ast.EvalStmt.evaluate()=ezhil.ast.EvalStmt-class.html#evaluate,Method ezhil.ast.Expr.evaluate()=ezhil.ast.Expr-class.html#evaluate,Method ezhil.ast.ExprCall.evaluate()=ezhil.ast.ExprCall-class.html#evaluate,Method ezhil.ast.ExprList.evaluate()=ezhil.ast.ExprList-class.html#evaluate,Method ezhil.ast.ForStmt.evaluate()=ezhil.ast.ForStmt-class.html#evaluate,Method ezhil.ast.Function.evaluate()=ezhil.ast.Function-class.html#evaluate,Method ezhil.ast.Identifier.evaluate()=ezhil.ast.Identifier-class.html#evaluate,Method ezhil.ast.IfStmt.evaluate()=ezhil.ast.IfStmt-class.html#evaluate,Method ezhil.ast.Number.evaluate()=ezhil.ast.Number-class.html#evaluate,Method ezhil.ast.PrintStmt.evaluate()=ezhil.ast.PrintStmt-class.html#evaluate,Method ezhil.ast.ReturnStmt.evaluate()=ezhil.ast.ReturnStmt-class.html#evaluate,Method ezhil.ast.Stmt.evaluate()=ezhil.ast.Stmt-class.html#evaluate,Method ezhil.ast.StmtList.evaluate()=ezhil.ast.StmtList-class.html#evaluate,Method ezhil.ast.String.evaluate()=ezhil.ast.String-class.html#evaluate,Method ezhil.ast.UnaryExpr.evaluate()=ezhil.ast.UnaryExpr-class.html#evaluate,Method ezhil.ast.WhileStmt.evaluate()=ezhil.ast.WhileStmt-class.html#evaluate,Method ezhil.runtime.BuiltinFunction.evaluate()=ezhil.runtime.BuiltinFunction-class.html#evaluate"><a title="ezhil.Interpreter'.Interpreter.evaluate
+ezhil.ast.Array.evaluate
+ezhil.ast.AssignStmt.evaluate
+ezhil.ast.BreakStmt.evaluate
+ezhil.ast.ContinueStmt.evaluate
+ezhil.ast.DoWhileStmt.evaluate
+ezhil.ast.ElseStmt.evaluate
+ezhil.ast.EvalStmt.evaluate
+ezhil.ast.Expr.evaluate
+ezhil.ast.ExprCall.evaluate
+ezhil.ast.ExprList.evaluate
+ezhil.ast.ForStmt.evaluate
+ezhil.ast.Function.evaluate
+ezhil.ast.Identifier.evaluate
+ezhil.ast.IfStmt.evaluate
+ezhil.ast.Number.evaluate
+ezhil.ast.PrintStmt.evaluate
+ezhil.ast.ReturnStmt.evaluate
+ezhil.ast.Stmt.evaluate
+ezhil.ast.StmtList.evaluate
+ezhil.ast.String.evaluate
+ezhil.ast.UnaryExpr.evaluate
+ezhil.ast.WhileStmt.evaluate
+ezhil.runtime.BuiltinFunction.evaluate" class="py-name" href="#" onclick="return doclink('link-28', 'evaluate', 'link-28');">evaluate</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt> <tt class="py-keyword">as</tt> <tt id="link-29" class="py-name" targets="Variable ezhil.ExprsParser.e=ezhil.ExprsParser-module.html#e,Variable ezhil.Interpreter'.e=ezhil.Interpreter%27-module.html#e,Variable ezhil.parser.e=ezhil.parser-module.html#e"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-29', 'e', 'link-29');">e</a></tt><tt class="py-op">:</tt>             </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"exception "</tt><tt class="py-op">,</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-30" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-30', 'e', 'link-29');">e</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-31" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-31', 'e', 'link-29');">e</a></tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-keyword">finally</tt><tt class="py-op">:</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">redirectop</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">                <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stdout</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">                <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stderr</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stderr</tt> </tt>
+</div></div><a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">         </tt>
+<a name="ezhil_file_REPL"></a><div id="ezhil_file_REPL-def"><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt> <a class="py-toggle" href="#" id="ezhil_file_REPL-toggle" onclick="return toggle('ezhil_file_REPL');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil-module.html#ezhil_file_REPL">ezhil_file_REPL</a><tt class="py-op">(</tt> <tt class="py-param">file_input</tt><tt class="py-op">,</tt> <tt class="py-param">lang</tt><tt class="py-op">,</tt> <tt class="py-param">lexer</tt><tt class="py-op">,</tt> <tt class="py-param">parse_eval</tt><tt class="py-op">,</tt> <tt class="py-param">debug</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>     </tt>
+</div><a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">    <tt class="py-comment">#refactor out REPL for ezhil and exprs</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">    <tt class="py-name">env</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> <tt class="py-comment">## get the first instance from evaluate_interactive</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">    <tt class="py-name">do_quit</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-comment">## world-famous REPL</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">    <tt class="py-keyword">with</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">file_input</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">fp</tt><tt class="py-op">:</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-name">lines</tt> <tt class="py-op">=</tt> <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt class="py-name">readlines</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">    <tt class="py-comment">#lines = "\n".join([line.strip() for line in lines])</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">    <tt class="py-name">totbuffer</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">    <tt class="py-name">max_lines</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">lines</tt><tt class="py-op">)</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">line_no</tt><tt class="py-op">,</tt><tt class="py-name">Lbuffer</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">lines</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>         </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">            <tt class="py-name">curr_line_no</tt> <tt class="py-op">=</tt> <tt class="py-string">"%s %d&gt; "</tt><tt class="py-op">%</tt><tt class="py-op">(</tt><tt class="py-name">lang</tt><tt class="py-op">,</tt><tt class="py-name">line_no</tt><tt class="py-op">)</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">            <tt class="py-name">Lbuffer</tt> <tt class="py-op">=</tt> <tt class="py-name">Lbuffer</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">Lbuffer</tt> <tt class="py-op">==</tt> <tt class="py-string">'exit'</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                <tt class="py-name">do_quit</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">EOFError</tt> <tt class="py-keyword">as</tt> <tt id="link-32" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-32', 'e', 'link-29');">e</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"End of Input reached\n"</tt><tt class="py-op">)</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-name">do_quit</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> <tt class="py-comment">##evaluate the Lbuffer             </tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"evaluating buffer"</tt><tt class="py-op">,</tt> <tt class="py-name">Lbuffer</tt><tt class="py-op">)</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">totbuffer</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"tot buffer %s"</tt><tt class="py-op">%</tt><tt class="py-name">totbuffer</tt><tt class="py-op">)</tt> <tt class="py-comment">#debugging aid</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">             </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">         </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">do_quit</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"******* &#2997;&#2979;&#2965;&#3021;&#2965;&#2990;&#3021;! &#2986;&#3007;&#2985;&#3021;&#2985;&#2992;&#3021; &#2953;&#2969;&#3021;&#2965;&#2995;&#3016;  &#2986;&#3006;&#2992;&#3021;&#2965;&#3021;&#2965;&#2994;&#3006;&#2990;&#3021;. *******"</tt><tt class="py-op">)</tt>  </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">            <tt class="py-name">lexer</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name" targets="Method ezhil.scanner.Lex.set_line_col()=ezhil.scanner.Lex-class.html#set_line_col,Method ezhil.scanner.Lexeme.set_line_col()=ezhil.scanner.Lexeme-class.html#set_line_col"><a title="ezhil.scanner.Lex.set_line_col
+ezhil.scanner.Lexeme.set_line_col" class="py-name" href="#" onclick="return doclink('link-33', 'set_line_col', 'link-33');">set_line_col</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">line_no</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">totbuffer</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">                <tt class="py-name">totbuffer</tt> <tt class="py-op">=</tt> <tt class="py-name">Lbuffer</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">                <tt class="py-name">totbuffer</tt> <tt class="py-op">+=</tt> <tt class="py-string">"\n"</tt><tt class="py-op">+</tt> <tt class="py-name">Lbuffer</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">            <tt class="py-name">lexer</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name" targets="Method ezhil.ezhil_scanner.EzhilLex.tokenize()=ezhil.ezhil_scanner.EzhilLex-class.html#tokenize,Method ezhil.scanner.Lex.tokenize()=ezhil.scanner.Lex-class.html#tokenize"><a title="ezhil.ezhil_scanner.EzhilLex.tokenize
+ezhil.scanner.Lex.tokenize" class="py-name" href="#" onclick="return doclink('link-34', 'tokenize', 'link-34');">tokenize</a></tt><tt class="py-op">(</tt><tt class="py-name">totbuffer</tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">            <tt class="py-op">[</tt><tt class="py-name">lexer_line_no</tt><tt class="py-op">,</tt><tt class="py-name">c</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">lexer</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name" targets="Method ezhil.scanner.Lex.get_line_col()=ezhil.scanner.Lex-class.html#get_line_col,Method ezhil.scanner.Lexeme.get_line_col()=ezhil.scanner.Lexeme-class.html#get_line_col"><a title="ezhil.scanner.Lex.get_line_col
+ezhil.scanner.Lexeme.get_line_col" class="py-name" href="#" onclick="return doclink('link-35', 'get_line_col', 'link-35');">get_line_col</a></tt><tt class="py-op">(</tt> <tt class="py-number">0</tt> <tt class="py-op">)</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">lexer</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="ezhil.scanner.Lex.dump_tokens" class="py-name" href="#" onclick="return doclink('link-36', 'dump_tokens', 'link-25');">dump_tokens</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-op">(</tt><tt class="py-string">"parsing buffer item =&gt; "</tt><tt class="py-op">,</tt><tt class="py-name">totbuffer</tt><tt class="py-op">)</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                <tt class="py-name">parse_eval</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name"><a title="ezhil.ExprsParser.Parser.parse
+ezhil.Interpreter'.Interpreter.parse
+ezhil.ezhil_parser.EzhilParser.parse
+ezhil.parser.Parser.parse" class="py-name" href="#" onclick="return doclink('link-37', 'parse', 'link-27');">parse</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt>                 </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt> <tt class="py-keyword">as</tt> <tt class="py-name">pexp</tt><tt class="py-op">:</tt>                 </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">                <tt class="py-comment">## clear tokens in lexer</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                <tt class="py-name">parse_eval</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Static Method ezhil.EZTurtle.EZTurtle.reset()=ezhil.EZTurtle.EZTurtle-class.html#reset,Method ezhil.ExprsParser.Parser.reset()=ezhil.ExprsParser.Parser-class.html#reset,Method ezhil.Interpreter'.Interpreter.reset()=ezhil.Interpreter%27.Interpreter-class.html#reset,Method ezhil.scanner.Lex.reset()=ezhil.scanner.Lex-class.html#reset"><a title="ezhil.EZTurtle.EZTurtle.reset
+ezhil.ExprsParser.Parser.reset
+ezhil.Interpreter'.Interpreter.reset
+ezhil.scanner.Lex.reset" class="py-name" href="#" onclick="return doclink('link-38', 'reset', 'link-38');">reset</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment">#parse_eval</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-op">(</tt><tt class="py-string">"offending buffer item =&gt; "</tt><tt class="py-op">,</tt><tt class="py-name">totbuffer</tt><tt class="py-op">)</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">pexp</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">pexp</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                <tt class="py-comment"># Greedy strategy to keep avoiding parse-errors by accumulating more of input.</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                <tt class="py-comment"># this allows a line-by-line execution strategy. When all else fails we report.</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-op">(</tt><tt class="py-name">line_no</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt>  <tt class="py-name">max_lines</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">                    <tt class="py-keyword">raise</tt> <tt class="py-name">pexp</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">                <tt class="py-keyword">continue</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">            <tt class="py-name">totbuffer</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">            <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name" targets="Static Method ezhil.EZTurtle.EZTurtle.write()=ezhil.EZTurtle.EZTurtle-class.html#write"><a title="ezhil.EZTurtle.EZTurtle.write" class="py-name" href="#" onclick="return doclink('link-39', 'write', 'link-39');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">curr_line_no</tt><tt class="py-op">)</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"*"</tt><tt class="py-op">*</tt><tt class="py-number">60</tt><tt class="py-op">)</tt><tt class="py-op">;</tt>  <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">parse_eval</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">            <tt class="py-op">[</tt><tt class="py-name">rval</tt><tt class="py-op">,</tt> <tt class="py-name">env</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">parse_eval</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name" targets="Method ezhil.Interpreter'.Interpreter.evaluate_interactive()=ezhil.Interpreter%27.Interpreter-class.html#evaluate_interactive"><a title="ezhil.Interpreter'.Interpreter.evaluate_interactive" class="py-name" href="#" onclick="return doclink('link-40', 'evaluate_interactive', 'link-40');">evaluate_interactive</a></tt><tt class="py-op">(</tt><tt class="py-name">env</tt><tt class="py-op">)</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt> <tt class="py-name">rval</tt><tt class="py-op">,</tt> <tt class="py-string">'evaluate'</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">rval</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name" targets="Method ezhil.ast.Boolean.__str__()=ezhil.ast.Boolean-class.html#__str__,Method ezhil.ast.Number.__str__()=ezhil.ast.Number-class.html#__str__,Method ezhil.ast.String.__str__()=ezhil.ast.String-class.html#__str__,Method ezhil.errors.ErrorException.__str__()=ezhil.errors.ErrorException-class.html#__str__"><a title="ezhil.ast.Boolean.__str__
+ezhil.ast.Number.__str__
+ezhil.ast.String.__str__
+ezhil.errors.ErrorException.__str__" class="py-name" href="#" onclick="return doclink('link-41', '__str__', 'link-41');">__str__</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">rval</tt><tt class="py-op">:</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">rval</tt><tt class="py-op">)</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"\n"</tt><tt class="py-op">)</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt> <tt class="py-keyword">as</tt> <tt id="link-42" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-42', 'e', 'link-29');">e</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt id="link-43" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-43', 'e', 'link-29');">e</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-44" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-44', 'e', 'link-29');">e</a></tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> </tt>
+</div><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"> </tt>
+<a name="EzhilInterpExecuter"></a><div id="EzhilInterpExecuter-def"><a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt> <a class="py-toggle" href="#" id="EzhilInterpExecuter-toggle" onclick="return toggle('EzhilInterpExecuter');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilInterpExecuter-class.html">EzhilInterpExecuter</a><tt class="py-op">(</tt><tt class="py-base-class">EzhilRedirectInputOutput</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilInterpExecuter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="EzhilInterpExecuter-expanded"><a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">    <tt class="py-docstring">""" run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files """</tt> </tt>
+<a name="EzhilInterpExecuter.__init__"></a><div id="EzhilInterpExecuter.__init__-def"><a name="L175"></a><tt class="py-lineno">175</tt> <a class="py-toggle" href="#" id="EzhilInterpExecuter.__init__-toggle" onclick="return toggle('EzhilInterpExecuter.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilInterpExecuter-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">file_input</tt><tt class="py-op">,</tt><tt class="py-param">debug</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt><tt class="py-param">redirectop</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilInterpExecuter.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EzhilInterpExecuter.__init__-expanded"><a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">        <tt id="link-45" class="py-name" targets="Class ezhil.ezhil.EzhilRedirectInputOutput=ezhil.ezhil.EzhilRedirectInputOutput-class.html"><a title="ezhil.ezhil.EzhilRedirectInputOutput" class="py-name" href="#" onclick="return doclink('link-45', 'EzhilRedirectInputOutput', 'link-45');">EzhilRedirectInputOutput</a></tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="ezhil.ExprsParser.Parser.__init__
+ezhil.Interpreter'.Interpreter.__init__
+ezhil.Interpreter'.REPL.__init__
+ezhil.ast.ArgList.__init__
+ezhil.ast.Array.__init__
+ezhil.ast.AssignStmt.__init__
+ezhil.ast.Boolean.__init__
+ezhil.ast.BreakStmt.__init__
+ezhil.ast.ContinueStmt.__init__
+ezhil.ast.DoWhileStmt.__init__
+ezhil.ast.ElseStmt.__init__
+ezhil.ast.EvalStmt.__init__
+ezhil.ast.Expr.__init__
+ezhil.ast.ExprCall.__init__
+ezhil.ast.ExprList.__init__
+ezhil.ast.ForStmt.__init__
+ezhil.ast.Function.__init__
+ezhil.ast.Identifier.__init__
+ezhil.ast.IfStmt.__init__
+ezhil.ast.Number.__init__
+ezhil.ast.PrintStmt.__init__
+ezhil.ast.ReturnStmt.__init__
+ezhil.ast.Stmt.__init__
+ezhil.ast.StmtList.__init__
+ezhil.ast.String.__init__
+ezhil.ast.UnaryExpr.__init__
+ezhil.ast.ValueList.__init__
+ezhil.ast.WhileStmt.__init__
+ezhil.errors.ParseException.__init__
+ezhil.errors.RuntimeException.__init__
+ezhil.errors.ScannerException.__init__
+ezhil.ezhil.EzhilFileExecuter.__init__
+ezhil.ezhil.EzhilInterpExecuter.__init__
+ezhil.ezhil.EzhilInterpreter.__init__
+ezhil.ezhil.EzhilRedirectInputOutput.__init__
+ezhil.ezhil.EzhilRedirectOutput.__init__
+ezhil.ezhil_parser.EzhilParser.__init__
+ezhil.ezhil_scanner.EzhilLex.__init__
+ezhil.ezhil_scanner.EzhilLexeme.__init__
+ezhil.parser.Parser.__init__
+ezhil.runtime.BlindBuiltins.__init__
+ezhil.runtime.BuiltinFunction.__init__
+ezhil.runtime.DebugUtils.__init__
+ezhil.runtime.Environment.__init__
+ezhil.scanner.Lex.__init__
+ezhil.scanner.Lexeme.__init__
+ezhil.transform.TreeWalker.__init__" class="py-name" href="#" onclick="return doclink('link-46', '__init__', 'link-13');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt><tt class="py-name">file_input</tt><tt class="py-op">,</tt><tt class="py-name">redirectop</tt><tt class="py-op">)</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">         </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">            <tt class="py-name">lang</tt> <tt class="py-op">=</tt> <tt class="py-string">"&#2958;&#2996;&#3007;&#2994;&#3021;"</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">            <tt class="py-name">lexer</tt> <tt class="py-op">=</tt> <tt id="link-47" class="py-name"><a title="ezhil.ezhil_scanner.EzhilLex" class="py-name" href="#" onclick="return doclink('link-47', 'EzhilLex', 'link-8');">EzhilLex</a></tt><tt class="py-op">(</tt><tt class="py-name">debug</tt><tt class="py-op">)</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt><tt class="py-op">(</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">lexer</tt><tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">            <tt class="py-name">parse_eval</tt> <tt class="py-op">=</tt> <tt id="link-48" class="py-name"><a title="ezhil.ezhil.EzhilInterpreter" class="py-name" href="#" onclick="return doclink('link-48', 'EzhilInterpreter', 'link-26');">EzhilInterpreter</a></tt><tt class="py-op">(</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">            <tt id="link-49" class="py-name" targets="Function ezhil.ezhil.ezhil_file_REPL()=ezhil.ezhil-module.html#ezhil_file_REPL"><a title="ezhil.ezhil.ezhil_file_REPL" class="py-name" href="#" onclick="return doclink('link-49', 'ezhil_file_REPL', 'link-49');">ezhil_file_REPL</a></tt><tt class="py-op">(</tt> <tt class="py-name">file_input</tt><tt class="py-op">,</tt> <tt class="py-name">lang</tt><tt class="py-op">,</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">parse_eval</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt> <tt class="py-keyword">as</tt> <tt id="link-50" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-50', 'e', 'link-29');">e</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"exception "</tt><tt class="py-op">,</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-51" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-51', 'e', 'link-29');">e</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-52" class="py-name"><a title="ezhil.ExprsParser.e
+ezhil.Interpreter'.e
+ezhil.parser.e" class="py-name" href="#" onclick="return doclink('link-52', 'e', 'link-29');">e</a></tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">        <tt class="py-keyword">finally</tt><tt class="py-op">:</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">redirectop</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpf</tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">                <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stdout</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">                <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stderr</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stderr</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">                <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdin</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">old_stdin</tt> </tt>
+</div><a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">staticmethod</tt> </tt>
+<a name="EzhilInterpExecuter.runforever"></a><div id="EzhilInterpExecuter.runforever-def"><a name="L195"></a><tt class="py-lineno">195</tt> <a class="py-toggle" href="#" id="EzhilInterpExecuter.runforever-toggle" onclick="return toggle('EzhilInterpExecuter.runforever');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil.EzhilInterpExecuter-class.html#runforever">runforever</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EzhilInterpExecuter.runforever-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EzhilInterpExecuter.runforever-expanded"><a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">        <tt id="link-53" class="py-name" targets="Class ezhil.ezhil.EzhilInterpExecuter=ezhil.ezhil.EzhilInterpExecuter-class.html"><a title="ezhil.ezhil.EzhilInterpExecuter" class="py-name" href="#" onclick="return doclink('link-53', 'EzhilInterpExecuter', 'link-53');">EzhilInterpExecuter</a></tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdin</tt><tt class="py-op">)</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
+</div></div><a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"> </tt>
+<a name="ezhil_interactive_interpreter"></a><div id="ezhil_interactive_interpreter-def"><a name="L199"></a><tt class="py-lineno">199</tt> <a class="py-toggle" href="#" id="ezhil_interactive_interpreter-toggle" onclick="return toggle('ezhil_interactive_interpreter');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ezhil-module.html#ezhil_interactive_interpreter">ezhil_interactive_interpreter</a><tt class="py-op">(</tt><tt class="py-param">lang</tt> <tt class="py-op">=</tt> <tt class="py-string">"&#2958;&#2996;&#3007;&#2994;&#3021;"</tt><tt class="py-op">,</tt><tt class="py-param">debug</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ezhil_interactive_interpreter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ezhil_interactive_interpreter-expanded"><a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">    <tt class="py-comment">## interactive interpreter</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">    <tt class="py-name">lexer</tt> <tt class="py-op">=</tt> <tt id="link-54" class="py-name"><a title="ezhil.ezhil_scanner.EzhilLex" class="py-name" href="#" onclick="return doclink('link-54', 'EzhilLex', 'link-8');">EzhilLex</a></tt><tt class="py-op">(</tt><tt class="py-name">debug</tt><tt class="py-op">)</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">    <tt class="py-name">parse_eval</tt> <tt class="py-op">=</tt> <tt id="link-55" class="py-name"><a title="ezhil.ezhil.EzhilInterpreter" class="py-name" href="#" onclick="return doclink('link-55', 'EzhilInterpreter', 'link-26');">EzhilInterpreter</a></tt><tt class="py-op">(</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">    <tt id="link-56" class="py-name"><a title="ezhil.Interpreter'.REPL" class="py-name" href="#" onclick="return doclink('link-56', 'REPL', 'link-2');">REPL</a></tt><tt class="py-op">(</tt> <tt class="py-name">lang</tt><tt class="py-op">,</tt> <tt class="py-name">lexer</tt><tt class="py-op">,</tt> <tt class="py-name">parse_eval</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt>     </tt>
+</div><a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">    <tt class="py-name">lang</tt> <tt class="py-op">=</tt> <tt class="py-string">"&#2958;&#2996;&#3007;&#2994;&#3021;"</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">    <tt class="py-op">[</tt><tt class="py-name">fname</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt><tt class="py-op">,</tt> <tt class="py-name">dostdin</tt> <tt class="py-op">]</tt><tt class="py-op">=</tt> <tt id="link-57" class="py-name"><a title="ezhil.Interpreter'.get_prog_name" class="py-name" href="#" onclick="return doclink('link-57', 'get_prog_name', 'link-4');">get_prog_name</a></tt><tt class="py-op">(</tt><tt class="py-name">lang</tt><tt class="py-op">)</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-op">(</tt> <tt class="py-name">dostdin</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt id="link-58" class="py-name" targets="Function ezhil.ezhil.ezhil_interactive_interpreter()=ezhil.ezhil-module.html#ezhil_interactive_interpreter"><a title="ezhil.ezhil.ezhil_interactive_interpreter" class="py-name" href="#" onclick="return doclink('link-58', 'ezhil_interactive_interpreter', 'link-58');">ezhil_interactive_interpreter</a></tt><tt class="py-op">(</tt><tt class="py-name">lang</tt><tt class="py-op">,</tt><tt class="py-name">debug</tt><tt class="py-op">)</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">        <tt class="py-comment">## evaluate a files sequentially</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">files</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fname</tt><tt class="py-op">:</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">            <tt id="link-59" class="py-name" targets="Class ezhil.ezhil.EzhilFileExecuter=ezhil.ezhil.EzhilFileExecuter-class.html"><a title="ezhil.ezhil.EzhilFileExecuter" class="py-name" href="#" onclick="return doclink('link-59', 'EzhilFileExecuter', 'link-59');">EzhilFileExecuter</a></tt><tt class="py-op">(</tt> <tt class="py-name">files</tt><tt class="py-op">,</tt> <tt class="py-name">debug</tt> <tt class="py-op">)</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="ezhil-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Fri Aug  9 00:00:01 2013
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
