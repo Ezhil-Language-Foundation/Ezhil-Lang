@@ -20,7 +20,7 @@ from math import *
 import copy
 import os, sys, string, inspect
 import string
-
+import tamil
 from cmd import Cmd
 
 import time
@@ -385,6 +385,9 @@ class Interpreter(DebugUtils):
 	
 	# date/time
 	self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias="தேதி_நேரம்")
+
+	# get tamil letters
+	self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias="தமிழ்_எழுத்துக்கள்")
 	
         # random functions
         aslist = True;
