@@ -1,7 +1,7 @@
 Ezhil-Lang
 ==========
 
-Ezhil-Lang : எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதன் முரை கணிப்பொரி நிரல் ஏழுதுவதர்கு உதவும் (Ezhil, is a fun Tamil programming language for K-12)
+Ezhil-Lang : எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல்முறை கணிப்பொறி நிரல் ஏழுது உதவும் (Ezhil, is a fun Tamil programming language for K-12)
 Ezhil is a procedural language with dynamic types,
 like Ruby/Python. Ezhil has a pascal-like syntax,
 with for-end, while-end, if-elseif-else-end statements,
@@ -36,10 +36,10 @@ Batch Mode
 ==========
 $ ./ez ./ezhil_tests/hello.n 
 பதிப்பி "வணக்கம்!"
-பதிப்பி "எழில் அழைக்கிரது"
+பதிப்பி "எழில் அழைக்கிறது"
 
 வணக்கம்!
-எழில் அழைக்கிரது
+எழில் அழைக்கிறது
 
 where you should see the output above. For usage, try,
 $ ./ez --help
@@ -58,8 +58,8 @@ Interactive Mode
 $ ./ez
 எழில் 1>> 1 + 5
 6
-எழில் 2>> பதிப்பி "வணக்கம்! எழில் அழைக்கிரது"
-வணக்கம்! எழில் அழைக்கிரது
+எழில் 2>> பதிப்பி "வணக்கம்! எழில் அழைக்கிறது"
+வணக்கம்! எழில் அழைக்கிறது
 எழில் 3>> exit()
 
 Web Mode
