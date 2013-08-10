@@ -45,24 +45,31 @@ class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
         tmpf=tempfile.NamedTemporaryFile(suffix='.n',delete=False)
         tmpf.write(program)
         tmpf.close()
-        
+		
+        program_fmt = """<TABLE>
+		<TR><TD>
+		<TABLE>
+		<TR>
+		<TD><font color=\"blue\"><OL>"""
+		
         print( "Source program" )
         print( open(tmpf.name).read() )
         print( "*"*60 )
         
-        program_fmt = "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))]);
-
+        program_fmt += "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))]);
+        program_fmt += """</OL></font></TD></TR>\n</TABLE></TD><TD>"""
+		
         # run the interpreter in a sandbox and capture the output hopefully
         try:
             failed = False
             obj = EzhilFileExecuter( file_input = tmpf.name, redirectop = True )
             #obj = EzhilInterpExecuter( file_input = tmpf.name, redirectop = True )
-            progout = obj.get_output()            
-            op = "<B>Succeeded Execution</B> for program <font color=\"blue\"><ol>%s</ol></font> as <br/> <font color=\"green\"><pre>%s</pre></font>"%(program_fmt,progout)
+            progout = obj.get_output()
+            op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
             print str(e)
             failed = True
-            op = "<B>FAILED Execution</B> for program <font color=\"blue\"><ol>%s</ol></font> with <font color=\"red\">error <pre>%s</pre> </font>"%(program_fmt,str(e))
+            op = "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e))
         else:
             print "Output file"
             obj.get_output()
