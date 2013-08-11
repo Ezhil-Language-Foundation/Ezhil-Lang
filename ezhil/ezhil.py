@@ -11,6 +11,8 @@ from Interpreter import Interpreter, REPL, Lex, get_prog_name
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
 from errors import RuntimeException, ParseException
+from multiprocessing import Process, current_process
+from time import sleep,clock
 
 class EzhilInterpreter( Interpreter ):
     def __init__(self, lexer, debug ):
@@ -47,10 +49,23 @@ class EzhilInterpreter( Interpreter ):
         
         return
 
+class TimeoutException(Exception):
+        def __init__(self,timeout):
+            Exception.__init__(self)
+            self.timeout = timeout
+
+        def __str__(self):
+            return "process exceeded timeout of " + str(self.timeout) + "s"
+
 class EzhilRedirectOutput:
     """ class provides the get_output method for reading from a temporary file, and deletes it after that.
         the file creation is also managed here. However restoring stdout, stderr have to be done in the user class
     """
+    @staticmethod
+    def pidFileName( pid ):
+        """ file name with $PID decoration as IPC alt """
+        return "ezhil_"+str(pid)+".out"
+    
     def __init__(self,redirectop):
         self.op = None
         self.redirectop = redirectop
@@ -81,28 +96,74 @@ class EzhilRedirectInputOutput(EzhilRedirectOutput):
         EzhilRedirectOutput.__init__(self,redirectop)
         self.old_stdin = sys.stdin
         self.stdin = open( input_file )
-    
+
 class EzhilFileExecuter(EzhilRedirectOutput):
-    """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files """
-    def __init__(self,file_input,debug=False,redirectop=False):        
-        EzhilRedirectOutput.__init__(self,redirectop)
+    """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files;
+        When constructed with a @TIMEOUT value, the process may terminate without and output, otherwise it dumps the output
+        to a file named, 
+    """
+    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None):
+        EzhilRedirectOutput.__init__(self,redirectop)        
+        p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'debug':debug})
         
         try:
-            lexer = EzhilLex(file_input,debug)
-            if ( debug ): lexer.dump_tokens()
-            parse_eval = EzhilInterpreter( lexer, debug )
-            parse_eval.parse()
-            if ( debug ):  print("*"*60);  print(str(parse_eval))
-            env = parse_eval.evaluate()
-        except Exception as e:            
+            p.start()
+            if ( TIMEOUT is not None ):
+                start = clock()
+                while p.is_alive():
+                    sleep(5) #poll every 5 minutes
+                    if ( (clock() - start) > TIMEOUT ):
+                        print "Reached ",TIMEOUT
+                        raise TimeoutException( TIMEOUT )
+                # now you try and read all the data from file, , and unlink it all up.
+                fProcName = EzhilRedirectOutput.pidFileName(p.pid);
+                
+                # dump stuff from fProcName into the stdout
+                fp = open(fProcName,'r')
+                print fp.read()
+                fp.close()
+                
+                os.unlink( fProcName)                
+            else:
+                # "Taking the slower path... "
+                p.join() #wait for process to finish
+        except Exception as e:
             print("exception ",str(e))
             raise e
         finally:
+            p.terminate()
             if ( redirectop ):
                 self.tmpf.close()
                 sys.stdout = self.old_stdout
                 sys.stderr = self.old_stderr
-        
+                sys.stdout.flush()
+                sys.stderr.flush()
+            self.exitcode  = p.exitcode        
+
+def ezhil_file_parse_eval( file_input,debug):
+    """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
+        the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
+        cleanup the cruft.
+    """    
+    sys.stdout = open(EzhilRedirectOutput.pidFileName(current_process().pid),"w")
+    sys.stderr = sys.stdout;
+    lexer = EzhilLex(file_input,debug)        
+    if ( debug ): lexer.dump_tokens()
+    parse_eval = EzhilInterpreter( lexer, debug )
+    parse_eval.parse()
+    if ( debug ):  print("*"*60);  print(str(parse_eval))
+    exit_code = 0
+    try:
+        env = parse_eval.evaluate()
+    except Exception as e:
+        exit_code = -1
+        print str(e)
+    finally:    
+        # cerrar - முடி
+        sys.stdout.flush()
+        sys.stderr.flush()
+        sys.stdout.close()        
+    return exit_code
 
 def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):    
     #refactor out REPL for ezhil and exprs
@@ -114,7 +175,7 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
     #lines = "\n".join([line.strip() for line in lines])
     totbuffer = ""
     max_lines = len(lines)
-    for line_no,Lbuffer in enumerate(lines):        
+    for line_no,Lbuffer in enumerate(lines):
         try:
             curr_line_no = "%s %d> "%(lang,line_no)
             Lbuffer = Lbuffer.strip()
@@ -122,13 +183,11 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 do_quit = True
         except EOFError as e:
             print("End of Input reached\n")
-            do_quit = True ##evaluate the Lbuffer             
+            do_quit = True ##evaluate the Lbuffer
         if ( debug ):
             print("evaluating buffer", Lbuffer)
             if ( len(totbuffer) > 0 ):
                 print("tot buffer %s"%totbuffer) #debugging aid
-            
-        
         if ( do_quit ):
             print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
             return
@@ -169,7 +228,6 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
             raise e
     return
 
-
 class EzhilInterpExecuter(EzhilRedirectInputOutput):
     """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files """
     def __init__(self,file_input,debug=False,redirectop=False):
@@ -197,10 +255,10 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         return
 
 def ezhil_interactive_interpreter(lang = "எழில்",debug=False):
-    ## interactive interpreter
+    ## interactive interpreter    
     lexer = EzhilLex(debug)
     parse_eval = EzhilInterpreter( lexer, debug )
-    REPL( lang, lexer, parse_eval, debug )    
+    REPL( lang, lexer, parse_eval, debug )
 
 if __name__ == "__main__":
     lang = "எழில்"

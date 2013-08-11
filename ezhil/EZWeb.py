@@ -62,11 +62,15 @@ class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
         # run the interpreter in a sandbox and capture the output hopefully
         try:
             failed = False
-            obj = EzhilFileExecuter( file_input = tmpf.name, redirectop = True )
+            obj = EzhilFileExecuter( file_input = tmpf.name, redirectop = True, TIMEOUT = 60*2 ) # 2 minutes
             #obj = EzhilInterpExecuter( file_input = tmpf.name, redirectop = True )
-            progout = obj.get_output()
-            op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
+            progout = obj.get_output()            
+            if obj.exitcode != 0 :                
+                op = "%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
+            else:
+                op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
+            print "FAILED EXECUTION"
             print str(e)
             failed = True
             op = "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e))
