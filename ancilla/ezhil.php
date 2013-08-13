@@ -4,8 +4,8 @@
  * Author: Muthu Annamalai (muthuspost@gmail.com)
  * Copyright: (c) 2013 Muthu Annamalai
  * 
- * Derived from the file, python.php from GenSHi
- * ----------------------------------
+ * Derived from the file, python.php from GeSHi
+ * --------------------------------------------
  * Ref: http://sourceforge.net/p/geshi/code/2590/tree/branches/RELEASE_1_0_X_STABLE/geshi-1.0.X/src/geshi/python.php
  * Author: Roberto Rossi (rsoftware@altervista.org)
  * Copyright: (c) 2004 Roberto Rossi (http://rsoftware.altervista.org), Nigel McNie (http://qbnz.com/highlighter)
@@ -13,8 +13,8 @@
  * Date Started: 2004/08/30
  *
  * Ezhil language file for GeSHi.
- *
- *
+ * Ezhil - A Tamil Programming language, http://ezhillang.org, and
+ * http://en.wikipedia.org/wiki/Ezhil_%28programming_language%29
  *************************************************************************************
  *
  *     This file is part of GeSHi.
