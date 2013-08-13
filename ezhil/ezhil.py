@@ -103,9 +103,16 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         to a file named, 
     """
     def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None):
-        EzhilRedirectOutput.__init__(self,redirectop)        
-        p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'debug':debug})
+        EzhilRedirectOutput.__init__(self,redirectop)
+        if ( not redirectop ): #run serially and exit.
+            try:
+                ezhil_file_parse_eval( file_input,redirectop,debug)
+                self.exitcode = 0
+            except Exception as e:
+                self.exitcode = -1
+                raise e            
         
+        p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})        
         try:
             p.start()
             if ( TIMEOUT is not None ):
@@ -121,12 +128,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 # dump stuff from fProcName into the stdout
                 fp = open(fProcName,'r')
                 print fp.read()
-                fp.close()
-                
+                fp.close()                
                 os.unlink( fProcName)                
-            else:
-                # "Taking the slower path... "
-                p.join() #wait for process to finish
         except Exception as e:
             print("exception ",str(e))
             raise e
@@ -140,14 +143,15 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 sys.stderr.flush()
             self.exitcode  = p.exitcode        
 
-def ezhil_file_parse_eval( file_input,debug):
+def ezhil_file_parse_eval( file_input,redirectop,debug):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
         the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
         cleanup the cruft.
     """    
-    sys.stdout = open(EzhilRedirectOutput.pidFileName(current_process().pid),"w")
-    sys.stderr = sys.stdout;
-    lexer = EzhilLex(file_input,debug)        
+    if ( redirectop ):
+        sys.stdout = open(EzhilRedirectOutput.pidFileName(current_process().pid),"w")
+        sys.stderr = sys.stdout;
+    lexer = EzhilLex(file_input,debug)
     if ( debug ): lexer.dump_tokens()
     parse_eval = EzhilInterpreter( lexer, debug )
     parse_eval.parse()
@@ -159,10 +163,11 @@ def ezhil_file_parse_eval( file_input,debug):
         exit_code = -1
         print str(e)
     finally:    
-        # cerrar - முடி
-        sys.stdout.flush()
-        sys.stderr.flush()
-        sys.stdout.close()        
+        if ( redirectop ):
+            # cerrar - முடி
+            sys.stdout.flush()
+            sys.stderr.flush()
+            sys.stdout.close()
     return exit_code
 
 def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):    
