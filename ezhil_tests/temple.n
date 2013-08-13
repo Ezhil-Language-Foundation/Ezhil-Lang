@@ -2,4 +2,4 @@
 # இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 
 #test the failure 'identifier' not found
-print "ஆலையம்"
+print "ஆலயம்"
