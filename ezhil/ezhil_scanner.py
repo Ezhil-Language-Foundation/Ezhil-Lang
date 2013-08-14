@@ -30,7 +30,7 @@ class EzhilLexeme(Lexeme):
 
 class EzhilToken( Token):
     """ add '@' token in extending the Token type """    
-    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%" ]
+    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%" ]
     Token.token_types.append("@")
     Token.ATRATEOF = len(Token.token_types)    
     
@@ -155,7 +155,7 @@ class EzhilLex ( Lex ) :
                 tval=EzhilLexeme(int(chunks),EzhilToken.NUMBER)
         elif isalpha(chunks[0]) or has_tamil(chunks):
             ## check for tamil indentifiers
-            tval=EzhilLexeme(chunks,EzhilToken.ID)        
+            tval=EzhilLexeme(chunks,EzhilToken.ID)                        
         else:
             raise ScannerException("Lexical error: " + str(chunks) + " at Line , Col "+str(self.get_line_col( pos )) +" in file "+self.fname )
         
@@ -187,15 +187,20 @@ class EzhilLex ( Lex ) :
         
         while ( idx < len( data ) ):
             c = data[idx]
-            if  ( c == ' 'or c == '\t' or c == '\n' ):
+            if  ( c == ' 'or c == '\t' or c == '\n'):
                 if ( c == '\n' ):
                     ##actual col = idx - col_idx
                     self.update_line_col(idx)
                 idx = idx + 1
+            elif ( c == '\r' ):
+                idx = idx + 1
+                continue
             elif ( c == '#' ):
                 ## single line skip comments like Python/Octave
-                while ( idx < len( data ) and data[idx] !='\n' ):
-                    idx = idx + 1                    
+                while ( idx < len( data ) and not (data[idx] in ['\r','\n']) ):
+                    idx = idx + 1
+                if ( data[idx] == '\r' ):
+                    idx = idx + 1
             elif ( isdigit(c) ): #or c == '+' or c == '-'  ):
                 num = c
                 tok_start_idx = idx
