@@ -40,16 +40,19 @@ class Printer:
             add_br = False
             attrib = self.theme.Operators
             if EzhilToken.is_keyword(t.kind):
-                attrib = self.theme.Keywords                
+                attrib = self.theme.Keywords
+                if ( EzhilToken.get_name(t.kind) in ["END", "ELSE"] ):
+                    out.append('<BR />\n')
             elif EzhilToken.is_number(t.kind):
                 attrib = self.theme.LiteralNumber                
             elif EzhilToken.is_string(t.kind):
                 attrib = self.theme.LiteralString
                 t.val = '"'+t.val+'"' #FIXME: ideally do some escaping as well
-                add_br = True
-            elif EzhilToken.is_id(t.kind):
-                ## FIXME: disambiguate ID and BUILTINs
+            elif EzhilToken.is_id(t.kind):                
                 attrib = self.theme.Variables
+            elif( t.val in ["@", "பதிப்பி" ] ):
+                attrib = self.theme.Builtins
+                out.append('<BR />\n')                
 
             t.val = " " + str(t.val)
             out.append( self.styler(attrib,t.val) )
