@@ -41,18 +41,21 @@ class EzhilToken( Token):
     Token.IN = Token.COMMA #short-circuit!
     
     Token.token_types.append("DOWHILE|முடியேனில்")
-    Token.DOWHILE = len(Token.token_types)        
+    Token.DOWHILE = len(Token.token_types)
 
-## Keep it this way, so we share maximum amount of code.
-##    def get_name(kind):
-##        return Token.token_types[kind]
-##    get_name = staticmethod(get_name)
+    @staticmethod
+    def is_keyword(kind):
+        if Token.is_keyword(kind):
+            return True
+        if Token.get_name(kind) in ["FOREACH","DOWHILE"]:
+            return True
+        return False
 
 ## SCANNER
 
 class EzhilLex ( Lex ) :
-    """ Lex Tamil characters """
-
+    """ Lex Tamil characters : RAII principle - lex on object construction"""
+    
     def __init__(self,fname=None,dbg=False):
         Lex.__init__(self,fname,dbg)
         

@@ -19,6 +19,28 @@ class Token:
                  "==","[","]","^","%","BREAK","CONTINUE","SWITCH",
                  "CASE","OTHERWISE","&&","||","&","|","!"]
 
+    @staticmethod
+    def is_string(kind):
+        """ predicate to check if @kind token is a string """
+        return Token.get_name(kind) == "STRING"
+    
+    @staticmethod
+    def is_number(kind):
+        """ predicate to check if @kind token is a number """
+        return Token.get_name(kind) == "NUMBER"
+    
+    @staticmethod
+    def is_id(kind):
+        """ predicate to check if @kind token is an identifier """
+        return Token.get_name(kind) == "ID"
+
+    @staticmethod    
+    def is_keyword(kind):
+        """ predicate to identify if @kind token is a keyword """
+        if (  Token.get_name(kind) in ["END","FOR","WHILE","DO","IF","ELSEIF","ELSE","DEF","SWITCH","CASE","OTHERWISE"] ):
+            return True
+        return False
+    
     def get_name(kind):
         """ used in reporting errors in match() on parsing stage """
         if ( kind >= 0 and kind < len(Token.token_types) ):
