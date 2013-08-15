@@ -14,13 +14,20 @@ If you would like to tryout the code, all you need
 is a python interpreter, and the code from 
 https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip
 
-Read Wikipedia article on Ezhil (Tamil) http://ta.wikipedia.org/w/index.php?title=%E0%AE%8E%E0%AE%B4%E0%AE%BF%E0%AE%B2%E0%AF%8D_%28%E0%AE%A8%E0%AE%BF%E0%AE%B0%E0%AE%B2%E0%AE%BE%E0%AE%95%E0%AF%8D%E0%AE%95_%E0%AE%AE%E0%AF%8A%E0%AE%B4%E0%AE%BF%29
-
-or (English) http://en.wikipedia.org/wiki/Ezhil_%28programming_language%29
-
 Interesting features include support for recursion,
 and an interactive interpreter. Ezhil supports a Turtle module
 for simple on-screen graphics, similar to LOGO language from 1960s.
+
+REFERENCES
+==========
+Read Wikipedia article(s) on Ezhil,
+1. (Tamil) http://bit.ly/16MgU6U
+2. (English) http://en.wikipedia.org/wiki/Ezhil_%28programming_language%29
+
+Scholarly articles on Ezhil include,
+1. M. Annamalai, "Ezhil : A Tamil Programming Language," (2009). http://arxiv.org/abs/0907.4960
+2. -do-, "Invitation to Ezhil: A Tamil Programming Language for Early Computer-Science Education," (2013). http://arxiv.org/abs/1308.1733
+
 
 USAGE
 =====
