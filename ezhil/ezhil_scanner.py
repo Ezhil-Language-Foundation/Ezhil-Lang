@@ -156,9 +156,9 @@ class EzhilLex ( Lex ) :
                 tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             else:
                 tval=EzhilLexeme(int(chunks),EzhilToken.NUMBER)
-        elif isalpha(chunks[0]) or has_tamil(chunks):
-            ## check for tamil indentifiers
-            tval=EzhilLexeme(chunks,EzhilToken.ID)                        
+        elif isalpha(chunks[0]) or has_tamil(chunks) or chunks[0] == '_':
+            ## check for tamil/english/mixed indentifiers even starting with a lead '_'
+            tval=EzhilLexeme(chunks,EzhilToken.ID)
         else:
             raise ScannerException("Lexical error: " + str(chunks) + " at Line , Col "+str(self.get_line_col( pos )) +" in file "+self.fname )
         
@@ -239,18 +239,7 @@ class EzhilLex ( Lex ) :
                 s = s+data[idx]
                 idx  = idx + 1
                 self.get_lexeme( s , tok_start_idx )
-            elif ( istamil( c ) ):
-                ## allow tamil-prefix numeric-suffix id's
-                ## allow tamil-english id's
-                tok_start_idx = idx
-                s = c; idx = idx + 1
-                ## FIXME temporary hack doesnt handle unary ops well.
-                while ( idx < len( data ) 
-                        and ( not data[idx] in EzhilToken.FORBIDDEN_FOR_IDENTIFIERS )):
-                    s = s + data[idx]
-                    idx = idx + 1
-                self.get_lexeme(s, tok_start_idx )
-            elif ( isalpha( c ) ):
+            elif ( istamil( c ) or isalpha( c ) or c == '_' ):
                 tok_start_idx = idx 
                 s = c; idx = idx + 1
                 while ( ( idx < len( data ) )

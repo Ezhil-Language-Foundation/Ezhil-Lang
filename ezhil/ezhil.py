@@ -27,10 +27,13 @@ class EzhilInterpreter( Interpreter ):
         #input statements, length constructs
         tamil_equiv = {"சரம்_இடமாற்று":"replace", "சரம்_கண்டுபிடி":"find","நீளம்":"len",
                        "சரம்_உள்ளீடு":"raw_input", "உள்ளீடு" : "input" }
-        #list operators        
+        #list operators
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
                              "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
-                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count", "எடு":"__getitem__"} )
+                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count"} )
+        
+        #generic get/set ops for list/dict
+        tamil_equiv.update( { "எடு":"__getitem__", "வை":"__setitem__"} )
         
         #file operators
         tamil_equiv.update({"கோப்பை_திற":"file_open", "கோப்பை_மூடு":"file_close","கோப்பை_படி":"file_read",

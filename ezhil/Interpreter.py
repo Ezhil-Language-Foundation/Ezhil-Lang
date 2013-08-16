@@ -75,6 +75,14 @@ def ezhil_getitem(x,idx):
         return x.__getitem__(idx)
     return x[idx]
 
+def ezhil_setitem(x,key,val):
+    #print("dispatching ezhil setitem",type(x),type(idx),x,idx,x[idx])
+    if ( isinstance(x,dict) or isinstance(x,list) or hasattr( x, '__setitem__') ):
+        x.__setitem__(key,val)
+    else:    
+        x[key]=val
+    return
+
 # program name
 def get_prog_name(lang):
     prog_name=None
@@ -179,32 +187,32 @@ class Interpreter(DebugUtils):
     @staticmethod
     def file_close(*args):
         assert( len(args) == 1 )
-	assert( hasattr(args[0],'close') )
+        assert( hasattr(args[0],'close') )
         args[0].close()
         return
     
     @staticmethod
     def file_read(*args):
         assert( len(args) == 1 )
-	assert( hasattr(args[0],'read') )
+        assert( hasattr(args[0],'read') )
         return String( args[0].read() )
     
     @staticmethod
     def file_readlines(*args):
         assert( len(args) == 1 )
-	assert( hasattr(args[0],'readlines') )
+        assert( hasattr(args[0],'readlines') )
         return args[0].readlines()
 
     @staticmethod
     def file_write(*args):
         assert( len(args) == 2 )
-	assert( hasattr(args[0],'write') )
+        assert( hasattr(args[0],'write') )
         return args[0].write(args[1])
     
     @staticmethod
     def file_writelines(*args):
         assert( len(args) == 2 )
-	assert( hasattr(args[0],'writelines') )
+        assert( hasattr(args[0],'writelines') )
         return args[0].writelines(args[1])
     
     # marshalling    	    
@@ -257,7 +265,7 @@ class Interpreter(DebugUtils):
              ezhil_sleep( 5 )
         else:
              ezhil_sleep( args[1] )
-	return
+        return
     
     def add_builtin(self,call_name,call_handle,nargin=1,ta_alias=None):	    
 	    # make sure you don't clobber yourself
@@ -316,8 +324,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['hash']=BlindBuiltins(hash,'hash',self.debug)
         self.builtin_map['help']=BlindBuiltins(help,'help',self.debug)
         self.builtin_map['hex']=BlindBuiltins(hex,'hex',self.debug)
-        self.builtin_map['id']=BlindBuiltins(id,'id',self.debug)
-        #self.builtin_map['input']=BlindBuiltins(input,'input',self.debug)
+        self.builtin_map['id']=BlindBuiltins(id,'id',self.debug)        
         self.builtin_map['int']=BlindBuiltins(int,'int',self.debug)
         self.builtin_map['intern']=BlindBuiltins(intern,'intern',self.debug)
         self.builtin_map['isinstance']=BlindBuiltins(isinstance,'isinstance',self.debug)
@@ -325,8 +332,6 @@ class Interpreter(DebugUtils):
         self.builtin_map['iter']=BlindBuiltins(iter,'iter',self.debug)
         self.builtin_map['len']=BlindBuiltins(len,'len',self.debug)
         self.builtin_map['license']=BlindBuiltins(ezhil_license,'license',self.debug)
-        #self.builtin_map['list']=BlindBuiltins(list,'list',self.debug)
-        #self.builtin_map['locals']=BlindBuiltins(locals,'locals',self.debug)
         self.builtin_map['long']=BlindBuiltins(int,'long',self.debug)
         self.builtin_map['map']=BlindBuiltins(map,'map',self.debug)
         self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
@@ -340,8 +345,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['pow']=BlindBuiltins(pow,'pow',self.debug)
         self.builtin_map['property']=BlindBuiltins(property,'property',self.debug)
         self.builtin_map['quit']=BlindBuiltins(quit,'quit',self.debug)
-        self.builtin_map['range']=BlindBuiltins(range,'range',self.debug)
-        #self.builtin_map['raw_input']=BlindBuiltins(raw_input,'raw_input',self.debug)
+        self.builtin_map['range']=BlindBuiltins(range,'range',self.debug)        
         self.builtin_map['reduce']=BlindBuiltins(reduce,'reduce',self.debug)
         self.builtin_map['reload']=BlindBuiltins(reload,'reload',self.debug)
         self.builtin_map['repr']=BlindBuiltins(repr,'repr',self.debug)
@@ -363,7 +367,8 @@ class Interpreter(DebugUtils):
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
         self.builtin_map['__getitem__']=BuiltinFunction(ezhil_getitem,"__getitem__",2)
-
+        self.builtin_map['__setitem__']=BuiltinFunction(ezhil_setitem,"__setitem__",3)
+        
         #file-IO functions
         self.builtin_map["file_open"]=BlindBuiltins(Interpreter.file_open,"file_open")
         self.builtin_map["file_close"]=BuiltinFunction(Interpreter.file_close,"file_close")
@@ -380,14 +385,14 @@ class Interpreter(DebugUtils):
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
 	
         # sleep/pause
-	self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
-	self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
+        self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
+        self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
 	
-	# date/time
-	self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias="தேதி_நேரம்")
+        # date/time
+        self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias="தேதி_நேரம்")
 
-	# get tamil letters
-	self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias="தமிழ்_எழுத்துக்கள்")
+        # get tamil letters
+        self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias="தமிழ்_எழுத்துக்கள்")
 	
         # random functions
         aslist = True;
@@ -506,25 +511,25 @@ class Interpreter(DebugUtils):
         self.builtin_map["get"]= BuiltinFunction(list.__getitem__,"get",2)
         
         # #dictionary methods - 
-        # self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
-        # self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
-        # self.builtin_map["fromkeys"]= BuiltinFunction(dict.fromkeys,"fromkeys",1)
-        # self.builtin_map["get"]= BuiltinFunction(dict.get,"get",1)
-        # self.builtin_map["has_key"]= BuiltinFunction(dict.has_key,"has_key",1)
-        # self.builtin_map["items"]= BuiltinFunction(dict.items,"items",1)
-        # self.builtin_map["iteritems"]= BuiltinFunction(dict.iteritems,"iteritems",1)
-        # self.builtin_map["iterkeys"]= BuiltinFunction(dict.iterkeys,"iterkeys",1)
-        # self.builtin_map["itervalues"]= BuiltinFunction(dict.itervalues,"itervalues",1)
-        # self.builtin_map["keys"]= BuiltinFunction(dict.keys,"keys",1)
-        # self.builtin_map["pop"]= BuiltinFunction(dict.pop,"pop",1)
-        # self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
-        # self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
-        # self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
-        # self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
-        # self.builtin_map["viewitems"]= BuiltinFunction(dict.viewitems,"viewitems",1)
-        # self.builtin_map["viewkeys"]= BuiltinFunction(dict.viewkeys,"viewkeys",1)
-        # self.builtin_map["viewvalues"]= BuiltinFunction(dict.viewvalues,"viewvalues",1)
-
+        self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
+        self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
+        self.builtin_map["fromkeys"]= BuiltinFunction(dict.fromkeys,"fromkeys",1)
+        self.builtin_map["get"]= BuiltinFunction(dict.get,"get",1)
+        self.builtin_map["has_key"]= BuiltinFunction(dict.has_key,"has_key",1)
+        self.builtin_map["items"]= BuiltinFunction(dict.items,"items",1)
+        self.builtin_map["iteritems"]= BuiltinFunction(dict.iteritems,"iteritems",1)
+        self.builtin_map["iterkeys"]= BuiltinFunction(dict.iterkeys,"iterkeys",1)
+        self.builtin_map["itervalues"]= BuiltinFunction(dict.itervalues,"itervalues",1)
+        self.builtin_map["keys"]= BuiltinFunction(dict.keys,"keys",1)
+        self.builtin_map["pop"]= BuiltinFunction(dict.pop,"pop",1)
+        self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
+        self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
+        self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
+        self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
+        self.builtin_map["viewitems"]= BuiltinFunction(dict.viewitems,"viewitems",1)
+        self.builtin_map["viewkeys"]= BuiltinFunction(dict.viewkeys,"viewkeys",1)
+        self.builtin_map["viewvalues"]= BuiltinFunction(dict.viewvalues,"viewvalues",1)
+        
         return True
 
     def __repr__(self):
