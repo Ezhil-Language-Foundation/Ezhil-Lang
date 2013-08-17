@@ -215,8 +215,13 @@ class EzhilLex ( Lex ) :
                      and not isdigit(data[idx]) ):
                     self.get_lexeme( c , idx )
                     continue
+                in_sci_notation = False
                 while ( ( idx < len( data) )
                             and ( isdigit(data[idx]) or data[idx] in ['+','-','e','E','.']) ):
+                    if ( data[idx] in ['+','-'] and not in_sci_notation ):
+                        break;
+                    elif( data[idx] in ['e','E'] ):
+                        in_sci_notation = True
                     num = num + data[idx]
                     idx = idx + 1
                 self.get_lexeme( num , tok_start_idx  )
