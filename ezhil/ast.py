@@ -59,7 +59,8 @@ class Identifier:
  Line %d, col %d"%( self.id, self.line,self.col ) )
         return None
 
-    def visit_identifier(self, walker):
+    def visit(self, walker):
+        """ visitor - do something with a identifier """
         walker.visit_identifier(self)
         return
 
@@ -79,7 +80,7 @@ class String:
     def evaluate(self,env):
         return self.string
 
-    def visit_string(self, walker):
+    def visit(self, walker):
         walker.visit_string(self)
         return
 
@@ -105,7 +106,7 @@ class Number:
     def evaluate(self,env):
         return self.num
 
-    def visit_number(self, walker):
+    def visit(self, walker):
         walker.visit_number(self)
         return
 
@@ -167,7 +168,7 @@ class ExprCall:
             raise RuntimeException("undefined function: %s near ( %d, %d )"%(self.fname, self.line, self.col) )
         return rval
 
-    def visit_expr_call(self,walker):
+    def visit(self,walker):
         walker.visit_expr_call(self)
         return
     
@@ -188,7 +189,7 @@ class ExprList:
             z.append(exp_itr.evaluate(env))
         return ", ".join(map(str,z))
     
-    def visit_expr_list(self, walker):
+    def visit(self, walker):
         walker.visit_expr_list(self)
         return    
 
@@ -242,7 +243,7 @@ class Stmt:
         self.dbg_msg('Is True Value? ' + str(rval) + str(val.__class__) )
         return rval
     
-    def visit_stmt( self, walker):
+    def visit( self, walker):
         walker.visit_stmt( self )
         return
     
@@ -391,7 +392,7 @@ class Expr(Stmt):
         if ( self.debug ): print "term = ",term, term.__class__
         return term
 
-    def visit_expr(self, walker):
+    def visit(self, walker):
         walker.visit_expr(self)
         return
 
@@ -410,7 +411,7 @@ class ReturnStmt(Stmt):
         env.set_retval(rhs)
         return rhs
     
-    def visit_return_stmt(self, walker):
+    def visit(self, walker):
         walker.visit_return_stmt(self)
         return
 
@@ -427,7 +428,7 @@ class BreakStmt(Stmt):
         env.set_break()
         return None
     
-    def visit_break_stmt(self, walker):
+    def visit(self, walker):
         walker.visit_break_stmt(self)
         return
 
@@ -444,7 +445,7 @@ class ContinueStmt(Stmt):
         env.set_continue()
         return None
     
-    def visit_continue_stmt(self, walker):
+    def visit(self, walker):
         walker.visit_continue_stmt(self)
         return
 
@@ -460,7 +461,7 @@ class ElseStmt(Stmt):
     def evaluate(self,env):
         return self.stmt.evaluate(env)
     
-    def visit_else_stmt(self,walker):
+    def visit(self,walker):
         walker.visit_else_stmt(self)
         return
 
@@ -519,7 +520,7 @@ class IfStmt(Stmt):
         # its perfectly legal to not have an else statement
         return rval 
     
-    def visit_if_elseif_stmt(self,walker):
+    def visit(self,walker):
         walker.visit_if_elseif_stmt(self)
         return
 
@@ -549,7 +550,7 @@ class WhileStmt(Stmt):
         self.dbg_msg("exiting While-stmt with rval="+str(rval))
         return rval
 
-    def visit_while_stmt(self,walker):
+    def visit(self,walker):
         walker.visit_while_stmt(self)
         return
 
@@ -608,7 +609,7 @@ class ForStmt(Stmt):
         self.dbg_msg("exiting For-stmt with rval="+str(rval))
         return rval
 
-    def visit_for_stmt(self,walker):
+    def visit(self,walker):
         walker.visit_for_stmt(self)
         return
 
@@ -650,7 +651,7 @@ class AssignStmt(Stmt):
             return rhs
         raise Exception("Unknown assign operator @ "+self.get_pos())
     
-    def visit_assign_stmt(self, walker):
+    def visit(self, walker):
         walker.visit_assign_stmt(self)
         return
 
@@ -675,7 +676,7 @@ class PrintStmt(Stmt):
         self.do_printop(env)
         return None
     
-    def visit_print_stmt(self, walker):
+    def visit(self, walker):
         walker.visit_print_stmt(self)
         return
 
@@ -692,7 +693,7 @@ class EvalStmt(Stmt):
     def evaluate(self,env):
         return self.expr.evaluate(env)
 
-    def visit_eval_stmt(self, walker):
+    def visit(self, walker):
         walker.visit_eval_stmt(self)
         return
 
@@ -714,7 +715,7 @@ class ArgList:
     def __repr__(self):
         return "\n\t [ArgList["+ ",".join(map(str,self.args))+"]]"
 
-    def visit_arg_list(self,walker):
+    def visit(self,walker):
         walker.visit_arg_list(self)
         return
 
@@ -746,7 +747,7 @@ class ValueList:
     def __repr__(self):
         return "\n\t [ValueList["+ ",".join(map(str,self.args))+"]]"
 
-    def visit_value_list(self,walker):
+    def visit(self,walker):
         walker.visit_value_list(self)
         return
 
@@ -777,7 +778,8 @@ class StmtList(Stmt):
             rval = stmt.evaluate(env)
         return rval
 
-    def visit_stmt_list(self,walker):
+    def visit(self,walker):
+        """ visit stmt list method """
         walker.visit_stmt_list(self)
         return
 
@@ -830,6 +832,7 @@ class Function(Stmt):
         env.return_function(self.name)
         return  rval
 
-    def visit_function(self,walker):
+    def visit(self,walker):
         walker.visit_function(self)
         return
+

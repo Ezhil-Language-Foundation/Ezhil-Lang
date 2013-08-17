@@ -566,6 +566,10 @@ class Interpreter(DebugUtils):
 # refactor out REPL for ezhil and exprs
 class REPL(Cmd):
 	def __init__(self,lang, lexer, parse_eval, debug=False):
+		""" @lexer is language lexical analyzer
+		    @parse_eval is the language interpreter with builtins, runtime, parser etc..
+		    @lang is a descriptive string,
+		    @debug the boolean """
 		Cmd.__init__(self)
 		## ala-Python like
 		self.banner = """எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
@@ -598,6 +602,7 @@ Type "help", "copyright", "credits" or "license" for more information."""
 		pass
 	
 	def default(self,line):
+		""" REPL is carried out primarily through this callback from the looping construct """
 		self.line_no += 1
 		
 		if ( self.debug ): print("evaluating line", line)

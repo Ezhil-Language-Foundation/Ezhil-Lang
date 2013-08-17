@@ -270,11 +270,15 @@ def ezhil_interactive_interpreter(lang = "எழில்",debug=False):
 
 if __name__ == "__main__":
     lang = "எழில்"
-    [fname, debug, dostdin ]= get_prog_name(lang)
+    [fnames, debug, dostdin ]= get_prog_name(lang)
     if ( dostdin ):
         ezhil_interactive_interpreter(lang,debug)
     else:
         ## evaluate a files sequentially
-        for files in fname:
-            EzhilFileExecuter( files, debug )
+        for idx,aFile in enumerate(fnames):
+            if ( debug):  print " **** Executing file #  ",1+idx,"named ",aFile
+            try:
+                EzhilFileExecuter( aFile, debug )
+            except Exception as e:
+                print "executing file, "+aFile+" with exception "+str(e)
     pass
