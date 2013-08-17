@@ -151,7 +151,7 @@ class EzhilLex ( Lex ) :
             tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )
         elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
             #tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
-            # deduce a float or integer
+            # deduce a float or integer            
             if ( chunks.find('.') >= 0 or chunks.find('e') >= 0 or chunks.find('E') >= 0 ):
                 tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             else:
@@ -216,7 +216,7 @@ class EzhilLex ( Lex ) :
                     self.get_lexeme( c , idx )
                     continue
                 while ( ( idx < len( data) )
-                            and ( isdigit(data[idx]) or data[idx] == '.') ):
+                            and ( isdigit(data[idx]) or data[idx] in ['+','-','e','E','.']) ):
                     num = num + data[idx]
                     idx = idx + 1
                 self.get_lexeme( num , tok_start_idx  )

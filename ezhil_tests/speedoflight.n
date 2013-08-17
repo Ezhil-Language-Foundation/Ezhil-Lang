@@ -1,0 +1,26 @@
+# Ezhil Programming Language example
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+C = 3e8 # Speed of light in m/s
+C = C/1e3 # move to km/s
+roundtrip_around_equator = 249901.47 #in mi
+roundtrip_around_equator = roundtrip_around_equator*16e-1 #in km
+
+time_for_light_to_travel = roundtrip_around_equator/C
+
+பதிப்பி "circumference of earth is",roundtrip_around_equator
+பதிப்பி "time for light to travel around earth =", time_for_light_to_travel, "seconds\n"
+
+roundtrip_around_equator = 249901.47*16e-1 #in km
+time_for_light_to_travel = roundtrip_around_equator/C
+
+பதிப்பி "In 60 seconds light to travels around earth ", 600e-2/time_for_light_to_travel, "times"
+
+#alternative answer
+dia_at_equator = 40000 #in km
+t_rt = dia_at_equator/C
+பதிப்பி "time for 1 roundtrip = ",t_rt," seconds\n"
+பதிப்பி "roundtrips per second = ",1/t_rt," times"
+
+
