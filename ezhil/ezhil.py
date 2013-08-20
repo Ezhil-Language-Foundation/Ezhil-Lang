@@ -15,7 +15,10 @@ from multiprocessing import Process, current_process
 from time import sleep,clock
 
 class EzhilInterpreter( Interpreter ):
-    def __init__(self, lexer, debug ):
+    def __init__(self, lexer, debug = False ):
+        """ create a Ezhil Interpeter and initialize runtime builtins etc.. in a RAII fashion,
+            and associates a Ezhil parser object with this class
+        """
         Interpreter.__init__(self,lexer,debug)
         Interpreter.change_parser(self,EzhilParser.factory)
         return
@@ -27,6 +30,7 @@ class EzhilInterpreter( Interpreter ):
         #input statements, length constructs
         tamil_equiv = {"சரம்_இடமாற்று":"replace", "சரம்_கண்டுபிடி":"find","நீளம்":"len",
                        "சரம்_உள்ளீடு":"raw_input", "உள்ளீடு" : "input" }
+        
         #list operators
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
                              "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
@@ -274,7 +278,8 @@ if __name__ == "__main__":
     if ( dostdin ):
         ezhil_interactive_interpreter(lang,debug)
     else:
-        ## evaluate a files sequentially
+        ## evaluate a files sequentially except when exit() was called in one of them,
+        ## while exceptions trapped per file without stopping the flow
         for idx,aFile in enumerate(fnames):
             if ( debug):  print " **** Executing file #  ",1+idx,"named ",aFile
             try:

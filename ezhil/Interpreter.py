@@ -56,7 +56,7 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
 from ExprsParser import Parser
 
 ## Transform / Visitor
-from transform import TreeWalker
+from transform import Visitor
 import collections
 
 def ezhil_copyright():

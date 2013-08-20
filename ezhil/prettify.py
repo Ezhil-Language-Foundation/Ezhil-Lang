@@ -10,8 +10,10 @@
 
 from theme import XsyTheme
 from ezhil_scanner import EzhilLex, EzhilToken
+from ezhil import EzhilInterpreter
+from transformer import Visitor
 
-class WikiStyle:        
+class WikiStyle:
     @staticmethod
     def wrap_msg(attrib,text):
         """ @text is any character stream that has to be wrapper in a style-Theme,
@@ -31,7 +33,8 @@ class Printer:
         self.lexer.tokens.reverse()
     
     def pretty_printer(self):
-        raise Exception("Kaput .. not implemented")
+        # raise Exception("Kaput .. not implemented")
+        
     
     # method walks the lexer-tokens and calls the appropriate elements
     def hilite(self):
