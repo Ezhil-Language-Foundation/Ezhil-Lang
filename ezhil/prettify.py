@@ -55,7 +55,12 @@ class Printer(Visitor):
         return
 
     def visit_expr_call(self,expr_call):
-        self.default(expr_call)
+        var_attrib = self.theme.Variables
+        print self.styler(var_attrib,str(expr_call.func_id.id))
+        op_attrib = self.theme.Operators
+        print self.styler(op_attrib,"(")
+        expr_call.arglist.visit( self )
+        print self.styler(op_attrib,")")
         return
 
     def visit_expr_list(self, expr_list):
@@ -117,7 +122,7 @@ class Printer(Visitor):
         return
 
     def visit_eval_stmt(self, eval_stmt ):
-        self.default(eval_stmt)
+        eval_stmt.expr.visit(self)
         return
 
     def visit_arg_list(self, arg_list):
@@ -125,7 +130,8 @@ class Printer(Visitor):
         return
 
     def visit_value_list(self,value_list):
-        self.default(value_list)
+        for value in value_list.args:
+            value.visit(self)
         return
 
     def visit_function(self,function):
