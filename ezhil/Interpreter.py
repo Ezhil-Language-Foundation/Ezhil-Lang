@@ -115,12 +115,13 @@ class Interpreter(DebugUtils):
     def __init__(self,lexer, dbg = False):
         DebugUtils.__init__(self,dbg)
         self.debug = dbg
+        self.MAX_REC_DEPTH = 10000
         self.lexer=lexer
         self.ast=None
         self.function_map = dict()#parsed functions
         self.builtin_map = dict() #pointers to builtin functions
         self.call_stack = list() #call stack
-        
+        sys.setrecursionlimit( self.MAX_REC_DEPTH ) # have a large enough Python stack        
         ## use the default Exprs parser.
         lang_parser = Parser(self.lexer,self.function_map, \
                              self.builtin_map, self.debug )
@@ -547,7 +548,7 @@ class Interpreter(DebugUtils):
 
     def evaluate(self):
         env = Environment( self.call_stack, self.function_map, \
-                               self.builtin_map, self.debug )
+                               self.builtin_map, self.debug, int(self.MAX_REC_DEPTH/10) )
         env.call_function("__toplevel__") ##some context
         return self.ast.evaluate(env)
 
