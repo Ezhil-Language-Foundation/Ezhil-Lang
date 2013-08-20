@@ -11,7 +11,7 @@
 from theme import XsyTheme
 from ezhil_scanner import EzhilLex, EzhilToken
 from ezhil import EzhilInterpreter
-from transformer import Visitor
+from transform import Visitor
 
 class WikiStyle:
     @staticmethod
@@ -25,19 +25,32 @@ class WikiStyle:
         out = out + '">' + text + "</span>"
         return out
 
-class Printer:
+class Printer(Visitor):
     def __init__(self,src_file):
+        """ @styler uses a Wiki/HTML/LaTeX output formatter, with a color theme 
+        specificied by @theme to render the text into the appropriate format"""
+        Visitor.__init__(self)
         self.styler = WikiStyle.wrap_msg
         self.theme = XsyTheme()
-        self.lexer = EzhilLex(src_file)
-        self.lexer.tokens.reverse()
-    
-    def pretty_printer(self):
-        # raise Exception("Kaput .. not implemented")
+        self.lexer = EzhilLex(src_file)        
+            
+    def default(self,*args):
+        """ /dev/zero dump for all visitor methods when not handled in derived class"""
+        #args[0] is AST object
         
+    def visit_identifier(self, id):  
+        
+        return
+    
+    def pretty_print(self):
+        self.parse_eval = EzhilInterpreter(self.lexer)        
+        ast = self.parse_eval.parse()
+        print ast
     
     # method walks the lexer-tokens and calls the appropriate elements
-    def hilite(self):
+    # basic lexical hiliting
+    def lexical_hilite(self):
+        self.lexer.tokens.reverse()
         out = []
         for t in self.lexer.tokens:
             add_br = False
@@ -65,8 +78,11 @@ class Printer:
         return "".join(out)
     
 if __name__ == "__main__":
-    from sys import argv
+    from sys import argv,exit
+    if len(argv) <= 1:
+        print "usage: python ezhil/prettify.py <file1> <file2> ... "
+        exit(-1)
     for aFile in argv[1:]:
         print "working with ",aFile
-        print Printer(aFile).hilite()
+        Printer(aFile).pretty_print()
     
