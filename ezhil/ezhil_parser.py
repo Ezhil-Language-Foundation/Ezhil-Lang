@@ -154,7 +154,7 @@ class EzhilParser(Parser):
                 break
             else:
                 self.inside_if = False
-                raise ParseError("SWITCH-CASE-OTHERWISE statement syntax is messed up")
+                raise ParseException("SWITCH-CASE-OTHERWISE statement syntax is messed up")
             ptok = self.peek()
             self.dbg_msg("parsing SWITCH-CASE next bits "+str(ptok))
         self.match( EzhilToken.END )
@@ -210,7 +210,7 @@ class EzhilParser(Parser):
                 break
             else:
                 self.inside_if = False
-                raise ParseError("If-Else-If statement syntax is messed up")
+                raise ParseException("If-Else-If statement syntax is messed up")
             ptok = self.peek()
             self.dbg_msg("parsing -IF next bits "+str(ptok))
         self.match( EzhilToken.END )
@@ -278,7 +278,7 @@ class EzhilParser(Parser):
                 self.dbg_msg("foreach-statement")
                 # convert to a for statement - building Ezhil AST - transformations
                 if not isinstance( exp[1], Identifier ):
-                    raise ParseError(" FOR-EACH statement "+str(foreach_tok) )
+                    raise ParseException(" FOR-EACH statement "+str(foreach_tok) )
                 foreach_iter = exp[1];
                 iter = Identifier("__"+foreach_iter.id,l=0,c=-1);
                 eq_token = EzhilLexeme("=",EzhilToken.EQUALS)
