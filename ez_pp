@@ -1,3 +1,2 @@
 #!/bin/bash
 python ./ezhil/prettify.py $@
-

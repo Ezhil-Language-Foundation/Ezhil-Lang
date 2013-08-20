@@ -1,5 +1,6 @@
 #!/usr/bin/python
-##
+# -*- coding: utf-8 -*-
+## 
 ## (C) 2007, 2008 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ## 

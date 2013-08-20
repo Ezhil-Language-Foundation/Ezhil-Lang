@@ -1,3 +1,2 @@
 #!/bin/sh
 ./ez -stdin -debug
-
