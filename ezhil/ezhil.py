@@ -280,10 +280,13 @@ if __name__ == "__main__":
     else:
         ## evaluate a files sequentially except when exit() was called in one of them,
         ## while exceptions trapped per file without stopping the flow
+        exitcode = 0
         for idx,aFile in enumerate(fnames):
             if ( debug):  print " **** Executing file #  ",1+idx,"named ",aFile
             try:
                 EzhilFileExecuter( aFile, debug )
             except Exception as e:
                 print "executing file, "+aFile+" with exception "+str(e)
+                exitcode = -1
+        sys.exit(exitcode)
     pass
