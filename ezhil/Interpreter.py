@@ -108,6 +108,21 @@ def get_prog_name(lang):
     
     return [prog_name, debug, dostdin]
 
+class NoClobberDict(dict):
+	""" dictionary structure with a set like mathematical structure.
+	    that way when you insert functions for ezhil library, we don't trample on each other
+	    by accidentally overwriting stuff"""
+	def __init__(self):
+		dict.__init__(self)
+	def __setitem__(self,key,val):
+		if ( self.has_key(key) ):
+			raise KeyError("Dictionary is getting clobbered; key "+key+" already present")
+		dict.__setitem__(self,key,val)
+
+#q = NoClobberDict()
+#q['foo']='bar';
+#q['foo']='car';
+
 ## Gandalf the Grey. One ring to rule them all.
 class Interpreter(DebugUtils):
     """ when you add new language feature, add a AST class 
@@ -118,8 +133,8 @@ class Interpreter(DebugUtils):
         self.MAX_REC_DEPTH = 10000
         self.lexer=lexer
         self.ast=None
-        self.function_map = dict()#parsed functions
-        self.builtin_map = dict() #pointers to builtin functions
+        self.function_map = NoClobberDict()#parsed functions
+        self.builtin_map = NoClobberDict() #pointers to builtin functions
         self.call_stack = list() #call stack
         sys.setrecursionlimit( self.MAX_REC_DEPTH ) # have a large enough Python stack        
         ## use the default Exprs parser.
@@ -313,7 +328,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['enumerate']=BlindBuiltins(enumerate,'enumerate',self.debug)
         self.builtin_map['eval']=BlindBuiltins(eval,'eval',self.debug)
         self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
-        self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
+        #self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
         self.builtin_map['file']=BlindBuiltins(file,'file',self.debug)
         self.builtin_map['filter']=BlindBuiltins(filter,'filter',self.debug)
         self.builtin_map['float']=BlindBuiltins(float,'float',self.debug)
@@ -335,15 +350,15 @@ class Interpreter(DebugUtils):
         self.builtin_map['license']=BlindBuiltins(ezhil_license,'license',self.debug)
         self.builtin_map['long']=BlindBuiltins(int,'long',self.debug)
         self.builtin_map['map']=BlindBuiltins(map,'map',self.debug)
-        self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
+        #self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
         self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
-        self.builtin_map['min']=BlindBuiltins(min,'min',self.debug)
+        #self.builtin_map['min']=BlindBuiltins(min,'min',self.debug)
         self.builtin_map['next']=BlindBuiltins(next,'next',self.debug)
         self.builtin_map['object']=BlindBuiltins(object,'object',self.debug)
         self.builtin_map['oct']=BlindBuiltins(oct,'oct',self.debug)
-        self.builtin_map['open']=BlindBuiltins(open,'open',self.debug)
+        #self.builtin_map['open']=BlindBuiltins(open,'open',self.debug)
         self.builtin_map['ord']=BlindBuiltins(ord,'ord',self.debug)
-        self.builtin_map['pow']=BlindBuiltins(pow,'pow',self.debug)
+        #self.builtin_map['pow']=BlindBuiltins(pow,'pow',self.debug)
         self.builtin_map['property']=BlindBuiltins(property,'property',self.debug)
         self.builtin_map['quit']=BlindBuiltins(quit,'quit',self.debug)
         self.builtin_map['range']=BlindBuiltins(range,'range',self.debug)        
@@ -367,6 +382,8 @@ class Interpreter(DebugUtils):
         self.builtin_map['vars']=BlindBuiltins(vars,'vars',self.debug)
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
+
+	# common/generic functions
         self.builtin_map['__getitem__']=BuiltinFunction(ezhil_getitem,"__getitem__",2)
         self.builtin_map['__setitem__']=BuiltinFunction(ezhil_setitem,"__setitem__",3)
         
@@ -433,7 +450,7 @@ class Interpreter(DebugUtils):
 
         self.builtin_map["max"]=BuiltinFunction(max,"max",2)
         self.builtin_map["min"]=BuiltinFunction(min,"min",2)
-        self.builtin_map["exit"]=BuiltinFunction(min,"exit",1)
+        #self.builtin_map["exit"]=BuiltinFunction(min,"exit",1)
 
         # turtle functions
         turtle_attrib = EZTurtle.functionAttributes();
@@ -465,12 +482,12 @@ class Interpreter(DebugUtils):
     	self.builtin_map["capitalize"] = BuiltinFunction(string.capitalize,"capitalize",1)
     	self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
     	self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
-    	self.builtin_map["count"] = BuiltinFunction(string.count,"count",1)
+    	self.builtin_map["count_string"] = BuiltinFunction(string.count,"count",1)
     	self.builtin_map["digits"] = BuiltinFunction(string.digits,"digits",1)
     	self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
     	self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
     	self.builtin_map["hexdigits"] = BuiltinFunction(string.hexdigits,"hexdigits",1)
-    	self.builtin_map["index"] = BuiltinFunction(string.index,"index",2)
+    	self.builtin_map["index_string"] = BuiltinFunction(string.index,"index",2)
     	self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
     	self.builtin_map["join"] = BuiltinFunction(string.join,"join",1)
     	self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
@@ -499,30 +516,30 @@ class Interpreter(DebugUtils):
     	self.builtin_map["whitespace"] = BuiltinFunction(string.whitespace,"whitespace",1)
     	self.builtin_map["zfill"] = BuiltinFunction(string.zfill,"zfill",2)
     	
-        #add list methods - first argument, when required, is always a list obj
+	# get/set methods are handled by generic __getitem__ and __setitem__
+	
+        # list methods - first argument, when required, is always a list obj
         self.builtin_map["append"] = BuiltinFunction(list.append,"append",2)
         self.builtin_map["insert"] = BuiltinFunction(list.insert,"insert",3)
         self.builtin_map["index"] = BuiltinFunction(list.index,"index",2)
-        self.builtin_map["list"] = BuiltinFunction(list,"list",0)
-        self.builtin_map["pop"] = BuiltinFunction(list.pop,"pop",1)
+        self.builtin_map["list"] = BuiltinFunction(list,"list",0)        
         self.builtin_map["sort"] = BuiltinFunction(list.sort,"sort",1)
         self.builtin_map["count"]= BuiltinFunction(list.count,"count",2)
         self.builtin_map["extend"]= BuiltinFunction(list.extend,"extend",2)
         self.builtin_map["reverse"]= BuiltinFunction(Interpreter.ezhil_reverse,"reverse",1)
-        self.builtin_map["get"]= BuiltinFunction(list.__getitem__,"get",2)
-        
-        # #dictionary methods - 
+	self.builtin_map["pop_list"] = BuiltinFunction(list.pop,"pop",1)
+	
+	# dictionary methods - first argument, when required, is always a dict obj
         self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
         self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
         self.builtin_map["fromkeys"]= BuiltinFunction(dict.fromkeys,"fromkeys",1)
-        self.builtin_map["get"]= BuiltinFunction(dict.get,"get",1)
         self.builtin_map["has_key"]= BuiltinFunction(dict.has_key,"has_key",1)
         self.builtin_map["items"]= BuiltinFunction(dict.items,"items",1)
         self.builtin_map["iteritems"]= BuiltinFunction(dict.iteritems,"iteritems",1)
         self.builtin_map["iterkeys"]= BuiltinFunction(dict.iterkeys,"iterkeys",1)
         self.builtin_map["itervalues"]= BuiltinFunction(dict.itervalues,"itervalues",1)
         self.builtin_map["keys"]= BuiltinFunction(dict.keys,"keys",1)
-        self.builtin_map["pop"]= BuiltinFunction(dict.pop,"pop",1)
+        self.builtin_map["pop_dict"]= BuiltinFunction(dict.pop,"pop",1)
         self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
         self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
         self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)

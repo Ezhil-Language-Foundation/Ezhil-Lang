@@ -34,7 +34,7 @@ class EzhilInterpreter( Interpreter ):
         #list operators
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
                              "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
-                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count"} )
+                             "வெளியேஎடு":"pop_list","பொருந்தியஎண்":"count"} )
         
         #generic get/set ops for list/dict
         tamil_equiv.update( { "எடு":"__getitem__", "வை":"__setitem__"} )
