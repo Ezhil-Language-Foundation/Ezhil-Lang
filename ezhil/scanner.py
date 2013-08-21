@@ -12,9 +12,9 @@ import re
 
 ## SCANNER
 class Token:
-    token_types=["EOF","ID","NUMBER","PRINT","PLUS","MINUS",
-                 "PROD","DIV","LPAREN","RPAREN","COMMA",
-                 "EQUALS","END","DEF","RETURN","IF","ELSEIF","ELSE",
+    token_types=["EOF","ID","NUMBER","PRINT","+","-",
+                 "*","/","(",")",",",
+                 "=","END","DEF","RETURN","IF","ELSEIF","ELSE",
                  "DO","WHILE","FOR","STRING",">","<",">=","<=","!=",
                  "==","[","]","^","%","BREAK","CONTINUE","SWITCH",
                  "CASE","OTHERWISE","&&","||","&","|","!"]

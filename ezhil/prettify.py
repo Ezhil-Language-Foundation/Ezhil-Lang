@@ -33,69 +33,98 @@ class Printer(Visitor):
         self.styler = WikiStyle.wrap_msg
         self.theme = XsyTheme()
         self.lexer = EzhilLex(src_file)
+        self.output = [];
+        self.line = 1; #current line 
+        self.NEWLINE = "<BR />\n"
+        
+    def update_line(self,obj):
+        if ( obj.line > self.line ):
+            self.line = obj.line
+            self.append( self.NEWLINE  )
+        return
+    
+    def append(self,string):
+        self.output.append( string )
     
     def default(self,*args):
         """ /dev/zero dump for all visitor methods when not handled in derived class"""
         #args[0] is AST object
-        print "def :",str(args[0])
+        self.append( "def :");
+        self.update_line(args[0])
+        self.append(str(args[0]))
         
-    def visit_identifier(self, id):  
+    def visit_identifier(self, IDobj):  
         attrib = self.theme.Variables
-        print self.styler(attrib,str(id))
+        self.update_line(IDobj)
+        self.append( self.styler(attrib,str(IDobj.id)))
         return
     
     def visit_string(self, string):
         attrib = self.theme.LiteralString
-        print self.styler(attrib,str(string))
+        self.update_line(string)
+        self.append(self.styler(attrib,str(string)))
         return
 
     def visit_number(self, num):
         attrib = self.theme.LiteralNumber
-        print self.styler(attrib,str(num))
+        self.update_line(num)
+        self.append(self.styler(attrib,str(num)))
         return
 
     def visit_expr_call(self,expr_call):
         var_attrib = self.theme.Variables
-        print self.styler(var_attrib,str(expr_call.func_id.id))
+        self.update_line(expr_call)
+        self.append(self.styler(var_attrib,str(expr_call.func_id.id)))
         op_attrib = self.theme.Operators
-        print self.styler(op_attrib,"(")
+        self.append( self.styler(op_attrib,"(") )
         expr_call.arglist.visit( self )
-        print self.styler(op_attrib,")")
+        self.append( self.styler(op_attrib,")") )
         return
 
     def visit_expr_list(self, expr_list):
-        for exp_itr in expr_list.exprs:
+        for pos,exp_itr in enumerate(expr_list.exprs):
+            self.update_line(exp_itr)
             exp_itr.visit( self )
+            if (pos+1) < len(expr_list.exprs):
+                self.append(",")
+            
         return
-
+    
     def visit_stmt_list(self,stmt_list):
         for stmt in stmt_list.List:
             stmt.visit(self)
+            self.update_line(stmt)
+            self.append(self.NEWLINE)
         return
-
+    
     def visit_stmt( self, stmt):
-        print "visit //"
+        self.update_line(stmt)
         stmt.visit(self)
         return
-
+    
     def visit_expr(self, expr):
-        self.default(expr)
+        op_attrib = self.theme.Operators;
+        self.update_line(expr)
+        expr.term.visit(self)
+        self.append( self.styler(op_attrib, EzhilToken.token_types[expr.binop.kind] ) )
+        expr.next_expr.visit(self)
         return
-
+    
     def visit_return_stmt(self, ret_stmt):
-        self.default(ret_stmt)
+        self.update_line(ret_stmt)
+        #self.default(ret_stmt)
         return
-
+    
     def visit_break_stmt(self, break_stmt ):
-        self.default(break_stmt)
+        #self.default(break_stmt)
         return
 
     def visit_continue_stmt(self, cont_stmt):
-        self.default(cont_stmt)
+        #self.default(cont_stmt)
         return
 
     def visit_else_stmt(self,else_stmt):
-        self.default(else_stmt)
+        #self.default(else_stmt)
         return
 
     def visit_if_elseif_stmt(self,if_elseif_stmt):
@@ -117,21 +146,26 @@ class Printer(Visitor):
     def visit_print_stmt(self, print_stmt):
         kw_attrib = self.theme.Keywords
         keyword = "பதிப்பி"
-        print self.styler(kw_attrib,str(keyword))
+        self.update_line(print_stmt)
+        self.append( self.styler(kw_attrib,str(keyword)) )
         print_stmt.exprlst.visit(self)
         return
 
     def visit_eval_stmt(self, eval_stmt ):
         eval_stmt.expr.visit(self)
         return
-
+    
     def visit_arg_list(self, arg_list):
         self.default(arg_list)
         return
 
     def visit_value_list(self,value_list):
+        op_attrib = self.theme.Operators;
         for value in value_list.args:
+            self.update_line(value)
             value.visit(self)
+            self.append(self.styler(op_attrib,","))
+        self.output.pop()
         return
 
     def visit_function(self,function):
@@ -143,6 +177,7 @@ class Printer(Visitor):
         ast = self.parse_eval.parse()
         print ast
         ast.visit(self)
+        print "".join(self.output)
     
     # method walks the lexer-tokens and calls the appropriate elements
     # basic lexical hiliting
