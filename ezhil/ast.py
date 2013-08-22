@@ -360,14 +360,15 @@ class Expr(Stmt):
     @staticmethod
     def normalize_values( obj, term, env ):
         if ( hasattr(term,'evaluate') ):
-            if ( term.__class__ == Number ):
+            if ( isinstance(term,Number) ): #work for both Number, and derived Boolean class
                 tval = term.num
-            elif ( term.__class__ == String ):
-                tval = term.string
+            elif ( isinstance(term,String) ):
+                tval = term.string                            
             else:
+                ## print term.__class__,term,str(term)
                 ## possibly leads to inf- recursion
                 ## tval = term.evaluate( env )
-                raise RuntimeException( " unknown clause to evaluate @ "+obj.get_pos());
+                raise RuntimeException( " cannot normalize token; unknown clause,"+str(term)+", to evaluate @ "+obj.get_pos());
         else:
             tval = (term) #float cast not required.
         return tval
