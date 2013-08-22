@@ -15,7 +15,10 @@ from multiprocessing import Process, current_process
 from time import sleep,clock
 
 class EzhilInterpreter( Interpreter ):
-    def __init__(self, lexer, debug ):
+    def __init__(self, lexer, debug = False ):
+        """ create a Ezhil Interpeter and initialize runtime builtins etc.. in a RAII fashion,
+            and associates a Ezhil parser object with this class
+        """
         Interpreter.__init__(self,lexer,debug)
         Interpreter.change_parser(self,EzhilParser.factory)
         return
@@ -27,10 +30,11 @@ class EzhilInterpreter( Interpreter ):
         #input statements, length constructs
         tamil_equiv = {"சரம்_இடமாற்று":"replace", "சரம்_கண்டுபிடி":"find","நீளம்":"len",
                        "சரம்_உள்ளீடு":"raw_input", "உள்ளீடு" : "input" }
+        
         #list operators
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
                              "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
-                             "வெளியேஎடு":"pop","பொருந்தியஎண்":"count"} )
+                             "வெளியேஎடு":"pop_list","பொருந்தியஎண்":"count"} )
         
         #generic get/set ops for list/dict
         tamil_equiv.update( { "எடு":"__getitem__", "வை":"__setitem__"} )
@@ -270,11 +274,19 @@ def ezhil_interactive_interpreter(lang = "எழில்",debug=False):
 
 if __name__ == "__main__":
     lang = "எழில்"
-    [fname, debug, dostdin ]= get_prog_name(lang)
+    [fnames, debug, dostdin ]= get_prog_name(lang)
     if ( dostdin ):
         ezhil_interactive_interpreter(lang,debug)
     else:
-        ## evaluate a files sequentially
-        for files in fname:
-            EzhilFileExecuter( files, debug )
+        ## evaluate a files sequentially except when exit() was called in one of them,
+        ## while exceptions trapped per file without stopping the flow
+        exitcode = 0
+        for idx,aFile in enumerate(fnames):
+            if ( debug):  print " **** Executing file #  ",1+idx,"named ",aFile
+            try:
+                EzhilFileExecuter( aFile, debug )
+            except Exception as e:
+                print "executing file, "+aFile+" with exception "+str(e)
+                exitcode = -1
+        sys.exit(exitcode)
     pass

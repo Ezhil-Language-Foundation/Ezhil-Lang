@@ -27,12 +27,22 @@ class Attrib(list):
             self.extend(args[1:])
         else:
             self.append(args[1])
-        
+
+    @staticmethod
+    def process(*args):
+        """ default process string to return inputs """
+        return args[0]
+
+class StringAttrib(Attrib):
+    @staticmethod
+    def process(*args):
+        """ chicken wrapped bacon """
+        return "\""+args[0]+"\""
 
 class XsyTheme:
     def __init__(self):
         self.Keywords = Attrib('Keywords',colors["Blue"])
-        self.LiteralString = Attrib('LiteralString',colors["IndianRed"])
+        self.LiteralString = StringAttrib('LiteralString',colors["IndianRed"])
         self.LiteralNumber = Attrib('LiteralNumber',colors["CornSilk"])
         self.Builtins = Attrib('Builtins',colors["DarkRed"])
         self.Variables = Attrib('Variables',colors["Green"])

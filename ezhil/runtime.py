@@ -78,12 +78,11 @@ class BlindBuiltins(BuiltinFunction):
         self.use_adicity = False
         self.aslist = aslist
 
-    
 ## <<Side-Effects>>: computation is side-effect of programming.
 class Environment:
     """ used to manage the side-effects of an interpreter """
-    def __init__(self,call_stack, function_map, builtin_map, dbg = False ):
-        self.max_recursion_depth = 128 #keep it smaller than Pythons stack
+    def __init__(self,call_stack, function_map, builtin_map, dbg = False, MAX_REC_DEPTH  = 128 ):
+        self.max_recursion_depth = MAX_REC_DEPTH #keep it smaller than Python stack
         self.call_stack = call_stack#list
         self.function_map = function_map#dicts
         self.builtin_map = builtin_map#dicts

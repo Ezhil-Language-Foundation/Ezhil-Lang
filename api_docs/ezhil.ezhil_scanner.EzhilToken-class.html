@@ -83,10 +83,30 @@
     </table>
   </td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.ezhil_scanner.EzhilToken-class.html#is_keyword" class="summary-sig-name">is_keyword</a>(<span class="summary-sig-arg">kind</span>)</span><br />
+      predicate to identify if @kind token is a keyword</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.ezhil_scanner-pysrc.html#EzhilToken.is_keyword">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.scanner.Token-class.html">scanner.Token</a></code></b>:
-      <code><a href="ezhil.scanner.Token-class.html#get_name">get_name</a></code>
+      <code><a href="ezhil.scanner.Token-class.html#get_name">get_name</a></code>,
+      <code><a href="ezhil.scanner.Token-class.html#is_id">is_id</a></code>,
+      <code><a href="ezhil.scanner.Token-class.html#is_number">is_number</a></code>,
+      <code><a href="ezhil.scanner.Token-class.html#is_string">is_string</a></code>
       </p>
     </td>
   </tr>
@@ -117,10 +137,10 @@
  ' ',
  ',',
  '\t',
+ '\r',
  '''
 ''',
- '/',
-..."><code class="variable-group">[</code><code class="variable-quote">'</code><code class="variable-string">]</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">[</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string"> </code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">,</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">\t</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">\n</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+..."><code class="variable-group">[</code><code class="variable-quote">'</code><code class="variable-string">]</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">[</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string"> </code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">,</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">\t</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">\r</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
   <tr>
@@ -186,6 +206,49 @@
     </td>
   </tr>
 </table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="is_keyword"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_keyword</span>(<span class="sig-arg">kind</span>)</span>
+    <br /><em class="fname">Static Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.ezhil_scanner-pysrc.html#EzhilToken.is_keyword">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>predicate to identify if @kind token is a keyword</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.scanner.Token-class.html#is_keyword">scanner.Token.is_keyword</a>
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== CLASS VARIABLE DETAILS ==================== -->
 <a name="section-ClassVariableDetails"></a>
 <table class="details" border="1" cellpadding="3"
@@ -221,9 +284,9 @@
  <code class="variable-quote">'</code><code class="variable-string"> </code><code class="variable-quote">'</code><code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">,</code><code class="variable-quote">'</code><code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">\t</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">\r</code><code class="variable-quote">'</code><code class="variable-op">,</code>
  <code class="variable-quote">'''</code><code class="variable-string"></code>
 <code class="variable-string"></code><code class="variable-quote">'''</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">/</code><code class="variable-quote">'</code><code class="variable-op">,</code>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -257,7 +320,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Aug  9 00:00:00 2013
+    Generated by Epydoc 3.0.1 on Fri Aug 16 17:17:46 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
