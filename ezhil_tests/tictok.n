@@ -1,0 +1,12 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# yesterday
+start = time()
+பதிப்பி "வணக்கம் உலகம்!", ctime(time()-84600)
+
+# today
+பதிப்பி "Today = ", ctime(time())
+
+# clock
+பதிப்பி "Total time elapsed ", clock() - start

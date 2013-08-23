@@ -408,10 +408,13 @@ class Interpreter(DebugUtils):
 	
         # date/time
         self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias="தேதி_நேரம்")
-
-        # get tamil letters
-        self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias="தமிழ்_எழுத்துக்கள்")
+	self.add_builtin("time",time.time,nargin=0,ta_alias="நேரம்")
+	self.add_builtin("ctime",time.ctime,nargin=1,ta_alias="cநேரம்")
+	self.add_builtin("clock",time.time,nargin=0)
 	
+        # get tamil letters
+        self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias="தமிழ்_எழுத்துக்கள்")	
+
         # random functions
         aslist = True;
         self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)
