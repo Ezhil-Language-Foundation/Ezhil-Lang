@@ -33,18 +33,18 @@ class Printer(Visitor):
         self.styler = WikiStyle.wrap_msg
         self.theme = XsyTheme()
         self.lexer = EzhilLex(src_file)
-        print self.lexer.comments.keys()
+        #print self.lexer.comments.keys()
         self.output = [];
         self.line = 1; #current line 
         self.NEWLINE = "<BR />\n"
         
     def update_line(self,obj):
-        print obj.line,"= line"
+        #print obj.line,"= line"
         if ( obj.line > self.line ):
             self.line = obj.line
             self.append( self.NEWLINE  )
         if ( self.lexer.comments.has_key(self.line) ):
-            print "visiting comment "
+            #print "visiting comment "
             self.append( self.lexer.comments[self.line] )
             del self.lexer.comments[self.line]
         return
@@ -104,6 +104,7 @@ class Printer(Visitor):
         return
     
     def visit_stmt( self, stmt):
+        ## is this a recipe for getting stuck in a loop?
         self.update_line(stmt)
         stmt.visit(self)
         return
@@ -139,15 +140,43 @@ class Printer(Visitor):
         self.append( self.styler( kw_attrib, keyword ) )
         self.append( self.NEWLINE )        
         return
-
+    
     def visit_else_stmt(self,else_stmt):
-        #self.default(else_stmt)
+        kw_attrib = self.theme.Keywords
+        keyword = "இல்லை"
+        self.append( self.styler( kw_attrib, keyword ) )
+        self.update_line(else_stmt)
+        else_stmt.stmt.visit( self )
         return
-
+    
     def visit_if_elseif_stmt(self,if_elseif_stmt):
-        self.default(if_elseif_stmt)
-        return
-
+        op_attrib = self.theme.Operators
+        
+        # condition expression
+        self.append( self.styler( op_attrib, "@( " ) )
+        if_elseif_stmt.expr.visit(self)
+        self.append( self.styler( op_attrib, ") " ) )
+        
+        # IF kw
+        kw_attrib = self.theme.Keywords
+        keyword_if = "ஆனால்"
+        self.append( self.styler( kw_attrib, keyword_if ) )                
+        
+        # True-Body
+        if_elseif_stmt.body.visit( self )
+        
+        # False-Body - optionally present
+        if hasattr(if_elseif_stmt.next_stmt,'visit'):
+            if_elseif_stmt.next_stmt.visit(self)
+        
+        self.visit_end_kw()
+        
+    def visit_end_kw(self):
+        # END kw
+        kw_attrib = self.theme.Keywords
+        keyword_end = "முடி"
+        self.append( self.styler( kw_attrib, keyword_end ) )
+        
     def visit_while_stmt(self,stmt):
         self.default(stmt)
         return
@@ -157,7 +186,10 @@ class Printer(Visitor):
         return
 
     def visit_assign_stmt(self, assign_stmt):
-        self.default(assign_stmt)
+        op_attrib = self.theme.Operators;
+        assign_stmt.lvalue.visit( self )
+        self.append(self.styler(op_attrib,"="))        
+        assign_stmt.rvalue.visit( self )
         return
 
     def visit_print_stmt(self, print_stmt):
