@@ -111,16 +111,27 @@ class Printer(Visitor):
         return
     
     def visit_return_stmt(self, ret_stmt):
-        self.update_line(ret_stmt)
-        #self.default(ret_stmt)
+        kw_attrib = self.theme.Keywords
+        self.update_line(ret_stmt)        
+        keyword = "பின்கொடு"
+        self.append( self.styler( kw_attrib, keyword ) )
+        self.append( self.NEWLINE )
         return
     
     def visit_break_stmt(self, break_stmt ):
-        #self.default(break_stmt)
+        kw_attrib = self.theme.Keywords
+        self.update_line(ret_stmt)
+        keyword = "நிறுத்து" #EzhilToken.Keywords["break"]
+        self.append( self.styler( kw_attrib, keyword ) )
+        self.append( self.NEWLINE )
         return
-
+    
     def visit_continue_stmt(self, cont_stmt):
-        #self.default(cont_stmt)
+        kw_attrib = self.theme.Keywords
+        self.update_line(ret_stmt)
+        keyword = "தொடர்" #EzhilToken.Keywords["continue"]
+        self.append( self.styler( kw_attrib, keyword ) )
+        self.append( self.NEWLINE )        
         return
 
     def visit_else_stmt(self,else_stmt):
