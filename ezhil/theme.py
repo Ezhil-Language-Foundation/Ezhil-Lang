@@ -47,3 +47,4 @@ class XsyTheme:
         self.Builtins = Attrib('Builtins',colors["DarkRed"])
         self.Variables = Attrib('Variables',colors["Green"])
         self.Operators = Attrib('Operators',colors["Red"])
+        self.Comment = StringAttrib('Comment',colors["Coffee"])

@@ -33,14 +33,20 @@ class Printer(Visitor):
         self.styler = WikiStyle.wrap_msg
         self.theme = XsyTheme()
         self.lexer = EzhilLex(src_file)
+        print self.lexer.comments.keys()
         self.output = [];
         self.line = 1; #current line 
         self.NEWLINE = "<BR />\n"
         
     def update_line(self,obj):
+        print obj.line,"= line"
         if ( obj.line > self.line ):
             self.line = obj.line
             self.append( self.NEWLINE  )
+        if ( self.lexer.comments.has_key(self.line) ):
+            print "visiting comment "
+            self.append( self.lexer.comments[self.line] )
+            del self.lexer.comments[self.line]
         return
     
     def append(self,string):
@@ -188,6 +194,13 @@ class Printer(Visitor):
         ast = self.parse_eval.parse()
         print ast
         ast.visit(self)
+
+        # dump remaining comments
+        comm_attrib = self.theme.Comment;
+        for  line,comment in  self.lexer.comments.items():            
+            self.append( self.styler( comm_attrib, comment ) )
+            self.append( self.NEWLINE )
+        
         print "".join(self.output)
     
     # method walks the lexer-tokens and calls the appropriate elements
