@@ -135,6 +135,7 @@ class Lex:
     def __init__(self,fname=None,dbg=False):
         self.stdin_mode = False
         self.debug = dbg;
+        self.comments = {}; #comments dict indexed by line number with comments present as string value
         if ( fname ):
             self.fname = fname
             self.File=open(fname)

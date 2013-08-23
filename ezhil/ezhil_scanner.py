@@ -200,10 +200,13 @@ class EzhilLex ( Lex ) :
                 continue
             elif ( c == '#' ):
                 ## single line skip comments like Python/Octave
+                start = idx;
                 while ( idx < len( data ) and not (data[idx] in ['\r','\n']) ):
                     idx = idx + 1
                 if ( data[idx] == '\r' ):
                     idx = idx + 1
+                end = idx
+                self.comments[self.line]= data[start:end]
             elif ( isdigit(c) ): #or c == '+' or c == '-'  ):
                 num = c
                 tok_start_idx = idx
