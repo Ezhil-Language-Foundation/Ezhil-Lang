@@ -59,11 +59,12 @@ class EzhilWeb():
     
     def do_ezhil_execute(self,program):
         # execute the Ezhil Interpreter with string @program
+        print("<html> <head> <title>Ezhil interpreter</title> </head><body> ")
         program_fmt = """<TABLE>
         <TR><TD>
         <TABLE>
         <TR>
-        <TD><font color=\"white\"><OL>"""
+        <TD><font color=\"blue\"><OL>"""
         
         if ( self.debug ):
             print( "Source program <BR />" )
@@ -86,18 +87,19 @@ class EzhilWeb():
                 if ( self.debug ):
                     print "Exitcode => ",obj.exitcode
                     print progout
-                op = "%s <B>Failed Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
+                op = "<IMG SRC='../icons/%s' alt='failure' />"%EzhilWeb.get_image('failure')
+                op = op + "%s <B>Failed Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
                 failed = True
             else:
                 failed = False
-                op = "<IMG SRC='icons/%s' alt='success' />"%EzhilWeb.get_image('success')
+                op = "<IMG SRC='../icons/%s' alt='success' />"%EzhilWeb.get_image('success')
                 op = op + "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
             if ( self.debug ):
                 print "FAILED EXECUTION"
                 print str(e)
             failed = True
-            op = "<IMG SRC='icons/%s' alt='failure' />"%EzhilWeb.get_image('failure')
+            op = "<IMG SRC='../icons/%s' alt='failure' />"%EzhilWeb.get_image('failure')
             op = op + "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e)) 
         if ( self.debug ):
             print "Output file"
@@ -105,14 +107,15 @@ class EzhilWeb():
         
         prev_page = """<script>
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");
-</script><HR/>"""
+</script><BR />\n<HR/>\n"""
+        print prev_page
         
         if failed:
             op = "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>"+op
         else:
             op = "<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>"+op
-        op = prev_page + op
-        print("<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n"%op)
+        print op
+        print("</body></html>\n")
  
         return op
 
