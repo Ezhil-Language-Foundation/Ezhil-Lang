@@ -23,6 +23,7 @@ class EzhilWeb():
     """ Class that does the job on construction """
     def __init__(self,debug = False):
         self.debug = debug
+	self.img_outcome = '' #image str indicating success/failure
         if ( self.debug ):
             # debugging tips
             import cgitb
@@ -61,6 +62,8 @@ class EzhilWeb():
     def do_ezhil_execute(self,program):
         # execute the Ezhil Interpreter with string @program
         print("<html> <head> <title>Ezhil interpreter</title> </head><body> ")
+        print("<!-- ") #suppress exec stdout
+        close_comment = False #and useful to debug a live site
         program_fmt = """<TABLE>
         <TR><TD>
         <TABLE>
@@ -83,26 +86,31 @@ class EzhilWeb():
             obj = EzhilFileExecuter( file_input = [program], redirectop = True, TIMEOUT = 60*2 ) # 2 minutes
             progout = obj.get_output()
             #SUCCESS_STRING = "<H2> Your program executed correctly! Congratulations. </H2>"            
-            print obj.exitcode
-            print progout
+            if ( self.debug ):
+                print(obj.exitcode)
+                print(progout)
+            print("-->")
+            close_comment = True
             if obj.exitcode != 0 and EzhilWeb.error_qualifiers(progout):
                 if ( self.debug ):
                     print "Exitcode => ",obj.exitcode
                     print progout
-                op = "<IMG SRC='../icons/%s' alt='failure' />"%EzhilWeb.get_image('failure')
-                op = op + "%s <B>Failed Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
+                self.img_outcome = "<IMG width='64' SRC='../icons/%s' alt='failure' />"%EzhilWeb.get_image('failure')
+                op = "%s <B>%s Failed Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,self.img_outcome,progout)
                 failed = True
             else:
                 failed = False
-                op = "<IMG SRC='../icons/%s' alt='success' />"%EzhilWeb.get_image('success')
-                op = op + "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
+                self.img_outcome = "<IMG width='64' SRC='../icons/%s' alt='success' />"%EzhilWeb.get_image('success')
+                op = "%s <B>%s Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,self.img_outcome,progout)
         except Exception as e:
+            if( not close_comment ):
+                print("-->")
             if ( self.debug ):
                 print "FAILED EXECUTION"
                 print str(e)
             failed = True
-            op = "<IMG SRC='../icons/%s' alt='failure' />"%EzhilWeb.get_image('failure')
-            op = op + "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e)) 
+            self.img_outcome = "<IMG SRC='../icons/%s' width='64' alt='failure' />"%EzhilWeb.get_image('failure')
+            op = "%s <B>%s FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,self.img_outcome,str(e)) 
         if ( self.debug ):
             print "Output file"
             print obj.get_output()
@@ -111,7 +119,7 @@ class EzhilWeb():
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");
 </script><BR />\n<HR/>\n"""
         print prev_page
-        
+        #op = self.img_outcome + op        
         if failed:
             op = "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>"+op
         else:
