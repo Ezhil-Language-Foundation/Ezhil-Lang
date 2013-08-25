@@ -32,12 +32,6 @@
       /* (C) 2013 Muthiah Annamalai */
       function appendText( text_elements  ) {
         var ezCodeWidget = document.getElementById('EzhilCodeWidget');
-        //ezCodeWidget.value += text_elements + " ";
-        //ezCodeWidget.scrollTop = ezCodeWidget.scrollHeight;
-        //ezCodeWidget.focus();
-        //insertAtCursor( ezCodeWidget, text_elements )
-        //window.alert('hello world '+text_elements + ' ends here\n')
-        // calling the function
         insertAtCursor(ezCodeWidget, text_elements);
       }
     </script>
@@ -50,28 +44,31 @@
 </table>
     <div>கீழே உள்ள படிவத்தில் உங்கள் நிரல் உள்ளிடவும், மற்றும்  "இயக்கவும்"  பொத்தானை கிளிக் செய்யவும்! (Enter your program in the form below, and click submit to execute the code!)</div> 
     <hr />
+<table>
+<tr>
+<td width="65%">
     <form>
 <!-- Tamil Keyboard, (C) 2013 Ezhil Language Foundation -->
     <div><B> சிறப்பு சொற்கள் உதவி (Keywords - Helper)</B></div>
-<input type="button" name="btn_kw_0" value="பதிப்பி" onClick="appendText('பதிப்பி');" />
-<input type="button" name="btn_kw_1" value="தேர்ந்தெடு" onClick="appendText('தேர்ந்தெடு');" />
-<input type="button" name="btn_kw_2" value="தேர்வு" onClick="appendText('தேர்வு');" />
-<input type="button" name="btn_kw_3" value="ஏதேனில்" onClick="appendText('ஏதேனில்');" />
-<input type="button" name="btn_kw_4" value="ஆனால்" onClick="appendText('ஆனால்');" />
-<input type="button" name="btn_kw_5" value="இல்லைஆனால்" onClick="appendText('இல்லைஆனால்');" />
-<input type="button" name="btn_kw_6" value="இல்லை" onClick="appendText('இல்லை');" />
-<input type="button" name="btn_kw_7" value="ஆக" onClick="appendText('ஆக');" />
-<input type="button" name="btn_kw_8" value="வரை" onClick="appendText('வரை');" />
+<input type="button" name="btn_kw_0" value="பதிப்பி -print" onClick="appendText('பதிப்பி');" />
+<input type="button" name="btn_kw_1" value="தேர்ந்தெடு-select" onClick="appendText('தேர்ந்தெடு');" />
+<input type="button" name="btn_kw_2" value="தேர்வு-case" onClick="appendText('தேர்வு');" />
+<input type="button" name="btn_kw_3" value="ஏதேனில்-otherwise" onClick="appendText('ஏதேனில்');" />
+<input type="button" name="btn_kw_4" value="ஆனால்-if" onClick="appendText('ஆனால்');" />
+<input type="button" name="btn_kw_5" value="இல்லைஆனால்-elseif" onClick="appendText('இல்லைஆனால்');" />
+<input type="button" name="btn_kw_6" value="இல்லை-else" onClick="appendText('இல்லை');" />
+<input type="button" name="btn_kw_7" value="ஆக-do" onClick="appendText('ஆக');" />
+<input type="button" name="btn_kw_8" value="வரை-while" onClick="appendText('வரை');" />
 <input type="button" name="btn_kw_9" value="செய்" onClick="appendText('செய்');" />
-<input type="button" name="btn_kw_36" value="முடியேனில்" onClick="appendText('முடியேனில்');" />
+<input type="button" name="btn_kw_36" value="முடியேனில்-until" onClick="appendText('முடியேனில்');" />
 <BR />
-<input type="button" name="btn_kw_10" value="பின்கொடு" onClick="appendText('பின்கொடு');" />
-<input type="button" name="btn_kw_11" value="முடி" onClick="appendText('முடி');" />
-<input type="button" name="btn_kw_12" value="நிரல்பாகம்" onClick="appendText('நிரல்பாகம்');" />
-<input type="button" name="btn_kw_13" value="தொடர்" onClick="appendText('தொடர்');" />
-<input type="button" name="btn_kw_14" value="நிறுத்து" onClick="appendText('நிறுத்து');" />
-<input type="button" name="btn_kw_34" value="ஒவ்வொன்றாக" onClick="appendText('ஒவ்வொன்றாக');" />
-<input type="button" name="btn_kw_35" value="இல்" onClick="appendText('இல்');" />
+<input type="button" name="btn_kw_10" value="பின்கொடு-return" onClick="appendText('பின்கொடு');" />
+<input type="button" name="btn_kw_11" value="முடி-end" onClick="appendText('முடி');" />
+<input type="button" name="btn_kw_12" value="நிரல்பாகம்-define" onClick="appendText('நிரல்பாகம்');" />
+<input type="button" name="btn_kw_13" value="தொடர்-continue" onClick="appendText('தொடர்');" />
+<input type="button" name="btn_kw_14" value="நிறுத்து-break" onClick="appendText('நிறுத்து');" />
+<input type="button" name="btn_kw_34" value="ஒவ்வொன்றாக-foreach" onClick="appendText('ஒவ்வொன்றாக');" />
+<input type="button" name="btn_kw_35" value="இல்-in" onClick="appendText('இல்');" />
 <input type="button" name="btn_kw_15" value="@" onClick="appendText('@');" />
 <input type="button" name="btn_kw_16" value="==" onClick="appendText('==');" />
 <input type="button" name="btn_kw_17" value="-" onClick="appendText('-');" />
@@ -91,8 +88,20 @@
 <input type="button" name="btn_kw_32" value="%" onClick="appendText('%');" />
 <input type="button" name="btn_kw_33" value="^" onClick="appendText('^');" />
 <!-- last btn_kw_36 -->
-<HR />
 </form>
+</td>
+<td width="35%">
+<div><B> சிறப்பு  நிரல்பாகம் உதவி (Ezhil Builtins, Statements )</B></div>
+<form>
+<input type="button" name="bltn_fn_set" value="வை- set" onClick="appendText('வை');" />
+<input type="button" name="bltn_fn_get" value="எடு - get" onClick="appendText('எடு');" />
+<input type="button" name="bltn_fn_if_then_else" value="@(  ) ஆனால் இல்லை   முடி" onClick="appendText('@(  ) ஆனால்\n\t\nஇல்லை\n  முடி');" />
+<input type="button" name="bltn_fn_while_end" value=" @(  ) வரை  முடி" onClick="appendText('@(  ) வரை\n  முடி');" />
+</form>
+</td>
+</tr>
+</table>
+<HR />
 <table>
  <tr>
   <td width="60%">
