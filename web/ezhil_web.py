@@ -9,7 +9,10 @@
 ## Ref: http://wiki.python.org/moin/BaseHttpServer
 
 import time
+
+# NB: this program imports Ezhil library from the installed version
 from ezhil import EzhilFileExecuter, EzhilInterpExecuter
+
 from os import unlink
 import cgi
 
@@ -26,7 +29,9 @@ class EzhilWeb():
 		program = self.form.getvalue('prog')
 	except Exception as e:
 		print "could not load the program from GET method"
-		program = "print(\"You can write Tamil programs from your browser!\")"
+        finally:
+            if ( not program ):
+		program = "printf(\"You can write Tamil programs from your browser!\")"
 	
 	if ( self.debug ):
 	        print(str(program))
