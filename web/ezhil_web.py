@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -u
 # -*- coding: utf-8 -*-
 ## 
 ## (C) 2013 Muthiah Annamalai,
@@ -19,37 +19,39 @@ import cgi
 class EzhilWeb():
     """ Class that does the job on construction """
     def __init__(self,debug = False):
-	self.debug =debug
+        self.debug =debug
         if ( self.debug ):
                 # debugging tips
                 import cgitb
                 cgitb.enable()
 
-	self.form = cgi.FieldStorage()
-	try:
-		program = self.form.getvalue('prog')
-	except Exception as e:
-		print "could not load the program from GET method"
+        self.form = cgi.FieldStorage()
+        try:
+            program = self.form.getvalue('prog')
+        except Exception as e:
+            print "could not load the program from GET method"
         finally:
             if ( not program ):
-		program = "printf(\"You can write Tamil programs from your browser!\")"
-	
-	if ( self.debug ):
-	        print(str(program))
-   	self.do_ezhil_execute( program )
+                program = "printf(\"You can write Tamil programs from your browser!\")"
+                
+        if ( self.debug ):
+            print(str(program))
+    
+        self.do_ezhil_execute( program )
     
     def do_ezhil_execute(self,program):
         # execute the Ezhil Interpreter with string @program
         program_fmt = """<TABLE>
-		<TR><TD>
-		<TABLE>
-		<TR>
-		<TD><font color=\"white\"><OL>"""
+        <TR><TD>
+        <TABLE>
+        <TR>
+        <TD><font color=\"white\"><OL>"""
         
-        print( "Source program <BR />" )
-	print "program = ",program,"<BR />"
-        print( "*"*60 )
-        print("<BR />")
+        if ( self.debug ):
+            print( "Source program <BR />" )
+            print "program = ",program,"<BR />"
+            print( "*"*60 )
+            print("<BR />")
         
         program_fmt += "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))])
         program_fmt += """</OL></font></TD></TR>\n</TABLE></TD><TD>"""
@@ -69,12 +71,14 @@ class EzhilWeb():
                 op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
             if ( self.debug ):
-	        print "FAILED EXECUTION"
-	        print str(e)
-            failed = True
-            op = "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e))
+                print "FAILED EXECUTION"
+                print str(e)
+                failed = True
+                op = "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e))
         else:
-            print "Output file"
+            if ( self.debug ):
+                print "Output file"
+            failed = False
             obj.get_output()
             
         prev_page = """<script>
@@ -91,8 +95,8 @@ class EzhilWeb():
         return op
 
 if __name__ == '__main__':
-	print("Content-Type: text/html")    # HTML is following
-	print("")                              # blank line, end of headers
-	# do the Ezhil thing	
-	EzhilWeb(debug=False)
+    print("Content-Type: text/html")    # HTML is following
+    print("")                              # blank line, end of headers
+    # do the Ezhil thing    
+    EzhilWeb(debug=False)
 
