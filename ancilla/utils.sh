@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 python setup.py sdist
 python setup.py build
 sudo python setup.py install
