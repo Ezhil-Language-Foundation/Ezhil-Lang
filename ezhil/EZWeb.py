@@ -42,32 +42,34 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
     
     def do_ezhil_execute(self,program):
         # write the input program into a temporary file and execute the Ezhil Interpreter
-        tmpf=tempfile.NamedTemporaryFile(suffix='.n',delete=False)
-        tmpf.write(program)
-        tmpf.close()
-		
+        
         program_fmt = """<TABLE>
 		<TR><TD>
 		<TABLE>
 		<TR>
 		<TD><font color=\"blue\"><OL>"""
-		
+        
         print( "Source program" )
-        print( open(tmpf.name).read() )
+        print( program )
         print( "*"*60 )
         
         program_fmt += "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))])
         program_fmt += """</OL></font></TD></TR>\n</TABLE></TD><TD>"""
-		
+        
         # run the interpreter in a sandbox and capture the output hopefully
         try:
-            failed = False
-            obj = EzhilFileExecuter( file_input = tmpf.name, redirectop = True, TIMEOUT = 60*2 ) # 2 minutes
-            #obj = EzhilInterpExecuter( file_input = tmpf.name, redirectop = True )
-            progout = obj.get_output()            
-            if obj.exitcode != 0 :                
+            failed = True #default failed mode
+            obj = EzhilFileExecuter( file_input = [program], redirectop = True, TIMEOUT = 60*2 ) # 2 minutes
+            progout = obj.get_output()
+            #SUCCESS_STRING = "<H2> Your program executed correctly! Congratulations. </H2>"
+            FAILED_STRING = "Traceback (most recent call last)"
+            if obj.exitcode != 0 and progout.find(FAILED_STRING) > -1:
+                print "Exitcode => ",obj.exitcode
+                print progout
                 op = "%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
             else:
+                failed = False
+                obj.exitcode = 0
                 op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
             print "FAILED EXECUTION"
@@ -77,12 +79,6 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
         else:
             print "Output file"
             obj.get_output()
-        
-        # delete the temporary file
-	try:
-            unlink(tmpf.name)
-        except Exception as e:
-            print("Exception %s but we pass it"%str(e))
         
         prev_page = """<script>
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");

@@ -128,6 +128,17 @@ class Lexeme:
         return " %s Line=%d, Col=%d in File %s "% \
             (str(self.val),self.line,self.col,self.fname)
 
+class DummyFile(file):
+    """ wrap a bunch of string data in a file interface """
+    def __init__(self,data):
+        self.data = data;
+        
+    def close(self):
+        pass
+    
+    def readlines(self):
+        return self.data.split("\n")
+
 class Lex:
     """ Lexer automatically starts lexing on init.
     Maybe use some Library module? """
@@ -136,9 +147,13 @@ class Lex:
         self.stdin_mode = False
         self.debug = dbg
         self.comments = {} #comments dict indexed by line number with comments present as string value
-        if ( fname ):
+        if ( isinstance(fname,str) ):
             self.fname = fname
-            self.File=open(fname)
+            self.File = open(fname)
+        elif ( isinstance(fname,list) ):
+            """ specify, fname = ["contents of program as a string"] """
+            self.fname = "<DUMMYFILE>"
+            self.File = DummyFile( fname[0] );
         else:
             self.fname = "<STDIN>"
             self.stdin_mode = True

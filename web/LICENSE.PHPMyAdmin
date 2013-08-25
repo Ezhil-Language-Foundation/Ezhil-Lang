@@ -1,0 +1,4 @@
+Ref: http://alexking.org/blog/2003/06/02/inserting-at-the-cursor-using-javascript
+Function  "insertAtCursor(myField, myValue)" used in the file index.html is borrowed from PHPMyAdmin
+This function GPL licensed - part of PHPMyAdmin
+(C) 1998-2013 phpMyAdmin project www.phpmyadmin.net/‎

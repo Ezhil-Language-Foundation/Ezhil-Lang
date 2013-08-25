@@ -159,7 +159,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
 def ezhil_file_parse_eval( file_input,redirectop,debug):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
         the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
-        cleanup the cruft.
+        cleanup the cruft. Note file_input can be a string version of a program to be evaluated if it is
+        enclosed properly in a list format
     """    
     if ( redirectop ):
         sys.stdout = open(EzhilRedirectOutput.pidFileName(current_process().pid),"w")
@@ -167,7 +168,9 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
     lexer = EzhilLex(file_input,debug)
     if ( debug ): lexer.dump_tokens()
     parse_eval = EzhilInterpreter( lexer, debug )
-    parse_eval.parse()
+    web_ast = parse_eval.parse()
+    if( debug ):
+        print(web_ast)
     if ( debug ):  print("*"*60);  print(str(parse_eval))
     exit_code = 0
     try:
@@ -175,7 +178,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
     except Exception as e:
         exit_code = -1
         print str(e)
-    finally:    
+    finally:
         if ( redirectop ):
             # cerrar - முடி
             sys.stdout.flush()
