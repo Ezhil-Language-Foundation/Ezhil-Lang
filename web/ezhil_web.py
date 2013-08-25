@@ -16,14 +16,15 @@ from ezhil import EzhilFileExecuter, EzhilInterpExecuter
 from os import unlink
 import cgi
 
-# debugging tips
-import cgitb
-cgitb.enable()
-
 class EzhilWeb():
     """ Class that does the job on construction """
     def __init__(self,debug = False):
 	self.debug =debug
+        if ( self.debug ):
+                # debugging tips
+                import cgitb
+                cgitb.enable()
+
 	self.form = cgi.FieldStorage()
 	try:
 		program = self.form.getvalue('prog')
@@ -43,7 +44,7 @@ class EzhilWeb():
 		<TR><TD>
 		<TABLE>
 		<TR>
-		<TD><font color=\"blue\"><OL>"""
+		<TD><font color=\"white\"><OL>"""
         
         print( "Source program <BR />" )
 	print "program = ",program,"<BR />"
@@ -67,8 +68,9 @@ class EzhilWeb():
             else:
                 op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
-            print "FAILED EXECUTION"
-            print str(e)
+            if ( self.debug ):
+	        print "FAILED EXECUTION"
+	        print str(e)
             failed = True
             op = "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e))
         else:
@@ -78,7 +80,7 @@ class EzhilWeb():
         prev_page = """<script>
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");
 </script><HR/>"""
-        #op = ""
+        
         if failed:
             op = "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>"+op
         else:
@@ -92,5 +94,5 @@ if __name__ == '__main__':
 	print("Content-Type: text/html")    # HTML is following
 	print("")                              # blank line, end of headers
 	# do the Ezhil thing	
-	EzhilWeb(debug=True)
+	EzhilWeb(debug=False)
 
