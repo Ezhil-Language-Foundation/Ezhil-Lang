@@ -52,7 +52,7 @@ class EzhilWeb():
         # run the interpreter in a sandbox and capture the output hopefully
         try:
             failed = False
-            obj = EzhilFileExecuter( file_input = [program], redirectop = False, TIMEOUT = 60*2 ) # 2 minutes
+            obj = EzhilFileExecuter( file_input = [program], redirectop = True, TIMEOUT = 60*2 ) # 2 minutes
             progout = obj.get_output()
             if obj.exitcode != 0 :
                 op = "%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
@@ -66,7 +66,7 @@ class EzhilWeb():
         else:
             print "Output file"
             obj.get_output()
-                
+            
         prev_page = """<script>
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");
 </script><HR/>"""
@@ -74,7 +74,7 @@ class EzhilWeb():
         if failed:
             op = "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>"+op
         else:
-            op = "<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>"+op            
+            op = "<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>"+op
         op = prev_page + op
         print("<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n"%op)
  
