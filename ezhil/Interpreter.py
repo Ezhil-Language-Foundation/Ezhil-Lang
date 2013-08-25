@@ -119,10 +119,6 @@ class NoClobberDict(dict):
 			raise KeyError("Dictionary is getting clobbered; key "+key+" already present")
 		dict.__setitem__(self,key,val)
 
-#q = NoClobberDict()
-#q['foo']='bar';
-#q['foo']='car';
-
 ## Gandalf the Grey. One ring to rule them all.
 class Interpreter(DebugUtils):
     """ when you add new language feature, add a AST class 

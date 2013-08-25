@@ -97,7 +97,7 @@ class Token:
     MULDIV = [PROD,DIV]
     COMPARE = [ GT, LT, GTEQ, LTEQ, NEQ, EQUALITY ]
     EXPMOD = [EXP, MOD]
-    BITWISE_AND_LOGICAL = [LOGICAL_AND, LOGICAL_OR, BITWISE_AND, BITWISE_OR];
+    BITWISE_AND_LOGICAL = [LOGICAL_AND, LOGICAL_OR, BITWISE_AND, BITWISE_OR]
     BINOP = []
     for i in [ADDSUB, MULDIV, COMPARE, EXPMOD, BITWISE_AND_LOGICAL]:
         BINOP.extend( i )
@@ -134,8 +134,8 @@ class Lex:
 
     def __init__(self,fname=None,dbg=False):
         self.stdin_mode = False
-        self.debug = dbg;
-        self.comments = {}; #comments dict indexed by line number with comments present as string value
+        self.debug = dbg
+        self.comments = {} #comments dict indexed by line number with comments present as string value
         if ( fname ):
             self.fname = fname
             self.File=open(fname)
@@ -160,7 +160,7 @@ class Lex:
     def reset(self):
         """ reset the lexer """
         if (self.debug): print("Dumping out "+ len(self.tokens)+"Lexemes ")
-        self.tokens = [];
+        self.tokens = []
     
     def __repr__(self):
         for idx in range(0,len(self.tokens)):
@@ -320,7 +320,8 @@ class Lex:
                 self.get_lexeme( num , tok_start_idx  )
             elif ( c == "\"" ):
                 tok_start_idx = idx 
-                s = c; idx = idx + 1
+                s = c
+                idx = idx + 1
                 while ( idx < len( data ) and
                          ( data[idx] != '\"' ) ):
                     s = s + data[idx]
@@ -332,7 +333,8 @@ class Lex:
                 self.get_lexeme( s , tok_start_idx )
             elif ( isalpha( c ) ):
                 tok_start_idx = idx 
-                s = c; idx = idx + 1
+                s = c
+                idx = idx + 1
                 while ( ( idx < len( data ) )
                             and ( isalpha(data[idx]) or isdigit( data[idx] )
                                   or data[idx] in [ "\"", "_" ] ) ):

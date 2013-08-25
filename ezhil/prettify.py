@@ -34,8 +34,8 @@ class Printer(Visitor):
         self.theme = XsyTheme()
         self.lexer = EzhilLex(src_file)
         #print self.lexer.comments.keys()
-        self.output = [];
-        self.line = 1; #current line 
+        self.output = []
+        self.line = 1 #current line 
         self.NEWLINE = "<BR />\n"
         
     def update_line(self,obj):
@@ -55,7 +55,7 @@ class Printer(Visitor):
     def default(self,*args):
         """ /dev/zero dump for all visitor methods when not handled in derived class"""
         #args[0] is AST object
-        self.append( "def :");
+        self.append( "def :")
         self.update_line(args[0])
         self.append(str(args[0]))
         
@@ -110,7 +110,7 @@ class Printer(Visitor):
         return
     
     def visit_expr(self, expr):
-        op_attrib = self.theme.Operators;
+        op_attrib = self.theme.Operators
         self.update_line(expr)
         expr.term.visit(self)
         self.append( self.styler(op_attrib, EzhilToken.token_types[expr.binop.kind] ) )
@@ -186,7 +186,7 @@ class Printer(Visitor):
         return
 
     def visit_assign_stmt(self, assign_stmt):
-        op_attrib = self.theme.Operators;
+        op_attrib = self.theme.Operators
         assign_stmt.lvalue.visit( self )
         self.append(self.styler(op_attrib,"="))        
         assign_stmt.rvalue.visit( self )
@@ -209,7 +209,7 @@ class Printer(Visitor):
         return
 
     def visit_value_list(self,value_list):
-        op_attrib = self.theme.Operators;
+        op_attrib = self.theme.Operators
         for value in value_list.args:
             self.update_line(value)
             value.visit(self)
@@ -228,7 +228,7 @@ class Printer(Visitor):
         ast.visit(self)
 
         # dump remaining comments
-        comm_attrib = self.theme.Comment;
+        comm_attrib = self.theme.Comment
         for  line,comment in  self.lexer.comments.items():            
             self.append( self.styler( comm_attrib, comment ) )
             self.append( self.NEWLINE )

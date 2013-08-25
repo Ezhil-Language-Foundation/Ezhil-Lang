@@ -17,7 +17,7 @@ colors = { "Blue" : "0000FF",
            "Green": "00FF00",
            "Coffee":"C0FFEE",
            "Deadbe":"DEADBE",
-};
+}
 
 class Attrib(list):
     def __init__(self,*args):

@@ -150,7 +150,7 @@ def uyirmei( idx ):
        return uyirmei_letters[idx]
 
 def uyirmei_constructed( mei_idx, uyir_idx):
-       idx = mei_idx; idy = uyir_idx;
+       idx,idy = mei_idx,uyir_idx
        assert ( idy >= 0 and idy < uyir_len() )
        assert ( idx >= 0 and idx < mei_len() )
        return agaram_letters[mei_idx]+accent_symbols[uyir_idx]
@@ -215,7 +215,7 @@ def get_letters( word ):
 		elif c in agaram_letters or c in sanskrit_letters:
 			if prev != u'':
 				ta_letters.append(prev)
-			prev = c;
+			prev = c
 		elif c in accent_symbols:
 			ta_letters.append(prev+c)
 			prev = u''

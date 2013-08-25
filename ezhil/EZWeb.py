@@ -16,7 +16,7 @@ from SocketServer import ThreadingMixIn
 from os import unlink
 import cgi
 
-class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
+class BaseEzhilWeb(SimpleHTTPRequestHandler):
     def do_GET(self):        
         print(str(self.headers), "in thread =", threading.currentThread().getName())
 
@@ -27,7 +27,7 @@ class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
                 program = "\n".join(GETvars['prog'])
             elif GETvars.has_key('eval'):
                 program = 'printf("Welcome to Ezhil! You can type a program and see its output here!")\n'
-            else:                
+            else:
                 # delegate upward
                 SimpleHTTPRequestHandler.do_GET(self)
                 return
@@ -56,7 +56,7 @@ class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
         print( open(tmpf.name).read() )
         print( "*"*60 )
         
-        program_fmt += "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))]);
+        program_fmt += "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))])
         program_fmt += """</OL></font></TD></TR>\n</TABLE></TD><TD>"""
 		
         # run the interpreter in a sandbox and capture the output hopefully
@@ -97,14 +97,14 @@ class BaseEzhilOnTheWeb(SimpleHTTPRequestHandler):
         
         return op
 
-class EzhilOnTheWeb(ThreadingMixIn,BaseEzhilOnTheWeb):
+class EzhilWeb(ThreadingMixIn,BaseEzhilWeb):
     """ Add threading to handle requests in separate thread """
 
 HOST_NAME = "localhost"
 PORT_NUMBER = 8080
 
 if __name__ == "__main__":
-    httpd = BaseHTTPServer.HTTPServer((HOST_NAME, PORT_NUMBER), EzhilOnTheWeb)
+    httpd = BaseHTTPServer.HTTPServer((HOST_NAME, PORT_NUMBER), EzhilWeb)
     print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
     try:
         httpd.serve_forever()

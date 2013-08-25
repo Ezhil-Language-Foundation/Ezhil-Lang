@@ -73,7 +73,7 @@ class BlindBuiltins(BuiltinFunction):
         os, sys, curses.ascii, math etc. donot check arguments 
         here.    """
     def __init__(self,fn,name,dbg = False,aslist=False):
-        self.padic = -1;
+        self.padic = -1
         BuiltinFunction.__init__(self,fn,name,self.padic,dbg)
         self.use_adicity = False
         self.aslist = aslist
@@ -139,7 +139,7 @@ class Environment:
         return retval
 
     def set_retval( self, rval ):
-        self.ret_stack.append( rval );
+        self.ret_stack.append( rval )
         self.Return = True
         return
     
@@ -150,9 +150,9 @@ class Environment:
         return rval
 
     def clear_break_return_continue(self):
-        self.Break = False;
-        self.Return = False;
-        self.Continue = False;
+        self.Break = False
+        self.Return = False
+        self.Continue = False
 
     def clear_call(self):
         """ utility to cleanup the stacks etc.. """
