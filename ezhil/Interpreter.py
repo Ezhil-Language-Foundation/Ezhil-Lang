@@ -344,7 +344,11 @@ class Interpreter(DebugUtils):
         self.builtin_map['long']=BlindBuiltins(int,'long',self.debug)
         self.builtin_map['map']=BlindBuiltins(map,'map',self.debug)
         #self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
-        self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
+	try:
+	        self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
+	except NameError as ie:
+		if(self.debug): print("Name Error:",str(ie))
+	
         #self.builtin_map['min']=BlindBuiltins(min,'min',self.debug)
         self.builtin_map['next']=BlindBuiltins(next,'next',self.debug)
         self.builtin_map['object']=BlindBuiltins(object,'object',self.debug)
@@ -539,9 +543,9 @@ class Interpreter(DebugUtils):
         self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
         self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
         self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
-        self.builtin_map["viewitems"]= BuiltinFunction(dict.viewitems,"viewitems",1)
-        self.builtin_map["viewkeys"]= BuiltinFunction(dict.viewkeys,"viewkeys",1)
-        self.builtin_map["viewvalues"]= BuiltinFunction(dict.viewvalues,"viewvalues",1)
+        #self.builtin_map["viewitems"]= BuiltinFunction(dict.viewitems,"viewitems",1)
+        #self.builtin_map["viewkeys"]= BuiltinFunction(dict.viewkeys,"viewkeys",1)
+        #self.builtin_map["viewvalues"]= BuiltinFunction(dict.viewvalues,"viewvalues",1)
         
         return True
 

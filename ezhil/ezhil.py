@@ -46,6 +46,12 @@ class EzhilInterpreter( Interpreter ):
         for k,v in list(tamil_equiv.items()):
             self.builtin_map[k]=self.builtin_map[v];
         
+	try:
+		import EZTurtle
+	except ImportError as ie:
+		if ( self.debug ): print "ImportError => turtle "+str(ie)
+		return
+	
         # translations for turtle module
         turtle_map = { "முன்னாடி":"forward", "பின்னாடி" :"backward",
                        "வலது":"lt", "இடது":"rt",
