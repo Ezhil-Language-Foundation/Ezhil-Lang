@@ -39,9 +39,6 @@ from errors import RuntimeException, ParseException
 from runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils
 
-# turtle graphics
-from EZTurtle import EZTurtle
-
 ## builtins
 import random
 
@@ -451,24 +448,23 @@ class Interpreter(DebugUtils):
         self.builtin_map["min"]=BuiltinFunction(min,"min",2)
         #self.builtin_map["exit"]=BuiltinFunction(min,"exit",1)
 
-        # turtle functions
-        turtle_attrib = EZTurtle.functionAttributes();
-        for nargs,fcnName in list(turtle_attrib.items()):
-            for vv in fcnName:
-                turtlefcn = "turtle_"+vv;
-                if ( self.debug ): print(nargs, vv)
-                if ( nargs == -1 ):
-                    self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv),vv,self.debug)
-                else:
-                    self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
-        
-        #string functions
-#       for x in dir(string):
-#            if ( x.__str__()[0] != '_' ):
-#                name = x.__str__()
-#                print "self.builtin_map[\"%s\"] = BuiltinFunction(getattr(string,\"%s\"),\"%s\")"%(name,name,name)
-        
+        # turtle functions - optional - 
+	try:
+		# turtle graphics
+		from EZTurtle import EZTurtle
 
+		turtle_attrib = EZTurtle.functionAttributes();
+		for nargs,fcnName in list(turtle_attrib.items()):
+			for vv in fcnName:
+				turtlefcn = "turtle_"+vv;
+				if ( self.debug ): print(nargs, vv)
+				if ( nargs == -1 ):
+					self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv),vv,self.debug)
+				else:
+					self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
+	except ImportError as ie:
+		if ( self.debug ): print "Cannot Import EZTurtle module; ignoring for now"
+        
     	self.builtin_map["ascii_letters"] = BuiltinFunction(string.ascii_letters,"ascii_letters",0)
     	self.builtin_map["ascii_lowercase"] = BuiltinFunction(string.ascii_lowercase,"ascii_lowercase",0)
     	self.builtin_map["ascii_uppercase"] = BuiltinFunction(string.ascii_uppercase,"ascii_uppercase",0)

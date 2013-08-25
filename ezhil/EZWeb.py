@@ -4,7 +4,7 @@
 ## (C) 2013 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ## 
-## Interpreter for Ezhil language on the web
+## Ezhil language Interpreter via Web
 
 ## Ref: http://wiki.python.org/moin/BaseHttpServer
 
