@@ -1,7 +1,7 @@
 Ezhil-Lang
 ==========
 
-Ezhil-Lang : எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல்முறை கணிப்பொறி நிரல் ஏழுத உதவும் (Ezhil, is a fun Tamil programming language for K-12)
+Ezhil-Lang : எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல்முறை கணிப்பொறி நிரல் ஏழுத உதவும் (Ezhil, is a fun Tamil programming language for K-12)
 Ezhil is a procedural language with dynamic types,
 like Ruby/Python. Ezhil has a pascal-like syntax,
 with for-end, while-end, if-elseif-else-end statements,
