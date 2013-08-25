@@ -10,6 +10,7 @@
 
 import time
 
+import sys
 from random import choice
 
 # NB: this program imports Ezhil library from the installed version
@@ -54,7 +55,7 @@ class EzhilWeb():
     def error_qualifiers( progout ):
         """ filter program execution output for Ezhil interpreter or Python stack traces"""
         FAILED_STRINGS = ["Traceback (most recent call last)",
-                                   "Run-time error Cannot Find Identifier"]
+                          "Run-time error Cannot Find Identifier"]
         return any(filter( lambda x: progout.find(x) > -1, FAILED_STRINGS))
     
     def do_ezhil_execute(self,program):
@@ -63,7 +64,7 @@ class EzhilWeb():
         <TR><TD>
         <TABLE>
         <TR>
-        <TD><font color=\"white\"><OL>"""
+        <TD><font color=\"blue\"><OL>"""
         
         if ( self.debug ):
             print( "Source program <BR />" )
@@ -73,7 +74,8 @@ class EzhilWeb():
         
         program_fmt += "\n".join(["<li>%s</li>"%(prog_line)  for line_no,prog_line in enumerate(program.split('\n'))])
         program_fmt += """</OL></font></TD></TR>\n</TABLE></TD><TD>"""
-        
+        sys.stdout.flush()
+        sys.stderr.flush()
         # run the interpreter in a sandbox and capture the output hopefully
         try:
             failed = False
