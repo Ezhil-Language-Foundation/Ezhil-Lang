@@ -8,7 +8,6 @@
 
 ## Ref: http://wiki.python.org/moin/BaseHttpServer
 
-import tempfile
 import time
 from ezhil import EzhilFileExecuter, EzhilInterpExecuter
 from os import unlink
@@ -54,7 +53,11 @@ class EzhilWeb():
             failed = False
             obj = EzhilFileExecuter( file_input = [program], redirectop = False, TIMEOUT = 60*2 ) # 2 minutes
             progout = obj.get_output()
-            if obj.exitcode != 0 :
+            #SUCCESS_STRING = "<H2> Your program executed correctly! Congratulations. </H2>"
+            FAILED_STRING = "Traceback (most recent call last)"
+            if obj.exitcode != 0 and progout.find(FAILED_STRING) > -1:
+                print "Exitcode => ",obj.exitcode
+                print progout
                 op = "%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
             else:
                 op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
