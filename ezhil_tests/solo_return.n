@@ -1,0 +1,2 @@
+# return by itself outside a function is an error
+ பின்கொடு சில்லரை
