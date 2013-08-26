@@ -228,6 +228,8 @@ class EzhilParser(Parser):
             self.dbg_msg('enter->return: <expression>')
             ret_tok = self.dequeue()
             [l,c]=ret_tok.get_line_col();
+            if ( not self.parsing_function ):
+                raise ParseException( "return statement outside of function body "+str(ret_tok))
             rstmt = ReturnStmt(self.expr(),l,c,self.debug)
             self.dbg_msg("return statement parsed")
             return rstmt
@@ -569,6 +571,8 @@ class EzhilParser(Parser):
             list_start = self.dequeue();
             val = Array()
             while( True ):
+                if ( self.peek().kind == EzhilToken.RSQRBRACE ):
+                    break;
                 exprval = self.expr()
                 val.append( exprval  )
                 if self.debug : print(self.peek().__class__,self.peek())
