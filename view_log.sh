@@ -1,2 +1,2 @@
 #!/bin/bash -x
-sudo tail /var/log/httpd/access_log
+sudo tail $@ /var/log/httpd/access_log
