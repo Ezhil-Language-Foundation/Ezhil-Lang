@@ -33,7 +33,7 @@ palindromes.n ford2.n trials.n fornested.n loopupdate.n foreach.n foriter.n \
 dowhile.n select_case2.n magic_coins.n rich_poor.n peanut_candy.n logical_not.n \
 binary.n fibo.n floatpthole.n ifnested.n hailstone.n split_text.n lcmgcd.n \
 windoze.n convert2kelvin.n dict.n speedoflight.n tictok.n \
-change.n solo_return.n listmt.n
+change.n solo_return.n listmt.n predicates.n sexpr.n
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
     python ../ezhil/ezhil.py $i $1
@@ -86,6 +86,23 @@ cat failed.txt
 echo "***********Summary******************"
 echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 
+# number of failures is always limited, and when you add
+# failed tests you have to bump this up.
+
+NFAIL=7 #08/27/13 - this many
+TOTFAIL=`wc -l failed.txt | cut -d' ' -f1`
+#echo "assert( $TOTFAIL ==  $NFAIL )" | python
+echo "from sys import exit; exit( $TOTFAIL !=  $NFAIL )" | python
+if [ $?  -eq 0 ]
+then
+   echo "Expected failures"
+   exitcode=0 # success
+else
+   echo "Too few/many failures; some negative tests may have failed"
+   exitcode=255 #failed failures < $NFAIL
+fi
+
 # cleanup
 rm failed.txt
 rm success.txt
+exit $exitcode
