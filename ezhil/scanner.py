@@ -91,7 +91,10 @@ class Token:
     BITWISE_AND = 39
     BITWISE_OR = 40
     LOGICAL_NOT = 41
-    
+    LCURLBRACE = 42
+    RCURLBRACE = 43
+    COLON = 44
+
     UNARYOP = [LOGICAL_NOT]
     ADDSUB = [PLUS, MINUS]
     MULDIV = [PROD,DIV]
@@ -242,6 +245,12 @@ class Lex:
             tval=Lexeme(chunks,Token.LSQRBRACE)
         elif chunks == "]":
             tval=Lexeme(chunks,Token.RSQRBRACE)
+        elif chunks == "{":
+            tval=Lexeme(chunks,Token.LCURLBRACE)
+        elif chunks == "}":
+            tval=Lexeme(chunks,Token.RCURLBRACE)
+        elif chunks == ":":
+            tval=Lexeme(chunks,Token.COLON)
         elif chunks == "%":
             tval=Lexeme(chunks,Token.MOD)
         elif chunks == "^":

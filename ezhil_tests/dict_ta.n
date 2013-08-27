@@ -1,0 +1,24 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Natural dictionary representation like Python
+# for Ezhil language
+x = {"a":1,"b":3}
+y = {1:2,3:4,"foo":5}
+nested={"foo":"bar","car":{"who":"knows","what":"cat"}}
+mt={}
+எடு(nested,"car")
+
+z={1:2,3:4}
+z={1:2,3:4,5:z}
+x = z
+
+எடு(x,1)
+எடு(x,3)
+
+#எடு(x,5) #raise exception when you access on-existent keys
+
+#compose a dict within a list, and assign it
+y = [1,z] #this breaks
+
+a = {"composition":y}

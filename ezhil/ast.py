@@ -119,6 +119,20 @@ class Boolean(Number):
             return "True"
         return "False"
 
+class Dict(dict):
+    def __init__(self):
+        dict.__init__(self)
+
+    def base_evaluate(self,env):
+        rval = {}
+        for x,y in self.items():
+            rval.update({ x.evaluate( env ): y.evaluate( env )} )
+        return rval
+    
+    def evaluate(self,env):
+        """ how do you evaluate dictionaries? just return the favor """
+        return self.base_evaluate( env )
+
 ## FIXME: implement arrays
 class Array(list):
     def __init__(self):

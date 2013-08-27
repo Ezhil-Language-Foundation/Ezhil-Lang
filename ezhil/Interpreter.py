@@ -61,7 +61,7 @@ def ezhil_copyright():
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-	return "Ezhil language was created by Muthiah Annamalai in 2007-2008"
+	return "Ezhil language was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013"
 
 def ezhil_license():
 	return "Licensed under GPL Version 3"

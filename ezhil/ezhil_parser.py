@@ -31,7 +31,7 @@ from ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
- String, Array
+ String, Array, Dict
 
 ## use exprs language parser
 from ExprsParser import Parser
@@ -45,7 +45,6 @@ class EzhilParser(Parser):
         if ( not isinstance(lexer, EzhilLex) ):
                 raise RuntimeException("Cannot find Ezhil lexer class")
         Parser.__init__(self,lexer,fcn_map,builtin_map,dbg)
-
 
     def factory(lexer,fcn_map,builtin_map, dbg = False):
         """ Factory method """
@@ -557,7 +556,10 @@ class EzhilParser(Parser):
             elif ( ptok.kind ==  EzhilToken.LSQRBRACE ):
                 ## indexing a array type variable or ID
                 val=None
-                raise ParseException("arrays not implemented"+str(ptok));
+                raise ParseException("array indexing implemented"+str(ptok));
+            elif ( ptok.kind ==  EzhilToken.LCURLBRACE ):
+                val=None
+                raise ParseException("dictionary indexing implemented"+str(ptok));
         elif tok.kind ==  EzhilToken.STRING :
             str_tok = self.dequeue()
             [l,c] = str_tok.get_line_col()
@@ -566,6 +568,25 @@ class EzhilParser(Parser):
             unop = self.dequeue();
             [l, c] = unop.get_line_col()
             val=Expr(Number(0),unop,self.term(),l,c,self.debug);
+        elif tok.kind == EzhilToken.LCURLBRACE:
+            # creating a list/dictionary expression
+            dict_start = self.dequeue();
+            val = Dict()
+            while( True ):
+                if ( self.peek().kind == EzhilToken.RCURLBRACE ):
+                    break;
+                exprkey = self.expr()
+                tok_colon = self.match(EzhilToken.COLON)
+                exprval = self.expr()
+                val.update( {exprkey : exprval}  )
+                if self.debug : print(self.peek().__class__,self.peek())
+                if ( self.peek().kind == EzhilToken.RCURLBRACE ):
+                    break
+                else:
+                    assert( self.peek().kind == EzhilToken.COMMA)
+                    self.dequeue()
+            assert( self.peek().kind == EzhilToken.RCURLBRACE )
+            list_end = self.dequeue()
         elif tok.kind == EzhilToken.LSQRBRACE:
             # creating a list/array expression
             list_start = self.dequeue();

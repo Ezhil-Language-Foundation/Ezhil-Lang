@@ -5,9 +5,8 @@
 # CFG:
 # -- non terminals-- 
 # PROG =  [ SEXP ]
-# SEXP  = | NUM
-#            | BINOP TERM TERM
-#            | PROG
+# SEXP  = | BINOP TERM TERM
+#             | TERM
 # TERM = NUM 
 #            | PROG
 # -- terminals --

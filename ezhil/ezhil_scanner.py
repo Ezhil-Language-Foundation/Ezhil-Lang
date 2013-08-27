@@ -30,7 +30,7 @@ class EzhilLexeme(Lexeme):
 
 class EzhilToken( Token):
     """ add '@' token in extending the Token type """    
-    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%" ]
+    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%","{","}" ]
     Token.token_types.append("@")
     Token.ATRATEOF = len(Token.token_types)    
     
@@ -133,6 +133,12 @@ class EzhilLex ( Lex ) :
             tval=EzhilLexeme(chunks,EzhilToken.LSQRBRACE)
         elif chunks == "]":
             tval=EzhilLexeme(chunks,EzhilToken.RSQRBRACE)
+        elif chunks == "{":
+            tval=Lexeme(chunks,Token.LCURLBRACE)
+        elif chunks == "}":
+            tval=Lexeme(chunks,Token.RCURLBRACE)
+        elif chunks == ":":
+            tval=Lexeme(chunks,Token.COLON)
         elif chunks == "%":
             tval=EzhilLexeme(chunks,EzhilToken.MOD)
         elif chunks == "^":
