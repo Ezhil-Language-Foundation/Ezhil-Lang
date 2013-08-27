@@ -48,6 +48,19 @@ done
 cd ../
 
 echo "**************************************************"
+echo " Running Web tests"
+echo "**************************************************"
+
+# this test needs Ezhil to be installed via pip
+python ./web/ezhil_web.py 
+if [ $? -eq 0 ]
+then
+    echo "ezhil_web.py" >> success.txt
+else
+    echo "ezhil_web.py" >> failed.txt
+fi
+
+echo "**************************************************"
 echo " Running all the failure programs, that must fail."
 echo "**************************************************"
 sleep 2
