@@ -47,7 +47,7 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
- String
+ String, Boolean
 
 ## Parser
 from ExprsParser import Parser
@@ -71,6 +71,12 @@ def ezhil_getitem(x,idx):
     if ( isinstance(x,list) or hasattr( x, '__getitem__') ):
         return x.__getitem__(idx)
     return x[idx]
+
+def ezhil_islist( x ):
+    return Boolean(isinstance(x,list))
+
+def ezhil_isnumber( x ):
+    return Boolean(isinstance(x,Number) or type(x) in [int, float] )
 
 def ezhil_setitem(x,key,val):
     #print("dispatching ezhil setitem",type(x),type(idx),x,idx,x[idx])
@@ -408,6 +414,10 @@ class Interpreter(DebugUtils):
 	self.add_builtin("time",time.time,nargin=0,ta_alias="நேரம்")
 	self.add_builtin("ctime",time.ctime,nargin=1,ta_alias="cநேரம்")
 	self.add_builtin("clock",time.time,nargin=0)
+
+	# islist, isnumber predicates
+	self.add_builtin("islist",ezhil_islist,nargin=1,ta_alias="பட்டியலா")
+	self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias="எண்ணா")	
 	
         # get tamil letters
         self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias="தமிழ்_எழுத்துக்கள்")	

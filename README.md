@@ -1,4 +1,4 @@
-Ezhil-Lang
+Ezhil-Lang [![Build Status](https://travis-ci.org/arcturusannamalai/Ezhil-Lang.png)](https://travis-ci.org/arcturusannamalai/Ezhil-Lang)
 ==========
 
 Ezhil-Lang : எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல்முறை கணிப்பொறி நிரல் ஏழுத உதவும் (Ezhil, is a fun Tamil programming language for K-12)
