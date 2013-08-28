@@ -101,3 +101,9 @@ But to do all of this, you need to build and install the Python packages from th
 $ cd ezhil-lang/ && python setup.py build
 $ cd ezhil-lang/ && python setup.py install
 ```
+
+Learn more, and contribute 
+==========================
+'''Rosetta Code''', the wiki platform for sharing standard algorithms, in
+many programming languages, now hosts several algorithms in Ezhil.
+You can find all of Ezhil programs there via http://rosettacode.org/wiki/Category:Ezhil
