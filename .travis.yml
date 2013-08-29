@@ -4,7 +4,7 @@ python:
   - "2.7"
   - "2.6"
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install argparse
+install: 
 # command to run tests, e.g. python setup.py test
-script:  python setup.py install && ./test
+script:  python setup.py install && pip install argparse && ./test
 
