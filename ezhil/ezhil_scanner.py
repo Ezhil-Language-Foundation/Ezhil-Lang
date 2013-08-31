@@ -30,7 +30,7 @@ class EzhilLexeme(Lexeme):
 
 class EzhilToken( Token):
     """ add '@' token in extending the Token type """    
-    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%","{","}" ]
+    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%","{","}",";" ]
     Token.token_types.append("@")
     Token.ATRATEOF = len(Token.token_types)    
     
@@ -269,6 +269,10 @@ class EzhilLex ( Lex ) :
                     idx = idx + 1
                 self.get_lexeme(  c , tok_start_idx )
                 idx = idx + 1
+            elif c == ";":
+                # treat as newline
+                idx = idx + 1
+                continue
             else:
                 tok_start_idx = idx 
                 idx = idx + 1
