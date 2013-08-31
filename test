@@ -34,7 +34,7 @@ dowhile.n select_case2.n magic_coins.n rich_poor.n peanut_candy.n logical_not.n 
 binary.n fibo.n floatpthole.n ifnested.n hailstone.n split_text.n lcmgcd.n \
 windoze.n convert2kelvin.n dict.n speedoflight.n tictok.n \
 change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
-fruity.n optional.n
+fruity.n optional.n sine_qua_non.n
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
     python ../ezhil/ezhil.py $i $1

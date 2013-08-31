@@ -222,7 +222,7 @@ class Environment:
         if ( len(self.call_stack) >= self.max_recursion_depth ):
             raise RuntimeException( "Maximum recursion depth [ " + 
                                     str(self.max_recursion_depth) + 
-                                    " ]exceeded, stack overflow" )
+                                    " ] exceeded; stack overflow." )
         self.call_stack.append( fn )
     
     def return_function(self, fn):
