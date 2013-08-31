@@ -99,6 +99,8 @@ class EzhilLex ( Lex ) :
             tval=EzhilLexeme(chunks,EzhilToken.CONTINUE)
         elif chunks == "நிறுத்து":
             tval=EzhilLexeme(chunks,EzhilToken.BREAK)
+        elif chunks == "எழுத்துக்களாக்கு"
+             tval= EzhilLexeme(chunks,EzhilToken,TAMWORDARRAY)
         elif chunks == "@":
             tval=EzhilLexeme(chunks,EzhilToken.ATRATEOF)
         elif chunks == "=":

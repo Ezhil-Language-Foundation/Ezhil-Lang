@@ -239,7 +239,17 @@ class EzhilParser(Parser):
             [l,c]=print_tok.get_line_col();
             exprlist_val = self.exprlist();
             self.currently_parsing.pop()
-            return PrintStmt(exprlist_val,l,c,self.debug)        
+            return PrintStmt(exprlist_val,l,c,self.debug)
+    #Correction REQUIRED TO call get_tamil_letters_array
+        elif tok.kind ==EzhilToken.TAMWORDARRAY:
+            self.currently_parsing.append( ptok )
+            ## print <expression>
+            print_tok = self.dequeue()
+            [l,c]=print_tok.get_line_col();
+            exprlist_val = self.exprlist();
+            self.currently_parsing.pop()
+            #  get_tamil_letters_array
+            return PrintStmt(exprlist_val,l,c,self.debug)
         elif ( ptok.kind ==  EzhilToken.ATRATEOF or pass_in_ATexpr):
             ## @ <expression> {if | while | elseif}
             if not pass_in_ATexpr:
@@ -587,6 +597,7 @@ class EzhilParser(Parser):
                     self.dequeue()
             assert( self.peek().kind == EzhilToken.RCURLBRACE )
             list_end = self.dequeue()
+               
         elif tok.kind == EzhilToken.LSQRBRACE:
             # creating a list/array expression
             list_start = self.dequeue();
