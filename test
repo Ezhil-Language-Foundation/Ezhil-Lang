@@ -92,15 +92,15 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 
 NFAIL=7 #08/27/13 - this many
 TOTFAIL=`wc -l failed.txt | cut -d' ' -f1`
-#echo "assert( $TOTFAIL ==  $NFAIL )" | python
 echo "from sys import exit; exit( $TOTFAIL !=  $NFAIL )" | python
 if [ $?  -eq 0 ]
 then
    echo "Expected failures"
    exitcode=0 # success
 else
+   echo "Expecting $NFAIL failures, but found $TOTFAIL failures"
    echo "Too few/many failures; some negative tests may have failed"
-   exitcode=255 #failed failures < $NFAIL
+   exitcode=255 #failed failures != $NFAIL
 fi
 
 # cleanup
