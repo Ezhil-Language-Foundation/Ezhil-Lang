@@ -1,6 +1,9 @@
 def infini ( x )
-   print x
-   infini ( x - 1 )
+   if ( x == -500 )
+       print x
+       return -1
+   end
+   return infini ( x - 1 )
 end
 
 print infini  ( 5 )
