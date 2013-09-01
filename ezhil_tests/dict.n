@@ -12,3 +12,7 @@ z = dict()
 பதிப்பி "என் பெயர் "+எடு(z,"name")
 பதிப்பி "நான் வாழும் ஊர் "+எடு(z,"location")
 பதிப்பி "எனக்கு "+str(எடு(z,"age"))+" வயதாகிறது. "
+
+# array rvalue work has consequences for dictionary too
+ஜு={0:"fumஃபஂபல்"} #fumble in Tanglish
+பதிப்பி ஜு[0]
