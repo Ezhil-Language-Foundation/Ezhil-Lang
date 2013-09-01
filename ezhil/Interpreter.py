@@ -581,6 +581,7 @@ class Interpreter(DebugUtils):
     def evaluate_interactive(self,env = None):
         ## use a persistent environment for interactive interpreter
         if ( not env ):
+            if ( self.debug ): print "creating a new environment"
             env = Environment( self.call_stack, self.function_map, \
                                    self.builtin_map, self.debug )
             env.call_function("__toplevel__") ##some context
@@ -650,6 +651,7 @@ Type "help", "copyright", "credits" or "license" for more information."""
 		except Exception as excep:
 			print("Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,str(excep)))
                 ## clear tokens in lexer
+		if ( self.debug ): print self.env
 		self.lexer.tokens = list()
 		self.update_prompt()
 	
@@ -668,4 +670,3 @@ Type "help", "copyright", "credits" or "license" for more information."""
 			sys.exit( 0 )
 		
 		return
-	

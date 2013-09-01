@@ -554,9 +554,20 @@ class EzhilParser(Parser):
                 vallist = self.valuelist()
                 val=ExprCall( val, vallist, l, c, self.debug )
             elif ( ptok.kind ==  EzhilToken.LSQRBRACE ):
-                ## indexing a array type variable or ID
-                val=None
-                raise ParseException("array indexing implemented"+str(ptok));
+                ## indexing a array type variable or ID                
+                [l,c] = ptok.get_line_col()
+                ## replace with a call to __getitem__
+                exp = self.factor();
+                if ( hasattr(exp,'__getitem__') ):
+                    VL2 = ValueList([val,exp[0]],l,c,self.debug)
+                else:
+                    # when exp is a expression
+                    VL2 = ValueList([val,exp],l,c,self.debug)
+                val = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug)
+                for itr in range(1,len(exp)):
+                    VL2 = ValueList([val,exp[itr]],l,c,self.debug)
+                    val = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug)
+                #raise ParseException("array indexing implemented"+str(ptok));
             elif ( ptok.kind ==  EzhilToken.LCURLBRACE ):
                 val=None
                 raise ParseException("dictionary indexing implemented"+str(ptok));

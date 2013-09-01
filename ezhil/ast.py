@@ -299,6 +299,10 @@ class Expr(Stmt):
         self.binop=op
         self.next_expr=next_expr        
 
+    def __len__(sef):
+        """ expr is unit length always, as opposed to ExprList which is a n-len thing """
+        return 1
+    
     def __repr__(self):
         return "\n\t [Expr[ "+ str(self.term)+"] " + \
                Token.token_types[self.binop.kind] + \
@@ -385,8 +389,10 @@ class Expr(Stmt):
                 ## possibly leads to inf- recursion
                 ## tval = term.evaluate( env )
                 raise RuntimeException( " cannot normalize token; unknown clause,"+str(term)+", to evaluate @ "+obj.get_pos());
+#        elif isinstance(term,list) and len(term) == 1:
+#            tval = term[0]
         else:
-            tval = (term) #float cast not required.
+            tval = term #float cast not required.
         return tval
     
     def evaluate(self,env):

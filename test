@@ -34,7 +34,8 @@ dowhile.n select_case2.n magic_coins.n rich_poor.n peanut_candy.n logical_not.n 
 binary.n fibo.n floatpthole.n ifnested.n hailstone.n split_text.n lcmgcd.n \
 windoze.n convert2kelvin.n dict.n speedoflight.n tictok.n \
 change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
-fruity.n optional.n sine_qua_non.n armstrong.n
+fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
+கூட்டு.n array1.n
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
     python ../ezhil/ezhil.py $i $1
@@ -90,7 +91,7 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # number of failures is always limited, and when you add
 # failed tests you have to bump this up.
 
-NFAIL=7 #08/27/13 - this many
+NFAIL=6 #08/27/13 - this many
 TOTFAIL=`wc -l failed.txt | cut -d' ' -f1`
 echo "from sys import exit; exit( $TOTFAIL !=  $NFAIL )" | python
 if [ $?  -eq 0 ]
