@@ -205,8 +205,9 @@ def reverse_word( word ):
 def get_letters( word ):
         """ splits the word into a character-list of tamil/english
         characters present in the stream """
-	#word = unicode(word) #.encode('utf-8')
-	prev = u''
+            #word = unicode(word) #.encode('utf-8')
+        prev = u''
+        word=word.decode('utf-8')
 	ta_letters = []
         for c in word:
 		if c in uyir_letters or c == ayudha_letter:
@@ -230,5 +231,6 @@ def get_letters( word ):
 				assert False #unknown/expected state
 	if prev != u'': #if prev is not null it is $c
 		ta_letters.append( prev )
-	
+#print ta_letters
+#print u"".join(ta_letters)
 	return ta_letters
