@@ -1,7 +1,8 @@
-﻿## This Python file uses the following encoding: utf-8
+## This Python file uses the following encoding: utf-8
 ##
 ## (C) 2007, 2008, 2013 Muthiah Annamalai <gnumuthu@user.sf.net>
 ## Licensed under GPL Version 3
+## Error Correction:msathia 2013<msathia@gmail.com>
 
 from EzhilUtils import *
 
