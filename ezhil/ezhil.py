@@ -14,6 +14,9 @@ from errors import RuntimeException, ParseException
 from multiprocessing import Process, current_process
 from time import sleep,clock
 
+#import codecs, sys, re
+#sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+
 class EzhilInterpreter( Interpreter ):
     def __init__(self, lexer, debug = False ):
         """ create a Ezhil Interpeter and initialize runtime builtins etc.. in a RAII fashion,
