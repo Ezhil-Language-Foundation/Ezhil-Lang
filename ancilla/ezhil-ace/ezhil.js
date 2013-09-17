@@ -1,3 +1,7 @@
+/*
+(C) 2013 Ezhil Language Project
+(C) 2013 Sridhar Ganesan
+*/
 define(function(require, exports, module) {
 "use strict";
 var oop = require("../lib/oop");
