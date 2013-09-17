@@ -8,7 +8,7 @@ var EzhilHighlightRules = function() {
 	
    
     var keywords = (
-        "\u0B86\u0BA9\u0BBE\u0BB2\u0BCD|\u0B8F\u0BA4\u0BC7\u0BA9\u0BBF\u0BB2\u0BCD|\u0BA4\u0BC7\u0BB0\u0BCD\u0BB5\u0BC1|\u0BAA\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BBF|\u0BA4\u0BC7\u0BB0\u0BCD\u0BA8\u0BCD\u0BA4\u0BC6\u0B9F\u0BC1|\u0B87\u0BB2\u0BCD\u0BB2\u0BC8\u0B86\u0BA9\u0BBE\u0BB2\u0BCD|\u0B86\u0B95;|&#x0B87\u0BB2\u0BCD\u0BB2\u0BC8|\u0BB5\u0BB0\u0BC8|\u0B9A\u0BC6\u0BAF\u0BCD|\u0BAA\u0BBF\u0BA9\u0BCD\u0B95\u0BCA\u0B9F\u0BC1|\u0BAE\u0BC1\u0B9F\u0BBF|\u0BA8\u0BBF\u0BB0\u0BB2\u0BCD\u0BAA\u0BBE\u0B95\u0BAE\u0BCD|\u0BA4\u0BCA\u0B9F\u0BB0\u0BCD|\u0BAE\u0BC1\u0B9F\u0BBF\u0BAF\u0BC7\u0BA9\u0BBF\u0BB2\u0BCD|\u0B87\u0BB2\u0BCD|\u0B92\u0BB5\u0BCD\u0BB5\u0BCA\u0BA9\u0BCD\u0BB1\u0BBE\u0B95|\u0BA8\u0BBF\u0BB1\u0BC1\u0BA4\u0BCD\u0BA4\u0BC1]"
+        "(\u0B86\u0BA9\u0BBE\u0BB2\u0BCD)|(?:\u0B8F\u0BA4\u0BC7\u0BA9\u0BBF\u0BB2\u0BCD)|(?:\u0BA4\u0BC7\u0BB0\u0BCD\u0BB5\u0BC1)|(?:\u0BAA\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BBF)|(?:\u0BA4\u0BC7\u0BB0\u0BCD\u0BA8\u0BCD\u0BA4\u0BC6\u0B9F\u0BC1)|(?:\u0B87\u0BB2\u0BCD\u0BB2\u0BC8\u0B86\u0BA9\u0BBE\u0BB2\u0BCD)|(?:\u0B86\u0B95;)|(?:&#x0B87\u0BB2\u0BCD\u0BB2\u0BC8)|(?:\u0BB5\u0BB0\u0BC8)|(?:\u0B9A\u0BC6\u0BAF\u0BCD)|(?:\u0BAA\u0BBF\u0BA9\u0BCD\u0B95\u0BCA\u0B9F\u0BC1)|(?:\u0BAE\u0BC1\u0B9F\u0BBF)|(?:\u0BA8\u0BBF\u0BB0\u0BB2\u0BCD\u0BAA\u0BBE\u0B95\u0BAE\u0BCD)|(?:\u0BA4\u0BCA\u0B9F\u0BB0\u0BCD)|(?:\u0BAE\u0BC1\u0B9F\u0BBF\u0BAF\u0BC7\u0BA9\u0BBF\u0BB2\u0BCD)|(?:\u0B87\u0BB2\u0BCD)|(?:\u0B92\u0BB5\u0BCD\u0BB5\u0BCA\u0BA9\u0BCD\u0BB1\u0BBE\u0B95)|(?:\u0BA8\u0BBF\u0BB1\u0BC1\u0BA4\u0BCD\u0BA4\u0BC1))"
     );
 
     var builtinConstants = (
@@ -31,7 +31,7 @@ var EzhilHighlightRules = function() {
         //"invalid.illegal": futureReserved,
         "constant.language": builtinConstants,
         "keyword": keywords
-    }, "identifier");
+    }, "identifiers");
 	
 	var strPre = "(?:r|u|ur|R|U|UR|Ur|uR)?";
 
@@ -48,7 +48,7 @@ var EzhilHighlightRules = function() {
     var exponentFloat = "(?:(?:" + pointFloat + "|" +  intPart + ")" + exponent + ")";
     var floatNumber = "(?:" + exponentFloat + "|" + pointFloat + ")";
 
-    var stringEscape =  "\\\\(x[0-9A-Fa-f]{2}|[0-7]{3}|[\\\\abfnrtv'\"]|U[0-9A-Fa-f]{8}|u[0-9A-Fa-f]{4})";
+    var stringEscape =  "";
 	
    this.$rules = {
         "start" : [ {
@@ -83,9 +83,22 @@ var EzhilHighlightRules = function() {
             token : "constant.numeric", // integer
             regex : integer + "\\b"
         }, {
-            token : keywordMapper,
-            regex : "[a-zA-Z[\u0B80-\u0BFF]_$][a-zA-Z0-9[\u0B80-\u0BFF]_$]*\\b"
-        }, {
+		    token : "support.function",
+			regex : "abs|acos|len|assert|seed|exit|randint|choice|random|range"
+		}, {
+		    token : "storage.type",
+			regex : "float|int|string"
+		}, {
+		    token : "constant.language",
+			regex :  "None|True|False"
+		}, {
+		    token : "keyword",
+			regex :  "((?:\u0B86\u0BA9\u0BBE\u0BB2\u0BCD)|(?:\u0B8F\u0BA4\u0BC7\u0BA9\u0BBF\u0BB2\u0BCD)|(?:\u0BA4\u0BC7\u0BB0\u0BCD\u0BB5\u0BC1)|(?:\u0BAA\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BBF)|(?:\u0BA4\u0BC7\u0BB0\u0BCD\u0BA8\u0BCD\u0BA4\u0BC6\u0B9F\u0BC1)|(?:\u0B87\u0BB2\u0BCD\u0BB2\u0BC8\u0B86\u0BA9\u0BBE\u0BB2\u0BCD)|(?:\u0B86\u0B95;)|(?:&#x0B87\u0BB2\u0BCD\u0BB2\u0BC8)|(?:\u0BB5\u0BB0\u0BC8)|(?:\u0B9A\u0BC6\u0BAF\u0BCD)|(?:\u0BAA\u0BBF\u0BA9\u0BCD\u0B95\u0BCA\u0B9F\u0BC1)|(?:\u0BAE\u0BC1\u0B9F\u0BBF)|(?:\u0BA8\u0BBF\u0BB0\u0BB2\u0BCD\u0BAA\u0BBE\u0B95\u0BAE\u0BCD)|(?:\u0BA4\u0BCA\u0B9F\u0BB0\u0BCD)|(?:\u0BAE\u0BC1\u0B9F\u0BBF\u0BAF\u0BC7\u0BA9\u0BBF\u0BB2\u0BCD)|(?:\u0B87\u0BB2\u0BCD)|(?:\u0B92\u0BB5\u0BCD\u0BB5\u0BCA\u0BA9\u0BCD\u0BB1\u0BBE\u0B95)|(?:\u0BA8\u0BBF\u0BB1\u0BC1\u0BA4\u0BCD\u0BA4\u0BC1))"
+		}, 
+		{
+		    token : "identifier",
+			regex : "([\u0B80-\u0BFF\u0041-\u005A\u0061-\u007A\u0030-\u0039\u005F-\u005F])+"
+		}, {
             token : "keyword.operator",
             regex : "\\+|\\-|\\*|\\*\\*|\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|=|@"
         }, {
