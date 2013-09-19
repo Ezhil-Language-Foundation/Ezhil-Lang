@@ -33,7 +33,7 @@ class EzhilWeb():
         try:
             program = self.form.getvalue('prog')
         except Exception as e:
-            print "could not load the program from GET method"
+            print "could not load the program from GET method, exception "+str(e)
         finally:
             if ( not program ):
                 program = "printf(\"You can write Tamil programs from your browser!\")"
@@ -61,7 +61,15 @@ class EzhilWeb():
     
     def do_ezhil_execute(self,program):
         # execute the Ezhil Interpreter with string @program
-        print("<html> <head> <title>Ezhil interpreter</title> </head><body> ")
+        print("<html> <head> <title>Ezhil interpreter</title>")
+        print("""<script src="./Blob.js"></script>
+<script src="./FileSaver.js"></script>
+<script lang="text/javascript">
+  function download(filename, content) {
+    saveAs( new Blob([content],{type: "application/x-ezhil;charset=utf-8"}), filename);
+  }
+</script>""")
+        print("</head><body> ")
         print("<!-- ") #suppress exec stdout
         close_comment = False #and useful to debug a live site
         program_fmt = """<TABLE>
@@ -101,7 +109,9 @@ class EzhilWeb():
             else:
                 failed = False
                 self.img_outcome = "<IMG width='64' SRC='../icons/%s' alt='success' />"%EzhilWeb.get_image('success')
-                op = "%s <B>%s Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,self.img_outcome,progout)
+                op = "%s <B>%s Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR>"%(program_fmt,self.img_outcome,progout)
+                op = op + saveYourCode(program)
+                op = op + "</TABLE>"
         except Exception as e:
             if( not close_comment ):
                 print("-->")
@@ -110,7 +120,9 @@ class EzhilWeb():
                 print str(e)
             failed = True
             self.img_outcome = "<IMG SRC='../icons/%s' width='64' alt='failure' />"%EzhilWeb.get_image('failure')
-            op = "%s <B>%s FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,self.img_outcome,str(e)) 
+            op = "%s <B>%s FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR>"%(program_fmt,self.img_outcome,str(e)) 
+            op = op + saveYourCode(program)
+            op = op + "</TABLE>"
         if ( self.debug ):
             print "Output file"
             print obj.get_output()
@@ -128,6 +140,11 @@ class EzhilWeb():
         print("</body></html>\n")
  
         return op
+
+def saveYourCode( program ):
+    tprefix = time.ctime().replace(' ','_').replace(':','_')
+    return """<TR><TD>
+<a  href="javascript:download('"""+"ezhil_program_"+tprefix+".n',"+program+""")">உங்கள் நிரலை சேமிக்க (save your code)</a></TD></TR>"""
 
 if __name__ == '__main__':
     print("Content-Type: text/html")    # HTML is following
