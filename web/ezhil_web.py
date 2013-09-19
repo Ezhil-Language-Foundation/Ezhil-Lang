@@ -144,7 +144,7 @@ class EzhilWeb():
 def saveYourCode( program ):
     tprefix = time.ctime().replace(' ','_').replace(':','_')
     return """<TR><TD>
-<a  href="javascript:download('"""+"ezhil_program_"+tprefix+".n',"+program.replace('\n','\\n').replace('"','\"')+""")">உங்கள் நிரலை சேமிக்க (save your code)</a></TD></TR>"""
+<a  href="javascript:download('"""+"ezhil_program_"+tprefix+".n','"+program.replace('\n','\\n').replace('"','\"')+"""')">உங்கள் நிரலை சேமிக்க (save your code)</a></TD></TR>"""
 
 if __name__ == '__main__':
     print("Content-Type: text/html")    # HTML is following
