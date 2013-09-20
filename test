@@ -35,7 +35,7 @@ binary.n fibo.n floatpthole.n ifnested.n hailstone.n split_text.n lcmgcd.n \
 windoze.n convert2kelvin.n dict.n speedoflight.n tictok.n \
 change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
 fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
-கூட்டு.n array1.n tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n\
+கூட்டு.n array1.n tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
 max_wo_compare.n
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
