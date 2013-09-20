@@ -1,6 +1,32 @@
 ;;Copyright (C) 2008-2013 Muthiah Annamalai
+;;parts of code inspired by GNU Emacs file octave-mod.el
 
-(setq ezhil-keywords '("ஆனால்" "ஏதேனில்" "தேர்வு" "பதிப்பி" "தேர்ந்தெடு" "இல்லைஆனால்" "ஆக" "இல்லை" "வரை" "செய்" "பின்கொடு" "முடியேனில்" "முடி" "நிரல்பாகம்" "தொடர்" "நிறுத்து" "இல்" "ஒவ்வொன்றாக") )
+;; Copyright (C) 1997, 2001, 2002, 2003, 2004, 2005, 2006, 2007
+;; Free Software Foundation, Inc.
+
+;; Author: Kurt Hornik <Kurt.Hornik@wu-wien.ac.at>
+;; Author: John Eaton <jwe@bevo.che.wisc.edu>
+;; Maintainer: Kurt Hornik <Kurt.Hornik@wu-wien.ac.at>
+;; Keywords: languages
+
+;; This file is part of GNU Emacs.
+
+;; GNU Emacs is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+(setq ezhil-keywords '("ஆனால்" "ஏதேனில்" "தேர்வு" "பதிப்பி" "தேர்ந்தெடு" "இல்லைஆனால்" "ஆக" "இல்லை" "வரை" "செய்" "பின்கொடு" "முடியேனில்" "முடி" "நிரல்பாகம்" "தொடர்" "நிறுத்து" "இல்" "ஒவ்வொன்றாக"))
+
+(defvar ezhil-begin-keywords
+  '( "ஆக"  "ஒவ்வொன்றாக" "ஆனால்" "வரை" "செய்" ))
+
+(defvar ezhil-else-keywords
+  '("ஏதேனில்" "தேர்வு" "இல்லைஆனால்" "இல்லை"))
+
+(defvar ezhil-end-keywords
+  '("முடி" "முடியேனில்"))
+
 (setq ezhil-types '("float" "int" "string"))
 (setq ezhil-constants '("None" "True" "False"))
 (setq ezhil-events '())
@@ -25,7 +51,7 @@
 (setq ezhil-font-lock-keywords
   `(
     (,ezhil-type-regexp . font-lock-type-face)
-    (,ezhil-constant-regexp . font-lock-constant-face)
+    (,ezhil-constant-regexp . font-lock-constant-face) 
     (,ezhil-event-regexp . font-lock-builtin-face)
     (,ezhil-functions-regexp . font-lock-function-name-face)
     (,ezhil-keywords-regexp . font-lock-keyword-face)
