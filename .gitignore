@@ -4,7 +4,8 @@ MANIFEST
 *~
 ./website/lib
 ./website/lib/*
-./web/ICONS
+./web/ICONS/
+./web/ICONS/*
 ./Notes
 ./Notes/*
 ezhil_tests/names.txt
