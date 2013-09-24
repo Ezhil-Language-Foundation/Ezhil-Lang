@@ -2,6 +2,9 @@ post_commit_ezhil.py
 MANIFEST
 *.py[cod]
 *~
+./website/lib
+./website/lib/*
+./web/ICONS
 ./Notes
 ./Notes/*
 ezhil_tests/names.txt
