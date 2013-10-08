@@ -33,6 +33,9 @@ class EzhilInterpreter( Interpreter ):
         #input statements, length constructs
         tamil_equiv = {"சரம்_இடமாற்று":"replace", "சரம்_கண்டுபிடி":"find","நீளம்":"len",
                        "சரம்_உள்ளீடு":"raw_input", "உள்ளீடு" : "input" }
+
+        # printf - as per survey request
+        tamil_equiv.update( { "அச்சிடு":"printf" } )        
         
         #list operators
         tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
@@ -41,7 +44,7 @@ class EzhilInterpreter( Interpreter ):
         
         #generic get/set ops for list/dict
         tamil_equiv.update( { "எடு":"__getitem__", "வை":"__setitem__"} )
-        
+
         #file operators
         tamil_equiv.update({"கோப்பை_திற":"file_open", "கோப்பை_மூடு":"file_close","கோப்பை_படி":"file_read",
                             "கோப்பை_எழுது":"file_write","கோப்பை_எழுது_வரிகள்":"file_writelines","கோப்பை_படி_வரிகள்":"file_readlines"})
