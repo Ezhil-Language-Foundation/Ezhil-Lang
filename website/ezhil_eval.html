@@ -80,7 +80,9 @@
          if ( program != null && program != "") {
              alert("I remember you, and your program!")
              alert(program);
-             $("editor").html(program)
+             if ( aceEditor != null ) {
+             	aceEditor.setValue(program);
+             }
          }
          else {
              alert("Cookie not found, or no cookie set yet!")
@@ -88,11 +90,11 @@
      }
 
     //evaluate on-load - check cookie and populate the editor field if we were here before.
-    $(checkEzhilCookie);
+    require(["ace/ace"],function(){ checkEzhilCookie(); });
 </script>
 
 <script>
-  var aceEditor;
+  var aceEditor = null;
   
   require.config({
 	   baseUrl: "http://54.214.234.20/",
@@ -109,8 +111,12 @@
 	});	   
 
     function evaluateProg() {  
-        /* Save program as cookie */
-        setEzhilCookie("program",$("editor").html);
+        if ( aceEditor == null ) {
+           alert("editor could not be loaded! cannot evaluate program");
+           return null;
+        }
+        /* Save program as cookie */        
+        setEzhilCookie("program",aceEditor.getValue());
         
         $('<form>', {
             "id": "EvaluageProgramForm",
