@@ -33,6 +33,9 @@
     <script language="javascript" type="text/javascript" >      
       /* (C) 2013 Muthiah Annamalai */
 
+
+     var aceEditor = null;
+
      function appendText( text_elements  ) {
 	require(["ace/ace"], function(ace) {
 		var editor = ace.edit("editor");
@@ -71,43 +74,39 @@
      {
         var expiry_date = new Date();
         expiry_date.setDate(expiry_date.getDate() + 7); /* 7-day expiry */      
-        document.cookie = name + "=" + escape(program) +  "; expires="+expiry_date.toUTCString());
+        document.cookie = name + "=" +escape(program)+"; expires="+expiry_date.toUTCString();
      }
 
      function checkEzhilCookie()
      {
          var program = getEzhilCookie("program");
          if ( program != null && program != "") {
-             alert("I remember you, and your program!")
-             alert(program);
+             /** alert("I remember you, and your program!")
+                 alert(program); */
              if ( aceEditor != null ) {
              	aceEditor.setValue(program);
              }
          }
          else {
-             alert("Cookie not found, or no cookie set yet!")
+             /**  alert("Cookie not found, or no cookie set yet!"); */
          }
      }
 
-    //evaluate on-load - check cookie and populate the editor field if we were here before.
-    require(["ace/ace"],function(){ checkEzhilCookie(); });
-</script>
-
-<script>
-  var aceEditor = null;
-  
   require.config({
 	   baseUrl: "http://54.214.234.20/",
 	   paths: {
 	      ace: "lib/ace"
 	   }
 	});
+
 	
+       //evaluate on-load - check cookie and populate the editor field if we were here before.
 	require(["ace/ace"], function(ace) {
 		var editor = ace.edit("editor");
 		aceEditor = editor;
 		editor.setTheme("ace/theme/xcode");
 		editor.getSession().setMode("ace/mode/ezhil");
+		checkEzhilCookie();
 	});	   
 
     function evaluateProg() {  
