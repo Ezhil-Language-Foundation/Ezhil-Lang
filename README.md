@@ -1,6 +1,9 @@
 Ezhil-Lang [![Build Status](https://travis-ci.org/arcturusannamalai/Ezhil-Lang.png)](https://travis-ci.org/arcturusannamalai/Ezhil-Lang)
 ==========
 
+Introduction
+============
+
 Ezhil-Lang : எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல்முறை கணிப்பொறி நிரல் ஏழுத உதவும் (Ezhil, is a fun Tamil programming language for K-12)
 Ezhil is a procedural language with dynamic types,
 like Ruby/Python. Ezhil has a pascal-like syntax,
@@ -17,6 +20,18 @@ https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip
 Interesting features include support for recursion,
 and an interactive interpreter. Ezhil supports a Turtle module
 for simple on-screen graphics, similar to LOGO language from 1960s.
+
+Motivations
+===========
+(English) ஆங்கிலம் அறியாதவர்கள் கணிப்பொறியை இயக்க உதவும் 
+எழில் உங்களுக்கு முதன்முறையாக நிரல்கள் எழுத உதவும் 
+திறமூல (Open Source) மென்பொருள். 
+(Free) இலவசமாக பயன்படுத்தலாம் 
+
+Write Code in Tamil!
+English language is not a pre-requisite
+Write your first program in Ezhil
+Free as in Open source
 
 REFERENCES
 ==========
