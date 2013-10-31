@@ -16,6 +16,9 @@
 ;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
+;; Syntax highlighting for Ezhil programming language; http://ezhillang.org/
+;; (C) 2013, Muthiah Annamalai
+
 (setq ezhil-keywords '("ஆனால்" "ஏதேனில்" "தேர்வு" "பதிப்பி" "தேர்ந்தெடு" "இல்லைஆனால்" "ஆக" "இல்லை" "வரை" "செய்" "பின்கொடு" "முடியேனில்" "முடி" "நிரல்பாகம்" "தொடர்" "நிறுத்து" "இல்" "ஒவ்வொன்றாக"))
 
 (defvar ezhil-begin-keywords
@@ -59,6 +62,21 @@
     ;; otherwise the keyword “state” in the function “state_entry”
     ;; would be highlighted.
 ))
+
+
+(defvar comment-char ?#
+  "Character to start an Ezhil comment.")
+
+(defvar ezhil-comment-char ?#
+  "Character to start an Ezhil comment.")
+
+;;; Comments
+(defun ezhil-comment-region (beg end &optional arg)
+  "Comment or uncomment each line in the region as Ezhil code.
+See `comment-region'."
+  (interactive "r\nP")
+  (let ((comment-start (char-to-string ezhil-comment-char)))
+    (comment-region beg end arg)))
 
 ;; syntax table
 (defvar ezhil-syntax-table nil "Syntax table for `ezhil-mode'.")
