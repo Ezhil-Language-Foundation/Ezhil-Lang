@@ -6,5 +6,4 @@ python:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
 # command to run tests, e.g. python setup.py test
-script:  python setup.py install && pip install argparse && ./test
-
+script:  python setup.py install && pip install argparse && ./test && ./unittest
