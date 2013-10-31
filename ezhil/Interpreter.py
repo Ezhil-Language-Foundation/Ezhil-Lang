@@ -45,12 +45,15 @@ from ExprsParser import Parser
 from transform import Visitor
 import collections
 
+def ezhil_version():
+        return 0.71
+
 def ezhil_copyright():
 	return "(C) 2007-2013 Muthiah Annamalai"
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-	return "Ezhil language was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013"
+	return "Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013."%(ezhil_version())
 
 def ezhil_license():
 	return "Licensed under GPL Version 3"
@@ -312,8 +315,12 @@ class Interpreter(DebugUtils):
         self.builtin_map['coerce']=BlindBuiltins(coerce,'coerce',self.debug)
         self.builtin_map['compile']=BlindBuiltins(compile,'compile',self.debug)
         self.builtin_map['complex']=BlindBuiltins(complex,'complex',self.debug)
+
+        # special ezhil commands
         self.builtin_map['copyright']=BlindBuiltins(ezhil_copyright,'copyright',self.debug)
+        self.builtin_map['version']=BlindBuiltins(ezhil_version,'version',self.debug) 
         self.builtin_map['credits']=BlindBuiltins(ezhil_credits,'credits',self.debug)
+        
         self.builtin_map['delattr']=BlindBuiltins(delattr,'delattr',self.debug)
         self.builtin_map['dict']=BlindBuiltins(dict,'dict',self.debug)
         self.builtin_map['dir']=BlindBuiltins(dir,'dir',self.debug)
@@ -595,8 +602,8 @@ class REPL(Cmd):
 		Cmd.__init__(self)
 		## ala-Python like
 		self.banner = """எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
-Ezhil : A Tamil Programming Language, (C) 2007-2013
-Type "help", "copyright", "credits" or "license" for more information."""
+Ezhil : A Tamil Programming Language - version %g, (C) 2007-2013
+Type "help", "copyright", "credits" or "license" for more information."""%ezhil_version()
 		
 		self.lang = lang
 		self.lexer = lexer
