@@ -6,7 +6,7 @@
 ## This module is the scanner for the exprs language.
 ## It contains classes Token, Lexeme, and  Lex.
 ## 
-from EzhilUtils import *
+
 from errors import ScannerException
 import re
 
@@ -265,14 +265,14 @@ class Lex:
             tval=Lexeme(chunks,Token.BITWISE_OR)
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
             tval = Lexeme( chunks[1:-1], Token.STRING )
-        elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
+        elif chunks[0].isdigit() or chunks[0]=='+' or chunks[0]=='-':
             # deduce a float or integer
             if ( chunks.find('.') >= 0 or chunks.find('e') >= 0 or chunks.find('E') >= 0 ):
                 tval=Lexeme(float(chunks),Token.NUMBER)
             else:
                 tval=Lexeme(int(chunks),Token.NUMBER)
             
-        elif isalpha(chunks[0]):
+        elif chunks[0].isalpha():
             tval=Lexeme(chunks,Token.ID)
         else:
             raise ScannerException("Lexical error: " + str(chunks) + " at Line , Col "+str(self.get_line_col( pos )) +" in file "+self.fname )
@@ -326,7 +326,7 @@ class Lex:
                 ## single line skip comments like Python/Octave
                 while ( idx < len( data ) and data[idx] !='\n' ):
                     idx = idx + 1                    
-            elif ( isdigit(c) or c == '+' or c == '-'  ):
+            elif ( c.isdigit() or c == '+' or c == '-'  ):
                 num = c
                 tok_start_idx = idx
                 idx = idx + 1
@@ -334,11 +334,11 @@ class Lex:
                 ## instead. also may throw an error if we exceed 
                 ## buffer-length.                
                 if ( c in ['+','-']  and ( idx < len( data ) ) 
-                     and not isdigit(data[idx]) ):
+                     and not data[idx].isdigit() ):
                     self.get_lexeme( c , idx )
                     continue
                 while ( ( idx < len( data) )
-                            and ( isdigit(data[idx]) or data[idx] == '.') ):
+                            and ( data[idx].isdigit() or data[idx] == '.') ):
                     num = num + data[idx]
                     idx = idx + 1
                 self.get_lexeme( num , tok_start_idx  )
@@ -355,13 +355,13 @@ class Lex:
                 s = s+data[idx]
                 idx  = idx + 1
                 self.get_lexeme( s , tok_start_idx )
-            elif ( isalpha( c ) ):
+            elif ( c.isalpha() ):
                 tok_start_idx = idx 
                 s = c
                 idx = idx + 1
                 while ( ( idx < len( data ) )
-                            and ( isalpha(data[idx]) or isdigit( data[idx] )
-                                  or data[idx] in [ "\"", "_" ] ) ):
+                            and ( data[idx].isalpha() or data[idx].isdigit() )
+                                  or data[idx] in [ "\"", "_" ] ):
                     s = s + data[idx]
                     idx = idx + 1
                 self.get_lexeme( s , tok_start_idx )

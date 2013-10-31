@@ -2,19 +2,8 @@
 ## (C) 2007, 2008, 2013 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
-## 1/25/08: move the scanner outside to another module.
-##          REPL-interpreter
-## 1/24/08: add Lexer line,col,file information.
-## 1/22/08: fix division operator, and function eval. add while.
-## 1/21/08: add newer operators.
-## 1/20/08: new lexer, and fix some evaluation errors.
-## 1/16/08: add bulitin functions. make space for conditionals.
-## 1/15/08: add simple function support.
-## 1/08/08: add visitor pattern to AST Objects.
 ## 
-## FEATURES: add array / list syntax.
 ## TODO: extract scanner and AST members into a module for sharing.
-## FIXME: grammar for expression maybe broke. precedence.
 import argparse
 from math import *
 import copy
@@ -85,6 +74,11 @@ def ezhil_setitem(x,key,val):
     else:    
         x[key]=val
     return
+
+def ezhil_load(filename):
+    # load the file into the interpreter
+    # we have a symbol table and use it
+    pass
 
 # program name
 def get_prog_name(lang):

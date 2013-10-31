@@ -4,8 +4,6 @@
 ## Licensed under GPL Version 3
 ## Error Correction:msathia 2013<msathia@gmail.com>
 
-from EzhilUtils import *
-
 ## constants
 TA_ACCENT_LEN = 13 #12 + 1
 TA_AYUDHA_LEN = 1
@@ -164,7 +162,7 @@ def tamil( idx ):
 def istamil_prefix( word ):
         """ check if the given word has a tamil prefix. Returns
         either a True/False flag """
-        if ( isalpha(word) ): return False
+        if ( word.isalpha() ): return False
         for letters in tamil_letters:
                 if ( word.find(letters) == 0 ):
                         return True
@@ -180,7 +178,7 @@ def has_tamil( word ):
 def istamil ( tchar ):
         """ check if the letter tchar is prefix of 
         any of tamil-letter. It suggests we have a tamil identifier"""
-        if ( isalpha(tchar) ): return False
+        if ( tchar.isalpha() ): return False
         for letters in tamil_letters:
                 if ( letters.find( tchar ) == 0 ):
                         return True
@@ -189,11 +187,7 @@ def istamil ( tchar ):
 def istamil_alnum( tchar ):
         """ check if the character is alphanumeric, or tamil.
         This saves time from running through istamil() check. """
-        if ( isalnum( tchar ) ):
-                return True
-        if ( istamil( tchar ) ):
-                return True
-        return False
+        return ( tchar.isalnum( ) or tchar.istamil( ) )
 
 ## reverse a Tamil word according to letters not unicode-points
 def reverse_word( word ):

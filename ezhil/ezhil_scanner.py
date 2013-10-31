@@ -8,7 +8,6 @@
 ## It contains classes EzhilLex.
 ## 
 
-from EzhilUtils import *
 import re
 from scanner import Token, Lexeme, Lex
 from tamil import has_tamil, istamil, istamil_alnum
@@ -155,14 +154,14 @@ class EzhilLex ( Lex ) :
             tval=Lexeme(chunks,EzhilToken.LOGICAL_NOT)
         elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
             tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )
-        elif isdigit(chunks[0]) or chunks[0]=='+' or chunks[0]=='-':
+        elif chunks[0].isdigit() or chunks[0]=='+' or chunks[0]=='-':
             #tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             # deduce a float or integer            
             if ( chunks.find('.') >= 0 or chunks.find('e') >= 0 or chunks.find('E') >= 0 ):
                 tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             else:
                 tval=EzhilLexeme(int(chunks),EzhilToken.NUMBER)
-        elif isalpha(chunks[0]) or has_tamil(chunks) or chunks[0] == '_':
+        elif chunks[0].isalpha() or has_tamil(chunks) or chunks[0] == '_':
             ## check for tamil/english/mixed indentifiers even starting with a lead '_'
             tval=EzhilLexeme(chunks,EzhilToken.ID)
         else:
@@ -213,7 +212,7 @@ class EzhilLex ( Lex ) :
                     idx = idx + 1
                 end = idx
                 self.comments[self.line]= data[start:end]
-            elif ( isdigit(c) ): #or c == '+' or c == '-'  ):
+            elif ( c.isdigit() ): #or c == '+' or c == '-'  ):
                 num = c
                 tok_start_idx = idx
                 idx = idx + 1
@@ -221,12 +220,12 @@ class EzhilLex ( Lex ) :
                 ## instead. also may throw an error if we exceed 
                 ## buffer-length.                
                 if ( c in ['+','-']  and ( idx < len( data ) ) 
-                     and not isdigit(data[idx]) ):
+                     and not data[idx].isdigit() ):
                     self.get_lexeme( c , idx )
                     continue
                 in_sci_notation = False
                 while ( ( idx < len( data) )
-                            and ( isdigit(data[idx]) or data[idx] in ['+','-','e','E','.']) ):
+                            and ( data[idx].isdigit() or data[idx] in ['+','-','e','E','.']) ):
                     if ( data[idx] in ['+','-'] and not in_sci_notation ):
                         break;
                     elif( data[idx] in ['e','E'] ):
@@ -253,7 +252,7 @@ class EzhilLex ( Lex ) :
                 s = s+data[idx]
                 idx  = idx + 1
                 self.get_lexeme( s , tok_start_idx )
-            elif ( istamil( c ) or isalpha( c ) or c == '_' ):
+            elif ( istamil( c ) or c.isalpha( ) or c == '_' ):
                 tok_start_idx = idx 
                 s = c; idx = idx + 1
                 while ( ( idx < len( data ) )
