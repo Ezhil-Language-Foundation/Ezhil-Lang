@@ -18,6 +18,7 @@ touch failed.txt
 
 for i in `ls *.py`
 do
+    echo Running test $i
     python $i
     if [ $? -eq 0 ]
     then
@@ -27,7 +28,7 @@ do
     fi
 done
 
-NFAIL=0 #ideall no unittests should fail
+NFAIL=0 #ideally no unittests should fail
 TOTFAIL=`wc -l failed.txt | cut -d' ' -f1`
 echo "from sys import exit; exit( $TOTFAIL !=  $NFAIL )" | python
 if [ $?  -eq 0 ]
