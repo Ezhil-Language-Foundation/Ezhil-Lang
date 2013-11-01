@@ -125,16 +125,17 @@
     }
 
     function updateEditorWithExample( filename ) {
-        if ( aceEditor == null ) {
-            alert("editor could not be loaded! cannot show demo "+filename)
-            return null;
-        }
 
         $.ajax({
             url: "ezhil_tests/"+filename,
             cache: false
-        }).done(function( html ) {
-              $("#editor").html( html );
+        }).done(function( program ) {
+              if ( aceEditor == null ) {
+                   alert("editor could not be loaded! cannot show requested demo"+$("#examples").val())
+                   $("#editor").html( program );
+              } else {
+                   aceEditor.setValue( program )
+              }
         });
     }
 </script>
