@@ -123,6 +123,20 @@
             "action": 'http://54.214.234.20/cgi-bin/ezhil_web.py'
         }).appendTo(document.body).submit();	
     }
+
+    function updateEditorWithExample( filename ) {
+        if ( aceEditor == null ) {
+            alert("editor could not be loaded! cannot show demo "+filename)
+            return null;
+        }
+
+        $.ajax({
+            url: "ezhil_tests/"+filename,
+            cache: false
+        }).done(function( html ) {
+              $("#editor").html( html );
+        });
+    }
 </script>
 </head>
 <body bgcolor="white">
@@ -201,7 +215,133 @@
 <table>
  <tr>
   <td width="60%">
-<div algin="center"><input type="button" value="நிரலை இயக்குங்கள் (Execute Program)" onClick='evaluateProg()'></div>
+<div algin="center">
+<!-- onClick="javascript:updateEditorWithExample($('#examples').val())" -->
+<!-- எழில் உதாரணம் பார்க்க (Browse Examples) -->
+<select id="examples">
+<option value="ackermann.n">ackermann.n</option>
+<option value="age.n">age.n</option>
+<option value="armstrong.n">armstrong.n</option>
+<option value="array0.n">array0.n</option>
+<option value="array1.n">array1.n</option>
+<option value="array2.n">array2.n</option>
+<option value="array_nd.n">array_nd.n</option>
+<option value="binary.n">binary.n</option>
+<option value="bisect.n">bisect.n</option>
+<option value="boolean.n">boolean.n</option>
+<option value="bubblesort.n">bubblesort.n</option>
+<option value="calc_asmd.n">calc_asmd.n</option>
+<option value="calc.n">calc.n</option>
+<option value="calendar_days.n">calendar_days.n</option>
+<option value="centerofmass.n">centerofmass.n</option>
+<option value="change.n">change.n</option>
+<option value="chaos.n">chaos.n</option>
+<option value="convert2kelvin.n">convert2kelvin.n</option>
+<option value="countwords.n">countwords.n</option>
+<option value="datetime.n">datetime.n</option>
+<option value="dict.n">dict.n</option>
+<option value="dict_ta.n">dict_ta.n</option>
+<option value="dowhile.n">dowhile.n</option>
+<option value="even_odd.n">even_odd.n</option>
+<option value="fact.n">fact.n</option>
+<option value="fern2.n">fern2.n</option>
+<option value="fern.n">fern.n</option>
+<option value="fibo2.n">fibo2.n</option>
+<option value="fibo.n">fibo.n</option>
+<option value="filedemo.n">filedemo.n</option>
+<option value="filerw.n">filerw.n</option>
+<option value="find.n">find.n</option>
+<option value="findvowels.n">findvowels.n</option>
+<option value="floatpthole.n">floatpthole.n</option>
+<option value="ford2.n">ford2.n</option>
+<option value="ford.n">ford.n</option>
+<option value="foreach.n">foreach.n</option>
+<option value="foriter.n">foriter.n</option>
+<option value="fornested.n">fornested.n</option>
+<option value="friends.n">friends.n</option>
+<option value="fruity.n">fruity.n</option>
+<option value="gcd.n">gcd.n</option>
+<option value="guess.n">guess.n</option>
+<option value="hailstone.n">hailstone.n</option>
+<option value="hanoi.n">hanoi.n</option>
+<option value="hello.n">hello.n</option>
+<option value="hex.n">hex.n</option>
+<option value="hist.n">hist.n</option>
+<option value="histogram.n">histogram.n</option>
+<option value="hw.n">hw.n</option>
+<option value="ifchain.n">ifchain.n</option>
+<option value="ifelse.n">ifelse.n</option>
+<option value="ifnested.n">ifnested.n</option>
+<option value="infinite_loop.n">infinite_loop.n</option>
+<option value="interest.n">interest.n</option>
+<option value="lcmgcd.n">lcmgcd.n</option>
+<option value="leapyear.n">leapyear.n</option>
+<option value="letters.n">letters.n</option>
+<option value="lex2.n">lex2.n</option>
+<option value="listmt.n">listmt.n</option>
+<option value="list.n">list.n</option>
+<option value="list_ta.n">list_ta.n</option>
+<option value="logical_not.n">logical_not.n</option>
+<option value="logo.n">logo.n</option>
+<option value="loopupdate.n">loopupdate.n</option>
+<option value="magic_coins.n">magic_coins.n</option>
+<option value="max_wo_compare.n">max_wo_compare.n</option>
+<option value="nqueens.n">nqueens.n</option>
+<option value="only.n">only.n</option>
+<option value="optional.n">optional.n</option>
+<option value="palindromes.n">palindromes.n</option>
+<option value="peanut_candy.n">peanut_candy.n</option>
+<option value="polygons.n">polygons.n</option>
+<option value="powers_of_two.n">powers_of_two.n</option>
+<option value="predicates.n">predicates.n</option>
+<option value="primefactors.n">primefactors.n</option>
+<option value="prime.n">prime.n</option>
+<option value="printtest.n">printtest.n</option>
+<option value="quadroots.n">quadroots.n</option>
+<option value="quiz.n">quiz.n</option>
+<option value="ranges.n">ranges.n</option>
+<option value="reverse.n">reverse.n</option>
+<option value="rich_poor.n">rich_poor.n</option>
+<option value="rndclr.n">rndclr.n</option>
+<option value="select_case2.n">select_case2.n</option>
+<option value="select_case.n">select_case.n</option>
+<option value="select.n">select.n</option>
+<option value="sexpr.n">sexpr.n</option>
+<option value="sine_qua_non.n">sine_qua_non.n</option>
+<option value="solo_return.n">solo_return.n</option>
+<option value="sort.n">sort.n</option>
+<option value="speedoflight.n">speedoflight.n</option>
+<option value="split_text.n">split_text.n</option>
+<option value="square_loop.n">square_loop.n</option>
+<option value="square.n">square.n</option>
+<option value="string_demo.n">string_demo.n</option>
+<option value="stringreverse.n">stringreverse.n</option>
+<option value="strings.n">strings.n</option>
+<option value="strrev.n">strrev.n</option>
+<option value="sum_of_digits.n">sum_of_digits.n</option>
+<option value="sumofseries.n">sumofseries.n</option>
+<option value="sum_of_squares.n">sum_of_squares.n</option>
+<option value="ta247.n">ta247.n</option>
+<option value="tables.n">tables.n</option>
+<option value="tamil_letters.n">tamil_letters.n</option>
+<option value="tamil_months.n">tamil_months.n</option>
+<option value="temple.n">temple.n</option>
+<option value="tictok.n">tictok.n</option>
+<option value="tower_of_hanoi.n">tower_of_hanoi.n</option>
+<option value="tree.n">tree.n</option>
+<option value="trials.n">trials.n</option>
+<option value="unaryop.n">unaryop.n</option>
+<option value="vannakm.n">vannakm.n</option>
+<option value="windoze.n">windoze.n</option>
+<option value="yinyang.n">yinyang.n</option>
+<option value="கூட்டு.n">கூட்டு.n</option>
+</select>
+    <input id="example_load" type="button" onClick="javascript:updateEditorWithExample($('#examples').val())" value="உதாரணம் பார்க்க (Browse Examples)"></input>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" value="நிரலை இயக்குங்கள் (Execute Program)" onClick='evaluateProg()'></input>
+</div>
 <br>
 <div align="left">
 <div id="editor">
