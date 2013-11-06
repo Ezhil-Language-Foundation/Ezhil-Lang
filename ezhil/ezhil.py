@@ -43,7 +43,7 @@ class EzhilInterpreter( Interpreter ):
                              "வெளியேஎடு":"pop_list","பொருந்தியஎண்":"count"} )
         
         #generic get/set ops for list/dict
-        tamil_equiv.update( { "எடு":"__getitem__", "வை":"__setitem__"} )
+        tamil_equiv.update( { "எடு":"__getitem__", "வை":"__setitem__","சாவிகள்":"keys"} )
 
         #file operators
         tamil_equiv.update({"கோப்பை_திற":"file_open", "கோப்பை_மூடு":"file_close","கோப்பை_படி":"file_read",
