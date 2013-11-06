@@ -9,6 +9,13 @@ nested={"foo":"bar","car":{"who":"knows","what":"cat"}}
 mt={}
 எடு(nested,"car")
 
+# like python equivalent of indexing keys, values
+# for k,v in dict.items:
+@( சாவிகள்( nested )  இல் இவ்) ஒவ்வொன்றாக    	
+    பதிப்பி  இவ்,"=>",nested[இவ்]
+முடி
+
+
 z={1:2,3:4}
 z={1:2,3:4,5:z}
 x = z
