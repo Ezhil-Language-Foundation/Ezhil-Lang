@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+# (C) 2013 Muthiah Annamalai
+# 
+# This file is part of Ezhil Language test suite
+# 
+
 # setup the paths
 import ezhiltests
 from ezhiltests import TestEzhil

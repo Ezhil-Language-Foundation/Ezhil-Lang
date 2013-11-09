@@ -38,7 +38,7 @@ class TestEzhil:
         
     def run( self ):
         """ run the interpreter """
-        print "******* beginning to run Ezhil test *******"
+        print("\n******* beginning to run Ezhil test *******")
         self._tested = True
         try:
             ezhil.EzhilFileExecuter( self.filename , False, False )
@@ -48,7 +48,7 @@ class TestEzhil:
             print( ex.message, ex.args )
             raise ex
         finally:
-            print "********* completed Ezhil test *********"
+            print("********* completed Ezhil test *********")
             pass
         return self.success
     
@@ -80,16 +80,19 @@ class TestEzhilException( TestEzhil ):
             self.success = False
             if self.exception:
                 self.success = isinstance( ex, self.exception )
-                print "We found an exception %s"%ex
+                print("We found an exception %s"%ex)
             
             if not self.success:
                 raise Exception("Expected exception class %s was not found"%(self.exception,ex))
             
-            print ex.message
+            print(ex)
             if self.message:
-                self.success = ( ex.message.find( self.message ) >= 0 )
-                self.success = self.success or \
-                    len(filter(lambda x: x.find( self.message ) >=0, ex.args )) > 0
+                self.success = True
+                # check multiple messages
+                for msg in self.message:
+                    self.success = self.success and \
+                        (( ex.message.find( msg ) >= 0 ) or \
+                             len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 )
             
             if not self.success:
                 raise Exception("Expected message %s was not found. We found message %s"%(self.message,ex.message))
