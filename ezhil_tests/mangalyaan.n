@@ -1,0 +1,13 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Escape velocity of PSLV or any launch vehicle
+# while launching a satellite like Mangalyaan
+# 
+# Ref: http://en.wikipedia.org/wiki/Escape_velocity
+
+G = 6.67e-11
+M = 5.9736e24 #earth mass
+r = 6.4e6  #6400km earth radius
+ve = sqrt( 2*G*M/r )/1e3
+அச்சிடு("Escape velocity of Mangalyaan = %g [km/s]",ve)
