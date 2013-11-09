@@ -1,11 +1,11 @@
 # setup the paths
 import ezhiltests
+from ezhiltests import TestEzhil
 
 # helper functions for testsuites
 import unittest
 from test import test_support
 
-import os
 import ezhil
 
 class Ancilla(unittest.TestCase):
@@ -20,19 +20,7 @@ class Ancilla(unittest.TestCase):
     
 class Interpreter(unittest.TestCase):
     def test_run_addition(self):
-        fp = open("hello.n","w")
-        fp.write("1 + 5\n")
-        fp.write("pi()*3.14159\n")
-        fp.write("exit\n")
-        fp.close()
-        
-        try:
-            ezhil.EzhilFileExecuter("hello.n",False,True)
-        except Ex:
-            raise Ex
-        finally:
-            os.unlink("hello.n")
-        
+        TestEzhil.create_and_test("1+5")
+    
 if __name__ == '__main__':    
     test_support.run_unittest(Ancilla,Interpreter)
-
