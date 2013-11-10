@@ -42,7 +42,7 @@
 உதாரண நிரல்கள்<br />
 Example programs
 <DIV>
-<select id="examples">
+<select id="examples" onClick="javascript:updateEditorWithExample($('#examples').val())">
 <option value="ackermann.n">ackermann.n</option>
 <option value="age.n">age.n</option>
 <option value="armstrong.n">armstrong.n</option>
@@ -164,8 +164,8 @@ Example programs
 <option value="yinyang.n">yinyang.n</option>
 <option value="கூட்டு.n">கூட்டு.n</option>
 </select>
-    <input id="example_load" type="button" onClick="javascript:updateEditorWithExample($('#examples').val())" value="உதாரணம் பார்க்க (Browse Examples)"></input>
-</DIV>
+<!--    <input id="example_load" type="button" onClick="javascript:updateEditorWithExample($('#examples').val())" value="உதாரணம் பார்க்க (Browse Examples)"></input>
+--></DIV>
 <div id="editor" style="position: relative;  height: 500px;  width: 100%;">
 # Ezhil language examples
 #  அடுத்த பயிற்சியாகப் பின்வரும் உதாரணங்கள், நிரலை எழுத முயற்சி செய்யுங்கள்!
