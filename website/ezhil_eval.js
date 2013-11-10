@@ -54,6 +54,7 @@ function checkEzhilCookie()
             alert(program); */
         if ( aceEditor != null ) {
             aceEditor.setValue(program);
+            aceEditor.clearSelection();
         }
     }
     else {
@@ -108,7 +109,8 @@ function updateEditorWithExample( filename ) {
             alert("editor could not be loaded! cannot show requested demo"+$("#examples").val())
             $("#editor").html( program );
         } else {
-            aceEditor.setValue( program )
+            aceEditor.setValue( program );
+            aceEditor.clearSelection();
         }
     });
 }
