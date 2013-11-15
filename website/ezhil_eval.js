@@ -92,11 +92,16 @@ function evaluateProg() {
     /* Save program as cookie */        
     setEzhilCookie("program",aceEditor.getValue());
     
-    $('<form>', {
+/*  $('<form>', {
         "id": "EvaluageProgramForm",
         "html": '<input type="text" name="eval" value="true" /><textarea name="prog">' + aceEditor.getValue() + '</textarea>'  ,
         "action": 'http://54.214.234.20/cgi-bin/ezhil_web.py'
-    }).appendTo(document.body).submit();	
+    }).appendTo(document.body).submit();
+*/
+
+    var progURL = "/cgi-bin/ezhil_web.py/?eval=true&prog="+aceEditor.getValue();
+    window.open( progURL, "Ezhil evaluator output","width=700,height=400,scrollbars=yes");
+
 }
 
 function updateEditorWithExample( filename ) {
