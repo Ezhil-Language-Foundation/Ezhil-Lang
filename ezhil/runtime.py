@@ -17,7 +17,7 @@ class DebugUtils:
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
-            print("## ",msg)
+            print(u"## ",msg)
         return
 
 class BuiltinFunction:
@@ -62,7 +62,7 @@ class BuiltinFunction:
                 else:
                     rval = self.fn(*args)
             except Exception as excep:
-                raise RuntimeException( str(excep) )
+                raise RuntimeException( unicode(excep) )
         env.clear_call()
         ## pop stuff into the call-stack
         env.return_function(self.name)
@@ -133,9 +133,9 @@ class Environment:
         return
 
     def __repr__(self):
-        retval = str(self.call_stack) + "\n" \
-            + str(self.local_vars) + "\n" \
-            + str(self.arg_stack) + "\n" 
+        retval = unicode(self.call_stack) + "\n" \
+            + unicode(self.local_vars) + "\n" \
+            + unicode(self.arg_stack) + "\n" 
         return retval
 
     def set_retval( self, rval ):
@@ -171,12 +171,12 @@ class Environment:
 
     def set_args(self,val):
         """ manage a global argument stack """
-        self.dbg_msg( "setting args " + str( val ) )
+        self.dbg_msg( "setting args " + unicode( val ) )
         return self.arg_stack.append(val)
     
     def set_local(self, vars):
         self.local_vars.append(vars)
-        self.dbg_msg( "setting locals " + str( vars ) )
+        self.dbg_msg( "setting locals " + unicode( vars ) )
         self.clear_break_return_continue()
         return
     
@@ -203,7 +203,7 @@ class Environment:
             d=dict()
             self.local_vars.append(d)
         d[idee]=val
-        self.dbg_msg("set_id: " + str(idee) +" = "+str(val))
+        self.dbg_msg("set_id: " + unicode(idee) +" = "+unicode(val))
         return
 
     def get_id(self, idee):
@@ -214,14 +214,14 @@ class Environment:
             raise RuntimeException("Identifier %s not found"%idee)
         variables = self.local_vars[-1]
         val = variables[idee]
-        self.dbg_msg("get_id: val = "+str(val))
+        self.dbg_msg("get_id: val = "+unicode(val))
         return val
 
     def call_function(self, fn):
         """ set call stack, used in function calls. Also check overflow"""
         if ( len(self.call_stack) >= self.max_recursion_depth ):
             raise RuntimeException( "Maximum recursion depth [ " + 
-                                    str(self.max_recursion_depth) + 
+                                    unicode(self.max_recursion_depth) + 
                                     " ] exceeded; stack overflow." )
         self.call_stack.append( fn )
     

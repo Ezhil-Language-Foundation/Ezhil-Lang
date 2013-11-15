@@ -41,7 +41,7 @@ class Identifier:
         return
 
     def __repr__(self):
-        return "\n\t [Identifier [" + str(self.id) +"]]"
+        return u"\n\t [Identifier [" + unicode(self.id) +u"]]"
 
     def evaluate(self,env):
         if ( env.has_id(self.id)):
@@ -54,7 +54,7 @@ class Identifier:
             else:
                 #val = val
                 pass
-            self.dbg_msg( str(self) + " = val ["+str(val) + "]" )
+            self.dbg_msg( unicode(self) + " = val ["+unicode(val) + "]" )
             return val
         raise RuntimeException("Cannot Find Identifier %s at \
  Line %d, col %d"%( self.id, self.line,self.col ) )
@@ -170,7 +170,7 @@ class ExprCall:
             +unicode(self.arglist)+u")]]"
     
     def evaluate(self,env):
-        self.dbg_msg( str(env) )
+        self.dbg_msg( unicode(env) )
         if ( env.has_function(self.fname) ):
             self.dbg_msg("calling function "+ self.fname)
             fval = env.get_function(self.fname)
@@ -178,7 +178,7 @@ class ExprCall:
             eval_arglist = [ i.evaluate(env) for i in self.arglist.get_list()];
             env.set_args(  eval_arglist )
             rval = fval.evaluate(env)
-            self.dbg_msg( "function retval ="+str(rval)+str(type(rval)))
+            self.dbg_msg( "function retval ="+unicode(rval)+unicode(type(rval)))
         else:
             raise RuntimeException("undefined function: %s near ( %d, %d )"%(self.fname, self.line, self.col) )
         return rval
@@ -226,7 +226,7 @@ class Stmt:
         return u"\n\t [%s[empty-statement]] "%(self.class_name)
 
     def get_pos(self):
-        return "line %d, col %d"%(self.line,self.col)
+        return u"line %d, col %d"%(self.line,self.col)
         
     def evaluate(self, env):
         """ empty statement """
@@ -236,7 +236,7 @@ class Stmt:
         """ Decide if the val is agreeable to True.
         Right now keep it simple however."""
         rval = False
-        self.dbg_msg("is_true_value? "+ str(val.__class__))
+        self.dbg_msg(u"is_true_value? "+ unicode(val.__class__))
         try:
             #print val, type(val)
             #if hasattr(val,'num'):
@@ -246,7 +246,7 @@ class Stmt:
             elif ( isinstance(val,float) or isinstance(val,int) ):
                 fval = val
             else:
-                raise  Exception("Unknown case, cannot identify truth @ "+self.get_pos()+" for value "+str(val))
+                raise  Exception(u"Unknown case, cannot identify truth @ "+self.get_pos()+u" for value "+unicode(val))
             
             if ( fval > 0.0 ):
                 rval = True
@@ -255,7 +255,7 @@ class Stmt:
             """ objects where is_true_value() is not supported """
             print(pyEx)
             raise RuntimeException(pyEx)
-        self.dbg_msg('Is True Value? ' + str(rval) + str(val.__class__) )
+        self.dbg_msg('Is True Value? ' + unicode(rval) + unicode(val.__class__) )
         return rval
     
     def visit( self, walker):
@@ -275,7 +275,7 @@ class UnaryExpr(Stmt):
             else:
                 return Boolean( False )
         else:
-            raise RuntimeException(" unknown Unary Operation - "+str(self.unaryop)+" not supported")
+            raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")
         return
 
     def evaluate(self,env):
@@ -286,7 +286,7 @@ class UnaryExpr(Stmt):
             if ( self.debug ): print(tval, type(tval))
             term = self.do_unaryop( tval )
         else:
-            raise RuntimeException(" unknown Unary Operation - "+str(self.unaryop)+" not supported")
+            raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")
         if ( self.debug ): print("term = ",term, term.__class__)
         return term
 
@@ -374,7 +374,7 @@ class Expr(Stmt):
             raise Exception("Ezhil : Bitwise operators AND '&' and OR '|' are not supported currently!")
         else:
             raise SyntaxError("Binary operator syntax not OK @ "+self.get_pos())
-        self.dbg_msg("value = "+str(val))
+        self.dbg_msg("value = "+unicode(val))
         return val
 
     @staticmethod
@@ -385,10 +385,10 @@ class Expr(Stmt):
             elif ( isinstance(term,String) ):
                 tval = term.string                            
             else:
-                ## print term.__class__,term,str(term)
+                ## print term.__class__,term,unicode(term)
                 ## possibly leads to inf- recursion
                 ## tval = term.evaluate( env )
-                raise RuntimeException( " cannot normalize token; unknown clause,"+str(term)+", to evaluate @ "+obj.get_pos());
+                raise RuntimeException( " cannot normalize token; unknown clause,"+unicode(term)+", to evaluate @ "+obj.get_pos());
 #        elif isinstance(term,list) and len(term) == 1:
 #            tval = term[0]
         else:
@@ -408,9 +408,9 @@ class Expr(Stmt):
                                      tval2,
                                      self.binop.kind)
             except Exception as binOp_Except:
-                raise RuntimeException("binary operation "+str(self.term)+str(self.binop)+str(self.next_expr)+" failed with exception "+str(binOp_Except))
+                raise RuntimeException("binary operation "+unicode(self.term)+unicode(self.binop)+unicode(self.next_expr)+" failed with exception "+unicode(binOp_Except))
         else:
-            raise RuntimeException(" unknown Binary Operation - Binary operation "+str(self.binop)+" not supported")
+            raise RuntimeException(" unknown Binary Operation - Binary operation "+unicode(self.binop)+" not supported")
         if ( self.debug ): print "term = ",term, term.__class__
         return term
 
@@ -429,7 +429,7 @@ class ReturnStmt(Stmt):
 
     def evaluate(self,env):
         rhs=self.rvalue.evaluate(env)
-        self.dbg_msg("return statement evaluated to "+str(rhs))
+        self.dbg_msg("return statement evaluated to "+unicode(rhs))
         env.set_retval(rhs)
         return rhs
     
@@ -503,7 +503,7 @@ class IfStmt(Stmt):
     def __repr__(self):
         rval = u"\t\n [IfStmt[["+unicode(self.expr)+ u"]] "+unicode(self.body)
         if ( self.next_stmt ):
-            rval = rval + str(self.next_stmt)
+            rval = rval + unicode(self.next_stmt)
         rval = rval + "]"
         return rval
 
@@ -518,7 +518,7 @@ class IfStmt(Stmt):
         self.next_stmt = stmt
     
     def evaluate(self,env):
-        self.dbg_msg( "Eval-if-stmt" + str(self.expr) )
+        self.dbg_msg( "Eval-if-stmt" + unicode(self.expr) )
         rval = None
         self.dbg_msg("eval-if stmt")
         if ( self.is_true_value ( self.expr.evaluate(env) ) ):
@@ -569,7 +569,7 @@ class WhileStmt(Stmt):
             rval = self.body.evaluate( env )
         ## clear break if-any
         env.clear_break();
-        self.dbg_msg("exiting While-stmt with rval="+str(rval))
+        self.dbg_msg("exiting While-stmt with rval="+unicode(rval))
         return rval
 
     def visit(self,walker):
@@ -595,7 +595,7 @@ class DoWhileStmt(WhileStmt):
             first_time = False
         ## clear break if-any
         env.clear_break();
-        self.dbg_msg("exiting Do-While-stmt with rval="+str(rval))
+        self.dbg_msg("exiting Do-While-stmt with rval="+unicode(rval))
         return rval
 
 class ForStmt(Stmt):

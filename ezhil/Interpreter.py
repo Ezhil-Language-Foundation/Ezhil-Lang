@@ -565,7 +565,7 @@ class Interpreter(DebugUtils):
         rval = rval + "[Functions["
         for k in list(self.function_map.keys()):
             rval = rval + "\n "+ str(self.function_map[k]) 
-        rval = rval +"]] "+ str(self.ast) +"]\n"
+        rval = rval +u"]] "+ unicode(self.ast) +u"]\n"
         return rval
 
     def parse(self):
@@ -642,15 +642,15 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
 			[line_no,c] = self.lexer.get_line_col( 0 )
 			if ( self.debug ): self.lexer.dump_tokens()
 			self.parse_eval.parse()
-			if ( self.debug ):  print("*"*60);  print(str(self.parse_eval))
+			if ( self.debug ):  print("*"*60);  print(unicode(self.parse_eval))
 			[rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
-			if ( self.debug ): print( "return value", str(rval) )
+			if ( self.debug ): print( u"return value", unicode(rval) )
 			if hasattr( rval, 'evaluate' ):
 				print(rval.__str__())
 			elif rval: #print everything except a None object
 				print(rval)
 		except Exception as excep:
-			print("Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,str(excep)))
+			print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,unicode(excep)))
                         if ( self.debug ):
                                 raise excep
                 ## clear tokens in lexer

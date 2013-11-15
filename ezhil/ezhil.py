@@ -171,15 +171,15 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
     parse_eval = EzhilInterpreter( lexer, debug )
     web_ast = parse_eval.parse()
     if( debug ):
-        print(web_ast)
-    if ( debug ):  print("*"*60);  print(str(parse_eval))
+        print(unicode(web_ast))
+    if ( debug ):  print(u"*"*60);  print(unicode(parse_eval))
     exit_code = 0
     try:
         env = parse_eval.evaluate()
     except Exception as e:
         exit_code = -1
         print str(e)
-        if ( self.debug ):
+        if ( debug ):
             traceback.print_tb(sys.exc_info()[2])
             raise e
     finally:
