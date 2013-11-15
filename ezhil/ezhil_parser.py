@@ -35,6 +35,7 @@ from ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
 
 ## use exprs language parser
 from ExprsParser import Parser
+import codecs, traceback
 
 ## Parser implementes the grammar for 'exprs' language.
 ## Entry point is parse(), after appropriate ctor-setup.
@@ -64,6 +65,7 @@ class EzhilParser(Parser):
     def parse(self):
         """ parser routine """
         self.ast = StmtList()
+        self.dbg_msg(u" entering parser " )
         while ( not self.lex.end_of_tokens() ):
             self.dbg_msg( "AST length = %d"%len(self.ast) )
             if ( self.lex.peek().kind ==  EzhilToken.DEF ):
@@ -86,8 +88,8 @@ class EzhilParser(Parser):
         while( not self.lex.end_of_tokens() ):
             self.dbg_msg("STMTLIST => STMT")
             ptok = self.peek()
-            self.dbg_msg("STMTLIST "+str(ptok))
-            if ( self.debug ): print("peek @ ",str(ptok))
+            self.dbg_msg("STMTLIST "+unicode(ptok))
+            if ( self.debug ): print("peek @ ",unicode(ptok))
             if ( ptok.kind == EzhilToken.END ):
                 self.dbg_msg("End token found");
                 break
@@ -155,7 +157,7 @@ class EzhilParser(Parser):
                 self.inside_if = False
                 raise ParseException("SWITCH-CASE-OTHERWISE statement syntax is messed up")
             ptok = self.peek()
-            self.dbg_msg("parsing SWITCH-CASE next bits "+str(ptok))
+            self.dbg_msg("parsing SWITCH-CASE next bits "+unicode(ptok))
         self.match( EzhilToken.END )
         self.inside_if = False
         self.dbg_msg("parsing -SWITCH-CASE- complete")
@@ -211,7 +213,7 @@ class EzhilParser(Parser):
                 self.inside_if = False
                 raise ParseException("If-Else-If statement syntax is messed up")
             ptok = self.peek()
-            self.dbg_msg("parsing -IF next bits "+str(ptok))
+            self.dbg_msg("parsing -IF next bits "+unicode(ptok))
         self.match( EzhilToken.END )
         self.inside_if = False
         self.dbg_msg("parsing -IF-complete")
@@ -221,7 +223,7 @@ class EzhilParser(Parser):
         """ try an assign, print, return, if or eval statement """
         self.dbg_msg(" STMT ")
         ptok = self.peek()
-        self.dbg_msg("stmt: peeking at "+str(ptok))
+        self.dbg_msg("stmt: peeking at "+unicode(ptok))
         if ( ptok.kind ==  EzhilToken.RETURN ):
             ## return <expression>
             self.dbg_msg('enter->return: <expression>')
@@ -233,6 +235,7 @@ class EzhilParser(Parser):
             self.dbg_msg("return statement parsed")
             return rstmt
         elif ( ptok.kind ==  EzhilToken.PRINT ):
+            self.dbg_msg("stmt : print ")
             self.currently_parsing.append( ptok )
             ## print <expression>
             print_tok = self.dequeue()
@@ -377,7 +380,7 @@ class EzhilParser(Parser):
                 return AssignStmt( lhs, assign_tok, rhs, l, c, self.debug)
             self.currently_parsing.pop()
             return EvalStmt( lhs, l, c, self.debug )
-        raise ParseException("parsing Statement, unknown operators" + str(ptok))
+        raise ParseException("parsing Statement, unknown operators" + unicode(ptok))
     
     def function(self):
         """ def[kw] fname[id] (arglist) {body} end[kw] """
@@ -414,7 +417,7 @@ class EzhilParser(Parser):
             val = self.expr()
             if ( self.debug ): print("val = ",str(val))
             ptok = self.peek()
-            if ( self.debug ) : print("ptok = ",str(ptok),str(ptok.kind),str(EzhilToken.ASSIGNOP))
+            if ( self.debug ) : print("ptok = ",unicode(ptok),str(ptok.kind),str(EzhilToken.ASSIGNOP))
             if ( ptok.kind in  EzhilToken.ASSIGNOP ):
                 assign_tok = self.dequeue()
                 rhs = self.expr()
@@ -432,7 +435,7 @@ class EzhilParser(Parser):
             elif ( ptok.kind ==  EzhilToken.COMMA ):
                 self.match(  EzhilToken.COMMA )
             else:
-                raise ParseException(" function call argument list "+str(ptok))
+                raise ParseException(" function call argument list "+unicode(ptok))
         self.match(  EzhilToken.RPAREN )
         [l,c] = lparen_tok.get_line_col()
         return ValueList(valueList, l, c, self.debug )
@@ -452,7 +455,7 @@ class EzhilParser(Parser):
                 self.match(  EzhilToken.COMMA )
             else:
                 raise ParseException(" function definition argument list "
-                                     +str(ptok))
+                                     +unicode(ptok))
         self.match(  EzhilToken.RPAREN )
         [l,c] = lparen_tok.get_line_col()
         return ArgList(args , l, c, self.debug )
@@ -493,7 +496,7 @@ class EzhilParser(Parser):
         elif ptok.kind ==  EzhilToken.LPAREN:
             ## function call
             if ( res.__class__ != Identifier ):
-                raise ParseException("invalid function call"+str(ptok))
+                raise ParseException("invalid function call"+unicode(ptok))
             [l,c] = ptok.get_line_col()
             vallist = self.valuelist()
             res=ExprCall( res, vallist, l, c, self.debug )
@@ -547,7 +550,7 @@ class EzhilParser(Parser):
             [l, c] = tok_id.get_line_col()
             val = Identifier( tok.val , l, c, self.debug )
             ptok = self.peek()
-            self.dbg_msg("factor: "+str(ptok) + " / "+str(tok) )
+            self.dbg_msg("factor: "+unicode(ptok) + " / "+str(tok) )
             if ( ptok.kind ==  EzhilToken.LPAREN ):
                 ## function call
                 [l, c] = ptok.get_line_col()
@@ -567,10 +570,10 @@ class EzhilParser(Parser):
                 for itr in range(1,len(exp)):
                     VL2 = ValueList([val,exp[itr]],l,c,self.debug)
                     val = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug)
-                #raise ParseException("array indexing implemented"+str(ptok));
+                #raise ParseException("array indexing implemented"+unicode(ptok));
             elif ( ptok.kind ==  EzhilToken.LCURLBRACE ):
                 val=None
-                raise ParseException("dictionary indexing implemented"+str(ptok));
+                raise ParseException("dictionary indexing implemented"+unicode(ptok));
         elif tok.kind ==  EzhilToken.STRING :
             str_tok = self.dequeue()
             [l,c] = str_tok.get_line_col()
@@ -618,5 +621,5 @@ class EzhilParser(Parser):
         else:
             raise ParseException("Expected Number, found something "+str(tok))
         
-        self.dbg_msg( "factor-returning: "+str(val) )
+        self.dbg_msg( u"factor-returning: "+unicode(val) )
         return val

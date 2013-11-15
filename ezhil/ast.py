@@ -37,7 +37,7 @@ class Identifier:
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
-            print("## "+msg)
+            print(u"## "+msg)
         return
 
     def __repr__(self):
@@ -73,7 +73,7 @@ class String:
         self.col = c
     
     def __repr__(self):
-        return " [String [" + str(self.string) +"]] "
+        return u" [String [" + unicode(self.string) + u"]] "
     
     def __str__(self):
         return self.string
@@ -99,7 +99,7 @@ class Number:
         return float(self.num)
     
     def __repr__(self):
-        return " [Number [" + str(self.num) +"]]"
+        return u" [Number [" + unicode(self.num) + u"]]"
     
     def __str__(self):
         return self.num.__str__()
@@ -166,8 +166,8 @@ class ExprCall:
         return
 
     def __repr__(self):
-        return "\n\t [ExprCall[ "+str(self.fname)+" (" \
-            +str(self.arglist)+")]]"
+        return u"\n\t [ExprCall[ "+unicode(self.fname)+u" (" \
+            +unicode(self.arglist)+u")]]"
     
     def evaluate(self,env):
         self.dbg_msg( str(env) )
@@ -195,14 +195,14 @@ class ExprList:
         self.col = c
 
     def __repr__(self):
-        return "\n\t [ExprList[ "+ ", ".join(map(str,self.exprs)) + "]]"
+        return u"\n\t [ExprList[ "+ u", ".join(map(unicode,self.exprs)) + u"]]"
 
     def evaluate(self,env):
         """evaluate  a, b, c ... z to a string"""
         z = []
         for exp_itr in self.exprs:
             z.append(exp_itr.evaluate(env))
-        return ", ".join(map(str,z))
+        return u", ".join(map(unicode,z))
     
     def visit(self, walker):
         walker.visit_expr_list(self)
@@ -223,7 +223,7 @@ class Stmt:
         return
         
     def __repr__(self):
-        return "\n\t [%s[empty-statement]] "%(self.class_name)
+        return u"\n\t [%s[empty-statement]] "%(self.class_name)
 
     def get_pos(self):
         return "line %d, col %d"%(self.line,self.col)
@@ -304,9 +304,9 @@ class Expr(Stmt):
         return 1
     
     def __repr__(self):
-        return "\n\t [Expr[ "+ str(self.term)+"] " + \
+        return u"\n\t [Expr[ "+ unicode(self.term)+ u"] " + \
                Token.token_types[self.binop.kind] + \
-               "\t NextExpr [" + str(self.next_expr) + "]]"
+               u"\t NextExpr [" + unicode(self.next_expr) + u"]]"
 
     def do_binop(self,opr1,opr2, binop):
         self.dbg_msg(" Doing binary operator " + Token.token_types[binop])
@@ -425,7 +425,7 @@ class ReturnStmt(Stmt):
         self.rvalue=rval
         
     def __repr__(self):
-        return "\n\t [ReturnStmt[ "+ str(self.rvalue)+"]]\n"
+        return u"\n\t [ReturnStmt[ "+ unicode(self.rvalue)+ u"]]\n"
 
     def evaluate(self,env):
         rhs=self.rvalue.evaluate(env)
@@ -443,7 +443,7 @@ class BreakStmt(Stmt):
         Stmt.__init__(self,l,c,dbg)
 
     def __repr__(self):
-        return "\n\t [BreakStmt]\n"
+        return u"\n\t [BreakStmt]\n"
 
     def evaluate(self,env):
         self.dbg_msg("break statement")
@@ -460,7 +460,7 @@ class ContinueStmt(Stmt):
         Stmt.__init__(self,l,c,dbg)
     
     def __repr__(self):
-        return "\n\t [ContinueStmt]\n"
+        return u"\n\t [ContinueStmt]\n"
 
     def evaluate(self,env):
         self.dbg_msg("continue statement")
@@ -478,7 +478,7 @@ class ElseStmt(Stmt):
         self.class_name = "ElseStmt"
 
     def __repr__(self):
-        return "\t [ElseStmt ["+str(self.stmt)+"]]\n"
+        return u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
     
     def evaluate(self,env):
         return self.stmt.evaluate(env)
@@ -501,7 +501,7 @@ class IfStmt(Stmt):
             self.next_stmt = next_stmt
         
     def __repr__(self):
-        rval = "\t\n [IfStmt[["+str(self.expr)+ "]] "+str(self.body)
+        rval = u"\t\n [IfStmt[["+unicode(self.expr)+ u"]] "+unicode(self.body)
         if ( self.next_stmt ):
             rval = rval + str(self.next_stmt)
         rval = rval + "]"
@@ -555,7 +555,7 @@ class WhileStmt(Stmt):
         self.class_name = "WhileStmt"
 
     def __repr__(self):
-        rval = "\t\n [%s[["%str(self.__class__)+str(self.expr)+ "]] "+str(self.body) +"]"
+        rval = u"\t\n [%s[["%unicode(self.__class__)+unicode(self.expr)+ u"]] "+unicode(self.body) +u"]"
         return rval
 
     def evaluate(self,env):
@@ -609,9 +609,9 @@ class ForStmt(Stmt):
         self.class_name = "ForStmt"
     
     def __repr__(self):
-        rval = "\t\n [ForStmt[[ ("+str(self.expr_init)+"; "+\
-            str(self.expr_cond) + "; " +\
-            str(self.expr_update)+") ]] " + str(self.body) +"]"
+        rval = u"\t\n [ForStmt[[ ("+unicode(self.expr_init)+"; "+\
+            unicode(self.expr_cond) + "; " +\
+            unicode(self.expr_update)+") ]] " + unicode(self.body) +"]"
         return rval
 
     def evaluate(self,env):
@@ -628,7 +628,7 @@ class ForStmt(Stmt):
             self.expr_update.evaluate( env )
         ## clear break if-any
         env.clear_break();
-        self.dbg_msg("exiting For-stmt with rval="+str(rval))
+        self.dbg_msg(u"exiting For-stmt with rval="+unicode(rval))
         return rval
 
     def visit(self,walker):
@@ -645,9 +645,9 @@ class AssignStmt(Stmt):
         self.class_name = "AssignStmt"
 
     def __repr__(self):
-        return "\n\t [AssignStmt[ "+ str(self.lvalue)+"] " + \
+        return u"\n\t [AssignStmt[ "+ unicode(self.lvalue)+u"] " + \
                Token.token_types[self.assignop.kind] + \
-               "\t Expr [" + str(self.rvalue) + "]]"
+               u"\t Expr [" + unicode(self.rvalue) + u"]]"
 
     def do_assignop(self, lvalue, rhs, kind, env):
         rval = None
@@ -660,16 +660,16 @@ class AssignStmt(Stmt):
     
     def evaluate(self,env):
         if self.assignop.kind in Token.ASSIGNOP:
-            self.dbg_msg("assignop: rhs = "+str(self.rvalue) )
+            self.dbg_msg(u"assignop: rhs = "+unicode(self.rvalue) )
             rhs = self.rvalue.evaluate(env)
             self.do_assignop(self.lvalue,
                              rhs,
                              self.assignop.kind, env)            
-            self.dbg_msg("assignop lvalue ["+str(self.lvalue) \
-                             +"] = ["+str(rhs) + \
-                             "( saved as ) " + \
-                             str(self.lvalue))
-                             #str(env.get_id(self.lvalue.id)) )
+            self.dbg_msg(u"assignop lvalue ["+unicode(self.lvalue) \
+                             +u"] = ["+unicode(rhs) + \
+                             u"( saved as ) " + \
+                             unicode(self.lvalue))
+                             #unicode(env.get_id(self.lvalue.id)) )
             return rhs
         raise Exception("Unknown assign operator @ "+self.get_pos())
     
@@ -684,7 +684,7 @@ class PrintStmt(Stmt):
         self.exprlst = exprlst
         
     def __repr__(self):
-        return "\n\t [PrintStmt[ "+ str(self.exprlst)+"]]"
+        return u"\n\t [PrintStmt[ "+ unicode(self.exprlst)+u"]]"
 
     def do_printop(self,env):
         val = ""
@@ -710,7 +710,7 @@ class EvalStmt(Stmt):
         
     def __repr__(self):
         #print type(self.expr)
-        return "\n\t [EvalStmt[ "+ str(self.expr)+"/"+str((self.expr.__class__))+"]]"
+        return "\n\t [EvalStmt[ "+ unicode(self.expr)+"/"+unicode((self.expr.__class__))+"]]"
 
     def evaluate(self,env):
         return self.expr.evaluate(env)
@@ -735,7 +735,7 @@ class ArgList:
         return self.args
 
     def __repr__(self):
-        return "\n\t [ArgList["+ ",".join(map(str,self.args))+"]]"
+        return "\n\t [ArgList["+ ",".join(map(unicode,self.args))+"]]"
 
     def visit(self,walker):
         walker.visit_arg_list(self)
@@ -767,7 +767,7 @@ class ValueList:
     #    return self.args
 
     def __repr__(self):
-        return "\n\t [ValueList["+ ",".join(map(str,self.args))+"]]"
+        return "\n\t [ValueList["+ ",".join(map(unicode,self.args))+"]]"
 
     def visit(self,walker):
         walker.visit_value_list(self)
@@ -783,12 +783,12 @@ class StmtList(Stmt):
         return len(self.List)        
     
     def append(self,stmt_x):
-        self.dbg_msg("adding new statement " + str(stmt_x) )
+        self.dbg_msg(u"adding new statement " + unicode(stmt_x) )
         self.List.append(stmt_x)
         return
     
     def __repr__(self):
-        rval = "\t [StmtList[ "+ "\n ".join(map(str,self.List)) + "]]\n"
+        rval = u"\t [StmtList[ "+ u"\n ".join(map(unicode,self.List)) + u"]]\n"
         return rval
 
     def evaluate(self,env):
@@ -820,9 +820,9 @@ class Function(Stmt):
         return
 
     def __repr__(self):
-        return "\n\t [Function[ "+ str(self.name)+"( " + \
-            str(self.arglist) + ")]\n" + \
-            "\t Body [" + str(self.body) + "]]\n"
+        return "\n\t [Function[ "+ unicode(self.name)+"( " + \
+            unicode(self.arglist) + ")]\n" + \
+            "\t Body [" + unicode(self.body) + "]]\n"
     
     def evaluate(self,env):
         ## push stuff into the call-stack

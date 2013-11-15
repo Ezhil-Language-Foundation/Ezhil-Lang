@@ -10,9 +10,10 @@ import os, sys, string, tempfile
 from Interpreter import Interpreter, REPL, Lex, get_prog_name
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
-from errors import RuntimeException, ParseException
+from errors import RuntimeException, ParseException, TimeoutException
 from multiprocessing import Process, current_process
 from time import sleep,clock
+import codecs, traceback
 
 #import codecs, sys, re
 #sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
@@ -31,23 +32,23 @@ class EzhilInterpreter( Interpreter ):
         Interpreter.install_builtins(self)
         
         #input statements, length constructs
-        tamil_equiv = {"சரம்_இடமாற்று":"replace", "சரம்_கண்டுபிடி":"find","நீளம்":"len",
-                       "சரம்_உள்ளீடு":"raw_input", "உள்ளீடு" : "input" }
+        tamil_equiv = {u"சரம்_இடமாற்று":u"replace", u"சரம்_கண்டுபிடி":u"find",u"நீளம்":u"len",
+                       u"சரம்_உள்ளீடு":u"raw_input", u"உள்ளீடு" : u"input" }
 
         # printf - as per survey request
-        tamil_equiv.update( { "அச்சிடு":"printf" } )        
+        tamil_equiv.update( { u"அச்சிடு":u"printf" } )        
         
         #list operators
-        tamil_equiv.update( {"பட்டியல்":"list","பின்இணை":"append","தலைகீழ்":"reverse",
-                             "வரிசைப்படுத்து":"sort","நீட்டிக்க":"extend","நுழைக்க":"insert","குறியீட்டெண்":"index",
-                             "வெளியேஎடு":"pop_list","பொருந்தியஎண்":"count"} )
+        tamil_equiv.update( {u"பட்டியல்":u"list",u"பின்இணை":u"append",u"தலைகீழ்":u"reverse",
+                             u"வரிசைப்படுத்து":u"sort",u"நீட்டிக்க":u"extend",u"நுழைக்க":u"insert",u"குறியீட்டெண்":u"index",
+                             u"வெளியேஎடு":u"pop_list",u"பொருந்தியஎண்":u"count"} )
         
         #generic get/set ops for list/dict
-        tamil_equiv.update( { "எடு":"__getitem__", "வை":"__setitem__","சாவிகள்":"keys"} )
+        tamil_equiv.update( { u"எடு":u"__getitem__", u"வை":u"__setitem__",u"சாவிகள்":u"keys"} )
 
         #file operators
-        tamil_equiv.update({"கோப்பை_திற":"file_open", "கோப்பை_மூடு":"file_close","கோப்பை_படி":"file_read",
-                            "கோப்பை_எழுது":"file_write","கோப்பை_எழுது_வரிகள்":"file_writelines","கோப்பை_படி_வரிகள்":"file_readlines"})
+        tamil_equiv.update({u"கோப்பை_திற":u"file_open", u"கோப்பை_மூடு":u"file_close",u"கோப்பை_படி":u"file_read",
+                            u"கோப்பை_எழுது":u"file_write",u"கோப்பை_எழுது_வரிகள்":u"file_writelines",u"கோப்பை_படி_வரிகள்":u"file_readlines"})
         
         for k,v in list(tamil_equiv.items()):
             self.builtin_map[k]=self.builtin_map[v];
@@ -59,22 +60,14 @@ class EzhilInterpreter( Interpreter ):
 		return
 	
         # translations for turtle module
-        turtle_map = { "முன்னாடி":"forward", "பின்னாடி" :"backward",
-                       "வலது":"lt", "இடது":"rt",
-                       "எழுதுகோல்மேலே":"penup",  "எழுதுகோல்கிழே":"pendown"}
+        turtle_map = { u"முன்னாடி":u"forward", u"பின்னாடி" :u"backward",
+                       u"வலது":u"lt", u"இடது":u"rt",
+                       u"எழுதுகோல்மேலே":u"penup",  u"எழுதுகோல்கிழே":u"pendown"}
         for k,v in list(turtle_map.items()):
-            vv = "turtle_"+v;
+            vv = u"turtle_"+v;
             self.builtin_map[k] = self.builtin_map[vv]
         
         return
-
-class TimeoutException(Exception):
-        def __init__(self,timeout):
-            Exception.__init__(self)
-            self.timeout = timeout
-
-        def __str__(self):
-            return "process exceeded timeout of " + str(self.timeout) + "s"
 
 class EzhilRedirectOutput:
     """ class provides the get_output method for reading from a temporary file, and deletes it after that.
@@ -114,7 +107,7 @@ class EzhilRedirectInputOutput(EzhilRedirectOutput):
     def __init__(self,input_file,redirectop):
         EzhilRedirectOutput.__init__(self,redirectop)
         self.old_stdin = sys.stdin
-        self.stdin = open( input_file )
+        self.stdin = codecs.open( input_file , "r", "utf-8" )
 
 class EzhilFileExecuter(EzhilRedirectOutput):
     """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files;
@@ -129,6 +122,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 self.exitcode = 0
             except Exception as e:
                 self.exitcode = -1
+                traceback.print_tb(sys.exc_info()[2])
                 raise e            
         
         p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})        
@@ -151,6 +145,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 os.unlink( fProcName)                
         except Exception as e:
             print("exception ",str(e))
+            traceback.print_tb(sys.exc_info()[2])
             raise e
         finally:
             p.terminate()
@@ -169,7 +164,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
         enclosed properly in a list format
     """    
     if ( redirectop ):
-        sys.stdout = open(EzhilRedirectOutput.pidFileName(current_process().pid),"w")
+        sys.stdout = codecs.open(EzhilRedirectOutput.pidFileName(current_process().pid),"w","utf-8")
         sys.stderr = sys.stdout;
     lexer = EzhilLex(file_input,debug)
     if ( debug ): lexer.dump_tokens()
@@ -184,6 +179,9 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
     except Exception as e:
         exit_code = -1
         print str(e)
+        if ( self.debug ):
+            traceback.print_tb(sys.exc_info()[2])
+            raise e
     finally:
         if ( redirectop ):
             # cerrar - முடி
@@ -229,12 +227,14 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
             if ( debug ): lexer.dump_tokens()
             try:
                 if ( debug ): print ("parsing buffer item => ",totbuffer)
-                parse_eval.parse()                
-            except Exception as pexp:                
+                parse_eval.parse()
+            except Exception as pexp:
                 ## clear tokens in lexer
                 parse_eval.reset() #parse_eval
                 if ( debug ): print ("offending buffer item => ",totbuffer)
                 if ( debug ): print(str(pexp),str(pexp.__class__))
+                if ( debug ): traceback.print_tb(sys.exc_info()[2])
+                if ( debug ): raise pexp
                 # Greedy strategy to keep avoiding parse-errors by accumulating more of input.
                 # this allows a line-by-line execution strategy. When all else fails we report.
                 if ( (line_no + 1) ==  max_lines ):
@@ -268,6 +268,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
             ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
         except Exception as e:
             print("exception ",str(e))
+            traceback.print_tb(sys.exc_info()[2])
             raise e
         finally:
             if ( redirectop ):
@@ -302,6 +303,9 @@ if __name__ == "__main__":
                 EzhilFileExecuter( aFile, debug )
             except Exception as e:
                 print "executing file, "+aFile+" with exception "+str(e)
+                if ( debug ):
+                    #traceback.print_tb(sys.exc_info()[2])
+                    raise e    
                 exitcode = -1
         sys.exit(exitcode)
     pass

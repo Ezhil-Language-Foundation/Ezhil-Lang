@@ -28,3 +28,11 @@ class ParseException(ErrorException):
     def __init__(self,desc):
         self.args = ["Parse error:", desc ]
 
+
+class TimeoutException(Exception):
+        def __init__(self,timeout):
+            Exception.__init__(self)
+            self.timeout = timeout
+
+        def __str__(self):
+            return "process exceeded timeout of " + str(self.timeout) + "s"

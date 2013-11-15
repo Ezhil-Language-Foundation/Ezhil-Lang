@@ -8,7 +8,7 @@
 ## 
 
 from errors import ScannerException
-import re
+import codecs, re
 
 ## SCANNER
 class Token:
@@ -127,8 +127,8 @@ class Lexeme:
         self.line = l
         self.col = c
         
-    def __repr__(self):
-        return " %s Line=%d, Col=%d in File %s "% \
+    def __str__(self):
+        return u" %s Line=%d, Col=%d in File %s "% \
             (str(self.val),self.line,self.col,self.fname)
 
 class DummyFile(file):
@@ -152,7 +152,7 @@ class Lex:
         self.comments = {} #comments dict indexed by line number with comments present as string value
         if ( isinstance(fname,str) ):
             self.fname = fname
-            self.File = open(fname)
+            self.File = codecs.open(fname,"r","utf-8")
         elif ( isinstance(fname,list) ):
             """ specify, fname = ["contents of program as a string"] """
             self.fname = "<DUMMYFILE>"
@@ -160,6 +160,7 @@ class Lex:
         else:
             self.fname = "<STDIN>"
             self.stdin_mode = True
+        print "post file open"
         ##actual col = idx - col_idx
         self.line = 1 
         self.col_idx = 0 
@@ -300,6 +301,7 @@ class Lex:
     def tokenize(self,data=None):
         """ do hard-work of tokenizing and
         put Lexemes into the tokens[] Q """
+        print "tokenize"
         if ( self.stdin_mode ):
             if ( self.debug ): print(self.tokens)
             ## cleanup the Q for stdin_mode of any EOF that can remain.
@@ -309,12 +311,13 @@ class Lex:
                 raise ScannerException("Lexer: token Q has previous session tokens ")
             self.tokens = list()
         else:
-            data = "".join(self.File.readlines())
+            data = u"".join(self.File.readlines())
         
         idx = 0 
         tok_start_idx = 0
 
         while ( idx < len( data ) ):
+            print idx, data[idx]
             c = data[idx]
             
             if  ( c == ' 'or c == '\t' or c == '\n' ):
@@ -392,7 +395,7 @@ class Lex:
         return 
         
     def dump_tokens(self):
-        print(" \n".join([str(self.tokens[i]) for i in range(len(self.tokens)-1,-1,-1)]))
+        print(u" \n".join([unicode(self.tokens[i]) for i in range(len(self.tokens)-1,-1,-1)]))
         return
 
     def dequeue(self):

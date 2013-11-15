@@ -651,6 +651,8 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
 				print(rval)
 		except Exception as excep:
 			print("Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,str(excep)))
+                        if ( self.debug ):
+                                raise excep
                 ## clear tokens in lexer
 		if ( self.debug ): print self.env
 		self.lexer.tokens = list()
