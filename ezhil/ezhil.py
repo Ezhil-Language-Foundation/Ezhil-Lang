@@ -56,7 +56,7 @@ class EzhilInterpreter( Interpreter ):
 	try:
 		import EZTurtle
 	except ImportError as ie:
-		if ( self.debug ): print "ImportError => turtle "+str(ie)
+		if ( self.debug ): print "ImportError => turtle "+unicode(ie)
 		return
 	
         # translations for turtle module
@@ -76,7 +76,7 @@ class EzhilRedirectOutput:
     @staticmethod
     def pidFileName( pid ):
         """ file name with $PID decoration as IPC alt """
-        return "ezhil_"+str(pid)+".out"
+        return "ezhil_"+unicode(pid)+".out"
     
     def __init__(self,redirectop):
         self.op = None
@@ -144,7 +144,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 fp.close()                
                 os.unlink( fProcName)                
         except Exception as e:
-            print("exception ",str(e))
+            print("exception ",unicode(e))
             traceback.print_tb(sys.exc_info()[2])
             raise e
         finally:
@@ -178,7 +178,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
         env = parse_eval.evaluate()
     except Exception as e:
         exit_code = -1
-        print str(e)
+        print unicode(e)
         if ( debug ):
             traceback.print_tb(sys.exc_info()[2])
             raise e
@@ -232,7 +232,7 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 ## clear tokens in lexer
                 parse_eval.reset() #parse_eval
                 if ( debug ): print ("offending buffer item => ",totbuffer)
-                if ( debug ): print(str(pexp),str(pexp.__class__))
+                if ( debug ): print(unicode(pexp),unicode(pexp.__class__))
                 if ( debug ): traceback.print_tb(sys.exc_info()[2])
                 if ( debug ): raise pexp
                 # Greedy strategy to keep avoiding parse-errors by accumulating more of input.
@@ -242,7 +242,7 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 continue
             totbuffer = ""
             sys.stdout.write(curr_line_no)
-            if ( debug ):  print("*"*60);  print(str(parse_eval))
+            if ( debug ):  print("*"*60);  print(unicode(parse_eval))
             [rval, env] = parse_eval.evaluate_interactive(env)
             if hasattr( rval, 'evaluate' ):
                 print(rval.__str__())
@@ -263,11 +263,11 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         try:
             lang = "எழில்"
             lexer = EzhilLex(debug)
-            if ( debug ): print( str(lexer) )
+            if ( debug ): print( unicode(lexer) )
             parse_eval = EzhilInterpreter( lexer, debug )
             ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
         except Exception as e:
-            print("exception ",str(e))
+            print("exception ",unicode(e))
             traceback.print_tb(sys.exc_info()[2])
             raise e
         finally:
@@ -302,10 +302,10 @@ if __name__ == "__main__":
             try:
                 EzhilFileExecuter( aFile, debug )
             except Exception as e:
-                print "executing file, "+aFile+" with exception "+str(e)
+                print(u"executing file, "+aFile+u" with exception "+unicode(e))
                 if ( debug ):
                     #traceback.print_tb(sys.exc_info()[2])
-                    raise e    
+                    raise e
                 exitcode = -1
         sys.exit(exitcode)
     pass

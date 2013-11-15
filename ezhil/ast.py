@@ -309,7 +309,7 @@ class Expr(Stmt):
                u"\t NextExpr [" + unicode(self.next_expr) + u"]]"
 
     def do_binop(self,opr1,opr2, binop):
-        self.dbg_msg(" Doing binary operator " + Token.token_types[binop])
+        self.dbg_msg(u" Doing binary operator " + Token.token_types[binop])
         if binop == Token.PLUS:
             self.dbg_msg("addition")
             val = Number(opr1+opr2)
@@ -475,9 +475,11 @@ class ElseStmt(Stmt):
     def __init__(self,stmt,l,c, dbg):
         Stmt.__init__(self,l,c,dbg)
         self.stmt = stmt
-        self.class_name = "ElseStmt"
+        self.class_name = u"ElseStmt"
 
     def __repr__(self):
+        print "in else-stmt"
+        print u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
         return u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
     
     def evaluate(self,env):
@@ -502,9 +504,16 @@ class IfStmt(Stmt):
         
     def __repr__(self):
         rval = u"\t\n [IfStmt[["+unicode(self.expr)+ u"]] "+unicode(self.body)
+        print u"orig",rval
+        #print type(self.next_stmt),len(self.next_stmt)
+        #print type(self.next_stmt[0])
+        #print type(self.next_stmt[0].stmt),unicode(self.next_stmt[0].stmt)
+        #print unicode(self.next_stmt[0])
+        #print u"nxt", unicode(self.next_stmt[0])
         if ( self.next_stmt ):
-            rval = rval + unicode(self.next_stmt)
-        rval = rval + "]"
+            rval = rval + u"<<Nxt>>" + unicode(self.next_stmt)
+        rval = rval + u"]"
+        print rval
         return rval
 
     def set_body(self,body):
@@ -518,14 +527,14 @@ class IfStmt(Stmt):
         self.next_stmt = stmt
     
     def evaluate(self,env):
-        self.dbg_msg( "Eval-if-stmt" + unicode(self.expr) )
+        self.dbg_msg( u"Eval-if-stmt" + unicode(self.expr) )
         rval = None
-        self.dbg_msg("eval-if stmt")
+        self.dbg_msg(u"eval-if stmt")
         if ( self.is_true_value ( self.expr.evaluate(env) ) ):
-            self.dbg_msg("ifstmt: true condition")
+            self.dbg_msg(u"ifstmt: true condition")
             rval = self.body.evaluate( env )
             return rval
-        self.dbg_msg("ifstmt: false condition")
+        self.dbg_msg(u"ifstmt: false condition")
         for elseif_or_else in self.next_stmt:
             if ( isinstance( elseif_or_else, IfStmt ) ):
                 if ( self.is_true_value( elseif_or_else.expr.evaluate(env) ) ):
@@ -709,8 +718,7 @@ class EvalStmt(Stmt):
         self.expr = expr
         
     def __repr__(self):
-        #print type(self.expr)
-        return "\n\t [EvalStmt[ "+ unicode(self.expr)+"/"+unicode((self.expr.__class__))+"]]"
+        return u"\n\t [EvalStmt[ "+ unicode(self.expr)+u"/"+unicode((self.expr.__class__))+u"]]"
 
     def evaluate(self,env):
         return self.expr.evaluate(env)
