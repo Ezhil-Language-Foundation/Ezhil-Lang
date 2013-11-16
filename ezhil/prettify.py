@@ -233,8 +233,8 @@ class Printer(Visitor):
             self.append( self.styler( comm_attrib, comment ) )
             self.append( self.NEWLINE )
         
-        print "".join(self.output)
-    
+        return u"".join(self.output)
+        
     # method walks the lexer-tokens and calls the appropriate elements
     # basic lexical hiliting
     def lexical_hilite(self):
@@ -265,11 +265,15 @@ class Printer(Visitor):
         
         return u"".join(out)
 
+def pretty_print_file( filename ):
+    print u"working with ",filename
+    print Printer(filename).pretty_print()
+    return True
+
 if __name__ == "__main__":
     from sys import argv,exit
     if len(argv) <= 1:
-        print "usage: python ezhil/prettify.py <file1> <file2> ... "
+        print u"usage: python ezhil/prettify.py <file1> <file2> ... "
         exit(-1)
-    for aFile in argv[1:]:
-        print "working with ",aFile
-        Printer(aFile).pretty_print()
+    map( pretty_print_file, argv[1:])
+    
