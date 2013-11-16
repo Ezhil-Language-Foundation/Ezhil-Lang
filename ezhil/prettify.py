@@ -19,10 +19,10 @@ class WikiStyle:
         """ @text is any character stream that has to be wrapper in a style-Theme,
             specified by @attrib """
         if ( len(attrib) >= 1 ):
-            out = '<span style="color:#'+attrib[0]
+            out = u'<span style="color:#'+attrib[0]
         if ( len(attrib) >= 2 ):
-            out = out + ';background:#'+attrib[1]
-        out = out + '">' + attrib.process(text) + "</span>"
+            out = out + u';background:#'+attrib[1]
+        out = out + u'">' + attrib.process(text) + u"</span>"
         return out
 
 class Printer(Visitor):
@@ -55,32 +55,32 @@ class Printer(Visitor):
     def default(self,*args):
         """ /dev/zero dump for all visitor methods when not handled in derived class"""
         #args[0] is AST object
-        self.append( "def :")
+        self.append(u"def :")
         self.update_line(args[0])
-        self.append(str(args[0]))
+        self.append(unicode(args[0]))
         
     def visit_identifier(self, IDobj):  
         attrib = self.theme.Variables
         self.update_line(IDobj)
-        self.append( self.styler(attrib,str(IDobj.id)))
+        self.append( self.styler(attrib,unicode(IDobj.id)))
         return
     
     def visit_string(self, string):
         attrib = self.theme.LiteralString
         self.update_line(string)
-        self.append(self.styler(attrib,str(string)))
+        self.append(self.styler(attrib,unicode(string)))
         return
 
     def visit_number(self, num):
         attrib = self.theme.LiteralNumber
         self.update_line(num)
-        self.append(self.styler(attrib,str(num)))
+        self.append(self.styler(attrib,unicode(num)))
         return
 
     def visit_expr_call(self,expr_call):
         var_attrib = self.theme.Variables
         self.update_line(expr_call)
-        self.append(self.styler(var_attrib,str(expr_call.func_id.id)))
+        self.append(self.styler(var_attrib,unicode(expr_call.func_id.id)))
         op_attrib = self.theme.Operators
         self.append( self.styler(op_attrib,"(") )
         expr_call.arglist.visit( self )
@@ -120,7 +120,7 @@ class Printer(Visitor):
     def visit_return_stmt(self, ret_stmt):
         kw_attrib = self.theme.Keywords
         self.update_line(ret_stmt)        
-        keyword = "பின்கொடு"
+        keyword = u"பின்கொடு"
         self.append( self.styler( kw_attrib, keyword ) )
         self.append( self.NEWLINE )
         return
@@ -128,7 +128,7 @@ class Printer(Visitor):
     def visit_break_stmt(self, break_stmt ):
         kw_attrib = self.theme.Keywords
         self.update_line(ret_stmt)
-        keyword = "நிறுத்து" #EzhilToken.Keywords["break"]
+        keyword = u"நிறுத்து" #EzhilToken.Keywords["break"]
         self.append( self.styler( kw_attrib, keyword ) )
         self.append( self.NEWLINE )
         return
@@ -136,14 +136,14 @@ class Printer(Visitor):
     def visit_continue_stmt(self, cont_stmt):
         kw_attrib = self.theme.Keywords
         self.update_line(ret_stmt)
-        keyword = "தொடர்" #EzhilToken.Keywords["continue"]
+        keyword = u"தொடர்" #EzhilToken.Keywords["continue"]
         self.append( self.styler( kw_attrib, keyword ) )
         self.append( self.NEWLINE )        
         return
     
     def visit_else_stmt(self,else_stmt):
         kw_attrib = self.theme.Keywords
-        keyword = "இல்லை"
+        keyword = u"இல்லை"
         self.append( self.styler( kw_attrib, keyword ) )
         self.update_line(else_stmt)
         else_stmt.stmt.visit( self )
@@ -159,7 +159,7 @@ class Printer(Visitor):
         
         # IF kw
         kw_attrib = self.theme.Keywords
-        keyword_if = "ஆனால்"
+        keyword_if = u"ஆனால்"
         self.append( self.styler( kw_attrib, keyword_if ) )                
         
         # True-Body
@@ -174,7 +174,7 @@ class Printer(Visitor):
     def visit_end_kw(self):
         # END kw
         kw_attrib = self.theme.Keywords
-        keyword_end = "முடி"
+        keyword_end = u"முடி"
         self.append( self.styler( kw_attrib, keyword_end ) )
         
     def visit_while_stmt(self,stmt):
@@ -194,9 +194,9 @@ class Printer(Visitor):
 
     def visit_print_stmt(self, print_stmt):
         kw_attrib = self.theme.Keywords
-        keyword = "பதிப்பி"
+        keyword = u"பதிப்பி"
         self.update_line(print_stmt)
-        self.append( self.styler(kw_attrib,str(keyword)) )
+        self.append( self.styler(kw_attrib,unicode(keyword)) )
         print_stmt.exprlst.visit(self)
         return
 
@@ -224,7 +224,7 @@ class Printer(Visitor):
     def pretty_print(self):
         self.parse_eval = EzhilInterpreter(self.lexer)
         ast = self.parse_eval.parse()
-        print ast
+        print(unicode(ast))
         ast.visit(self)
 
         # dump remaining comments
@@ -246,24 +246,24 @@ class Printer(Visitor):
             if EzhilToken.is_keyword(t.kind):
                 attrib = self.theme.Keywords
                 if ( EzhilToken.get_name(t.kind) in ["END", "ELSE"] ):
-                    out.append('<BR />\n')
+                    out.append(u'<BR />\n')
             elif EzhilToken.is_number(t.kind):
                 attrib = self.theme.LiteralNumber
             elif EzhilToken.is_string(t.kind):
                 attrib = self.theme.LiteralString
-                t.val = '"'+t.val+'"' #FIXME: ideally do some escaping as well
+                t.val = u'"'+t.val+u'"' #FIXME: ideally do some escaping as well
             elif EzhilToken.is_id(t.kind):
                 attrib = self.theme.Variables
-            elif( t.val in ["@", "பதிப்பி" ] ):
+            elif( t.val in [u"@", u"பதிப்பி" ] ):
                 attrib = self.theme.Builtins
-                out.append('<BR />\n')
+                out.append(u'<BR />\n')
             
-            t.val = " " + str(t.val)
+            t.val = u" " + unicode(t.val)
             out.append( self.styler(attrib,t.val) )
             if ( add_br ):
-                out.append("<BR />\n")
+                out.append(u"<BR />\n")
         
-        return "".join(out)
+        return u"".join(out)
 
 if __name__ == "__main__":
     from sys import argv,exit
@@ -273,4 +273,3 @@ if __name__ == "__main__":
     for aFile in argv[1:]:
         print "working with ",aFile
         Printer(aFile).pretty_print()
-    

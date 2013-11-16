@@ -8,15 +8,15 @@
 ## It contains classes @Attrib, @XsyTheme
 ## 
 
-colors = { "Blue" : "0000FF",
-           "GreenYellow" : "ADFF2F",
-           "CornSilk":"FF8DC",
-           "IndianRed":"CD5C5C",
-           "DarkRed" : "8B0000",
-           "Red":"FF0000",
-           "Green": "00FF00",
-           "Coffee":"C0FFEE",
-           "Deadbe":"DEADBE",
+colors = { u"Blue" : u"0000FF",
+           u"GreenYellow" : u"ADFF2F",
+           u"CornSilk":"FF8DC",
+           u"IndianRed":"CD5C5C",
+           u"DarkRed" : u"8B0000",
+           u"Red":"FF0000",
+           u"Green": u"00FF00",
+           u"Coffee":"C0FFEE",
+           u"Deadbe":"DEADBE",
 }
 
 class Attrib(list):
@@ -30,21 +30,21 @@ class Attrib(list):
 
     @staticmethod
     def process(*args):
-        """ default process string to return inputs """
+        u""" default process string to return inputs u"""
         return args[0]
 
 class StringAttrib(Attrib):
     @staticmethod
     def process(*args):
         """ chicken wrapped bacon """
-        return "\""+args[0]+"\""
+        return u"\""+args[0]+u"\""
 
 class XsyTheme:
     def __init__(self):
-        self.Keywords = Attrib('Keywords',colors["Blue"])
-        self.LiteralString = StringAttrib('LiteralString',colors["IndianRed"])
-        self.LiteralNumber = Attrib('LiteralNumber',colors["CornSilk"])
-        self.Builtins = Attrib('Builtins',colors["DarkRed"])
-        self.Variables = Attrib('Variables',colors["Green"])
-        self.Operators = Attrib('Operators',colors["Red"])
-        self.Comment = StringAttrib('Comment',colors["Coffee"])
+        self.Keywords = Attrib(u'Keywords',colors["Blue"])
+        self.LiteralString = StringAttrib(u'LiteralString',colors["IndianRed"])
+        self.LiteralNumber = Attrib(u'LiteralNumber',colors["CornSilk"])
+        self.Builtins = Attrib(u'Builtins',colors["DarkRed"])
+        self.Variables = Attrib(u'Variables',colors["Green"])
+        self.Operators = Attrib(u'Operators',colors["Red"])
+        self.Comment = StringAttrib(u'Comment',colors["Coffee"])
