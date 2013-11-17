@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>ezhil.Interpreter'.Interpreter</title>
+  <title>ezhil.transform.Visitor</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
-        <a href="ezhil.Interpreter%27-module.html">Module&nbsp;Interpreter'</a> ::
-        Class&nbsp;Interpreter
+        <a href="ezhil.transform-module.html">Module&nbsp;transform</a> ::
+        Class&nbsp;Visitor
       </span>
     </td>
     <td>
@@ -49,30 +49,21 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="ezhil.Interpreter%27.Interpreter-class.html"
+            >]&nbsp;|&nbsp;<a href="ezhil.transform.Visitor-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Interpreter</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter">source&nbsp;code</a></span></p>
-<pre class="base-tree">
-<a href="ezhil.runtime.DebugUtils-class.html">runtime.DebugUtils</a> --+
-                     |
-                    <strong class="uidshort">Interpreter</strong>
-</pre>
-
+<h1 class="epydoc">Class Visitor</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor">source&nbsp;code</a></span></p>
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="ezhil.ezhil.EzhilInterpreter-class.html">ezhil.EzhilInterpreter</a></li>  </ul>
+<li><a href="ezhil.prettify.Printer-class.html">prettify.Printer</a></li>  </ul>
 </dd></dl>
 
 <hr />
-<p>when you add new language feature, add a AST class and its evaluate 
-  methods. Also add a parser method</p>
-
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -96,11 +87,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="ezhil.Interpreter%27.Interpreter-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">lexer</span>,
-        <span class="summary-sig-arg">dbg</span>=<span class="summary-sig-default">False</span>)</span></td>
+          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      initialize data structures</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -114,9 +104,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__repr__"></a><span class="summary-sig-name">__repr__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="default"></a><span class="summary-sig-name">default</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.__repr__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.default">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -130,12 +121,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="add_blind_fcns"></a><span class="summary-sig-name">add_blind_fcns</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">bfn</span>,
-        <span class="summary-sig-arg">b</span>)</span><br />
-      an internal method to reduce repetition</td>
+          <td><span class="summary-sig"><a name="visit_identifier"></a><span class="summary-sig-name">visit_identifier</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">id</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.add_blind_fcns">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_identifier">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -149,13 +138,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="add_builtin"></a><span class="summary-sig-name">add_builtin</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">call_name</span>,
-        <span class="summary-sig-arg">call_handle</span>,
-        <span class="summary-sig-arg">nargin</span>=<span class="summary-sig-default">1</span>,
-        <span class="summary-sig-arg">ta_alias</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_string"></a><span class="summary-sig-name">visit_string</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">str</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.add_builtin">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_string">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -169,12 +155,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="change_parser"></a><span class="summary-sig-name">change_parser</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">parser_ctor</span>)</span><br />
-      change the parser to your-cool-language using a lambda function 
-      parser_ctor the constructor</td>
+          <td><span class="summary-sig"><a name="visit_number"></a><span class="summary-sig-name">visit_number</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">num</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.change_parser">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_number">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -188,9 +172,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="evaluate"></a><span class="summary-sig-name">evaluate</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_expr_call"></a><span class="summary-sig-name">visit_expr_call</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">expr_call</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.evaluate">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_expr_call">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -204,10 +189,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="evaluate_interactive"></a><span class="summary-sig-name">evaluate_interactive</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">env</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_expr_list"></a><span class="summary-sig-name">visit_expr_list</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">expr_list</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.evaluate_interactive">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_expr_list">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -221,11 +206,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="install_blind_builtins"></a><span class="summary-sig-name">install_blind_builtins</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      we dont know the arity of these functions, hence we call-em the blind
-      builtins, but we still add them to the builtin_map</td>
+          <td><span class="summary-sig"><a name="visit_stmt"></a><span class="summary-sig-name">visit_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.install_blind_builtins">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -239,10 +223,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="install_builtins"></a><span class="summary-sig-name">install_builtins</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      populate with the builtin functions</td>
+          <td><span class="summary-sig"><a name="visit_expr"></a><span class="summary-sig-name">visit_expr</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">expr</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.install_builtins">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_expr">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -256,10 +240,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="parse"></a><span class="summary-sig-name">parse</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      parser routine</td>
+          <td><span class="summary-sig"><a name="visit_return_stmt"></a><span class="summary-sig-name">visit_return_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ret_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.parse">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_return_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -273,51 +257,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="reset"></a><span class="summary-sig-name">reset</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      reset lexer and parser</td>
+          <td><span class="summary-sig"><a name="visit_break_stmt"></a><span class="summary-sig-name">visit_break_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">break_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.reset">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.runtime.DebugUtils-class.html">runtime.DebugUtils</a></code></b>:
-      <code><a href="ezhil.runtime.DebugUtils-class.html#dbg_msg">dbg_msg</a></code>
-      </p>
-    </td>
-  </tr>
-</table>
-<!-- ==================== STATIC METHODS ==================== -->
-<a name="section-StaticMethods"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Static Methods</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-StaticMethods"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="INPUT"></a><span class="summary-sig-name">INPUT</span>(<span class="summary-sig-arg">args</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.INPUT">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_break_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -331,9 +274,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="PRINTF"></a><span class="summary-sig-name">PRINTF</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_continue_stmt"></a><span class="summary-sig-name">visit_continue_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">cont_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.PRINTF">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_continue_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -347,9 +291,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="RAWINPUT"></a><span class="summary-sig-name">RAWINPUT</span>(<span class="summary-sig-arg">args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_else_stmt"></a><span class="summary-sig-name">visit_else_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">else_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.RAWINPUT">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_else_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -363,9 +308,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="SPRINTF"></a><span class="summary-sig-name">SPRINTF</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_if_elseif_stmt"></a><span class="summary-sig-name">visit_if_elseif_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">if_elseif_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.SPRINTF">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_if_elseif_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -379,9 +325,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="SPRINTF_worker"></a><span class="summary-sig-name">SPRINTF_worker</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_while_stmt"></a><span class="summary-sig-name">visit_while_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.SPRINTF_worker">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_while_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -395,9 +342,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="ezhil_assert"></a><span class="summary-sig-name">ezhil_assert</span>(<span class="summary-sig-arg">x</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_for_stmt"></a><span class="summary-sig-name">visit_for_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">for_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.ezhil_assert">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_for_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -411,9 +359,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="ezhil_pause"></a><span class="summary-sig-name">ezhil_pause</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_assign_stmt"></a><span class="summary-sig-name">visit_assign_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">assign_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.ezhil_pause">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_assign_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -427,9 +376,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="ezhil_reverse"></a><span class="summary-sig-name">ezhil_reverse</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_print_stmt"></a><span class="summary-sig-name">visit_print_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">print_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.ezhil_reverse">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_print_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -443,9 +393,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="file_close"></a><span class="summary-sig-name">file_close</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_eval_stmt"></a><span class="summary-sig-name">visit_eval_stmt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">eval_stmt</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.file_close">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_eval_stmt">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -459,9 +410,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="file_open"></a><span class="summary-sig-name">file_open</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_arg_list"></a><span class="summary-sig-name">visit_arg_list</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">arg_list</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.file_open">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_arg_list">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -475,9 +427,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="file_read"></a><span class="summary-sig-name">file_read</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_value_list"></a><span class="summary-sig-name">visit_value_list</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value_list</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.file_read">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_value_list">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -491,9 +444,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="file_readlines"></a><span class="summary-sig-name">file_readlines</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_stmt_list"></a><span class="summary-sig-name">visit_stmt_list</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">stmt_list</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.file_readlines">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_stmt_list">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -507,9 +461,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="file_write"></a><span class="summary-sig-name">file_write</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_function"></a><span class="summary-sig-name">visit_function</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">function</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.file_write">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_function">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -523,9 +478,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="file_writelines"></a><span class="summary-sig-name">file_writelines</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="visit_program_or_script"></a><span class="summary-sig-name">visit_program_or_script</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.file_writelines">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.transform-pysrc.html#Visitor.visit_program_or_script">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -534,50 +489,6 @@
     </td>
   </tr>
 </table>
-<!-- ==================== METHOD DETAILS ==================== -->
-<a name="section-MethodDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Method Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-MethodDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-</table>
-<a name="__init__"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">lexer</span>,
-        <span class="sig-arg">dbg</span>=<span class="sig-default">False</span>)</span>
-    <br /><em class="fname">(Constructor)</em>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.Interpreter%27-pysrc.html#Interpreter.__init__">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="ezhil.runtime.DebugUtils-class.html#__init__">runtime.DebugUtils.__init__</a>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -604,7 +515,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Nov 15 08:59:55 2013
+    Generated by Epydoc 3.0.1 on Fri Nov 15 08:59:56 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

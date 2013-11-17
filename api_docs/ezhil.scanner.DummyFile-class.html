@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>ezhil.ast.StmtList</title>
+  <title>ezhil.scanner.DummyFile</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
-        <a href="ezhil.ast-module.html">Module&nbsp;ast</a> ::
-        Class&nbsp;StmtList
+        <a href="ezhil.scanner-module.html">Module&nbsp;scanner</a> ::
+        Class&nbsp;DummyFile
       </span>
     </td>
     <td>
@@ -49,21 +49,25 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="ezhil.ast.StmtList-class.html"
+            >]&nbsp;|&nbsp;<a href="ezhil.scanner.DummyFile-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class StmtList</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class DummyFile</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.scanner-pysrc.html#DummyFile">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-<a href="ezhil.ast.Stmt-class.html">Stmt</a> --+
-       |
-      <strong class="uidshort">StmtList</strong>
+object --+    
+         |    
+      file --+
+             |
+            <strong class="uidshort">DummyFile</strong>
 </pre>
 
 <hr />
+<p>wrap a bunch of string data in a file interface</p>
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -83,16 +87,15 @@
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">file object</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.StmtList-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">stmt</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
-        <span class="summary-sig-arg">dbg</span>=<span class="summary-sig-default">False</span>)</span><br />
-      implements an empty statement</td>
+          <td><span class="summary-sig"><a href="ezhil.scanner.DummyFile-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">data</span>)</span><br />
+      x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.scanner-pysrc.html#DummyFile.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -102,13 +105,14 @@
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">None or (perhaps) an integer</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__len__"></a><span class="summary-sig-name">__len__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a href="ezhil.scanner.DummyFile-class.html#close" class="summary-sig-name">close</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Close the file.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.__len__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.scanner-pysrc.html#DummyFile.close">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -118,66 +122,14 @@
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">list of strings, each a line from the file</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="append"></a><span class="summary-sig-name">append</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">stmt_x</span>)</span></td>
+          <td><span class="summary-sig"><a href="ezhil.scanner.DummyFile-class.html#readlines" class="summary-sig-name">readlines</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Call readline() repeatedly and return a list of the lines so read.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.append">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.StmtList-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.__repr__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.StmtList-class.html#evaluate" class="summary-sig-name">evaluate</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">env</span>)</span><br />
-      empty statement</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.evaluate">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.StmtList-class.html#visit" class="summary-sig-name">visit</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">walker</span>)</span><br />
-      visit stmt list method</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.visit">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.scanner-pysrc.html#DummyFile.readlines">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -187,10 +139,71 @@
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.ast.Stmt-class.html">Stmt</a></code></b>:
-      <code><a href="ezhil.ast.Stmt-class.html#dbg_msg">dbg_msg</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#get_pos">get_pos</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#is_true_value">is_true_value</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>file</code></b>:
+      <code>__delattr__</code>,
+      <code>__enter__</code>,
+      <code>__exit__</code>,
+      <code>__getattribute__</code>,
+      <code>__iter__</code>,
+      <code>__new__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>fileno</code>,
+      <code>flush</code>,
+      <code>isatty</code>,
+      <code>next</code>,
+      <code>read</code>,
+      <code>readinto</code>,
+      <code>readline</code>,
+      <code>seek</code>,
+      <code>tell</code>,
+      <code>truncate</code>,
+      <code>write</code>,
+      <code>writelines</code>,
+      <code>xreadlines</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__format__</code>,
+      <code>__hash__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>file</code></b>:
+      <code>closed</code>,
+      <code>encoding</code>,
+      <code>errors</code>,
+      <code>mode</code>,
+      <code>name</code>,
+      <code>newlines</code>,
+      <code>softspace</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
       </p>
     </td>
   </tr>
@@ -221,90 +234,74 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">stmt</span>=<span class="sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
-        <span class="sig-arg">dbg</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">data</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="ezhil.scanner-pysrc.html#DummyFile.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>implements an empty statement</p>
+  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
   <dl class="fields">
+    <dt>Returns: file object</dt>
     <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#__init__">Stmt.__init__</a>
+        object.__init__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="__repr__"></a>
+<a name="close"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
-    <br /><em class="fname">(Representation operator)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">close</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.__repr__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="ezhil.scanner-pysrc.html#DummyFile.close">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  
+  <p>Close the file.</p>
+  <p>Sets data attribute .closed to True.  A closed file cannot be used for
+  further I/O operations.  close() may be called more than once without 
+  error.  Some kinds of file objects (for example, opened by popen()) may 
+  return an exit status upon closing.</p>
   <dl class="fields">
+    <dt>Returns: None or (perhaps) an integer</dt>
     <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#__repr__">Stmt.__repr__</a>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="evaluate"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">evaluate</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">env</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.evaluate">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>empty statement</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#evaluate">Stmt.evaluate</a>
+        file.close
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="visit"></a>
+<a name="readlines"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">walker</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">readlines</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#StmtList.visit">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="ezhil.scanner-pysrc.html#DummyFile.readlines">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>visit stmt list method</p>
+  <p>Call readline() repeatedly and return a list of the lines so read. The
+  optional size argument, if given, is an approximate bound on the total 
+  number of bytes in the lines returned.</p>
   <dl class="fields">
+    <dt>Returns: list of strings, each a line from the file</dt>
     <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#visit">Stmt.visit</a>
+        file.readlines
+        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>

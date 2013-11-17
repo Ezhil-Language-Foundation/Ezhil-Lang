@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>ezhil.ast.UnaryExpr</title>
+  <title>ezhil.theme.StringAttrib</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
-        <a href="ezhil.ast-module.html">Module&nbsp;ast</a> ::
-        Class&nbsp;UnaryExpr
+        <a href="ezhil.theme-module.html">Module&nbsp;theme</a> ::
+        Class&nbsp;StringAttrib
       </span>
     </td>
     <td>
@@ -49,18 +49,22 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="ezhil.ast.UnaryExpr-class.html"
+            >]&nbsp;|&nbsp;<a href="ezhil.theme.StringAttrib-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class UnaryExpr</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class StringAttrib</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.theme-pysrc.html#StringAttrib">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-<a href="ezhil.ast.Stmt-class.html">Stmt</a> --+
-       |
-      <strong class="uidshort">UnaryExpr</strong>
+object --+        
+         |        
+      list --+    
+             |    
+        <a href="ezhil.theme.Attrib-class.html">Attrib</a> --+
+                 |
+                <strong class="uidshort">StringAttrib</strong>
 </pre>
 
 <hr />
@@ -81,71 +85,140 @@
     </table>
   </td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.UnaryExpr-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">t</span>,
-        <span class="summary-sig-arg">op</span>,
-        <span class="summary-sig-arg">l</span>,
-        <span class="summary-sig-arg">c</span>,
-        <span class="summary-sig-arg">dbg</span>=<span class="summary-sig-default">False</span>)</span><br />
-      implements an empty statement</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.__init__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="do_unaryop"></a><span class="summary-sig-name">do_unaryop</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">tval</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.do_unaryop">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.UnaryExpr-class.html#evaluate" class="summary-sig-name">evaluate</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">env</span>)</span><br />
-      empty statement</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.evaluate">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.ast.Stmt-class.html">Stmt</a></code></b>:
-      <code><a href="ezhil.ast.Stmt-class.html#__repr__">__repr__</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#dbg_msg">dbg_msg</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#get_pos">get_pos</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#is_true_value">is_true_value</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#visit">visit</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.theme.Attrib-class.html">Attrib</a></code></b>:
+      <code><a href="ezhil.theme.Attrib-class.html#__init__">__init__</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>list</code></b>:
+      <code>__add__</code>,
+      <code>__contains__</code>,
+      <code>__delitem__</code>,
+      <code>__delslice__</code>,
+      <code>__eq__</code>,
+      <code>__ge__</code>,
+      <code>__getattribute__</code>,
+      <code>__getitem__</code>,
+      <code>__getslice__</code>,
+      <code>__gt__</code>,
+      <code>__iadd__</code>,
+      <code>__imul__</code>,
+      <code>__iter__</code>,
+      <code>__le__</code>,
+      <code>__len__</code>,
+      <code>__lt__</code>,
+      <code>__mul__</code>,
+      <code>__ne__</code>,
+      <code>__new__</code>,
+      <code>__repr__</code>,
+      <code>__reversed__</code>,
+      <code>__rmul__</code>,
+      <code>__setitem__</code>,
+      <code>__setslice__</code>,
+      <code>__sizeof__</code>,
+      <code>append</code>,
+      <code>count</code>,
+      <code>extend</code>,
+      <code>index</code>,
+      <code>insert</code>,
+      <code>pop</code>,
+      <code>remove</code>,
+      <code>reverse</code>,
+      <code>sort</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== STATIC METHODS ==================== -->
+<a name="section-StaticMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Static Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-StaticMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.theme.StringAttrib-class.html#process" class="summary-sig-name">process</a>(<span class="summary-sig-arg">*args</span>)</span><br />
+      chicken wrapped bacon</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.theme-pysrc.html#StringAttrib.process">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>list</code></b>:
+      <code>__hash__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
       </p>
     </td>
   </tr>
@@ -168,55 +241,25 @@
   </td>
 </tr>
 </table>
-<a name="__init__"></a>
+<a name="process"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">t</span>,
-        <span class="sig-arg">op</span>,
-        <span class="sig-arg">l</span>,
-        <span class="sig-arg">c</span>,
-        <span class="sig-arg">dbg</span>=<span class="sig-default">False</span>)</span>
-    <br /><em class="fname">(Constructor)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">process</span>(<span class="sig-arg">*args</span>)</span>
+    <br /><em class="fname">Static Method</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="ezhil.theme-pysrc.html#StringAttrib.process">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>implements an empty statement</p>
+  <p>chicken wrapped bacon</p>
   <dl class="fields">
     <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#__init__">Stmt.__init__</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="evaluate"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">evaluate</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">env</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.evaluate">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>empty statement</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#evaluate">Stmt.evaluate</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
+        <a href="ezhil.theme.Attrib-class.html#process">Attrib.process</a>
     </dt>
   </dl>
 </td></tr></table>
@@ -248,7 +291,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Nov 15 08:59:55 2013
+    Generated by Epydoc 3.0.1 on Fri Nov 15 08:59:56 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

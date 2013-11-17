@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>ezhil.ast.Hash</title>
+  <title>ezhil.EZWeb.EzhilWeb</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
-        <a href="ezhil.ast-module.html">Module&nbsp;ast</a> ::
-        Class&nbsp;Hash
+        <a href="ezhil.EZWeb-module.html">Module&nbsp;EZWeb</a> ::
+        Class&nbsp;EzhilWeb
       </span>
     </td>
     <td>
@@ -49,23 +49,58 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="ezhil.ast.Hash-class.html"
+            >]&nbsp;|&nbsp;<a href="ezhil.EZWeb.EzhilWeb-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Hash</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.ast-pysrc.html#Hash">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class EzhilWeb</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.EZWeb-pysrc.html#EzhilWeb">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-object --+    
-         |    
-      dict --+
-             |
-            <strong class="uidshort">Hash</strong>
+                    SocketServer.ThreadingMixIn --+
+                                                  |
+SocketServer.BaseRequestHandler --+               |
+                                  |               |
+  SocketServer.StreamRequestHandler --+           |
+                                      |           |
+  BaseHTTPServer.BaseHTTPRequestHandler --+       |
+                                          |       |
+  SimpleHTTPServer.SimpleHTTPRequestHandler --+   |
+                                              |   |
+                                   <a href="ezhil.EZWeb.BaseEzhilWeb-class.html">BaseEzhilWeb</a> --+
+                                                  |
+                                                 <strong class="uidshort">EzhilWeb</strong>
 </pre>
 
 <hr />
+<p>Add threading to handle requests in separate thread</p>
+
+<!-- ==================== NESTED CLASSES ==================== -->
+<a name="section-NestedClasses"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Nested Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-NestedClasses"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>BaseHTTPServer.BaseHTTPRequestHandler</code></b>:
+      <code><a href="mimetools.Message-class.html">MessageClass</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -85,52 +120,44 @@ object --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>dict</code></b>:
-      <code>__cmp__</code>,
-      <code>__contains__</code>,
-      <code>__delitem__</code>,
-      <code>__eq__</code>,
-      <code>__ge__</code>,
-      <code>__getattribute__</code>,
-      <code>__getitem__</code>,
-      <code>__gt__</code>,
-      <code>__init__</code>,
-      <code>__iter__</code>,
-      <code>__le__</code>,
-      <code>__len__</code>,
-      <code>__lt__</code>,
-      <code>__ne__</code>,
-      <code>__new__</code>,
-      <code>__repr__</code>,
-      <code>__setitem__</code>,
-      <code>__sizeof__</code>,
-      <code>clear</code>,
-      <code>copy</code>,
-      <code>fromkeys</code>,
-      <code>get</code>,
-      <code>has_key</code>,
-      <code>items</code>,
-      <code>iteritems</code>,
-      <code>iterkeys</code>,
-      <code>itervalues</code>,
-      <code>keys</code>,
-      <code>pop</code>,
-      <code>popitem</code>,
-      <code>setdefault</code>,
-      <code>update</code>,
-      <code>values</code>,
-      <code>viewitems</code>,
-      <code>viewkeys</code>,
-      <code>viewvalues</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.ThreadingMixIn</code></b>:
+      <code>process_request</code>,
+      <code>process_request_thread</code>
       </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__delattr__</code>,
-      <code>__format__</code>,
-      <code>__reduce__</code>,
-      <code>__reduce_ex__</code>,
-      <code>__setattr__</code>,
-      <code>__str__</code>,
-      <code>__subclasshook__</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.EZWeb.BaseEzhilWeb-class.html">BaseEzhilWeb</a></code></b>:
+      <code><a href="ezhil.EZWeb.BaseEzhilWeb-class.html#do_GET">do_GET</a></code>,
+      <code><a href="ezhil.EZWeb.BaseEzhilWeb-class.html#do_ezhil_execute">do_ezhil_execute</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SimpleHTTPServer.SimpleHTTPRequestHandler</code></b>:
+      <code>copyfile</code>,
+      <code>do_HEAD</code>,
+      <code>guess_type</code>,
+      <code>list_directory</code>,
+      <code>send_head</code>,
+      <code>translate_path</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>BaseHTTPServer.BaseHTTPRequestHandler</code></b>:
+      <code>address_string</code>,
+      <code>date_time_string</code>,
+      <code>end_headers</code>,
+      <code>handle</code>,
+      <code>handle_one_request</code>,
+      <code>log_date_time_string</code>,
+      <code>log_error</code>,
+      <code>log_message</code>,
+      <code>log_request</code>,
+      <code>parse_request</code>,
+      <code>send_error</code>,
+      <code>send_header</code>,
+      <code>send_response</code>,
+      <code>version_string</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.StreamRequestHandler</code></b>:
+      <code>finish</code>,
+      <code>setup</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.BaseRequestHandler</code></b>:
+      <code>__init__</code>
       </p>
     </td>
   </tr>
@@ -154,33 +181,28 @@ object --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>dict</code></b>:
-      <code>__hash__</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.ThreadingMixIn</code></b>:
+      <code>daemon_threads</code>
       </p>
-    </td>
-  </tr>
-</table>
-<!-- ==================== PROPERTIES ==================== -->
-<a name="section-Properties"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Properties</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Properties"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__class__</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SimpleHTTPServer.SimpleHTTPRequestHandler</code></b>:
+      <code>extensions_map</code>,
+      <code>server_version</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>BaseHTTPServer.BaseHTTPRequestHandler</code></b>:
+      <code>default_request_version</code>,
+      <code>error_content_type</code>,
+      <code>error_message_format</code>,
+      <code>monthname</code>,
+      <code>protocol_version</code>,
+      <code>responses</code>,
+      <code>sys_version</code>,
+      <code>weekdayname</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.StreamRequestHandler</code></b>:
+      <code>disable_nagle_algorithm</code>,
+      <code>rbufsize</code>,
+      <code>timeout</code>,
+      <code>wbufsize</code>
       </p>
     </td>
   </tr>

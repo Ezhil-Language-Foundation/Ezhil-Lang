@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>ezhil.ast.UnaryExpr</title>
+  <title>ezhil.EZWeb.BaseEzhilWeb</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="ezhil-module.html">Package&nbsp;ezhil</a> ::
-        <a href="ezhil.ast-module.html">Module&nbsp;ast</a> ::
-        Class&nbsp;UnaryExpr
+        <a href="ezhil.EZWeb-module.html">Module&nbsp;EZWeb</a> ::
+        Class&nbsp;BaseEzhilWeb
       </span>
     </td>
     <td>
@@ -49,21 +49,58 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="ezhil.ast.UnaryExpr-class.html"
+            >]&nbsp;|&nbsp;<a href="ezhil.EZWeb.BaseEzhilWeb-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class UnaryExpr</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class BaseEzhilWeb</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.EZWeb-pysrc.html#BaseEzhilWeb">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-<a href="ezhil.ast.Stmt-class.html">Stmt</a> --+
-       |
-      <strong class="uidshort">UnaryExpr</strong>
+SocketServer.BaseRequestHandler --+            
+                                  |            
+  SocketServer.StreamRequestHandler --+        
+                                      |        
+  BaseHTTPServer.BaseHTTPRequestHandler --+    
+                                          |    
+  SimpleHTTPServer.SimpleHTTPRequestHandler --+
+                                              |
+                                             <strong class="uidshort">BaseEzhilWeb</strong>
 </pre>
 
+<dl><dt>Known Subclasses:</dt>
+<dd>
+      <ul class="subclass-list">
+<li><a href="ezhil.EZWeb.EzhilWeb-class.html">EzhilWeb</a></li>  </ul>
+</dd></dl>
+
 <hr />
+<!-- ==================== NESTED CLASSES ==================== -->
+<a name="section-NestedClasses"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Nested Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-NestedClasses"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>BaseHTTPServer.BaseHTTPRequestHandler</code></b>:
+      <code><a href="mimetools.Message-class.html">MessageClass</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -87,15 +124,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.UnaryExpr-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">t</span>,
-        <span class="summary-sig-arg">op</span>,
-        <span class="summary-sig-arg">l</span>,
-        <span class="summary-sig-arg">c</span>,
-        <span class="summary-sig-arg">dbg</span>=<span class="summary-sig-default">False</span>)</span><br />
-      implements an empty statement</td>
+          <td><span class="summary-sig"><a href="ezhil.EZWeb.BaseEzhilWeb-class.html#do_GET" class="summary-sig-name">do_GET</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Serve a GET request.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.EZWeb-pysrc.html#BaseEzhilWeb.do_GET">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -109,28 +141,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="do_unaryop"></a><span class="summary-sig-name">do_unaryop</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">tval</span>)</span></td>
+          <td><span class="summary-sig"><a name="do_ezhil_execute"></a><span class="summary-sig-name">do_ezhil_execute</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">program</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.do_unaryop">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="ezhil.ast.UnaryExpr-class.html#evaluate" class="summary-sig-name">evaluate</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">env</span>)</span><br />
-      empty statement</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.evaluate">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.EZWeb-pysrc.html#BaseEzhilWeb.do_ezhil_execute">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -140,12 +154,78 @@
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.ast.Stmt-class.html">Stmt</a></code></b>:
-      <code><a href="ezhil.ast.Stmt-class.html#__repr__">__repr__</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#dbg_msg">dbg_msg</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#get_pos">get_pos</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#is_true_value">is_true_value</a></code>,
-      <code><a href="ezhil.ast.Stmt-class.html#visit">visit</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SimpleHTTPServer.SimpleHTTPRequestHandler</code></b>:
+      <code>copyfile</code>,
+      <code>do_HEAD</code>,
+      <code>guess_type</code>,
+      <code>list_directory</code>,
+      <code>send_head</code>,
+      <code>translate_path</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>BaseHTTPServer.BaseHTTPRequestHandler</code></b>:
+      <code>address_string</code>,
+      <code>date_time_string</code>,
+      <code>end_headers</code>,
+      <code>handle</code>,
+      <code>handle_one_request</code>,
+      <code>log_date_time_string</code>,
+      <code>log_error</code>,
+      <code>log_message</code>,
+      <code>log_request</code>,
+      <code>parse_request</code>,
+      <code>send_error</code>,
+      <code>send_header</code>,
+      <code>send_response</code>,
+      <code>version_string</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.StreamRequestHandler</code></b>:
+      <code>finish</code>,
+      <code>setup</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.BaseRequestHandler</code></b>:
+      <code>__init__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SimpleHTTPServer.SimpleHTTPRequestHandler</code></b>:
+      <code>extensions_map</code>,
+      <code>server_version</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>BaseHTTPServer.BaseHTTPRequestHandler</code></b>:
+      <code>default_request_version</code>,
+      <code>error_content_type</code>,
+      <code>error_message_format</code>,
+      <code>monthname</code>,
+      <code>protocol_version</code>,
+      <code>responses</code>,
+      <code>sys_version</code>,
+      <code>weekdayname</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>SocketServer.StreamRequestHandler</code></b>:
+      <code>disable_nagle_algorithm</code>,
+      <code>rbufsize</code>,
+      <code>timeout</code>,
+      <code>wbufsize</code>
       </p>
     </td>
   </tr>
@@ -168,54 +248,24 @@
   </td>
 </tr>
 </table>
-<a name="__init__"></a>
+<a name="do_GET"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">t</span>,
-        <span class="sig-arg">op</span>,
-        <span class="sig-arg">l</span>,
-        <span class="sig-arg">c</span>,
-        <span class="sig-arg">dbg</span>=<span class="sig-default">False</span>)</span>
-    <br /><em class="fname">(Constructor)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">do_GET</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="ezhil.EZWeb-pysrc.html#BaseEzhilWeb.do_GET">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>implements an empty statement</p>
+  <p>Serve a GET request.</p>
   <dl class="fields">
     <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#__init__">Stmt.__init__</a>
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="evaluate"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">evaluate</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">env</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="ezhil.ast-pysrc.html#UnaryExpr.evaluate">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>empty statement</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="ezhil.ast.Stmt-class.html#evaluate">Stmt.evaluate</a>
+        SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>

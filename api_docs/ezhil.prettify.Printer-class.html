@@ -57,6 +57,13 @@
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class Printer</h1><p class="nomargin-top"><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+<a href="ezhil.transform.Visitor-class.html">transform.Visitor</a> --+
+                    |
+                   <strong class="uidshort">Printer</strong>
+</pre>
+
+<hr />
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -80,8 +87,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">src_file</span>)</span></td>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">src_file</span>)</span><br />
+      @styler uses a Wiki/HTML/LaTeX output formatter, with a color theme 
+      specificied by @theme to render the text into the appropriate format</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.__init__">source&nbsp;code</a></span>
             
@@ -97,9 +106,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="pretty_printer"></a><span class="summary-sig-name">pretty_printer</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="update_line"></a><span class="summary-sig-name">update_line</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">obj</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.pretty_printer">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.update_line">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -113,9 +123,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="hilite"></a><span class="summary-sig-name">hilite</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="append"></a><span class="summary-sig-name">append</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">string</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.hilite">source&nbsp;code</a></span>
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.append">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -123,7 +134,989 @@
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#default" class="summary-sig-name">default</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      /dev/zero dump for all visitor methods when not handled in derived 
+      class</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.default">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_identifier" class="summary-sig-name">visit_identifier</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">IDobj</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_identifier">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_string" class="summary-sig-name">visit_string</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">string</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_string">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_number" class="summary-sig-name">visit_number</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">num</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_number">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_expr_call" class="summary-sig-name">visit_expr_call</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">expr_call</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_expr_call">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_expr_list" class="summary-sig-name">visit_expr_list</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">expr_list</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_expr_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_stmt_list" class="summary-sig-name">visit_stmt_list</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">stmt_list</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_stmt_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_stmt" class="summary-sig-name">visit_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_expr" class="summary-sig-name">visit_expr</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">expr</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_expr">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_return_stmt" class="summary-sig-name">visit_return_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ret_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_return_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_break_stmt" class="summary-sig-name">visit_break_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">break_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_break_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_continue_stmt" class="summary-sig-name">visit_continue_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">cont_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_continue_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_else_stmt" class="summary-sig-name">visit_else_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">else_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_else_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_if_elseif_stmt" class="summary-sig-name">visit_if_elseif_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">if_elseif_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_if_elseif_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="visit_end_kw"></a><span class="summary-sig-name">visit_end_kw</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_end_kw">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_while_stmt" class="summary-sig-name">visit_while_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_while_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_for_stmt" class="summary-sig-name">visit_for_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">for_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_for_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_assign_stmt" class="summary-sig-name">visit_assign_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">assign_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_assign_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_print_stmt" class="summary-sig-name">visit_print_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">print_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_print_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_eval_stmt" class="summary-sig-name">visit_eval_stmt</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">eval_stmt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_eval_stmt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_arg_list" class="summary-sig-name">visit_arg_list</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">arg_list</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_arg_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_value_list" class="summary-sig-name">visit_value_list</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value_list</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_value_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="ezhil.prettify.Printer-class.html#visit_function" class="summary-sig-name">visit_function</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">function</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_function">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="pretty_print"></a><span class="summary-sig-name">pretty_print</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.pretty_print">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="lexical_hilite"></a><span class="summary-sig-name">lexical_hilite</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.lexical_hilite">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ezhil.transform.Visitor-class.html">transform.Visitor</a></code></b>:
+      <code><a href="ezhil.transform.Visitor-class.html#visit_program_or_script">visit_program_or_script</a></code>
+      </p>
+    </td>
+  </tr>
 </table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">src_file</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>@styler uses a Wiki/HTML/LaTeX output formatter, with a color theme 
+  specificied by @theme to render the text into the appropriate format</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#__init__">transform.Visitor.__init__</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">default</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.default">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>/dev/zero dump for all visitor methods when not handled in derived 
+  class</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#default">transform.Visitor.default</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_identifier"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_identifier</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">IDobj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_identifier">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_identifier">transform.Visitor.visit_identifier</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_string"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_string</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">string</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_string">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_string">transform.Visitor.visit_string</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_number"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_number</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">num</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_number">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_number">transform.Visitor.visit_number</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_expr_call"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_expr_call</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">expr_call</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_expr_call">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_expr_call">transform.Visitor.visit_expr_call</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_expr_list"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_expr_list</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">expr_list</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_expr_list">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_expr_list">transform.Visitor.visit_expr_list</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_stmt_list"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_stmt_list</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">stmt_list</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_stmt_list">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_stmt_list">transform.Visitor.visit_stmt_list</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_stmt">transform.Visitor.visit_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_expr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_expr</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">expr</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_expr">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_expr">transform.Visitor.visit_expr</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_return_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_return_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">ret_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_return_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_return_stmt">transform.Visitor.visit_return_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_break_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_break_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">break_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_break_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_break_stmt">transform.Visitor.visit_break_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_continue_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_continue_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">cont_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_continue_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_continue_stmt">transform.Visitor.visit_continue_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_else_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_else_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">else_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_else_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_else_stmt">transform.Visitor.visit_else_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_if_elseif_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_if_elseif_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">if_elseif_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_if_elseif_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_if_elseif_stmt">transform.Visitor.visit_if_elseif_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_while_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_while_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_while_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_while_stmt">transform.Visitor.visit_while_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_for_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_for_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">for_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_for_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_for_stmt">transform.Visitor.visit_for_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_assign_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_assign_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">assign_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_assign_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_assign_stmt">transform.Visitor.visit_assign_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_print_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_print_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">print_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_print_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_print_stmt">transform.Visitor.visit_print_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_eval_stmt"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_eval_stmt</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">eval_stmt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_eval_stmt">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_eval_stmt">transform.Visitor.visit_eval_stmt</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_arg_list"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_arg_list</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">arg_list</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_arg_list">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_arg_list">transform.Visitor.visit_arg_list</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_value_list"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_value_list</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">value_list</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_value_list">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_value_list">transform.Visitor.visit_value_list</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="visit_function"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">visit_function</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">function</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="ezhil.prettify-pysrc.html#Printer.visit_function">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="ezhil.transform.Visitor-class.html#visit_function">transform.Visitor.visit_function</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -150,7 +1143,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Aug 16 17:17:46 2013
+    Generated by Epydoc 3.0.1 on Fri Nov 15 08:59:55 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

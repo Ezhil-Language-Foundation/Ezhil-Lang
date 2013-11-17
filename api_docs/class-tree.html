@@ -70,9 +70,9 @@
     <li> <strong class="uidlink">SimpleHTTPServer.SimpleHTTPRequestHandler</strong>:
       <em class="summary">Simple HTTP request handler with GET and HEAD commands.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="ezhil.EZWeb.BaseEzhilOnTheWeb-class.html">ezhil.EZWeb.BaseEzhilOnTheWeb</a></strong>
+    <li> <strong class="uidlink"><a href="ezhil.EZWeb.BaseEzhilWeb-class.html">ezhil.EZWeb.BaseEzhilWeb</a></strong>
     <ul>
-    <li> <strong class="uidlink"><a href="ezhil.EZWeb.EzhilOnTheWeb-class.html">ezhil.EZWeb.EzhilOnTheWeb</a></strong>:
+    <li> <strong class="uidlink"><a href="ezhil.EZWeb.EzhilWeb-class.html">ezhil.EZWeb.EzhilWeb</a></strong>:
       <em class="summary">Add threading to handle requests in separate thread</em>
     </li>
     </ul>
@@ -111,10 +111,6 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="ezhil.parser.Parser-class.html">ezhil.parser.Parser</a></strong>:
-      <em class="summary">when you add new language feature, add a AST class and its evaluate
-        methods.</em>
-    </li>
     <li> <strong class="uidlink"><a href="ezhil.ExprsParser.Parser-class.html">ezhil.ExprsParser.Parser</a></strong>:
       <em class="summary">when you add new language feature, add a AST class and its evaluate
         methods.</em>
@@ -124,6 +120,10 @@
         methods.</em>
     </li>
     </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="ezhil.parser.Parser-class.html">ezhil.parser.Parser</a></strong>:
+      <em class="summary">when you add new language feature, add a AST class and its evaluate
+        methods.</em>
     </li>
     </ul>
     </li>
@@ -190,8 +190,6 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="ezhil.prettify.Printer-class.html">ezhil.prettify.Printer</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="ezhil.ast.Stmt-class.html">ezhil.ast.Stmt</a></strong>
     <ul>
     <li> <strong class="uidlink"><a href="ezhil.ast.AssignStmt-class.html">ezhil.ast.AssignStmt</a></strong>:
@@ -244,7 +242,7 @@
     <li> <strong class="uidlink">SocketServer.ThreadingMixIn</strong>:
       <em class="summary">Mix-in class to handle each request in a new thread.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="ezhil.EZWeb.EzhilOnTheWeb-class.html">ezhil.EZWeb.EzhilOnTheWeb</a></strong>:
+    <li> <strong class="uidlink"><a href="ezhil.EZWeb.EzhilWeb-class.html">ezhil.EZWeb.EzhilWeb</a></strong>:
       <em class="summary">Add threading to handle requests in separate thread</em>
     </li>
     </ul>
@@ -256,10 +254,14 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="ezhil.transform.TreeWalker-class.html">ezhil.transform.TreeWalker</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="ezhil.ast.ValueList-class.html">ezhil.ast.ValueList</a></strong>:
       <em class="summary">defines value list in a function definition</em>
+    </li>
+    <li> <strong class="uidlink"><a href="ezhil.transform.Visitor-class.html">ezhil.transform.Visitor</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="ezhil.prettify.Printer-class.html">ezhil.prettify.Printer</a></strong>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink"><a href="ezhil.prettify.WikiStyle-class.html">ezhil.prettify.WikiStyle</a></strong>
     </li>
@@ -284,7 +286,7 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="ezhil.ezhil.TimeoutException-class.html">ezhil.ezhil.TimeoutException</a></strong>
+    <li> <strong class="uidlink"><a href="ezhil.errors.TimeoutException-class.html">ezhil.errors.TimeoutException</a></strong>
     </li>
     </ul>
     </li>
@@ -301,7 +303,20 @@ dict(iterable) -&gt; new dictionary initialized as if via:
 dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     in the keyword argument list.</em>
     <ul>
+    <li> <strong class="uidlink"><a href="ezhil.ast.Dict-class.html">ezhil.ast.Dict</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="ezhil.ast.Hash-class.html">ezhil.ast.Hash</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ezhil.Interpreter%27.NoClobberDict-class.html">ezhil.Interpreter'.NoClobberDict</a></strong>:
+      <em class="summary">dictionary structure with a set like mathematical structure.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">file</strong>:
+      <em class="summary">file(name[, mode[, buffering]]) -&gt; file object</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="ezhil.scanner.DummyFile-class.html">ezhil.scanner.DummyFile</a></strong>:
+      <em class="summary">wrap a bunch of string data in a file interface</em>
     </li>
     </ul>
     </li>
@@ -312,6 +327,10 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     <li> <strong class="uidlink"><a href="ezhil.ast.Array-class.html">ezhil.ast.Array</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ezhil.theme.Attrib-class.html">ezhil.theme.Attrib</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="ezhil.theme.StringAttrib-class.html">ezhil.theme.StringAttrib</a></strong>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
@@ -344,7 +363,7 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Aug 16 17:17:45 2013
+    Generated by Epydoc 3.0.1 on Fri Nov 15 08:59:55 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
