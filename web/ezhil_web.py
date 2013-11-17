@@ -23,6 +23,7 @@ import urllib
 import re
 
 def chrome_url_fixup( prog ):
+    prog = prog.decode("utf-8")
     prog = urllib.unquote( prog )
     patt = re.compile('(&#[0-9]{4};)')
     parts = re.split( patt, prog )

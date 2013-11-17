@@ -165,13 +165,13 @@ class EzhilParser(Parser):
     
     def parseIfStmt(self,exp):
         ## @ <expression> if { stmtlist } @<expr> ELSEIF {stmtlist} ELSE <stmtlist> END
-        self.dbg_msg("parsing IF statement")
+        self.dbg_msg(u"parsing IF statement")
         if_tok = self.dequeue()
         [l,c]=if_tok.get_line_col()
         self.inside_if = True
         ifstmt = IfStmt( exp[0], None, None, l, c, self.debug)
         self.if_stack.append(ifstmt)
-        self.dbg_msg("parsing IF-body")
+        self.dbg_msg(u"parsing IF-body")
         body = self.stmtlist()
         prev_body = body;
         ifstmt.set_body( body )
@@ -181,10 +181,10 @@ class EzhilParser(Parser):
             [l,c]=ptok.get_line_col()
             if ( ptok.kind == EzhilToken.ATRATEOF ):
                 # parse elseif branch
-                self.dbg_msg("parsing ELSE-IF")                
+                self.dbg_msg(u"parsing ELSE-IF")                
                 self.match( EzhilToken.ATRATEOF )
                 exp = self.valuelist();
-                self.dbg_msg("parsing ELSE-IF EXPR")
+                self.dbg_msg(u"parsing ELSE-IF EXPR")
                 tok = self.peek()
                 if ( tok.kind != EzhilToken.ELSEIF ):
                     # maybe another IF statement, SWITCH-CASE or a WHILE loop, DO-WHILE loop etc.
@@ -192,7 +192,7 @@ class EzhilParser(Parser):
                     prev_body.append( next_stmt )
                     # append to previously scanned body.
                 else:
-                    self.dbg_msg("parsing ELSE-IF-body")
+                    self.dbg_msg(u"parsing ELSE-IF-body")
                     self.match( EzhilToken.ELSEIF )
                     body = self.stmtlist()
                     prev_body = body
@@ -200,9 +200,9 @@ class EzhilParser(Parser):
                     ifstmt.append_stmt( next_stmt )
             elif ( ptok.kind == EzhilToken.ELSE ):
                 #parse else branch                
-                self.dbg_msg("parsing stmt else: ")
+                self.dbg_msg(u"parsing stmt else: ")
                 self.match( EzhilToken.ELSE )
-                self.dbg_msg("parsing ELSE-Body")
+                self.dbg_msg(u"parsing ELSE-Body")
                 self.inside_if = False
                 body = self.stmtlist()
                 prev_body = body;
@@ -211,31 +211,31 @@ class EzhilParser(Parser):
                 break
             else:
                 self.inside_if = False
-                raise ParseException("If-Else-If statement syntax is messed up")
+                raise ParseException(u"If-Else-If statement syntax is messed up")
             ptok = self.peek()
-            self.dbg_msg("parsing -IF next bits "+unicode(ptok))
+            self.dbg_msg(u"parsing -IF next bits "+unicode(ptok))
         self.match( EzhilToken.END )
         self.inside_if = False
-        self.dbg_msg("parsing -IF-complete")
+        self.dbg_msg(u"parsing -IF-complete")
         return ifstmt
     
     def stmt(self,pass_in_ATexpr=None):
         """ try an assign, print, return, if or eval statement """
-        self.dbg_msg(" STMT ")
+        self.dbg_msg(u" STMT ")
         ptok = self.peek()
-        self.dbg_msg("stmt: peeking at "+unicode(ptok))
+        self.dbg_msg(u"stmt: peeking at "+unicode(ptok))
         if ( ptok.kind ==  EzhilToken.RETURN ):
             ## return <expression>
             self.dbg_msg('enter->return: <expression>')
             ret_tok = self.dequeue()
             [l,c]=ret_tok.get_line_col();
             if ( not self.parsing_function ):
-                raise ParseException( "return statement outside of function body "+unicode(ret_tok))
+                raise ParseException( u"return statement outside of function body "+unicode(ret_tok))
             rstmt = ReturnStmt(self.expr(),l,c,self.debug)
-            self.dbg_msg("return statement parsed")
+            self.dbg_msg(u"return statement parsed")
             return rstmt
         elif ( ptok.kind ==  EzhilToken.PRINT ):
-            self.dbg_msg("stmt : print ")
+            self.dbg_msg(u"stmt : print ")
             self.currently_parsing.append( ptok )
             ## print <expression>
             print_tok = self.dequeue()
@@ -260,7 +260,7 @@ class EzhilParser(Parser):
             elif ( ptok.kind ==  EzhilToken.WHILE ):
                 ## @ ( expr ) while { body } end               
                self.loop_stack.append(True)
-               self.dbg_msg("while-statement")
+               self.dbg_msg(u"while-statement")
                while_tok = self.dequeue()
                self.currently_parsing.append( while_tok )
                [l,c]=while_tok.get_line_col()
@@ -277,25 +277,25 @@ class EzhilParser(Parser):
                 foreach_tok = self.dequeue()
                 self.currently_parsing.append(foreach_tok)
                 [l,c]=foreach_tok.get_line_col()
-                if ( self.debug ): print("parsing FOREACH stmt")
+                if ( self.debug ): print(u"parsing FOREACH stmt")
                 self.loop_stack.append(True)
-                self.dbg_msg("foreach-statement")
+                self.dbg_msg(u"foreach-statement")
                 # convert to a for statement - building Ezhil AST - transformations
                 if not isinstance( exp[1], Identifier ):
-                    raise ParseException(" FOR-EACH statement "+unicode(foreach_tok) )
+                    raise ParseException(u" FOR-EACH statement "+unicode(foreach_tok) )
                 foreach_iter = exp[1];
                 iter = Identifier("__"+foreach_iter.id,l=0,c=-1);
-                eq_token = EzhilLexeme("=",EzhilToken.EQUALS)
-                plus_token = EzhilLexeme("+",EzhilToken.PLUS)
-                lt_token = EzhilLexeme("<",EzhilToken.LT)
-                if ( self.debug ): print("build init assign stmt")
+                eq_token = EzhilLexeme(u"=",EzhilToken.EQUALS)
+                plus_token = EzhilLexeme(u"+",EzhilToken.PLUS)
+                lt_token = EzhilLexeme(u"<",EzhilToken.LT)
+                if ( self.debug ): print(u"build init assign stmt")
                 init = AssignStmt( iter, eq_token , Number(0),l,c,self.debug)
-                if ( self.debug ): print("build cond expr")
+                if ( self.debug ): print(u"build cond expr")
                 VL1 = ValueList([exp[0]],l,c,self.debug)
                 cond = Expr( iter, lt_token, ExprCall( Identifier("len",l,c), VL1, l, c, self.debug ), l, c, self.debug )
                 if ( self.debug ): print("build plus1 stmt")
                 plus1_iter = Expr( iter, plus_token, Number(1), l, c, self.debug  )
-                if ( self.debug ): print("build equals stmt")
+                if ( self.debug ): print(u"build equals stmt")
                 update = AssignStmt( iter, eq_token , plus1_iter ,l,c,self.debug)
                 body = self.stmtlist() #parse body
                 # and insert artifical update variable in body
@@ -308,7 +308,7 @@ class EzhilParser(Parser):
                 self.currently_parsing.pop()
                 foreach_stmt = ForStmt(init, cond, update, body, l, c, self.debug);                
                 self.loop_stack.pop();                
-                if ( self.debug ): print("completed parsing FOR-EACH loop",unicode(foreach_stmt))
+                if ( self.debug ): print(u"completed parsing FOR-EACH loop",unicode(foreach_stmt))
                 return foreach_stmt
             elif ( ptok.kind ==  EzhilToken.FOR ):
                 ## Fixme : empty for loops not allowed.

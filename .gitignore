@@ -1,3 +1,4 @@
+help/
 push_to_git.sh
 post_commit_ezhil.py
 MANIFEST

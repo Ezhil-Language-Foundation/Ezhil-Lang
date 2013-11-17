@@ -213,7 +213,7 @@ class Stmt:
         """ implements an empty statement"""
         self.line = l
         self.col = c
-        self.class_name = "Stmt"
+        self.class_name = u"Stmt"
         self.debug = dbg
     
     def dbg_msg(self, msg):
@@ -223,8 +223,8 @@ class Stmt:
         return
         
     def __repr__(self):
-        return u"\n\t [%s[empty-statement]] "%(self.class_name)
-
+        return u"\n\t [%s[empty-statement]] "%(unicode(self.class_name))
+    
     def get_pos(self):
         return u"line %d, col %d"%(self.line,self.col)
         
@@ -478,9 +478,9 @@ class ElseStmt(Stmt):
         self.class_name = u"ElseStmt"
 
     def __repr__(self):
-        print "in else-stmt"
+        print u"in else-stmt"
         print u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
-        return u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
+        return u"" #u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
     
     def evaluate(self,env):
         return self.stmt.evaluate(env)
@@ -507,11 +507,18 @@ class IfStmt(Stmt):
         print u"orig",rval
         #print type(self.next_stmt),len(self.next_stmt)
         #print type(self.next_stmt[0])
+        #print unicode(self.next_stmt)
         #print type(self.next_stmt[0].stmt),unicode(self.next_stmt[0].stmt)
         #print unicode(self.next_stmt[0])
         #print u"nxt", unicode(self.next_stmt[0])
         if ( self.next_stmt ):
-            rval = rval + u"<<Nxt>>" + unicode(self.next_stmt)
+            #fixmee... "ezhil_tests/isbalanced.n with exception 'ascii' codec can't encode characters in position 54-60: ordinal not in range(128)"
+            try:
+                rval = rval + u"<<Nxt>>" + unicode(self.next_stmt)
+            except UnicodeEncodeError as uc_err:
+                print unicode(uc_err)
+                pass
+            pass
         rval = rval + u"]"
         print rval
         return rval

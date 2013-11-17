@@ -170,20 +170,20 @@ class EzhilLex ( Lex ) :
             ## check for tamil/english/mixed indentifiers even starting with a lead '_'
             tval=EzhilLexeme(chunks,EzhilToken.ID)
         else:
-            raise ScannerException(u"Lexical error: " + str(chunks) + u" at Line , Col "+str(self.get_line_col( pos )) +u" in file "+self.fname )
+            raise ScannerException(u"Lexical error: " + unicode(chunks) + u" at Line , Col "+unicode(self.get_line_col( pos )) +u" in file "+self.fname )
         
         [l,c]=self.get_line_col( pos )
         tval.set_line_col( [l,c] )
         tval.set_file_name( self.fname )
         self.tokens.append( tval )        
-
+        
         if ( self.debug ): print(u"Lexer token = ",tval)
         return l
     
     def tokenize(self,data=None):
         """ do hard-work of tokenizing and
         put EzhilLexemes into the tokens[] Q """
-        print "ez - tokenize"
+        if ( self.debug ): print(u"Start of Ezhil lexer - begin tokenize")
         if ( self.stdin_mode ):
             if ( self.debug ): print(self.tokens)
             ## cleanup the Q for stdin_mode of any EOF that can remain.
@@ -202,7 +202,7 @@ class EzhilLex ( Lex ) :
             c = data[idx]
             print idx,c
             if ( istamil( c ) or c.isalpha( ) or c == u'_' ):
-                print "istamil "
+                #print "istamil "
                 tok_start_idx = idx 
                 s = c; idx = idx + 1
                 while ( ( idx < len( data ) )
@@ -292,7 +292,7 @@ class EzhilLex ( Lex ) :
         eof_tok = EzhilLexeme("",EzhilToken.EOF )
         eof_tok.set_line_col( self.get_line_col( tok_start_idx ) )
         self.tokens.append( eof_tok )
-        if ( self.debug ):  print("before reverse"); self.dump_tokens()
+        if ( self.debug ):  print(u"before reverse"); self.dump_tokens()
         self.tokens.reverse()
-        if ( self.debug ):  print("after reverse"); self.dump_tokens()
+        if ( self.debug ):  print(u"after reverse"); self.dump_tokens()
         return

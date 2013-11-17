@@ -276,7 +276,7 @@ class Lex:
         elif chunks[0].isalpha():
             tval=Lexeme(chunks,Token.ID)
         else:
-            raise ScannerException("Lexical error: " + str(chunks) + " at Line , Col "+str(self.get_line_col( pos )) +" in file "+self.fname )
+            raise ScannerException(u"Lexical error: " + str(chunks) + u" at Line , Col "+str(self.get_line_col( pos )) +u" in file "+self.fname )
         
         [l,c]=self.get_line_col( pos )
         tval.set_line_col( [l,c] )
@@ -387,7 +387,7 @@ class Lex:
         if ( not self.stdin_mode ): self.File.close()
 
         ## and manually add an EOF statement.
-        eof_tok = Lexeme("",Token.EOF )
+        eof_tok = Lexeme(u"",Token.EOF )
         eof_tok.set_line_col( self.get_line_col( tok_start_idx ) )
         self.tokens.append( eof_tok )
 
@@ -409,7 +409,7 @@ class Lex:
     def peek(self):
         """ remove Lexeme from the head of Q""" 
         if len(self.tokens) == 0:
-            raise ScannerException("tokens[] queue is empty ")
+            raise ScannerException(u"tokens[] queue is empty ")
         ##print "**> PEEK-ing, ",self.tokens[-1]
         return self.tokens[-1]
 
@@ -417,8 +417,8 @@ class Lex:
         """ if match return value of token """
         if self.peek().kind != tokval:
             ##print self
-            raise ScannerException("cannot find token "+ \
-                                Token.get_name(tokval) + " got " \
-                                + str(self.peek())  \
-                                + " instead!")
+            raise ScannerException(u"cannot find token "+ \
+                                Token.get_name(tokval) + u" got " \
+                                + unicode(self.peek())  \
+                                + u" instead!")
         return self.dequeue()
