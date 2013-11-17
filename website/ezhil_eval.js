@@ -91,12 +91,14 @@ function evaluateProg() {
     }
     /* Save program as cookie */        
     setEzhilCookie("program",aceEditor.getValue());
-    
-    $('<form>', {
+ 
+   output = window.open( "","Ezhil evaluator output","width=700,height=400,scrollbars=yes");
+   $('<form>', {
         "id": "EvaluageProgramForm",
         "html": '<input type="text" name="eval" value="true" /><textarea name="prog">' + aceEditor.getValue() + '</textarea>'  ,
         "action": 'http://54.214.234.20/cgi-bin/ezhil_web.py'
-    }).appendTo(document.body).submit();	
+    }).appendTo(output.document.body).submit();
+
 }
 
 function updateEditorWithExample( filename ) {
