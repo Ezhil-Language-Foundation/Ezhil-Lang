@@ -10,7 +10,7 @@
 
 import time
 
-import sys
+import sys, os
 from random import choice
 
 # NB: this program imports Ezhil library from the installed version
@@ -18,6 +18,21 @@ from ezhil import EzhilFileExecuter #, EzhilInterpExecuter
 
 #from os import unlink
 import cgi
+
+import urllib
+import re
+
+def chrome_url_fixup( prog ):
+    prog = urllib.unquote( prog )
+    patt = re.compile('(&#[0-9]{4};)')
+    parts = re.split( patt, prog )
+    newpart = []
+    for encoded in parts:
+        if ( re.match(patt,encoded) ):
+            newpart.append( u"%c"%int(encoded[2:-1]) )
+        else:
+            newpart.append( encoded )
+    return u"".join(newpart)
 
 class EzhilWeb():
     """ Class that does the job on construction """
@@ -38,6 +53,14 @@ class EzhilWeb():
             if ( not program ):
                 program = "printf(\"You can write Tamil programs from your browser!\")"
         
+        try:
+            if ( os.environ.get("HTTP_USER_AGENT","").lower().find("chrome") >= 0 ):
+                print "<B> code works only in Chrome </B>"
+                program = chrome_url_fixup( program )
+        except Exception as e:
+            print "chrome url fixup routine failed"
+            raise e
+                
         if ( self.debug ):
             print(str(program))
     
