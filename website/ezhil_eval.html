@@ -14,15 +14,13 @@
 	}
 </style>
 <script type="text/javascript">
-
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-43234778-1', '54.214.234.20');
-  ga('send', 'pageview');
-  
+  ga('send', 'pageview');  
 </script>
     <title>வலை உலாவியில் இருந்து நேரடியாக "எழில்" மொழியில் நிரல் எழுதிப் பழகுங்கள் (Try Ezhil Now!) Write Code in #Tamil from Web browser</title>
 
@@ -239,17 +237,20 @@
 <option value="yinyang.n">yinyang.n</option>
 <option value="கூட்டு.n">கூட்டு.n</option>
 </select>
-    <input id="example_load" type="button" onClick="javascript:updateEditorWithExample($('#examples').val())" value="உதாரணம் பார்க்க (Browse Examples)"></input>
+<input id="example_load" type="button" onClick="javascript:updateEditorWithExample($('#examples').val())" value="உதாரணம் பார்க்க (Browse Examples)"></input>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="button" value="நிரலை இயக்குங்கள் (Execute Program)" onClick='evaluateProg()'></input>
 </div>
+<div>
+<!-- default don't show nothing -->
+<span id="disclaimer" style="display: none; background-color:yellow">This site only works with Mozilla Firefox. Don't use Chrome or I.E</span> 
+</div>
 <br>
 <div align="left">
 <div id="editor">
 </div>
-
 </td>
 <td width = "20%">
 <form>

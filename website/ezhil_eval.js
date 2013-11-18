@@ -116,3 +116,14 @@ function updateEditorWithExample( filename ) {
         }
     });
 }
+
+/* Currently web-based evaluator works only in FireFox */
+function showDisclaimer() {
+    var isMozillaBased = navigator.userAgent.search("Mozilla") >= 0 && !(navigator.userAgent.search("Chrome") >= 0);
+    if ( ! isMozillaBased ) {
+        $("#disclaimer").show();
+    }
+    return false;
+}
+
+$(document).ready(showDisclaimer)
