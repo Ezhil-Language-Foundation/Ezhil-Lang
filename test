@@ -104,7 +104,7 @@ else
    echo "Expecting $NFAIL failures, but found $TOTFAIL failures"
    echo "Too few/many failures; some negative tests may have failed"
    echo ""
-   echo "######### LIST OF FAILED FILES"
+   echo "######### LIST OF FAILED FILES ##############"
    cat failed.txt | nl
    echo " "
    exitcode=255 #failed failures != $NFAIL
