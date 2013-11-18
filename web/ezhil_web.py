@@ -160,7 +160,7 @@ class EzhilWeb():
             op = "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>"+op
         else:
             op = "<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>"+op
-        print op
+        print op.decode("utf-8")
         print("</body></html>\n")
  
         return op
