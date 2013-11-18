@@ -15,8 +15,8 @@ from multiprocessing import Process, current_process
 from time import sleep,clock
 import codecs, traceback
 
-#import codecs, sys, re
-#sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+import codecs, sys
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
 class EzhilInterpreter( Interpreter ):
     def __init__(self, lexer, debug = False ):
@@ -56,7 +56,7 @@ class EzhilInterpreter( Interpreter ):
 	try:
 		import EZTurtle
 	except ImportError as ie:
-		if ( self.debug ): print "ImportError => turtle "+unicode(ie)
+		if ( self.debug ): print(u"ImportError => turtle ",unicode(ie))
 		return
 	
         # translations for turtle module
@@ -214,7 +214,7 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
             if ( len(totbuffer) > 0 ):
                 print("tot buffer %s"%totbuffer) #debugging aid
         if ( do_quit ):
-            print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
+            print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
             return
         try:
             lexer.set_line_col([line_no, 0])
@@ -226,15 +226,16 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
             [lexer_line_no,c] = lexer.get_line_col( 0 )
             if ( debug ): lexer.dump_tokens()
             try:
-                if ( debug ): print ("parsing buffer item => ",totbuffer)
+                if ( debug ): print (u"parsing buffer item => ",totbuffer)
                 parse_eval.parse()
             except Exception as pexp:
                 ## clear tokens in lexer
                 parse_eval.reset() #parse_eval
-                if ( debug ): print ("offending buffer item => ",totbuffer)
-                if ( debug ): print(unicode(pexp),unicode(pexp.__class__))
-                if ( debug ): traceback.print_tb(sys.exc_info()[2])
-                if ( debug ): raise pexp
+                if ( debug ): 
+                    print (u"offending buffer item => ",totbuffer)
+                    print(unicode(pexp),unicode(pexp.__class__))
+                    traceback.print_tb(sys.exc_info()[2])
+                    raise pexp
                 # Greedy strategy to keep avoiding parse-errors by accumulating more of input.
                 # this allows a line-by-line execution strategy. When all else fails we report.
                 if ( (line_no + 1) ==  max_lines ):
@@ -242,14 +243,14 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
                 continue
             totbuffer = ""
             sys.stdout.write(curr_line_no)
-            if ( debug ):  print("*"*60);  print(unicode(parse_eval))
+            if ( debug ):  print(u"*"*60);  print(unicode(parse_eval))
             [rval, env] = parse_eval.evaluate_interactive(env)
             if hasattr( rval, 'evaluate' ):
                 print(rval.__str__())
             elif rval:
                 print(rval)
             else:
-                print("\n")
+                print(u"\n")
         except Exception as e:
             print(e)
             raise e
@@ -261,13 +262,13 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         EzhilRedirectInputOutput.__init__(self,file_input,redirectop)
         
         try:
-            lang = "எழில்"
+            lang = u"எழில்"
             lexer = EzhilLex(debug)
             if ( debug ): print( unicode(lexer) )
             parse_eval = EzhilInterpreter( lexer, debug )
             ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
         except Exception as e:
-            print("exception ",unicode(e))
+            print(u"exception ",unicode(e))
             traceback.print_tb(sys.exc_info()[2])
             raise e
         finally:
@@ -282,14 +283,14 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         EzhilInterpExecuter(sys.stdin)
         return
 
-def ezhil_interactive_interpreter(lang = "எழில்",debug=False):
-    ## interactive interpreter    
+def ezhil_interactive_interpreter(lang = u"எழில்",debug=False):
+    ## interactive interpreter
     lexer = EzhilLex(debug)
     parse_eval = EzhilInterpreter( lexer, debug )
     REPL( lang, lexer, parse_eval, debug )
 
-if __name__ == "__main__":
-    lang = "எழில்"
+if __name__ == u"__main__":
+    lang = u"எழில்"
     [fnames, debug, dostdin ]= get_prog_name(lang)
     if ( dostdin ):
         ezhil_interactive_interpreter(lang,debug)
@@ -298,11 +299,11 @@ if __name__ == "__main__":
         ## while exceptions trapped per file without stopping the flow
         exitcode = 0
         for idx,aFile in enumerate(fnames):
-            if ( debug):  print " **** Executing file #  ",1+idx,"named ",aFile
+            if ( debug):  print u" **** Executing file #  ",1+idx,u"named ",aFile
             try:
                 EzhilFileExecuter( aFile, debug )
             except Exception as e:
-                print(u"executing file, "+aFile+u" with exception "+unicode(e))
+                print(u"executing file, "+aFile.decode("utf-8")+u" with exception "+unicode(e))
                 if ( debug ):
                     #traceback.print_tb(sys.exc_info()[2])
                     raise e

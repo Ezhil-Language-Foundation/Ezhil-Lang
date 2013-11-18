@@ -12,27 +12,27 @@ import codecs, re
 
 ## SCANNER
 class Token:
-    token_types=["EOF","ID","NUMBER","PRINT","+","-",
-                 "*","/","(",")",",",
-                 "=","END","DEF","RETURN","IF","ELSEIF","ELSE",
-                 "DO","WHILE","FOR","STRING",">","<",">=","<=","!=",
-                 "==","[","]","^","%","BREAK","CONTINUE","SWITCH",
-                 "CASE","OTHERWISE","&&","||","&","|","!"]
+    token_types=[u"EOF",u"ID",u"NUMBER",u"PRINT",u"+",u"-",
+                 u"*",u"/",u"(",u")",u",",
+                 u"=",u"END",u"DEF",u"RETURN",u"IF",u"ELSEIF",u"ELSE",
+                 u"DO",u"WHILE",u"FOR",u"STRING",u">",u"<",u">=",u"<=",u"!=",
+                 u"==",u"[",u"]",u"^",u"%",u"BREAK",u"CONTINUE",u"SWITCH",
+                 u"CASE",u"OTHERWISE",u"&&",u"||",u"&",u"|",u"!"]
 
     @staticmethod
     def is_string(kind):
         """ predicate to check if @kind token is a string """
-        return Token.get_name(kind) == "STRING"
+        return Token.get_name(kind) == u"STRING"
     
     @staticmethod
     def is_number(kind):
         """ predicate to check if @kind token is a number """
-        return Token.get_name(kind) == "NUMBER"
+        return Token.get_name(kind) == u"NUMBER"
     
     @staticmethod
     def is_id(kind):
         """ predicate to check if @kind token is an identifier """
-        return Token.get_name(kind) == "ID"
+        return Token.get_name(kind) == u"ID"
 
     @staticmethod    
     def is_keyword(kind):
@@ -41,13 +41,13 @@ class Token:
             return True
         return False
     
+    @staticmethod
     def get_name(kind):
         """ used in reporting errors in match() on parsing stage """
         if ( kind >= 0 and kind < len(Token.token_types) ):
             return Token.token_types[kind]
-        raise ScannerException("Index out of bounds. Unknown token "+str(kind))
-        return None
-    get_name = staticmethod(get_name)
+        raise ScannerException(u"Index out of bounds. Unknown token "+unicode(kind))
+        return None    
     
     EOF = 0
     ID = 1
@@ -129,7 +129,7 @@ class Lexeme:
         
     def __str__(self):
         return u" %s Line=%d, Col=%d in File %s "% \
-            (str(self.val),self.line,self.col,self.fname)
+            (unicode(self.val),self.line,self.col,self.fname)
 
 class DummyFile(file):
     """ wrap a bunch of string data in a file interface """
@@ -140,7 +140,7 @@ class DummyFile(file):
         pass
     
     def readlines(self):
-        return self.data.split("\n")
+        return self.data.split(u"\n")
 
 class Lex:
     """ Lexer automatically starts lexing on init.
@@ -158,17 +158,17 @@ class Lex:
             self.fname = "<DUMMYFILE>"
             self.File = DummyFile( fname[0] );
         else:
-            self.fname = "<STDIN>"
+            self.fname = u"<STDIN>"
             self.stdin_mode = True
-        print "post file open"
+        if ( self.debug ): print u"post file open"
         ##actual col = idx - col_idx
         self.line = 1 
         self.col_idx = 0 
         ##contains lexeme's in reverse order
         ##for popping is elegant.
         self.tokens=[]
-        self.spc=re.compile("\s+")
-        self.newlines=re.compile("\n+")
+        self.spc=re.compile(u"\s+")
+        self.newlines=re.compile(u"\n+")
         self.unary_binary_ops = \
             [ '+','-','=','*','/','>','<','%','^','!=','!','&&','||','|','&','!']
         ## need to be the last on init & only for files
@@ -178,97 +178,97 @@ class Lex:
 
     def reset(self):
         """ reset the lexer """
-        if (self.debug): print("Dumping out "+ len(self.tokens)+"Lexemes ")
+        if (self.debug): print(u"Dumping out "+ len(self.tokens)+"Lexemes ")
         self.tokens = []
     
     def __repr__(self):
         for idx in range(0,len(self.tokens)):
-            print("%d] %s"%(idx,repr(self.tokens.pop())))
+            print(u"%d] %s"%(idx,repr(self.tokens.pop())))
         return ""
 
     def get_lexeme(self,chunks , pos):
         if chunks == None:
             return None
 
-        if chunks == "print":
+        if chunks == u"print":
             tval=Lexeme(chunks,Token.PRINT)
-        elif chunks == "if":
+        elif chunks == u"if":
             tval = Lexeme( chunks, Token.IF )
-        elif chunks == "elseif":
+        elif chunks == u"elseif":
             tval = Lexeme( chunks, Token.ELSEIF )
-        elif chunks == "else":
+        elif chunks == u"else":
             tval = Lexeme( chunks, Token.ELSE )
-        elif chunks == "for":
+        elif chunks == u"for":
             tval = Lexeme( chunks, Token.FOR )
-        elif chunks == "while":
+        elif chunks == u"while":
             tval = Lexeme( chunks, Token.WHILE )
-        elif chunks == "do":
+        elif chunks == u"do":
             tval = Lexeme( chunks, Token.DO )
-        elif chunks == "return":
+        elif chunks == u"return":
             tval=Lexeme(chunks,Token.RETURN)
-        elif chunks == "end":
+        elif chunks == u"end":
             tval=Lexeme(chunks,Token.END)
-        elif chunks == "def":
+        elif chunks == u"def":
             tval=Lexeme(chunks,Token.DEF)
-        elif chunks == "continue":
+        elif chunks == u"continue":
             tval=Lexeme(chunks,Token.CONTINUE)
-        elif chunks == "break":
+        elif chunks == u"break":
             tval=Lexeme(chunks,Token.BREAK)
-        elif chunks == "=":
+        elif chunks == u"=":
             tval=Lexeme(chunks,Token.EQUALS)
-        elif chunks == "-":
+        elif chunks == u"-":
             tval=Lexeme(chunks,Token.MINUS)
-        elif chunks == "+":
+        elif chunks == u"+":
             tval=Lexeme(chunks,Token.PLUS)
-        elif chunks == ">":
+        elif chunks == u">":
             tval=Lexeme(chunks,Token.GT)
-        elif chunks == "<":
+        elif chunks == u"<":
             tval=Lexeme(chunks,Token.LT)
-        elif chunks == ">=":
+        elif chunks == u">=":
             tval=Lexeme(chunks,Token.GTEQ)
-        elif chunks == "<=":
+        elif chunks == u"<=":
             tval=Lexeme(chunks,Token.LTEQ)
-        elif chunks == "==":
+        elif chunks == u"==":
             tval=Lexeme(chunks,Token.EQUALITY)
-        elif chunks == "!=":
+        elif chunks == u"!=":
             tval=Lexeme(chunks,Token.NEQ)
-        elif chunks == "*":
+        elif chunks == u"*":
             tval=Lexeme(chunks,Token.PROD)
-        elif chunks == "/":
+        elif chunks == u"/":
             tval=Lexeme(chunks,Token.DIV)
-        elif chunks == ",":
+        elif chunks == u",":
             tval=Lexeme(chunks,Token.COMMA)
-        elif chunks == "(":
+        elif chunks == u"(":
             tval=Lexeme(chunks,Token.LPAREN)
-        elif chunks == ")":
+        elif chunks == u")":
             tval=Lexeme(chunks,Token.RPAREN)
-        elif chunks == "[":
+        elif chunks == u"[":
             tval=Lexeme(chunks,Token.LSQRBRACE)
-        elif chunks == "]":
+        elif chunks == u"]":
             tval=Lexeme(chunks,Token.RSQRBRACE)
-        elif chunks == "{":
+        elif chunks == u"{":
             tval=Lexeme(chunks,Token.LCURLBRACE)
-        elif chunks == "}":
+        elif chunks == u"}":
             tval=Lexeme(chunks,Token.RCURLBRACE)
-        elif chunks == ":":
+        elif chunks == u":":
             tval=Lexeme(chunks,Token.COLON)
-        elif chunks == "%":
+        elif chunks == u"%":
             tval=Lexeme(chunks,Token.MOD)
-        elif chunks == "^":
+        elif chunks == u"^":
             tval=Lexeme(chunks,Token.EXP)
-        elif chunks == "&&":
+        elif chunks == u"&&":
             tval=Lexeme(chunks,Token.LOGICAL_AND)
-        elif chunks == "&":
+        elif chunks == u"&":
             tval=Lexeme(chunks,Token.BITWISE_AND)
-        elif chunks == "||":
+        elif chunks == u"||":
             tval=Lexeme(chunks,Token.LOGICAL_OR)
-        elif chunks == "|":
+        elif chunks == u"|":
             tval=Lexeme(chunks,Token.BITWISE_OR)
-        elif ( chunks[0] == "\"" and chunks[-1] == "\"" ):
+        elif ( chunks[0] == u"\"" and chunks[-1] == u"\"" ):
             tval = Lexeme( chunks[1:-1], Token.STRING )
-        elif chunks[0].isdigit() or chunks[0]=='+' or chunks[0]=='-':
+        elif chunks[0].isdigit() or chunks[0]==u'+' or chunks[0]==u'-':
             # deduce a float or integer
-            if ( chunks.find('.') >= 0 or chunks.find('e') >= 0 or chunks.find('E') >= 0 ):
+            if ( chunks.find(u'.') >= 0 or chunks.find(u'e') >= 0 or chunks.find(u'E') >= 0 ):
                 tval=Lexeme(float(chunks),Token.NUMBER)
             else:
                 tval=Lexeme(int(chunks),Token.NUMBER)
@@ -276,7 +276,7 @@ class Lex:
         elif chunks[0].isalpha():
             tval=Lexeme(chunks,Token.ID)
         else:
-            raise ScannerException(u"Lexical error: " + str(chunks) + u" at Line , Col "+str(self.get_line_col( pos )) +u" in file "+self.fname )
+            raise ScannerException(u"Lexical error: " + unicode(chunks) + u" at Line , Col "+unicode(self.get_line_col( pos )) +u" in file "+self.fname )
         
         [l,c]=self.get_line_col( pos )
         tval.set_line_col( [l,c] )
@@ -301,7 +301,7 @@ class Lex:
     def tokenize(self,data=None):
         """ do hard-work of tokenizing and
         put Lexemes into the tokens[] Q """
-        print "tokenize"
+        if ( self.debug ): print( u"tokenize")
         if ( self.stdin_mode ):
             if ( self.debug ): print(self.tokens)
             ## cleanup the Q for stdin_mode of any EOF that can remain.

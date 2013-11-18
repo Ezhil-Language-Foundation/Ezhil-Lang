@@ -5,7 +5,8 @@
 import turtle
 
 class EZTurtle:
-    """ EZTurtle class implements a singleton for famed Turtle module"""
+    """ EZTurtle class implements a singleton for famed Turtle module.
+        Unfortunately turtle class does not take Unicode arguments.    """
     instance = None
     
     @staticmethod
@@ -43,10 +44,7 @@ class EZTurtle:
     def penup():
         EZTurtle.getInstance().penup(*[])
     up = penup;
-    #@staticmethod
-    #def up():
-    #   EZTurtle.penup()
-    
+
     @staticmethod
     def pendown():
         EZTurtle.getInstance().pendown(*[])
@@ -117,9 +115,9 @@ class EZTurtle:
         EZTurtle.getInstance().clone(*[x])
 
     @staticmethod
-    def color(x):
-        EZTurtle.getInstance().color(*[x])
-
+    def color(x):        
+        EZTurtle.getInstance().color(*[str(x)])
+    
     @staticmethod
     def degrees(x):
         EZTurtle.getInstance().degrees(*[x])
@@ -190,7 +188,7 @@ class EZTurtle:
 
     @staticmethod
     def pencolor(x):
-        EZTurtle.getInstance().pencolor(*[x])
+        EZTurtle.getInstance().pencolor(*[str(x)])
 
     @staticmethod
     def pensize(x):

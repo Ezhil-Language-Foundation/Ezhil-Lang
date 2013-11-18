@@ -44,7 +44,7 @@ class EzhilParser(Parser):
     and its evaluate methods. Also add a parser method """
     def __init__(self,lexer,fcn_map, builtin_map, dbg = False):
         if ( not isinstance(lexer, EzhilLex) ):
-                raise RuntimeException("Cannot find Ezhil lexer class")
+                raise RuntimeException(u"Cannot find Ezhil lexer class")
         Parser.__init__(self,lexer,fcn_map,builtin_map,dbg)
 
     def factory(lexer,fcn_map,builtin_map, dbg = False):
@@ -56,10 +56,10 @@ class EzhilParser(Parser):
         ## if match return token, else ParseException
         tok = self.dequeue()
         if ( tok.kind != kind ):
-            raise ParseException("cannot find token "+ \
-                                 EzhilToken.get_name(kind) + " got " \
+            raise ParseException(u"cannot find token "+ \
+                                 EzhilToken.get_name(kind) + u" got " \
                                 + unicode(tok)  \
-                                + " instead!")
+                                + u" instead!")
         return tok
 
     def parse(self):
@@ -67,15 +67,15 @@ class EzhilParser(Parser):
         self.ast = StmtList()
         self.dbg_msg(u" entering parser " )
         while ( not self.lex.end_of_tokens() ):
-            self.dbg_msg( "AST length = %d"%len(self.ast) )
+            self.dbg_msg( u"AST length = %d"%len(self.ast) )
             if ( self.lex.peek().kind ==  EzhilToken.DEF ):
-                self.dbg_msg ( "parsing for function" )
+                self.dbg_msg ( u"parsing for function" )
                 ## save function in a global table.
                 func = self.function()
                 self.warn_function_overrides(func.name)
                 self.function_map[func.name]=func
             else:
-                self.dbg_msg( "parsing for stmt" )
+                self.dbg_msg( u"parsing for stmt" )
                 st = self.stmt()
                 if ( not self.parsing_function ):
                     self.ast.append(st)
@@ -83,15 +83,15 @@ class EzhilParser(Parser):
 
     def stmtlist(self,pass_in_ATexpr=None):
         """ parse a bunch of statements """
-        self.dbg_msg(" STMTLIST ")
+        self.dbg_msg(u" STMTLIST ")
         stlist = StmtList()
         while( not self.lex.end_of_tokens() ):
-            self.dbg_msg("STMTLIST => STMT")
+            self.dbg_msg(u"STMTLIST => STMT")
             ptok = self.peek()
-            self.dbg_msg("STMTLIST "+unicode(ptok))
-            if ( self.debug ): print("peek @ ",unicode(ptok))
+            self.dbg_msg(u"STMTLIST "+unicode(ptok))
+            if ( self.debug ): print(u"peek @ ",unicode(ptok))
             if ( ptok.kind == EzhilToken.END ):
-                self.dbg_msg("End token found");
+                self.dbg_msg(u"End token found");
                 break
             elif ( ptok.kind == EzhilToken.DOWHILE ):
                 if ( self.debug ): print("DOWHILE token found")
@@ -196,7 +196,8 @@ class EzhilParser(Parser):
                     self.match( EzhilToken.ELSEIF )
                     body = self.stmtlist()
                     prev_body = body
-                    next_stmt = IfStmt(exp[0],body,None,l,c,self.debug)                    
+                    next_stmt = IfStmt(exp[0],body,None,l,c,self.debug)
+                    self.dbg_msg(u"ELSEIF parsed correctly => "+unicode(next_stmt))
                     ifstmt.append_stmt( next_stmt )
             elif ( ptok.kind == EzhilToken.ELSE ):
                 #parse else branch                
@@ -386,63 +387,63 @@ class EzhilParser(Parser):
         """ def[kw] fname[id] (arglist) {body} end[kw] """
         if ( self.parsing_function ):
             self.parsing_function = False
-            raise ParseException(" Nested functions not allowed! "+unicode(self.last_token()))
+            raise ParseException(u" Nested functions not allowed! "+unicode(self.last_token()))
 
         self.parsing_function = True
         def_tok = self.dequeue()
         if ( def_tok.kind !=  EzhilToken.DEF ):
-            raise ParseException("unmatched 'def'  in function " +unicode(def_tok))
+            raise ParseException(u"unmatched 'def'  in function " +unicode(def_tok))
         
         id_tok = self.dequeue()
         if ( id_tok.kind !=  EzhilToken.ID ):
-            raise ParseException("expected identifier in function"+unicode(id_tok))
+            raise ParseException(u"expected identifier in function"+unicode(id_tok))
         
         arglist = self.arglist()
-        self.dbg_msg( "finished parsing arglist" )
+        self.dbg_msg( u"finished parsing arglist" )
         body = self.stmtlist()
 
         self.match(  EzhilToken.END )
         [l,c] = def_tok.get_line_col()
         fval = Function( id_tok.val, arglist, body, l, c, self.debug )
         self.parsing_function = False
-        self.dbg_msg( "finished parsing function" ) 
+        self.dbg_msg( u"finished parsing function" ) 
         return fval
 
     def valuelist(self):
         """parse: ( expr_1 , expr_2, ... ) """
         valueList = list()
-        self.dbg_msg("valuelist: ")
+        self.dbg_msg(u"valuelist: ")
         lparen_tok = self.match(  EzhilToken.LPAREN )
         while ( self.peek().kind !=  EzhilToken.RPAREN ):            
             val = self.expr()
-            if ( self.debug ): print("val = ",unicode(val))
+            if ( self.debug ): print(u"val = ",unicode(val))
             ptok = self.peek()
-            if ( self.debug ) : print("ptok = ",unicode(ptok),unicode(ptok.kind),unicode(EzhilToken.ASSIGNOP))
+            if ( self.debug ) : print(u"ptok = ",unicode(ptok),unicode(ptok.kind),unicode(EzhilToken.ASSIGNOP))
             if ( ptok.kind in  EzhilToken.ASSIGNOP ):
                 assign_tok = self.dequeue()
                 rhs = self.expr()
                 [l,c]=assign_tok.get_line_col()
                 lhs = val
                 val =  AssignStmt( lhs, assign_tok, rhs, l, c, self.debug)
-                if ( self.debug ): print("AssignStmt = ",unicode(val))
+                if ( self.debug ): print(u"AssignStmt = ",unicode(val))
                 ptok = self.peek()
             else:
-                if ( self.debug ): print("No-Assign // Expr =",unicode(val))
-            self.dbg_msg("valuelist-expr: "+unicode(val))
+                if ( self.debug ): print(u"No-Assign // Expr =",unicode(val))
+            self.dbg_msg(u"valuelist-expr: "+unicode(val))
             valueList.append( val )
             if  ( ptok.kind ==  EzhilToken.RPAREN ):
                 break
             elif ( ptok.kind ==  EzhilToken.COMMA ):
                 self.match(  EzhilToken.COMMA )
             else:
-                raise ParseException(" function call argument list "+unicode(ptok))
+                raise ParseException(u" function call argument list "+unicode(ptok))
         self.match(  EzhilToken.RPAREN )
         [l,c] = lparen_tok.get_line_col()
         return ValueList(valueList, l, c, self.debug )
 
     def arglist(self):
         """parse: ( arg_1, arg_2, ... ) """
-        self.dbg_msg( " ARGLIST " )
+        self.dbg_msg( u" ARGLIST " )
         args = list()
         lparen_tok = self.match(  EzhilToken.LPAREN )
         while ( self.peek().kind !=  EzhilToken.RPAREN ):
@@ -454,7 +455,7 @@ class EzhilParser(Parser):
             elif ( ptok.kind ==  EzhilToken.COMMA ):
                 self.match(  EzhilToken.COMMA )
             else:
-                raise ParseException(" function definition argument list "
+                raise ParseException(u" function definition argument list "
                                      +unicode(ptok))
         self.match(  EzhilToken.RPAREN )
         [l,c] = lparen_tok.get_line_col()
@@ -463,7 +464,7 @@ class EzhilParser(Parser):
     def exprlist(self):
         """   EXPRLIST : EXPR, EXPRLIST        
         ##  EXPRLIST : EXPR """
-        self.dbg_msg( " EXPRLIST " )
+        self.dbg_msg( u" EXPRLIST " )
         exprs=[]
         comma_tok = None
         l = 0; c = 0
@@ -477,11 +478,11 @@ class EzhilParser(Parser):
 
         if ( comma_tok ):
             [l,c] = comma_tok.get_line_col()
-        self.dbg_msg("finished expression list")
+        self.dbg_msg(u"finished expression list")
         return ExprList(exprs, l, c, self.debug)
 
     def expr(self):
-        self.dbg_msg( " EXPR " )
+        self.dbg_msg( u" EXPR " )
         val1=self.term()
         res=val1
         ptok = self.peek()
@@ -495,8 +496,8 @@ class EzhilParser(Parser):
             res=Expr(val1,binop,val2, l, c, self.debug )
         elif ptok.kind ==  EzhilToken.LPAREN:
             ## function call
-            if ( res.__class__ != Identifier ):
-                raise ParseException("invalid function call"+unicode(ptok))
+            if ( not isinstance(res, Identifier) ):
+                raise ParseException(u"invalid function call"+unicode(ptok))
             [l,c] = ptok.get_line_col()
             vallist = self.valuelist()
             res=ExprCall( res, vallist, l, c, self.debug )
@@ -620,6 +621,5 @@ class EzhilParser(Parser):
             list_end = self.dequeue()
         else:
             raise ParseException("Expected Number, found something "+unicode(tok))
-        
         self.dbg_msg( u"factor-returning: "+unicode(val) )
         return val

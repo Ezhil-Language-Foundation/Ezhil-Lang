@@ -57,12 +57,12 @@ class Parser(DebugUtils):
 	
     def check_loop_stack(self):
         if ( len(self.loop_stack) == 0 ):
-            raise ParseException("break/continue statement outside any loop, near" + str(self.last_token()));
+            raise ParseException(u"break/continue statement outside any loop, near" + str(self.last_token()));
         return len(self.loop_stack);
 
     def check_if_stack(self):
         if ( len(self.if_stack) == 0 ):
-            raise ParseException("unmatched else statement, near" + str(self.last_token()))
+            raise ParseException(u"unmatched else statement, near" + str(self.last_token()))
         return len(self.if_stack)
 
     def last_token(self):
@@ -83,18 +83,17 @@ class Parser(DebugUtils):
         ## if match return token, else ParseException
         tok = self.dequeue()
         if ( tok.kind != kind ):
-            raise ParseException("cannot find token "+ \
-                                Token.get_name(kind) + " got " \
-                                + str(tok)  \
-                                + " instead!")
+            raise ParseException(u"cannot find token "+ \
+                                Token.get_name(kind) + u" got " \
+                                + unicode(tok) + u" instead!")
         return tok
 
     def __repr__(self):
-        rval =  "[Interpreter: "
-        rval = rval + "[Functions["
+        rval =  u"[Interpreter: "
+        rval = rval + u"[Functions["
         for k in list(self.function_map.keys()):
-            rval = rval + "\n "+ str(self.function_map[k]) 
-        rval = rval +"]] "+ str(self.ast) +"]\n"
+            rval = rval + u"\n "+ str(self.function_map[k]) 
+        rval = rval + u"]] "+ str(self.ast) + u"]\n"
         return rval
 
     def warn_function_overrides( self, func_name ):
@@ -103,7 +102,7 @@ class Parser(DebugUtils):
         val =  ( func_name in self.function_map \
                      or func_name in self.builtin_map )
         if ( val ):
-            print("WARNING: function %s overrides builtin"%(func_name))
+            print(u"WARNING: function %s overrides builtin"%(func_name))
         return val
 
     def parse(self):

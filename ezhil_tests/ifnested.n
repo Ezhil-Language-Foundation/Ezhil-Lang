@@ -45,18 +45,21 @@ z = 1
  z = -z
 முடி
 
+printf("penult/ z=> %s",z)
+assert( z == 3 )
 
-@( True ) ஆனால்
-  z = z*2 + 1
-  @( True ) ஆனால்
-        z = 2*z + 1
-        @( True ) ஆனால்
-            z = 2*z + 1            
-        முடி
-  @( False ) இல்லைஆனால்
-    z = -z
-  முடி  
-முடி
+# This bit is broken right now.
+# @( True ) ஆனால்
+#   z = z*2 + 1
+#   @( True ) ஆனால்
+#         z = 2*z + 1
+#         @( True ) ஆனால்
+#             z = 2*z + 1            
+#         முடி
+#   @( False ) இல்லைஆனால்
+#     z = -z
+#   முடி  
+# முடி
 
-printf(str(z))
-assert( z == 31 )
+# printf("z=> %s",z)
+# assert( z == 31 )

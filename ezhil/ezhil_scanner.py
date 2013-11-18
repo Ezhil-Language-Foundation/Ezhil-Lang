@@ -21,7 +21,7 @@ class EzhilLexeme(Lexeme):
     def get_kind(self):
         return "%s - %s"%(self.val,self.kind)
     
-    def __str__(self):
+    def __unicode__(self):
         return u" %s [%s] Line=%d, Col=%d in File %s "% \
             (self.val,self.get_kind(), \
                 self.line,self.col,self.fname)
@@ -32,20 +32,20 @@ class EzhilToken( Token):
     Token.token_types.append("@")
     Token.ATRATEOF = len(Token.token_types)    
     
-    Token.token_types.append("FOREACH|ஒவ்வொன்றாக")
+    Token.token_types.append(u"FOREACH|ஒவ்வொன்றாக")
     Token.FOREACH = len(Token.token_types)
         
-    Token.token_types.append("IN|இல்")
+    Token.token_types.append(u"IN|இல்")
     Token.IN = Token.COMMA #short-circuit!
     
-    Token.token_types.append("DOWHILE|முடியேனில்")
+    Token.token_types.append(u"DOWHILE|முடியேனில்")
     Token.DOWHILE = len(Token.token_types)
 
     @staticmethod
     def is_keyword(kind):
         if Token.is_keyword(kind):
             return True
-        if Token.get_name(kind) in ["FOREACH","DOWHILE"]:
+        if Token.get_name(kind) in [u"FOREACH",u"DOWHILE"]:
             return True
         return False
 
@@ -55,11 +55,10 @@ class EzhilLex ( Lex ) :
     """ Lex Tamil characters : RAII principle - lex on object construction"""
     
     def __init__(self,fname=None,dbg=False):
-        print "init"
+        if ( dbg ): print(u"init")
         Lex.__init__(self,fname,dbg)
         
-    def get_lexeme(self,chunks , pos):        
-
+    def get_lexeme(self,chunks , pos):
         if ( self.debug ):
             print u"get_lexeme",chunks,pos
 
@@ -67,7 +66,6 @@ class EzhilLex ( Lex ) :
             return None
         
         if chunks == u"பதிப்பி":
-            print "ez - print tok"
             tval = EzhilLexeme(chunks,EzhilToken.PRINT )
         elif chunks == u"தேர்ந்தெடு":
             tval = EzhilLexeme(chunks,EzhilToken.SWITCH )
@@ -200,9 +198,8 @@ class EzhilLex ( Lex ) :
         
         while ( idx < len( data ) ):
             c = data[idx]
-            print idx,c
+            if ( self.debug ): print idx,c
             if ( istamil( c ) or c.isalpha( ) or c == u'_' ):
-                #print "istamil "
                 tok_start_idx = idx 
                 s = c; idx = idx + 1
                 while ( ( idx < len( data ) )

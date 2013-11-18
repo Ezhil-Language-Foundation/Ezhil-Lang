@@ -15,7 +15,7 @@ class Visitor:
         # tree-source-transformer etc.
 
     def default(self,*args):
-        raise Exception('Not Implemented')
+        raise Exception(u'Not Implemented')
     
     def visit_identifier(self, id):  
         self.default(id)

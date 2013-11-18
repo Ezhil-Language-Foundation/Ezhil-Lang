@@ -29,8 +29,19 @@ class BuiltinFunction:
         self.padic = padic
         self.debug = dbg
         self.aslist = False
+        
+    def __unicode__(self):
+        return u"[BuiltinFunction[%s,nargs=%d]]"%(self.name,self.padic)
     
     def evaluate(self,env):
+        try:
+            return self.do_evaluate(env)
+        except Exception as excep:
+            print u"failed dispatching function ",unicode(self),u"with exception",unicode(excep)
+            raise excep
+        assert False, u"unreachable state"
+    
+    def do_evaluate(self,env):
         ## push stuff into the call-stack
         env.call_function(self.name)
         
@@ -48,7 +59,6 @@ class BuiltinFunction:
             for a in args:
                 if hasattr(a,'evaluate'):
                     a = a.evaluate(env)
-                #print(a,a.__class__)
                 args_.append(a)
             args = args_
         
@@ -62,6 +72,7 @@ class BuiltinFunction:
                 else:
                     rval = self.fn(*args)
             except Exception as excep:
+                #print u"catch exception", excep
                 raise RuntimeException( unicode(excep) )
         env.clear_call()
         ## pop stuff into the call-stack
@@ -223,6 +234,7 @@ class Environment:
             raise RuntimeException( "Maximum recursion depth [ " + 
                                     unicode(self.max_recursion_depth) + 
                                     " ] exceeded; stack overflow." )
+        self.dbg_msg(u"calling function"+unicode(fn))
         self.call_stack.append( fn )
     
     def return_function(self, fn):

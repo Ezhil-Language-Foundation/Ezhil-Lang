@@ -49,14 +49,14 @@ def ezhil_version():
         return 0.71
 
 def ezhil_copyright():
-	return "(C) 2007-2013 Muthiah Annamalai"
+	return u"(C) 2007-2013 Muthiah Annamalai"
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-	return "Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013."%(ezhil_version())
+	return u"Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013."%(ezhil_version())
 
 def ezhil_license():
-	return "Licensed under GPL Version 3"
+	return u"Licensed under GPL Version 3"
 
 def ezhil_getitem(x,idx):
     #print("dispatching ezhil getitem",type(x),type(idx),x,idx,x[idx])
@@ -471,14 +471,14 @@ class Interpreter(DebugUtils):
 		turtle_attrib = EZTurtle.functionAttributes();
 		for nargs,fcnName in list(turtle_attrib.items()):
 			for vv in fcnName:
-				turtlefcn = "turtle_"+vv;
+				turtlefcn = u"turtle_"+vv;
 				if ( self.debug ): print(nargs, vv)
 				if ( nargs == -1 ):
 					self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv),vv,self.debug)
 				else:
 					self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
 	except ImportError as ie:
-		if ( self.debug ): print "Cannot Import EZTurtle module; ignoring for now"
+		if ( self.debug ): print u"Cannot Import EZTurtle module; ignoring for now"
         
     	self.builtin_map["ascii_letters"] = BuiltinFunction(string.ascii_letters,"ascii_letters",0)
     	self.builtin_map["ascii_lowercase"] = BuiltinFunction(string.ascii_lowercase,"ascii_lowercase",0)
@@ -642,7 +642,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
 			[line_no,c] = self.lexer.get_line_col( 0 )
 			if ( self.debug ): self.lexer.dump_tokens()
 			self.parse_eval.parse()
-			if ( self.debug ):  print("*"*60);  print(unicode(self.parse_eval))
+			if ( self.debug ):  print(u"*"*60);  print(unicode(self.parse_eval))
 			[rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
 			if ( self.debug ): print( u"return value", unicode(rval) )
 			if hasattr( rval, 'evaluate' ):
@@ -659,15 +659,15 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
 		self.update_prompt()
 	
 	def do_EOF(self,line):
-		print("\n")
+		print(u"\n")
 		self.exit_hook()
 		return True
 	
 	def exit_hook(self,doExit=False):
 		if ( self.lang == "எழில்"):
-			print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
+			print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
 		else:
-			print("******* Goodbye! Now have a nice day *******") 				
+			print(u"******* Goodbye! Now have a nice day *******") 				
 			
 		if doExit:
 			sys.exit( 0 )

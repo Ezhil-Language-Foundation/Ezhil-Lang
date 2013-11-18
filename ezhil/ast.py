@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 ## 
-## (C) 2007, 2008 Muthiah Annamalai,
+## (C) 2007, 2008, 2013 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ## 
 ## Module has elements of PARSE-TREE  AST 
@@ -34,6 +34,9 @@ class Identifier:
         self.line = l;
         self.col = c;
 
+    def __unicode__(self):
+        return u"" + self.id
+    
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
@@ -78,6 +81,9 @@ class String:
     def __str__(self):
         return self.string
 
+    def __unicode__(self):
+        return unicode( self.string )
+
     def evaluate(self,env):
         return self.string
 
@@ -104,6 +110,9 @@ class Number:
     def __str__(self):
         return self.num.__str__()
 
+    def __unicode__(self):
+        return unicode( self.num )
+
     def evaluate(self,env):
         return self.num
 
@@ -114,20 +123,31 @@ class Number:
 class Boolean(Number):
     def __init__(self,n, l = 0, c = -1, dbg = False):
         Number.__init__(self,n,l,c,dbg)
+
+    def __unicode(self):
+        return self.__str__()
+
     def __str__(self):
         if ( self.num ):
-            return "True"
-        return "False"
+            return u"True"
+        return u"False"
 
 class Dict(dict):
     def __init__(self):
         dict.__init__(self)
-
+        
     def base_evaluate(self,env):
         rval = {}
         for x,y in self.items():
             rval.update({ x.evaluate( env ): y.evaluate( env )} )
         return rval
+    
+    def __unicode__(self):
+        fmt = u"{"
+        for k,v in self.items():
+            fmt = fmt + unicode(k) + u" : " + unicode(v) + u",\n"
+        fmt = fmt + u"}"
+        return fmt
     
     def evaluate(self,env):
         """ how do you evaluate dictionaries? just return the favor """
@@ -143,12 +163,12 @@ class Array(list):
         for v in self:
             rval.append( v.evaluate(env) )
         return rval
-
+    
+    def __unicode__(self):
+        return u", ".join( [unicode(item) for item in self] )
+    
     def evaluate(self,env):
         return self.base_evaluate( env )
-
-class Hash(dict):
-    pass
 
 class ExprCall:
     """handle function call statement etc."""
@@ -178,7 +198,7 @@ class ExprCall:
             eval_arglist = [ i.evaluate(env) for i in self.arglist.get_list()];
             env.set_args(  eval_arglist )
             rval = fval.evaluate(env)
-            self.dbg_msg( "function retval ="+unicode(rval)+unicode(type(rval)))
+            self.dbg_msg( u"function retval ="+unicode(rval)+unicode(type(rval)))
         else:
             raise RuntimeException("undefined function: %s near ( %d, %d )"%(self.fname, self.line, self.col) )
         return rval
@@ -215,15 +235,22 @@ class Stmt:
         self.col = c
         self.class_name = u"Stmt"
         self.debug = dbg
+
+    def __unicode__(self):        
+        #print u"stmt => ", unicode(self.__class__) #we're headed toward assertion
+        return self.__repr__()
+
+    def __repr__(self):
+        print "//#//"*50
+        print u"stmt => ", unicode(self.__class__) #we're headed toward assertion
+        self.dbg_msg(u"stmt => "+ unicode(self.__class__) )
+        assert( False )
     
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if ( self.debug ):
             print(msg)
         return
-        
-    def __repr__(self):
-        return u"\n\t [%s[empty-statement]] "%(unicode(self.class_name))
     
     def get_pos(self):
         return u"line %d, col %d"%(self.line,self.col)
@@ -238,9 +265,6 @@ class Stmt:
         rval = False
         self.dbg_msg(u"is_true_value? "+ unicode(val.__class__))
         try:
-            #print val, type(val)
-            #if hasattr(val,'num'):
-            #    fval = val.num
             if ( hasattr(val,'evaluate') ):
                 fval = val.evaluate(None);
             elif ( isinstance(val,float) or isinstance(val,int) ):
@@ -255,7 +279,7 @@ class Stmt:
             """ objects where is_true_value() is not supported """
             print(pyEx)
             raise RuntimeException(pyEx)
-        self.dbg_msg('Is True Value? ' + unicode(rval) + unicode(val.__class__) )
+        self.dbg_msg(u"Is True Value? " + unicode(rval) + unicode(val.__class__) )
         return rval
     
     def visit( self, walker):
@@ -268,6 +292,9 @@ class UnaryExpr(Stmt):
         self.term=t
         self.unaryop=op
 
+    def __unicode__(self):
+        return u"[UnaryExpr["+unicode(self.unaryop)+ ","+unicode(self.term)+"]]"
+    
     def do_unaryop(self,tval):
         if ( self.unaryop.kind == Token.LOGICAL_NOT ):
             if not tval:
@@ -280,14 +307,14 @@ class UnaryExpr(Stmt):
 
     def evaluate(self,env):
         term=self.term.evaluate(env)
-        if ( self.debug ): print(term, type(term))
+        self.dbg_msg(u"unaryop=> "+unicode(term) +u" "+ unicode(term.__class__))
         if self.unaryop.kind in Token.UNARYOP:
             tval = Expr.normalize_values( self, term, env)
             if ( self.debug ): print(tval, type(tval))
             term = self.do_unaryop( tval )
         else:
-            raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")
-        if ( self.debug ): print("term = ",term, term.__class__)
+            raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")        
+        self.dbg_msg(u"unaryop=> "+u"term = "+unicode(term)+u" "+unicode(term.__class__))
         return term
 
 class Expr(Stmt):
@@ -312,7 +339,7 @@ class Expr(Stmt):
         self.dbg_msg(u" Doing binary operator " + Token.token_types[binop])
         if binop == Token.PLUS:
             self.dbg_msg("addition")
-            val = Number(opr1+opr2)
+            val = (opr1+opr2)
         elif binop == Token.MINUS:
             self.dbg_msg("subtraction")
             val = Number(opr1-opr2)
@@ -397,21 +424,19 @@ class Expr(Stmt):
     
     def evaluate(self,env):
         term=self.term.evaluate(env)
-        if ( self.debug ): print term, type(term)
+        self.dbg_msg(u" "+unicode(term)+u" "+ unicode(term.__class__))
         if self.binop.kind in Token.BINOP:
             tnext = self.next_expr.evaluate(env)
             tval = Expr.normalize_values( self, term, env)
             tval2 = Expr.normalize_values( self, tnext, env)
-            if ( self.debug ): print tval, type(tval), tval2, type(tval2)
+            self.dbg_msg(u" "+unicode( tval)+ " "+unicode(tval2)+ u" " + unicode(tval2.__class__))
             try:
-                term = self.do_binop(tval,
-                                     tval2,
-                                     self.binop.kind)
+                term = self.do_binop(tval, tval2, self.binop.kind)
             except Exception as binOp_Except:
-                raise RuntimeException("binary operation "+unicode(self.term)+unicode(self.binop)+unicode(self.next_expr)+" failed with exception "+unicode(binOp_Except))
+                raise RuntimeException(u"binary operation "+unicode(self.term)+unicode(self.binop)+unicode(self.next_expr)+u" failed with exception "+unicode(binOp_Except))
         else:
-            raise RuntimeException(" unknown Binary Operation - Binary operation "+unicode(self.binop)+" not supported")
-        if ( self.debug ): print "term = ",term, term.__class__
+            raise RuntimeException(u" unknown Binary Operation - Binary operation "+unicode(self.binop)+u" not supported")
+        self.dbg_msg(u"term = "+unicode(term)+u" "+unicode(term.__class__))
         return term
 
     def visit(self, walker):
@@ -429,7 +454,7 @@ class ReturnStmt(Stmt):
 
     def evaluate(self,env):
         rhs=self.rvalue.evaluate(env)
-        self.dbg_msg("return statement evaluated to "+unicode(rhs))
+        self.dbg_msg(u"return statement evaluated to "+unicode(rhs))
         env.set_retval(rhs)
         return rhs
     
@@ -446,7 +471,7 @@ class BreakStmt(Stmt):
         return u"\n\t [BreakStmt]\n"
 
     def evaluate(self,env):
-        self.dbg_msg("break statement")
+        self.dbg_msg(u"break statement")
         env.set_break()
         return None
     
@@ -463,7 +488,7 @@ class ContinueStmt(Stmt):
         return u"\n\t [ContinueStmt]\n"
 
     def evaluate(self,env):
-        self.dbg_msg("continue statement")
+        self.dbg_msg(u"continue statement")
         env.set_continue()
         return None
     
@@ -477,10 +502,8 @@ class ElseStmt(Stmt):
         self.stmt = stmt
         self.class_name = u"ElseStmt"
 
-    def __repr__(self):
-        print u"in else-stmt"
-        print u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
-        return u"" #u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
+    def __repr__(self):        
+        return u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
     
     def evaluate(self,env):
         return self.stmt.evaluate(env)
@@ -504,23 +527,15 @@ class IfStmt(Stmt):
         
     def __repr__(self):
         rval = u"\t\n [IfStmt[["+unicode(self.expr)+ u"]] "+unicode(self.body)
-        print u"orig",rval
-        #print type(self.next_stmt),len(self.next_stmt)
-        #print type(self.next_stmt[0])
-        #print unicode(self.next_stmt)
-        #print type(self.next_stmt[0].stmt),unicode(self.next_stmt[0].stmt)
-        #print unicode(self.next_stmt[0])
-        #print u"nxt", unicode(self.next_stmt[0])
         if ( self.next_stmt ):
-            #fixmee... "ezhil_tests/isbalanced.n with exception 'ascii' codec can't encode characters in position 54-60: ordinal not in range(128)"
             try:
+                self.dbg_msg( u" ".join([unicode(self.next_stmt),unicode(self.next_stmt.__class__),u"***"]) )
                 rval = rval + u"<<Nxt>>" + unicode(self.next_stmt)
             except UnicodeEncodeError as uc_err:
                 print unicode(uc_err)
-                pass
+                raise uc_err
             pass
         rval = rval + u"]"
-        print rval
         return rval
 
     def set_body(self,body):
@@ -597,6 +612,9 @@ class DoWhileStmt(WhileStmt):
     def __init__(self,expr,body,l,c,dbg=False):
         WhileStmt.__init__(self,expr,body,l,c,dbg)
         
+    def __repr__(self):
+        return u"[DoWhileStmt[expr="+unicode(self.expr)+u",body="+unicode(self.body)+"]]"
+    
     def evaluate(self,env):
         """ first run is on the house, but then we keep count. Dog bites American style """
         rval = None
@@ -703,9 +721,9 @@ class PrintStmt(Stmt):
         return u"\n\t [PrintStmt[ "+ unicode(self.exprlst)+u"]]"
 
     def do_printop(self,env):
-        val = ""
         val = self.exprlst.evaluate( env  )
         if hasattr(val,'evaluate') :
+            assert( False )
             val = val.evaluate( env )
         print(val)
         return val
@@ -798,7 +816,8 @@ class StmtList(Stmt):
         return len(self.List)        
     
     def append(self,stmt_x):
-        self.dbg_msg(u"adding new statement " + unicode(stmt_x) )
+        print "==>",stmt_x.__class__
+        self.dbg_msg(u"adding new statement " + unicode(stmt_x.__class__) )
         self.List.append(stmt_x)
         return
     
@@ -827,17 +846,17 @@ class Function(Stmt):
         self.name = fname
         self.arglist = arglist
         self.body = body
-        self.dbg_msg( "function "+fname+" was defined" )
+        self.dbg_msg( u"function "+fname+u" was defined" )
         
     def dbg_msg(self, msg):
         if ( self.debug ):
-            print("## ",msg)
+            print(u"## ",msg)
         return
 
     def __repr__(self):
-        return "\n\t [Function[ "+ unicode(self.name)+"( " + \
-            unicode(self.arglist) + ")]\n" + \
-            "\t Body [" + unicode(self.body) + "]]\n"
+        return u"\n\t [Function[ "+ unicode(self.name)+u"( " + \
+            unicode(self.arglist) + u")]\n" + \
+            u"\t Body [" + unicode(self.body) + u"]]\n"
     
     def evaluate(self,env):
         ## push stuff into the call-stack
@@ -872,4 +891,3 @@ class Function(Stmt):
     def visit(self,walker):
         walker.visit_function(self)
         return
-
