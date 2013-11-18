@@ -17,6 +17,7 @@ import codecs, traceback
 
 import codecs, sys
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 class EzhilInterpreter( Interpreter ):
     def __init__(self, lexer, debug = False ):

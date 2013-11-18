@@ -185,8 +185,8 @@ class Interpreter(DebugUtils):
         try:
            assert x
         except Exception as excep:
-           print str(excep)
-           raise Exception('Assertion failed!')
+           print unicode(excep)
+           raise Exception(u'Assertion failed!')
            return False
 	return True
     
@@ -243,7 +243,7 @@ class Interpreter(DebugUtils):
     @staticmethod   
     def SPRINTF_worker(*args):        
         if ( len(args) < 1 ):
-            raise Exception('Not enough arguments to printf() function')
+            raise Exception(u'Not enough arguments to printf() function')
         fmt = args[0]
         arg = tuple( args[1:] );
         opstr = fmt%arg;
@@ -295,8 +295,8 @@ class Interpreter(DebugUtils):
     
     def install_builtins(self):
         """ populate with the builtin functions"""
-        self.builtin_map['printf']=BlindBuiltins(Interpreter.PRINTF,'printf',self.debug)
-        self.builtin_map['sprintf']=BlindBuiltins(Interpreter.SPRINTF,'sprintf',self.debug)
+        self.builtin_map[u'printf']=BlindBuiltins(Interpreter.PRINTF,u'printf',self.debug)
+        self.builtin_map[u'sprintf']=BlindBuiltins(Interpreter.SPRINTF,u'sprintf',self.debug)
         
         self.builtin_map['abs']=BlindBuiltins(abs,'abs',self.debug)
         self.builtin_map['all']=BlindBuiltins(all,'all',self.debug)
@@ -354,7 +354,7 @@ class Interpreter(DebugUtils):
 	try:
 	        self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
 	except NameError as ie:
-		if(self.debug): print("Name Error:",str(ie))
+		if(self.debug): print(u"Name Error:",unicode(ie))
 	
         #self.builtin_map['min']=BlindBuiltins(min,'min',self.debug)
         self.builtin_map['next']=BlindBuiltins(next,'next',self.debug)
@@ -376,7 +376,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['slice']=BlindBuiltins(slice,'slice',self.debug)
         self.builtin_map['sorted']=BlindBuiltins(sorted,'sorted',self.debug)
         self.builtin_map['staticmethod']=BlindBuiltins(staticmethod,'staticmethod',self.debug)
-        self.builtin_map['str']=BlindBuiltins(str,'str',self.debug)
+        self.builtin_map[u'str']=BlindBuiltins(unicode,u'str',self.debug)
         self.builtin_map['sum']=BlindBuiltins(sum,'sum',self.debug)
         self.builtin_map['super']=BlindBuiltins(super,'super',self.debug)
         self.builtin_map['tuple']=BlindBuiltins(tuple,'tuple',self.debug)
@@ -561,10 +561,10 @@ class Interpreter(DebugUtils):
         return True
 
     def __repr__(self):
-        rval =  "[Interpreter: "
-        rval = rval + "[Functions["
+        rval =  u"[Interpreter: "
+        rval = rval + u"[Functions["
         for k in list(self.function_map.keys()):
-            rval = rval + "\n "+ str(self.function_map[k]) 
+            rval = rval + u"\n "+ unicode(self.function_map[k]) 
         rval = rval +u"]] "+ unicode(self.ast) +u"]\n"
         return rval
 
@@ -601,7 +601,7 @@ class REPL(Cmd):
 		    @debug the boolean """
 		Cmd.__init__(self)
 		## ala-Python like
-		self.banner = """எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
+		self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
 Ezhil : A Tamil Programming Language - version %g, (C) 2007-2013
 Type "help", "copyright", "credits" or "license" for more information."""%ezhil_version()
 		
@@ -642,7 +642,8 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
 			[line_no,c] = self.lexer.get_line_col( 0 )
 			if ( self.debug ): self.lexer.dump_tokens()
 			self.parse_eval.parse()
-			if ( self.debug ):  print(u"*"*60);  print(unicode(self.parse_eval))
+			if ( self.debug ):  
+                                print(u"*"*60);  
 			[rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
 			if ( self.debug ): print( u"return value", unicode(rval) )
 			if hasattr( rval, 'evaluate' ):
@@ -664,7 +665,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
 		return True
 	
 	def exit_hook(self,doExit=False):
-		if ( self.lang == "எழில்"):
+		if ( self.lang == u"எழில்"):
 			print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
 		else:
 			print(u"******* Goodbye! Now have a nice day *******") 				

@@ -237,7 +237,7 @@ class Stmt:
         self.debug = dbg
 
     def __unicode__(self):        
-        #print u"stmt => ", unicode(self.__class__) #we're headed toward assertion
+        self.dbg_msg( u" ".join([ u"stmt => ", unicode(self.__class__)]) ) #we're headed toward assertion
         return self.__repr__()
 
     def __repr__(self):
@@ -717,7 +717,7 @@ class PrintStmt(Stmt):
         Stmt.__init__(self,l,c,dbg)
         self.exprlst = exprlst
         
-    def __repr__(self):
+    def __repr__(self):        
         return u"\n\t [PrintStmt[ "+ unicode(self.exprlst)+u"]]"
 
     def do_printop(self,env):
@@ -725,7 +725,7 @@ class PrintStmt(Stmt):
         if hasattr(val,'evaluate') :
             assert( False )
             val = val.evaluate( env )
-        print(val)
+        print(val) #this prints to output
         return val
     
     def evaluate(self,env):
@@ -816,7 +816,7 @@ class StmtList(Stmt):
         return len(self.List)        
     
     def append(self,stmt_x):
-        print "==>",stmt_x.__class__
+        self.dbg_msg(u"==>"+unicode(stmt_x.__class__))
         self.dbg_msg(u"adding new statement " + unicode(stmt_x.__class__) )
         self.List.append(stmt_x)
         return
