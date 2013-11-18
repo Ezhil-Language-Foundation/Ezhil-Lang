@@ -2,7 +2,7 @@
 # 
 # This file is part of Ezhil Language project
 # 
-import os
+import os, codecs
 import tempfile
 
 import ezhil
@@ -18,8 +18,10 @@ class TestEzhil:
         
         # dump stuff into a file
         [self.handle,self.filename] = tempfile.mkstemp()
-        os.write( self.handle, ezhil_test_code )
         os.close( self.handle )
+        fp = codecs.open( self.filename, 'w', 'utf-8')
+        fp.write( ezhil_test_code )
+        fp.close(  )
 
     def __enter__(self):
         return self
@@ -85,7 +87,7 @@ class TestEzhilException( TestEzhil ):
             if not self.success:
                 raise Exception("Expected exception class %s was not found"%(self.exception,ex))
             
-            print(ex)
+            print( unicode(ex) )
             if self.message:
                 self.success = True
                 # check multiple messages
@@ -95,7 +97,7 @@ class TestEzhilException( TestEzhil ):
                              len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 )
             
             if not self.success:
-                raise Exception("Expected message %s was not found. We found message %s"%(self.message,ex.message))
+                raise Exception(u"Expected message %s was not found. We found message %s"%(self.message,ex.message))
             
             return self.success
 

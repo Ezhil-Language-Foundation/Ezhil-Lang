@@ -24,7 +24,7 @@ class ExprNeg(unittest.TestCase):
 
 class StmtNeg(unittest.TestCase):
     def test_nested_fn(self):
-        exprCode = r""" நிரல்பாகம்  fact2 ( n )
+        exprCode = u""" நிரல்பாகம்  fact2 ( n )
     @( n == 0 ) ஆனால்      
             பின்கொடு  1
     இல்லை
@@ -38,7 +38,7 @@ class StmtNeg(unittest.TestCase):
         
     
     def test_return_stmt_dangling_function(self):
-        exprCode  = r"""
+        exprCode  = u"""
 # (C) முத்தையா அண்ணாமலை 2013
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
     நிரல்பாகம்  fact2 ( n )
@@ -53,7 +53,7 @@ class StmtNeg(unittest.TestCase):
         
 
     def test_missing_ifstmt(self):
-        exprCode  = r"""
+        exprCode  = u"""
 # (C) முத்தையா அண்ணாமலை 2013
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 நிரல்பாகம்  fact ( n )
@@ -65,7 +65,7 @@ class StmtNeg(unittest.TestCase):
         TestEzhilException.create_and_test(exprCode,ParseException,"parsing Statement, unknown operators")
         
     def test_missing_end(self):        
-        exprCode  = r"""
+        exprCode  = u"""
 # (C) முத்தையா அண்ணாமலை 2013
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 நிரல்பாகம்  fact ( n )
