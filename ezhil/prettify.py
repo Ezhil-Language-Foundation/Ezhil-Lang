@@ -177,12 +177,32 @@ class Printer(Visitor):
         keyword_end = u"முடி"
         self.append( self.styler( kw_attrib, keyword_end ) )
         
-    def visit_while_stmt(self,stmt):
-        self.default(stmt)
+    def visit_while_stmt(self,while_stmt):
+        """
+        @( itr < L ) வரை
+                        சமம்= சமம் + input[itr]*wts[itr]
+            itr = itr + 1
+                முடி"""        
+        op_attrib = self.theme.Operators
+        
+        # condition expression
+        self.append( self.styler( op_attrib, u"@( " ) )
+        while_stmt.expr.visit(self)
+        self.append( self.styler( op_attrib, u") " ) )
+        
+        # While kw
+        kw_attrib = self.theme.Keywords
+        keyword_while = u"வரை"
+        self.append( self.styler(kw_attrib,(keyword_while)) )
+        
+        # Body
+        while_stmt.body.visit( self )
+        
+        self.visit_end_kw()
         return
 
     def visit_for_stmt(self,for_stmt):
-        self.default(for_stmt)
+        self.default(stmt)
         return
 
     def visit_assign_stmt(self, assign_stmt):
@@ -226,7 +246,7 @@ class Printer(Visitor):
         ast = self.parse_eval.parse()
         print(unicode(ast))
         ast.visit(self)
-
+        
         # dump remaining comments
         comm_attrib = self.theme.Comment
         for  line,comment in  self.lexer.comments.items():            
@@ -236,7 +256,8 @@ class Printer(Visitor):
         return u"".join(self.output)
         
     # method walks the lexer-tokens and calls the appropriate elements
-    # basic lexical hiliting
+    # basic lexical hiliting. This is useful when parsing fails, or just
+    # a plain vanilla hiliter
     def lexical_hilite(self):
         self.lexer.tokens.reverse()
         out = []
