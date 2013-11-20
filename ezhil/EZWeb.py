@@ -95,6 +95,7 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
 
 class EzhilWeb(ThreadingMixIn,BaseEzhilWeb):
     """ Add threading to handle requests in separate thread """
+    pass
 
 HOST_NAME = "localhost"
 PORT_NUMBER = 8080
