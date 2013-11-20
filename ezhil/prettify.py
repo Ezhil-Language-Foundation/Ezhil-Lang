@@ -119,23 +119,27 @@ class Printer(Visitor):
     
     def visit_return_stmt(self, ret_stmt):
         kw_attrib = self.theme.Keywords
-        self.update_line(ret_stmt)        
+        self.update_line(ret_stmt)
         keyword = u"பின்கொடு"
         self.append( self.styler( kw_attrib, keyword ) )
-        self.append( self.NEWLINE )
+        # return may have optional argument
+        if hasattr(ret_stmt.rvalue,'visit'):
+            ret_stmt.rvalue.visit(self)
+        self.append(self.NEWLINE)
         return
     
     def visit_break_stmt(self, break_stmt ):
         kw_attrib = self.theme.Keywords
-        self.update_line(ret_stmt)
+        self.update_line(break_stmt)
         keyword = u"நிறுத்து" #EzhilToken.Keywords["break"]
+        self.append( self.NEWLINE )
         self.append( self.styler( kw_attrib, keyword ) )
         self.append( self.NEWLINE )
         return
     
     def visit_continue_stmt(self, cont_stmt):
         kw_attrib = self.theme.Keywords
-        self.update_line(ret_stmt)
+        self.update_line(cont_stmt)
         keyword = u"தொடர்" #EzhilToken.Keywords["continue"]
         self.append( self.styler( kw_attrib, keyword ) )
         self.append( self.NEWLINE )        
@@ -200,9 +204,33 @@ class Printer(Visitor):
         
         self.visit_end_kw()
         return
-
+    
+    # foreach is transformed at the AST-level
+    # so its really a MACRO here
     def visit_for_stmt(self,for_stmt):
-        self.default(stmt)
+        """
+        @( x = -1 , x < 0, x = x + 1 ) ஆக
+                        பதிப்பி x, "கருவேபில"
+                முடி
+        """
+        op_attrib = self.theme.Operators
+        
+        # condition expression
+        self.append( self.styler( op_attrib, u"@( " ) )
+        for_stmt.expr_init.visit(self)
+        self.append( self.styler( op_attrib, u", " ) )
+        for_stmt.expr_cond.visit(self)
+        self.append( self.styler( op_attrib, u", " ) )
+        for_stmt.expr_update.visit(self)
+        self.append( self.styler( op_attrib, u") " ) )
+        
+        # For kw
+        kw_attrib = self.theme.Keywords
+        keyword_for = u"ஆக"
+        self.append( self.styler(kw_attrib,keyword_for) )
+        # Body
+        for_stmt.body.visit( self )
+        self.visit_end_kw()
         return
 
     def visit_assign_stmt(self, assign_stmt):
@@ -225,7 +253,12 @@ class Printer(Visitor):
         return
     
     def visit_arg_list(self, arg_list):
-        self.default(arg_list)
+        for arg in arg_list.get_list():
+            if hasattr(arg,'visit'):
+                arg.visit(self)
+            else:
+                self.default(arg)
+            self.append( ", " )
         return
 
     def visit_value_list(self,value_list):
@@ -238,7 +271,7 @@ class Printer(Visitor):
         return
 
     def visit_function(self,function):
-        self.default(function)
+        
         return
     
     def pretty_print(self):
@@ -249,7 +282,7 @@ class Printer(Visitor):
         
         # dump remaining comments
         comm_attrib = self.theme.Comment
-        for  line,comment in  self.lexer.comments.items():            
+        for  line,comment in  self.lexer.comments.items():
             self.append( self.styler( comm_attrib, comment ) )
             self.append( self.NEWLINE )
         
