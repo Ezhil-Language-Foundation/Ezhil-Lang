@@ -4,24 +4,15 @@ Ezhil-Lang [![Build Status](https://travis-ci.org/arcturusannamalai/Ezhil-Lang.p
 Introduction
 ============
 
-எழில்: தமிழ் நிரலாக்க மொழி; முதன்முறை கணிப்பொறி நிரல் எழுதுகிற தமிழ் மாணவர்களுக்கு இது உதவும்.
+```எழில்: தமிழ் நிரலாக்க மொழி; முதன்முறை கணிப்பொறி நிரல் எழுதுகிற தமிழ் மாணவர்களுக்கு இது உதவும்.
 
 Ezhil-Lang : (Ezhil, is a fun Tamil programming language for K-12)
 Ezhil is a procedural language with dynamic types,
 like Ruby/Python. Ezhil has a pascal-like syntax,
 with for-end, while-end, if-elseif-else-end statements,
-break, continue and def-end for defining functions.
-
-Ezhil language is implemented in a handwritten scanner
-and parser using the Python programming language. Latest version of Ezhil-Language is v0.6.
-
-If you would like to tryout the code, all you need
-is a python interpreter, and the code from 
-https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip
-
-Interesting features include support for recursion,
-and an interactive interpreter. Ezhil supports a Turtle module
-for simple on-screen graphics, similar to LOGO language from 1960s.
+break, continue and def-end for defining functions. Ezhil language is implemented in a handwritten scanner
+and parser using the Python programming language. Latest version of Ezhil-Language is v0.71.
+```
 
 Motivations
 ===========
@@ -35,20 +26,7 @@ English language is not a pre-requisite
 Write your first program in Ezhil
 Free as in Open source
 
-REFERENCES
-==========
-Read Wikipedia article(s) on Ezhil,
-
-1. (Tamil) http://bit.ly/16MgU6U
-2. (English) http://en.wikipedia.org/wiki/Ezhil_%28programming_language%29
-
-Scholarly articles on Ezhil include,
-
-1. M. Annamalai, "Ezhil : A Tamil Programming Language," (2009). http://arxiv.org/abs/0907.4960
-2. -do-, "Invitation to Ezhil: A Tamil Programming Language for Early Computer-Science Education," (2013). http://arxiv.org/abs/1308.1733
-
-
-USAGE
+Usage
 =====
 
 Currently Ezhil language is under development, and a little rough around the
@@ -124,3 +102,25 @@ Learn more, and contribute
 '''Rosetta Code''', the wiki platform for sharing standard algorithms, in
 many programming languages, now hosts several algorithms in Ezhil.
 You can find all of Ezhil programs there via http://rosettacode.org/wiki/Category:Ezhil
+
+Download Ezhil
+==============
+If you would like to tryout the code, all you need
+is a python interpreter, and the code from 
+https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip
+
+Interesting features include support for recursion,
+and an interactive interpreter. Ezhil supports a Turtle module
+for simple on-screen graphics, similar to LOGO language from 1960s.
+
+References
+==========
+Read Wikipedia article(s) on Ezhil,
+
+1. (Tamil) http://bit.ly/16MgU6U
+2. (English) http://en.wikipedia.org/wiki/Ezhil_%28programming_language%29
+
+Scholarly articles on Ezhil include,
+
+1. M. Annamalai, "Ezhil : A Tamil Programming Language," (2009). http://arxiv.org/abs/0907.4960
+2. -do-, "Invitation to Ezhil: A Tamil Programming Language for Early Computer-Science Education," (2013). http://arxiv.org/abs/1308.1733
