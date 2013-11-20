@@ -12,7 +12,7 @@ a procedural language with dynamic types, like Ruby/Python. Ezhil has a
 pascal-like syntax, with for-end, while-end, if-elseif-else-end statements,
 break, continue and def-end for defining functions. Ezhil language is 
 implemented in a handwritten scanner and parser using the Python programming 
-language. Latest version of Ezhil-Language is v0.71.
+language. Latest version of Ezhil-Language is v0.75.
 ```
 
 Motivations
