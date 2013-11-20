@@ -35,9 +35,29 @@ class TestPrettyPrinter(unittest.TestCase):
 <span style="color:#0000FF">முடி</span><BR />
 """
 
+        ford2_patterns = u"""
+<span style="color:#FF0000">@( </span><BR />
+<span style="color:#00FF00">x</span><span style="color:#FF0000">=</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">1</span><span style="color:#FF0000">, </span><span style="color:#FF8DC">0</span><span style="color:#FF0000">, </span><span style="color:#FF8DC">0</span><span style="color:#FF0000">) </span><span style="color:#0000FF">ஆக</span><BR />
+<span style="color:#0000FF">பதிப்பி</span><span style="color:#00FF00">x</span>,<span style="color:#CD5C5C">"கருவேபில"</span><BR />
+<BR />
+#without this stmt it is a infinite loop<BR />
+<span style="color:#0000FF">நிறுத்து</span><BR />
+<BR />
+<span style="color:#0000FF">முடி</span><BR />
+<BR />
+<span style="color:#00FF00">assert</span><span style="color:#FF0000">(</span><span style="color:#00FF00">x</span><span style="color:#FF0000">==</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">1</span><span style="color:#FF0000">)</span><BR />
+<span style="color:#FF0000">@( </span><BR />
+<span style="color:#00FF00">x</span><span style="color:#FF0000">=</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">1</span><span style="color:#FF0000">, </span><span style="color:#00FF00">x</span><span style="color:#FF0000"><</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">, </span><span style="color:#00FF00">x</span><span style="color:#FF0000">=</span><span style="color:#00FF00">x</span><span style="color:#FF0000">+</span><span style="color:#FF8DC">1</span><span style="color:#FF0000">) </span><span style="color:#0000FF">ஆக</span><BR />
+<span style="color:#0000FF">பதிப்பி</span><span style="color:#00FF00">x</span>,<span style="color:#CD5C5C">"கருவேபில"</span><BR />
+<span style="color:#0000FF">முடி</span><BR />
+
+"""
+
         file_patterns = {"hello.n" : hello_patterns,
                          "fact.n"  : fact_patterns,
-                         "infinite_loop.n" : infinite_loop_patterns,}
+                         "infinite_loop.n" : infinite_loop_patterns,
+                         "ford2.n" : ford2_patterns,
+                        }
                 
         flag = True
         for filename, expt_fmt in file_patterns.items():
