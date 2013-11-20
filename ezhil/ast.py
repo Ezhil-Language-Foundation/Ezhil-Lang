@@ -9,7 +9,7 @@
 ## BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, 
 ## ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList,
 ## ValueList, Function, StmtList, Identifier, String, Number,
-## Array, Hash
+## Array, Dict, NoOp
 
 import copy
 import math
@@ -244,7 +244,7 @@ class Stmt:
         print "//#//"*50
         print u"stmt => ", unicode(self.__class__) #we're headed toward assertion
         self.dbg_msg(u"stmt => "+ unicode(self.__class__) )
-        assert( False )
+        raise Exception(u"FATAL : Class %s did not implement the __repr__ method, nor inherits a concrete implementation."%unicode(self.__class__))
     
     def dbg_msg(self, msg):
         """ handy to print debug messages """
@@ -285,7 +285,26 @@ class Stmt:
     def visit( self, walker):
         walker.visit_stmt( self )
         return
+
+class DeclarationStmt(Stmt):
+    """ hold function declaration statements; have visit option, 
+        but no evaluation options. """
+    def __init__(self,fcn):        
+        if isinstance(fcn,Function):
+            Stmt.__init__(self,fcn.line,fcn.col,fcn.debug)
+            self.class_name = u"Declaration_Statement"
+            self.fcn = fcn #FunctionStmt object
+        else:
+            raise Exception(u"declaration statement can only hold FunctionStmt objects")
     
+    def visit( self, walker):
+        """ delegate visitor to holding function """
+        walker.visit_function( self.fcn )
+        return
+    
+    def __repr__(self):        
+        return self.fcn.__repr__()
+
 class UnaryExpr(Stmt):
     def __init__(self,t,op,l,c,dbg=False):
         Stmt.__init__(self,l,c,dbg)
