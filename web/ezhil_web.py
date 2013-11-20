@@ -39,7 +39,7 @@ class EzhilWeb():
     """ Class that does the job on construction """
     def __init__(self,debug = False):
         self.debug = debug
-	self.img_outcome = '' #image str indicating success/failure
+        self.img_outcome = '' #image str indicating success/failure
         if ( self.debug ):
             # debugging tips
             import cgitb
