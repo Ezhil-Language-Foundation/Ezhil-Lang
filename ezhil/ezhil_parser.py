@@ -29,7 +29,7 @@ from runtime import  Environment, BuiltinFunction, \
 ## AST elements
 from ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
- ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
+ ForStmt, AssignStmt, PrintStmt, DeclarationStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
  String, Array, Dict
 
@@ -74,6 +74,7 @@ class EzhilParser(Parser):
                 func = self.function()
                 self.warn_function_overrides(func.name)
                 self.function_map[func.name]=func
+                self.ast.append(DeclarationStmt(func)) #add to AST
             else:
                 self.dbg_msg( u"parsing for stmt" )
                 st = self.stmt()
