@@ -28,12 +28,20 @@ class TestPrettyPrinter(unittest.TestCase):
 <BR />
 <span style="color:#00FF00">ans</span><span style="color:#FF0000">=</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">(</span><span style="color:#FF8DC">0.75</span><span style="color:#FF0000">*</span><span style="color:#00FF00">ப</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">4</span><span style="color:#FF0000">/</span><span style="color:#FF8DC">2</span><span style="color:#FF0000">)</span><BR />
 <BR />"""
-        file_patterns = {"hello.n" : hello_patterns.split("\n"),
-                         "fact.n"  : fact_patterns.split("\n") }        
+
+        infinite_loop_patterns = u"""
+<span style="color:#00FF00">i</span><span style="color:#FF0000">>=</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">) </span><span style="color:#0000FF">வரை</span><BR />
+<span style="color:#00FF00">i</span><span style="color:#FF0000">=</span><span style="color:#00FF00">i</span><span style="color:#FF0000">+</span><span style="color:#FF8DC">1</span><BR />
+<span style="color:#0000FF">முடி</span><BR />
+"""
+
+        file_patterns = {"hello.n" : hello_patterns,
+                         "fact.n"  : fact_patterns,
+                         "infinite_loop.n" : infinite_loop_patterns,}
                 
         flag = True
-        
         for filename, expt_fmt in file_patterns.items():
+            expt_fmt = expt_fmt.split("\n");
             formatted_str = PrettyPrint(relpath+filename).pretty_print()
             if not ( all([( formatted_str.find( line ) >= 0 ) for line in expt_fmt]) ):
                 print "file "+filename+" did not find expected strings "
@@ -42,7 +50,7 @@ class TestPrettyPrinter(unittest.TestCase):
             else:
                 print "file " + filename + " passed the test"
         
-        assert( flag )
+        self.assertTrue( flag )
 
 if __name__ == '__main__':    
     test_support.run_unittest(TestPrettyPrinter)
