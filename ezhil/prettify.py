@@ -228,6 +228,7 @@ class Printer(Visitor):
         kw_attrib = self.theme.Keywords
         keyword_for = u"ஆக"
         self.append( self.styler(kw_attrib,keyword_for) )
+        self.append( self.NEWLINE )
         # Body
         for_stmt.body.visit( self )
         self.visit_end_kw()
@@ -253,12 +254,15 @@ class Printer(Visitor):
         return
     
     def visit_arg_list(self, arg_list):
-        for arg in arg_list.get_list():
+        L = len(arg_list.get_list())
+        for pos,arg in enumerate(arg_list.get_list()):
             if hasattr(arg,'visit'):
                 arg.visit(self)
             else:
-                self.default(arg)
-            self.append( ", " )
+                var_attrib = self.theme.Variables
+                self.append( self.styler(var_attrib,unicode(arg)) )            
+            if ( pos < (L-1) ):
+                self.append( ", " )
         return
 
     def visit_value_list(self,value_list):
@@ -270,7 +274,35 @@ class Printer(Visitor):
         self.output.pop()
         return
 
-    def visit_function(self,function):
+    def visit_function(self,fndecl_stmt):
+        """
+        நிரல்பாகம் fibonacci_தமிழ்( x )
+        @( x <= 1 ) ஆனால்
+                        ஈ = 1
+                இல்லை
+                        ஈ = fibonacci_தமிழ்( x - 1 ) + fibonacci_தமிழ்( x - 2 )
+                முடி 
+                பின்கொடு ஈ
+        முடி
+        """
+        
+        # Function kw
+        kw_attrib = self.theme.Keywords
+        keyword_fn = u"நிரல்பாகம்"
+        self.append( self.styler(kw_attrib,keyword_fn) )
+        
+        # name of function
+        fn_attrib = self.theme.Variables
+        self.append( self.styler( fn_attrib, fndecl_stmt.name ) )
+        
+        # arglist expression
+        op_attrib = self.theme.Operators
+        self.append( self.styler( op_attrib, u"( " ) )
+        fndecl_stmt.arglist.visit(self)
+        self.append( self.styler( op_attrib, u") " ) )
+        
+        # Body expression
+        fndecl_stmt.body.visit(self)
         
         return
     

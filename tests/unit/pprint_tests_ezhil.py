@@ -22,7 +22,21 @@ class TestPrettyPrinter(unittest.TestCase):
 <span style="color:#C0FFEE">"# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்"</span><BR />
 <span style="color:#0000FF">பதிப்பி</span><span style="color:#CD5C5C">"இது என் முதல் எழில் நிரல்"</span><BR />"""
 
-        fact_patterns = u"""<span style="color:#00FF00">ans</span><span style="color:#FF0000">=</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">(</span><span style="color:#00FF00">ப</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">4</span><span style="color:#FF0000">/</span><span style="color:#FF8DC">2</span><span style="color:#FF0000">)</span><BR />
+        fact_patterns = u"""
+<span style="color:#0000FF">நிரல்பாகம்</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">( </span><span style="color:#00FF00">n</span><span style="color:#FF0000">) </span><span style="color:#FF0000">@( </span><BR />
+<span style="color:#00FF00">n</span><span style="color:#FF0000">==</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">) </span><span style="color:#0000FF">ஆனால்</span><BR />
+<span style="color:#0000FF">பின்கொடு</span><span style="color:#FF8DC">1</span><BR />
+<BR />
+<span style="color:#0000FF">முடி</span><BR />
+<BR />
+<BR />
+<span style="color:#0000FF">பதிப்பி</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">(</span><span style="color:#FF8DC">10</span><span style="color:#FF0000">)</span><BR />
+<BR />
+<span style="color:#00FF00">ப</span><span style="color:#FF0000">=</span><span style="color:#FF8DC">4</span><BR />
+<BR />
+<span style="color:#00FF00">ans</span><span style="color:#FF0000">=</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">(</span><span style="color:#00FF00">ப</span><span style="color:#FF0000">+</span><span style="color:#FF8DC">4</span><span style="color:#FF0000">)</span><BR />
+<BR />
+<span style="color:#00FF00">ans</span><span style="color:#FF0000">=</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">(</span><span style="color:#00FF00">ப</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">4</span><span style="color:#FF0000">/</span><span style="color:#FF8DC">2</span><span style="color:#FF0000">)</span><BR />
 <BR />
 <span style="color:#0000FF">பதிப்பி</span><span style="color:#00FF00">ans</span>,<span style="color:#00FF00">assert</span><span style="color:#FF0000">(</span><span style="color:#00FF00">ans</span><span style="color:#FF0000">==</span><span style="color:#FF8DC">2</span><span style="color:#FF0000">)</span><BR />
 <BR />
@@ -54,9 +68,9 @@ class TestPrettyPrinter(unittest.TestCase):
 """
 
         file_patterns = {"hello.n" : hello_patterns,
-                         "fact.n"  : fact_patterns,
+                         "fact.n"  : fact_patterns, #check for fcn declarations as well
                          "infinite_loop.n" : infinite_loop_patterns,
-                         "ford2.n" : ford2_patterns,
+                         "ford2.n" : ford2_patterns,                         
                         }
                 
         flag = True
