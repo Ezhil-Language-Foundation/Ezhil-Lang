@@ -155,7 +155,7 @@ class Lex:
             self.File = codecs.open(fname,"r","utf-8")
         elif ( isinstance(fname,list) ):
             """ specify, fname = ["contents of program as a string"] """
-            self.fname = "<DUMMYFILE>"
+            self.fname = u"<DUMMYFILE>"
             self.File = DummyFile( fname[0] );
         else:
             self.fname = u"<STDIN>"
