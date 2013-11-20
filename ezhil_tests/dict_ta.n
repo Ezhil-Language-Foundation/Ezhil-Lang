@@ -1,5 +1,5 @@
 # (C) முத்தையா அண்ணாமலை 2013
-# இந்த எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+# இது எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 
 # Natural dictionary representation like Python
 # for Ezhil language

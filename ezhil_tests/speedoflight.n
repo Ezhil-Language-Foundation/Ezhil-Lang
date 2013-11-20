@@ -1,6 +1,6 @@
 # Ezhil Programming Language example
 # (C) முத்தையா அண்ணாமலை 2013
-# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 
 C = 3e8 # Speed of light in m/s
 C = C/1e3 # move to km/s
