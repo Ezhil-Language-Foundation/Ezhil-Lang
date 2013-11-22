@@ -241,8 +241,8 @@ class Stmt:
         return self.__repr__()
 
     def __repr__(self):
-        print "//#//"*50
-        print u"stmt => ", unicode(self.__class__) #we're headed toward assertion
+        print("//#//"*50)
+        print(u"stmt => ", unicode(self.__class__)) #we're headed toward assertion
         self.dbg_msg(u"stmt => "+ unicode(self.__class__) )
         raise Exception(u"FATAL : Class %s did not implement the __repr__ method, nor inherits a concrete implementation."%unicode(self.__class__))
     
@@ -551,7 +551,7 @@ class IfStmt(Stmt):
                 self.dbg_msg( u" ".join([unicode(self.next_stmt),unicode(self.next_stmt.__class__),u"***"]) )
                 rval = rval + u"<<Nxt>>" + unicode(self.next_stmt)
             except UnicodeEncodeError as uc_err:
-                print unicode(uc_err)
+                print(unicode(uc_err))
                 raise uc_err
             pass
         rval = rval + u"]"

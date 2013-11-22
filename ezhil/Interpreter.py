@@ -49,14 +49,14 @@ def ezhil_version():
         return 0.75
 
 def ezhil_copyright():
-	return u"(C) 2007-2013 Muthiah Annamalai"
+    return u"(C) 2007-2013 Muthiah Annamalai"
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-	return u"Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013."%(ezhil_version())
+    return u"Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013."%(ezhil_version())
 
 def ezhil_license():
-	return u"Licensed under GPL Version 3"
+    return u"Licensed under GPL Version 3"
 
 def ezhil_getitem(x,idx):
     #print("dispatching ezhil getitem",type(x),type(idx),x,idx,x[idx])
@@ -109,15 +109,15 @@ def get_prog_name(lang):
     return [prog_name, debug, dostdin]
 
 class NoClobberDict(dict):
-	""" dictionary structure with a set like mathematical structure.
-	    that way when you insert functions for ezhil library, we don't trample on each other
-	    by accidentally overwriting stuff"""
-	def __init__(self):
-		dict.__init__(self)
-	def __setitem__(self,key,val):
-		if ( self.has_key(key) ):
-			raise KeyError("Dictionary is getting clobbered; key "+key+" already present")
-		dict.__setitem__(self,key,val)
+    """ dictionary structure with a set like mathematical structure.
+        that way when you insert functions for ezhil library, we don't trample on each other
+        by accidentally overwriting stuff"""
+    def __init__(self):
+        dict.__init__(self)
+    def __setitem__(self,key,val):
+        if ( self.has_key(key) ):
+            raise KeyError("Dictionary is getting clobbered; key "+key+" already present")
+        dict.__setitem__(self,key,val)
 
 ## Gandalf the Grey. One ring to rule them all.
 class Interpreter(DebugUtils):
@@ -185,10 +185,10 @@ class Interpreter(DebugUtils):
         try:
            assert x
         except Exception as excep:
-           print unicode(excep)
+           print(unicode(excep))
            raise Exception(u'Assertion failed!')
            return False
-	return True
+        return True
     
     # file IO functions - 6 total
     @staticmethod
@@ -227,7 +227,7 @@ class Interpreter(DebugUtils):
         assert( hasattr(args[0],'writelines') )
         return args[0].writelines(args[1])
     
-    # marshalling    	    
+    # marshalling            
     @staticmethod
     def RAWINPUT(args):
         op = raw_input(args)
@@ -279,19 +279,19 @@ class Interpreter(DebugUtils):
              ezhil_sleep( args[1] )
         return
     
-    def add_builtin(self,call_name,call_handle,nargin=1,ta_alias=None):	    
-	    # make sure you don't clobber yourself
-	    assert not self.builtin_map.has_key(call_name)
-	    if ( nargin == -1 ):
-		    self.builtin_map[call_name] = BlindBuiltins( call_handle, call_name, self.debug)
-            else:
-		    self.builtin_map[call_name] = BuiltinFunction( call_handle, call_name, nargin, self.debug )
-	    # update the alias if something was supplied
-	    if ( ta_alias ):
-		    assert not self.builtin_map.has_key(ta_alias) #noclobber
-		    self.builtin_map[ta_alias] = self.builtin_map[call_name]
-	    
-	    return True
+    def add_builtin(self,call_name,call_handle,nargin=1,ta_alias=None):        
+        # make sure you don't clobber yourself
+        assert not self.builtin_map.has_key(call_name)
+        if ( nargin == -1 ):
+            self.builtin_map[call_name] = BlindBuiltins( call_handle, call_name, self.debug)
+        else:
+            self.builtin_map[call_name] = BuiltinFunction( call_handle, call_name, nargin, self.debug )
+        # update the alias if something was supplied
+        if ( ta_alias ):
+            assert not self.builtin_map.has_key(ta_alias) #noclobber
+            self.builtin_map[ta_alias] = self.builtin_map[call_name]
+        
+        return True
     
     def install_builtins(self):
         """ populate with the builtin functions"""
@@ -351,11 +351,13 @@ class Interpreter(DebugUtils):
         self.builtin_map['long']=BlindBuiltins(int,'long',self.debug)
         self.builtin_map['map']=BlindBuiltins(map,'map',self.debug)
         #self.builtin_map['max']=BlindBuiltins(max,'max',self.debug)
-	try:
-	        self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
-	except NameError as ie:
-		if(self.debug): print(u"Name Error:",unicode(ie))
-	
+        
+        try:
+            self.builtin_map['memoryview']=BlindBuiltins(memoryview,'memoryview',self.debug)
+        except NameError as ie:
+            if(self.debug): 
+                print(u"Name Error:",unicode(ie))
+    
         #self.builtin_map['min']=BlindBuiltins(min,'min',self.debug)
         self.builtin_map['next']=BlindBuiltins(next,'next',self.debug)
         self.builtin_map['object']=BlindBuiltins(object,'object',self.debug)
@@ -386,8 +388,8 @@ class Interpreter(DebugUtils):
         self.builtin_map['vars']=BlindBuiltins(vars,'vars',self.debug)
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
-
-	# common/generic functions
+        
+            # common/generic functions
         self.builtin_map['__getitem__']=BuiltinFunction(ezhil_getitem,"__getitem__",2)
         self.builtin_map['__setitem__']=BuiltinFunction(ezhil_setitem,"__setitem__",3)
         
@@ -398,30 +400,30 @@ class Interpreter(DebugUtils):
         self.builtin_map["file_readlines"]=BuiltinFunction(Interpreter.file_readlines,"file_readlines")
         self.builtin_map["file_write"]=BuiltinFunction(Interpreter.file_write,"file_write",2)
         self.builtin_map["file_writelines"]=BuiltinFunction(Interpreter.file_writelines,"file_writelines",2)
-    	
+        
         # input statements
         self.builtin_map["input"]=BuiltinFunction(Interpreter.INPUT,"input")
         self.builtin_map["raw_input"]=BuiltinFunction(Interpreter.RAWINPUT,"raw_input")
 
         # assert
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
-	
+    
         # sleep/pause
         self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
         self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
-	
+    
         # date/time
         self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias=u"தேதி_நேரம்")
-	self.add_builtin("time",time.time,nargin=0,ta_alias=u"நேரம்")
-	self.add_builtin("ctime",time.ctime,nargin=1,ta_alias=u"cநேரம்")
-	self.add_builtin("clock",time.time,nargin=0)
+        self.add_builtin("time",time.time,nargin=0,ta_alias=u"நேரம்")
+        self.add_builtin("ctime",time.ctime,nargin=1,ta_alias=u"cநேரம்")
+        self.add_builtin("clock",time.time,nargin=0)
 
-	# islist, isnumber predicates
-	self.add_builtin("islist",ezhil_islist,nargin=1,ta_alias=u"பட்டியலா")
-	self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias=u"எண்ணா")	
-	
+        # islist, isnumber predicates
+        self.add_builtin("islist",ezhil_islist,nargin=1,ta_alias=u"பட்டியலா")
+        self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias=u"எண்ணா")    
+    
         # get tamil letters
-        self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")	
+        self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
 
         # random functions
         aslist = True;
@@ -429,7 +431,7 @@ class Interpreter(DebugUtils):
         self.builtin_map["random"]=BuiltinFunction(random.random,"random",0)
         self.builtin_map["seed"]=BuiltinFunction(random.seed,"seed")
         self.builtin_map["randint"]=BuiltinFunction(random.randint,"randint",2)
-        
+    
         # math functions
         self.builtin_map["acos"]=BuiltinFunction(acos,"acos")
         self.builtin_map["asin"]=BuiltinFunction(asin,"asin")
@@ -464,70 +466,69 @@ class Interpreter(DebugUtils):
         #self.builtin_map["exit"]=BuiltinFunction(min,"exit",1)
 
         # turtle functions - optional - 
-	try:
-		# turtle graphics
-		from EZTurtle import EZTurtle
+        try:
+            # turtle graphics
+            from EZTurtle import EZTurtle
 
-		turtle_attrib = EZTurtle.functionAttributes();
-		for nargs,fcnName in list(turtle_attrib.items()):
-			for vv in fcnName:
-				turtlefcn = u"turtle_"+vv;
-				if ( self.debug ): print(nargs, vv)
-				if ( nargs == -1 ):
-					self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv),vv,self.debug)
-				else:
-					self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
-	except ImportError as ie:
-		if ( self.debug ): print u"Cannot Import EZTurtle module; ignoring for now"
+            turtle_attrib = EZTurtle.functionAttributes();
+            for nargs,fcnName in list(turtle_attrib.items()):
+                for vv in fcnName:
+                    turtlefcn = u"turtle_"+vv;
+                    if ( self.debug ): print(nargs, vv)
+                    if ( nargs == -1 ):
+                        self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv),vv,self.debug)
+                    else:
+                        self.builtin_map[turtlefcn] = BuiltinFunction( getattr( EZTurtle, vv ), turtlefcn, nargs )
+        except ImportError as ie:
+            if ( self.debug ): 
+                print(u"Cannot Import EZTurtle module; ignoring for now")
+        self.builtin_map["ascii_letters"] = BuiltinFunction(string.ascii_letters,"ascii_letters",0)
+        self.builtin_map["ascii_lowercase"] = BuiltinFunction(string.ascii_lowercase,"ascii_lowercase",0)
+        self.builtin_map["ascii_uppercase"] = BuiltinFunction(string.ascii_uppercase,"ascii_uppercase",0)
+        self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
+        self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
+        self.builtin_map["atoi"] = BuiltinFunction(string.atoi,"atoi",1)
+        self.builtin_map["atoi_error"] = BuiltinFunction(string.atoi_error,"atoi_error",1)
+        self.builtin_map["atol"] = BuiltinFunction(string.atol,"atol",1)
+        self.builtin_map["atol_error"] = BuiltinFunction(string.atol_error,"atol_error",1)
+        self.builtin_map["capitalize"] = BuiltinFunction(string.capitalize,"capitalize",1)
+        self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
+        self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
+        self.builtin_map["count_string"] = BuiltinFunction(string.count,"count",1)
+        self.builtin_map["digits"] = BuiltinFunction(string.digits,"digits",1)
+        self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
+        self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
+        self.builtin_map["hexdigits"] = BuiltinFunction(string.hexdigits,"hexdigits",1)
+        self.builtin_map["index_string"] = BuiltinFunction(string.index,"index",2)
+        self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
+        self.builtin_map["join"] = BuiltinFunction(string.join,"join",1)
+        self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
+        self.builtin_map["letters"] = BuiltinFunction(string.letters,"letters",1)
+        self.builtin_map["ljust"] = BuiltinFunction(string.ljust,"ljust",1)
+        self.builtin_map["lower"] = BuiltinFunction(string.lower,"lower",1)
+        self.builtin_map["lowercase"] = BuiltinFunction(string.lowercase,"lowercase",1)
+        self.builtin_map["lstrip"] = BuiltinFunction(string.lstrip,"lstrip",1)
+        self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
+        self.builtin_map["octdigits"] = BuiltinFunction(string.octdigits,"octdigits",1)
+        self.builtin_map["printable"] = BuiltinFunction(string.printable,"printable",1)
+        self.builtin_map["punctuation"] = BuiltinFunction(string.punctuation,"punctuation",1)
+        self.builtin_map["replace"] = BuiltinFunction(string.replace,"replace",3)
+        self.builtin_map["rfind"] = BuiltinFunction(string.rfind,"rfind",2)
+        self.builtin_map["rindex"] = BuiltinFunction(string.rindex,"rindex",1)
+        self.builtin_map["rjust"] = BuiltinFunction(string.rjust,"rjust",1)
+        self.builtin_map["rsplit"] = BuiltinFunction(string.rsplit,"rsplit",1)
+        self.builtin_map["rstrip"] = BuiltinFunction(string.rstrip,"rstrip",1)
+        self.builtin_map["split"] = BuiltinFunction(string.split,"split",2)
+        self.builtin_map["splitfields"] = BuiltinFunction(string.splitfields,"splitfields",1)
+        self.builtin_map["strip"] = BuiltinFunction(string.strip,"strip",1)
+        self.builtin_map["swapcase"] = BuiltinFunction(string.swapcase,"swapcase",1)
+        self.builtin_map["translate"] = BuiltinFunction(string.translate,"translate",1)
+        self.builtin_map["upper"] = BuiltinFunction(string.upper,"upper",1)
+        self.builtin_map["uppercase"] = BuiltinFunction(string.uppercase,"uppercase",1)
+        self.builtin_map["whitespace"] = BuiltinFunction(string.whitespace,"whitespace",1)
+        self.builtin_map["zfill"] = BuiltinFunction(string.zfill,"zfill",2)
+        # get/set methods are handled by generic __getitem__ and __setitem__
         
-    	self.builtin_map["ascii_letters"] = BuiltinFunction(string.ascii_letters,"ascii_letters",0)
-    	self.builtin_map["ascii_lowercase"] = BuiltinFunction(string.ascii_lowercase,"ascii_lowercase",0)
-    	self.builtin_map["ascii_uppercase"] = BuiltinFunction(string.ascii_uppercase,"ascii_uppercase",0)
-    	self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
-    	self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
-    	self.builtin_map["atoi"] = BuiltinFunction(string.atoi,"atoi",1)
-    	self.builtin_map["atoi_error"] = BuiltinFunction(string.atoi_error,"atoi_error",1)
-    	self.builtin_map["atol"] = BuiltinFunction(string.atol,"atol",1)
-    	self.builtin_map["atol_error"] = BuiltinFunction(string.atol_error,"atol_error",1)
-    	self.builtin_map["capitalize"] = BuiltinFunction(string.capitalize,"capitalize",1)
-    	self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
-    	self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
-    	self.builtin_map["count_string"] = BuiltinFunction(string.count,"count",1)
-    	self.builtin_map["digits"] = BuiltinFunction(string.digits,"digits",1)
-    	self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
-    	self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
-    	self.builtin_map["hexdigits"] = BuiltinFunction(string.hexdigits,"hexdigits",1)
-    	self.builtin_map["index_string"] = BuiltinFunction(string.index,"index",2)
-    	self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
-    	self.builtin_map["join"] = BuiltinFunction(string.join,"join",1)
-    	self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
-    	self.builtin_map["letters"] = BuiltinFunction(string.letters,"letters",1)
-    	self.builtin_map["ljust"] = BuiltinFunction(string.ljust,"ljust",1)
-    	self.builtin_map["lower"] = BuiltinFunction(string.lower,"lower",1)
-    	self.builtin_map["lowercase"] = BuiltinFunction(string.lowercase,"lowercase",1)
-    	self.builtin_map["lstrip"] = BuiltinFunction(string.lstrip,"lstrip",1)
-    	self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
-    	self.builtin_map["octdigits"] = BuiltinFunction(string.octdigits,"octdigits",1)
-    	self.builtin_map["printable"] = BuiltinFunction(string.printable,"printable",1)
-    	self.builtin_map["punctuation"] = BuiltinFunction(string.punctuation,"punctuation",1)
-    	self.builtin_map["replace"] = BuiltinFunction(string.replace,"replace",3)
-    	self.builtin_map["rfind"] = BuiltinFunction(string.rfind,"rfind",2)
-    	self.builtin_map["rindex"] = BuiltinFunction(string.rindex,"rindex",1)
-    	self.builtin_map["rjust"] = BuiltinFunction(string.rjust,"rjust",1)
-    	self.builtin_map["rsplit"] = BuiltinFunction(string.rsplit,"rsplit",1)
-    	self.builtin_map["rstrip"] = BuiltinFunction(string.rstrip,"rstrip",1)
-    	self.builtin_map["split"] = BuiltinFunction(string.split,"split",2)
-    	self.builtin_map["splitfields"] = BuiltinFunction(string.splitfields,"splitfields",1)
-    	self.builtin_map["strip"] = BuiltinFunction(string.strip,"strip",1)
-    	self.builtin_map["swapcase"] = BuiltinFunction(string.swapcase,"swapcase",1)
-    	self.builtin_map["translate"] = BuiltinFunction(string.translate,"translate",1)
-    	self.builtin_map["upper"] = BuiltinFunction(string.upper,"upper",1)
-    	self.builtin_map["uppercase"] = BuiltinFunction(string.uppercase,"uppercase",1)
-    	self.builtin_map["whitespace"] = BuiltinFunction(string.whitespace,"whitespace",1)
-    	self.builtin_map["zfill"] = BuiltinFunction(string.zfill,"zfill",2)
-    	
-	# get/set methods are handled by generic __getitem__ and __setitem__
-	
         # list methods - first argument, when required, is always a list obj
         self.builtin_map["append"] = BuiltinFunction(list.append,"append",2)
         self.builtin_map["insert"] = BuiltinFunction(list.insert,"insert",3)
@@ -537,9 +538,9 @@ class Interpreter(DebugUtils):
         self.builtin_map["count"]= BuiltinFunction(list.count,"count",2)
         self.builtin_map["extend"]= BuiltinFunction(list.extend,"extend",2)
         self.builtin_map["reverse"]= BuiltinFunction(Interpreter.ezhil_reverse,"reverse",1)
-	self.builtin_map["pop_list"] = BuiltinFunction(list.pop,"pop",1)
-	
-	# dictionary methods - first argument, when required, is always a dict obj
+        self.builtin_map["pop_list"] = BuiltinFunction(list.pop,"pop",1)
+
+        # dictionary methods - first argument, when required, is always a dict obj
         self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
         self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
         self.builtin_map["fromkeys"]= BuiltinFunction(dict.fromkeys,"fromkeys",1)
@@ -559,7 +560,7 @@ class Interpreter(DebugUtils):
         #self.builtin_map["viewvalues"]= BuiltinFunction(dict.viewvalues,"viewvalues",1)
         
         return True
-
+    
     def __repr__(self):
         rval =  u"[Interpreter: "
         rval = rval + u"[Functions["
@@ -582,7 +583,9 @@ class Interpreter(DebugUtils):
     def evaluate_interactive(self,env = None):
         ## use a persistent environment for interactive interpreter
         if ( not env ):
-            if ( self.debug ): print "creating a new environment"
+            if ( self.debug ): 
+                print("creating a new environment")
+            
             env = Environment( self.call_stack, self.function_map, \
                                    self.builtin_map, self.debug )
             env.call_function("__toplevel__") ##some context
@@ -594,83 +597,81 @@ class Interpreter(DebugUtils):
 # derive from the Python standard library - Cmd
 # refactor out REPL for ezhil and exprs
 class REPL(Cmd):
-	def __init__(self,lang, lexer, parse_eval, debug=False):
-		""" @lexer is language lexical analyzer
-		    @parse_eval is the language interpreter with builtins, runtime, parser etc..
-		    @lang is a descriptive string,
-		    @debug the boolean """
-		Cmd.__init__(self)
-		## ala-Python like
-		self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
+    def __init__(self,lang, lexer, parse_eval, debug=False):
+        """ @lexer is language lexical analyzer
+            @parse_eval is the language interpreter with builtins, runtime, parser etc..
+            @lang is a descriptive string,
+            @debug the boolean """
+        Cmd.__init__(self)
+        ## ala-Python like
+        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
 Ezhil : A Tamil Programming Language - version %g, (C) 2007-2013
 Type "help", "copyright", "credits" or "license" for more information."""%ezhil_version()
-		
-		self.lang = lang
-		self.lexer = lexer
-		self.parse_eval = parse_eval
-		self.debug = debug
-		self.line_no = 1
-		self.env = None ## get the first instance from evaluate_interactive
-		self.cmdloop()
+        
+        self.lang = lang
+        self.lexer = lexer
+        self.parse_eval = parse_eval
+        self.debug = debug
+        self.line_no = 1
+        self.env = None ## get the first instance from evaluate_interactive
+        self.cmdloop()
     
-	def parseline(self,line):
-		arg,cmd = "",""
-		if line in ["exit","help","EOF","copyright","credits","license"]:
-			cmd = line
-			line = line+"()"
-		return [cmd,arg,line]
+    def parseline(self,line):
+        arg,cmd = "",""
+        if line in ["exit","help","EOF","copyright","credits","license"]:
+            cmd = line
+            line = line+"()"
+        return [cmd,arg,line]
 
-	def update_prompt(self):
-		self.prompt = "%s %d>> "%(self.lang,self.line_no)
+    def update_prompt(self):
+        self.prompt = "%s %d>> "%(self.lang,self.line_no)
 
-	def preloop(self):
-		self.update_prompt()
-		print(self.banner)
-	
-	def emptyline(self):
-		pass
-	
-	def default(self,line):
-		""" REPL is carried out primarily through this callback from the looping construct """
-		self.line_no += 1
-		
-		if ( self.debug ): print("evaluating line", line)
-		if ( line == 'exit' ): self.exit_hook(doExit=True)
-		try:
-			self.lexer.set_line_col([self.line_no, 0])
-			self.lexer.tokenize(line)
-			[line_no,c] = self.lexer.get_line_col( 0 )
-			if ( self.debug ): self.lexer.dump_tokens()
-			self.parse_eval.parse()
-			if ( self.debug ):  
+    def preloop(self):
+        self.update_prompt()
+        print(self.banner)
+    
+    def emptyline(self):
+        pass
+    
+    def default(self,line):
+        """ REPL is carried out primarily through this callback from the looping construct """
+        self.line_no += 1
+        
+        if ( self.debug ): print("evaluating line", line)
+        if ( line == 'exit' ): self.exit_hook(doExit=True)
+        try:
+            self.lexer.set_line_col([self.line_no, 0])
+            self.lexer.tokenize(line)
+            [line_no,c] = self.lexer.get_line_col( 0 )
+            if ( self.debug ): self.lexer.dump_tokens()
+            self.parse_eval.parse()
+            if ( self.debug ):  
                                 print(u"*"*60);  
-			[rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
-			if ( self.debug ): print( u"return value", unicode(rval) )
-			if hasattr( rval, 'evaluate' ):
-				print(rval.__str__())
-			elif rval: #print everything except a None object
-				print(rval)
-		except Exception as excep:
-			print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,unicode(excep)))
-                        if ( self.debug ):
-                                raise excep
+            [rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
+            if ( self.debug ): print( u"return value", unicode(rval) )
+            if hasattr( rval, 'evaluate' ):
+                print(rval.__str__())
+            elif rval: #print everything except a None object
+                print(rval)
+        except Exception as excep:
+            print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,unicode(excep)))
+            if ( self.debug ):
+                raise excep
                 ## clear tokens in lexer
-		if ( self.debug ): print self.env
-		self.lexer.tokens = list()
-		self.update_prompt()
-	
-	def do_EOF(self,line):
-		print(u"\n")
-		self.exit_hook()
-		return True
-	
-	def exit_hook(self,doExit=False):
-		if ( self.lang == u"எழில்"):
-			print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
-		else:
-			print(u"******* Goodbye! Now have a nice day *******") 				
-			
-		if doExit:
-			sys.exit( 0 )
-		
-		return
+        if ( self.debug ): print(self.env)
+        self.lexer.tokens = list()
+        self.update_prompt()
+    
+    def do_EOF(self,line):
+        print(u"\n")
+        self.exit_hook()
+        return True
+    
+    def exit_hook(self,doExit=False):
+        if ( self.lang == u"எழில்"):
+            print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
+        else:
+            print(u"******* Goodbye! Now have a nice day *******")
+        if doExit:
+            sys.exit( 0 )
+        return

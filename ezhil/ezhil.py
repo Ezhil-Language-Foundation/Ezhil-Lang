@@ -54,12 +54,13 @@ class EzhilInterpreter( Interpreter ):
         for k,v in list(tamil_equiv.items()):
             self.builtin_map[k]=self.builtin_map[v];
         
-	try:
-		import EZTurtle
-	except ImportError as ie:
-		if ( self.debug ): print(u"ImportError => turtle ",unicode(ie))
-		return
-	
+        try:
+            import EZTurtle
+        except ImportError as ie:
+            if ( self.debug ):
+                print(u"ImportError => turtle ",unicode(ie))
+            return
+        
         # translations for turtle module
         turtle_map = { u"முன்னாடி":u"forward", u"பின்னாடி" :u"backward",
                        u"வலது":u"lt", u"இடது":u"rt",
@@ -134,14 +135,14 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 while p.is_alive():
                     sleep(5) #poll every 5 minutes
                     if ( (clock() - start) > TIMEOUT ):
-                        print "Reached ",TIMEOUT
+                        print("Reached ",TIMEOUT)
                         raise TimeoutException( TIMEOUT )
                 # now you try and read all the data from file, , and unlink it all up.
                 fProcName = EzhilRedirectOutput.pidFileName(p.pid);
                 
                 # dump stuff from fProcName into the stdout
                 fp = open(fProcName,'r')
-                print fp.read()
+                print(fp.read())
                 fp.close()                
                 os.unlink( fProcName)                
         except Exception as e:
@@ -179,7 +180,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
         env = parse_eval.evaluate()
     except Exception as e:
         exit_code = -1
-        print unicode(e)
+        print(unicode(e))
         if ( debug ):
             traceback.print_tb(sys.exc_info()[2])
             raise e
@@ -300,7 +301,7 @@ if __name__ == u"__main__":
         ## while exceptions trapped per file without stopping the flow
         exitcode = 0
         for idx,aFile in enumerate(fnames):
-            if ( debug):  print u" **** Executing file #  ",1+idx,u"named ",aFile
+            if ( debug):  print(u" **** Executing file #  ",1+idx,u"named ",aFile)
             try:
                 EzhilFileExecuter( aFile, debug )
             except Exception as e:
