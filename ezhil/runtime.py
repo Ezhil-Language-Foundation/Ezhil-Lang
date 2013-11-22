@@ -144,9 +144,9 @@ class Environment:
         return
 
     def __repr__(self):
-        retval = unicode(self.call_stack) + "\n" \
-            + unicode(self.local_vars) + "\n" \
-            + unicode(self.arg_stack) + "\n" 
+        retval = unicode(self.call_stack) + u"\n" \
+            + unicode(self.local_vars) + u"\n" \
+            + unicode(self.arg_stack) + u"\n" 
         return retval
 
     def set_retval( self, rval ):

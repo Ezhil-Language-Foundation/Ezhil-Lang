@@ -656,8 +656,8 @@ ezhil.runtime.Environment.__repr__
 ezhil.scanner.Lex.__repr__" class="py-name" href="#" onclick="return doclink('link-55', '__repr__', 'link-55');">__repr__</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
 </div><a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line"> </tt>
 <a name="Stmt.__repr__"></a><div id="Stmt.__repr__-def"><a name="L243"></a><tt class="py-lineno">243</tt> <a class="py-toggle" href="#" id="Stmt.__repr__-toggle" onclick="return toggle('Stmt.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.ast.Stmt-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="Stmt.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Stmt.__repr__-expanded"><a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> <tt class="py-string">"//#//"</tt><tt class="py-op">*</tt><tt class="py-number">50</tt> </tt>
-<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> <tt class="py-string">u"stmt =&gt; "</tt><tt class="py-op">,</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">)</tt> <tt class="py-comment">#we're headed toward assertion</tt> </tt>
+</div><div id="Stmt.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Stmt.__repr__-expanded"><a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"//#//"</tt><tt class="py-op">*</tt><tt class="py-number">50</tt><tt class="py-op">)</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">u"stmt =&gt; "</tt><tt class="py-op">,</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-comment">#we're headed toward assertion</tt> </tt>
 <a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="ezhil.ast.ExprCall.dbg_msg
 ezhil.ast.Function.dbg_msg
 ezhil.ast.Identifier.dbg_msg
@@ -1791,7 +1791,7 @@ ezhil.runtime.DebugUtils.dbg_msg
 ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return doclink('link-242', 'dbg_msg', 'link-14');">dbg_msg</a></tt><tt class="py-op">(</tt> <tt class="py-string">u" "</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">next_stmt</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">next_stmt</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-string">u"***"</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
 <a name="L552"></a><tt class="py-lineno">552</tt>  <tt class="py-line">                <tt class="py-name">rval</tt> <tt class="py-op">=</tt> <tt class="py-name">rval</tt> <tt class="py-op">+</tt> <tt class="py-string">u"&lt;&lt;Nxt&gt;&gt;"</tt> <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">next_stmt</tt><tt class="py-op">)</tt> </tt>
 <a name="L553"></a><tt class="py-lineno">553</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt> <tt class="py-name">UnicodeEncodeError</tt> <tt class="py-keyword">as</tt> <tt class="py-name">uc_err</tt><tt class="py-op">:</tt> </tt>
-<a name="L554"></a><tt class="py-lineno">554</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">uc_err</tt><tt class="py-op">)</tt> </tt>
+<a name="L554"></a><tt class="py-lineno">554</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">uc_err</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L555"></a><tt class="py-lineno">555</tt>  <tt class="py-line">                <tt class="py-keyword">raise</tt> <tt class="py-name">uc_err</tt> </tt>
 <a name="L556"></a><tt class="py-lineno">556</tt>  <tt class="py-line">            <tt class="py-keyword">pass</tt> </tt>
 <a name="L557"></a><tt class="py-lineno">557</tt>  <tt class="py-line">        <tt class="py-name">rval</tt> <tt class="py-op">=</tt> <tt class="py-name">rval</tt> <tt class="py-op">+</tt> <tt class="py-string">u"]"</tt> </tt>
@@ -3227,7 +3227,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Nov 20 01:15:27 2013
+    Generated by Epydoc 3.0.1 on Fri Nov 22 01:01:43 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -6,7 +6,7 @@
 ## TODO: extract scanner and AST members into a module for sharing.
 import argparse
 from math import *
-import copy
+import copy, codecs
 import os, sys, string, inspect
 import string
 import tamil
@@ -193,7 +193,12 @@ class Interpreter(DebugUtils):
     # file IO functions - 6 total
     @staticmethod
     def file_open(*args):
-        fp = open(*args)
+        args = list(args)
+        if ( len(args) < 2 ):
+                args.append('r') #default op = read
+        if ( len(args) < 3 ):
+                args.append('utf-8') #default encoding = utf-8
+        fp = codecs.open(*args)
         return fp
     
     @staticmethod
@@ -219,7 +224,7 @@ class Interpreter(DebugUtils):
     def file_write(*args):
         assert( len(args) == 2 )
         assert( hasattr(args[0],'write') )
-        return args[0].write(args[1])
+        return args[0].write( args[1] )
     
     @staticmethod
     def file_writelines(*args):
@@ -241,7 +246,7 @@ class Interpreter(DebugUtils):
         return String( op )
     
     @staticmethod   
-    def SPRINTF_worker(*args):        
+    def SPRINTF_worker(*args):
         if ( len(args) < 1 ):
             raise Exception(u'Not enough arguments to printf() function')
         fmt = args[0]

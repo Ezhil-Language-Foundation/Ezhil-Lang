@@ -755,8 +755,8 @@ ezhil.runtime.Environment.get_break_return	ezhil.runtime.Environment-class.html#
 ezhil.runtime.Environment.__repr__	ezhil.runtime.Environment-class.html#__repr__
 ezhil.runtime.Environment.set_id	ezhil.runtime.Environment-class.html#set_id
 ezhil.scanner.DummyFile	ezhil.scanner.DummyFile-class.html
-ezhil.scanner.DummyFile.readlines	ezhil.scanner.DummyFile-class.html#readlines
 ezhil.scanner.DummyFile.close	ezhil.scanner.DummyFile-class.html#close
+ezhil.scanner.DummyFile.readlines	ezhil.scanner.DummyFile-class.html#readlines
 ezhil.scanner.DummyFile.__init__	ezhil.scanner.DummyFile-class.html#__init__
 ezhil.scanner.Lex	ezhil.scanner.Lex-class.html
 ezhil.scanner.Lex.reset	ezhil.scanner.Lex-class.html#reset
