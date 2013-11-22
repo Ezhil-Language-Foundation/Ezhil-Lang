@@ -131,9 +131,10 @@ class Lexeme:
         return u" %s Line=%d, Col=%d in File %s "% \
             (unicode(self.val),self.line,self.col,self.fname)
 
-class DummyFile(file):
+class DummyFile:
     """ wrap a bunch of string data in a file interface """
     def __init__(self,data):
+        file.__init__(self)
         self.data = data;
         
     def close(self):
@@ -160,7 +161,8 @@ class Lex:
         else:
             self.fname = u"<STDIN>"
             self.stdin_mode = True
-        if ( self.debug ): print u"post file open"
+        if ( self.debug ): 
+            print(u"post file open")
         ##actual col = idx - col_idx
         self.line = 1 
         self.col_idx = 0 
@@ -317,7 +319,7 @@ class Lex:
         tok_start_idx = 0
 
         while ( idx < len( data ) ):
-            print idx, data[idx]
+            print(idx, data[idx])
             c = data[idx]
             
             if  ( c == ' 'or c == '\t' or c == '\n' ):

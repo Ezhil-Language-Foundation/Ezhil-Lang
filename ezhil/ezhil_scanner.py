@@ -60,7 +60,7 @@ class EzhilLex ( Lex ) :
         
     def get_lexeme(self,chunks , pos):
         if ( self.debug ):
-            print u"get_lexeme",chunks,pos
+            print(u"get_lexeme",chunks,pos)
 
         if chunks == None:
             return None
@@ -198,7 +198,7 @@ class EzhilLex ( Lex ) :
         
         while ( idx < len( data ) ):
             c = data[idx]
-            if ( self.debug ): print idx,c
+            if ( self.debug ): print(idx,c)
             if ( istamil( c ) or c.isalpha( ) or c == u'_' ):
                 tok_start_idx = idx 
                 s = c; idx = idx + 1

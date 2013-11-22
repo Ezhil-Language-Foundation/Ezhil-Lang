@@ -37,7 +37,7 @@ class BuiltinFunction:
         try:
             return self.do_evaluate(env)
         except Exception as excep:
-            print u"failed dispatching function ",unicode(self),u"with exception",unicode(excep)
+            print(u"failed dispatching function ",unicode(self),u"with exception",unicode(excep))
             raise excep
         assert False, u"unreachable state"
     
