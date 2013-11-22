@@ -2,7 +2,7 @@
 # 
 # This file is part of Ezhil Language project
 # 
-import os, codecs
+import os, codecs, sys
 import tempfile
 
 import ezhil
@@ -11,18 +11,22 @@ class TestEzhil:
     """ run a positive test, and make sure the interpreter doesn't gripe.
         currently there is no way to check the output of Ezhil """
     def __init__( self, ezhil_test_code ):
-        self.filename = ''
-        self.handle = -1
+        self.filename = ''        
         self.success = False #was test run successful ?
         self._tested = False
+        self.filename = self.create_tmp_file(ezhil_test_code)
         
-        # dump stuff into a file
-        [self.handle,self.filename] = tempfile.mkstemp()
-        os.close( self.handle )
-        fp = codecs.open( self.filename, 'w', 'utf-8')
-        fp.write( ezhil_test_code )
+    def create_tmp_file(self,contents=u""):
+        # dump stuff into a unique temporary file - refactor to write multiple
+        # files from the class.
+        handle = -1
+        [handle,filename] = tempfile.mkstemp()
+        os.close( handle )
+        fp = codecs.open( filename, 'w', 'utf-8')
+        fp.write( contents )
         fp.close(  )
-
+        return filename
+    
     def __enter__(self):
         return self
     
@@ -30,7 +34,7 @@ class TestEzhil:
         pass
     
     def __del__( self ):
-        # destructor
+        # destructor - delete temporary file
         os.unlink( self.filename )
         
     def __str__(self):
@@ -104,6 +108,49 @@ class TestEzhilException( TestEzhil ):
     @staticmethod
     def create_and_test( code, exception, msg ):
         with TestEzhilException(code,exception,msg) as tst:
+            flag = tst.run()
+            print(tst)
+        return flag
+
+class TestInteractiveEzhil(TestEzhil):
+    """ run a positive test, and make sure the CLI interpreter doesn't gripe.
+        currently there is no way to check the output of Ezhil."""
+    def __init__( self, ezhil_test_code ):
+        TestEzhil.__init__( self, ezhil_test_code )
+        self.actual_stdin = sys.stdin;
+        self.actual_stdout = sys.stdout;
+        sys.stdin = open(self.filename)
+        #self.out_filename = self.create_tmp_file() #create a empty file
+        #sys.stdout = codecs.open(self.filename,"w","utf-8")
+    
+    def __del__( self ):
+        # destructor - delete tempfile - restore stdin
+        TestEzhil.__del__(self)
+        sys.stdin = self.actual_stdin
+        #sys.stdout.close()
+        #sys.stdout = self.actual_stdout
+        #print open(self.out_filename)
+        #os.unlink(self.out_filename)
+    
+    def run( self ):
+        """ run the interpreter """
+        print("\n******* beginning to run Ezhil test *******")
+        self._tested = True
+        try:
+            ezhil.start()
+            self.success = True
+        except Exception as ex:
+            print("Ezhil Interpreter stopped with the exception ....")
+            print( ex.message, ex.args )
+            raise ex
+        finally:
+            print("********* completed Ezhil test *********")
+            pass
+        return self.success
+    
+    @staticmethod
+    def create_and_test( code ):        
+        with TestInteractiveEzhil(code) as tst:
             flag = tst.run()
             print(tst)
         return flag

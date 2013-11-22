@@ -12,4 +12,4 @@ ezhil_path = "/".join(os.getcwd().split('/')[:-2])
 sys.path.insert(0,ezhil_path)
 
 import ezhil
-from  .EzhilTestRunner import TestEzhil, TestEzhilException
+from  .EzhilTestRunner import TestEzhil, TestEzhilException, TestInteractiveEzhil
