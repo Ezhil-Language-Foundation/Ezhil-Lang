@@ -191,6 +191,11 @@ class ExprCall:
     
     def evaluate(self,env):
         self.dbg_msg( unicode(env) )
+        if ( self.debug ):
+            print(u"\n".join( env.builtin_map.keys() ))
+            print("*"*60)
+            print(u"\t".join(env.function_map.keys() ))
+            print( self.fname, " ==?== ",env.builtin_map.get(self.fname,None))
         if ( env.has_function(self.fname) ):
             self.dbg_msg("calling function "+ self.fname)
             fval = env.get_function(self.fname)
@@ -200,7 +205,7 @@ class ExprCall:
             rval = fval.evaluate(env)
             self.dbg_msg( u"function retval ="+unicode(rval)+unicode(type(rval)))
         else:
-            raise RuntimeException("undefined function: %s near ( %d, %d )"%(self.fname, self.line, self.col) )
+            raise RuntimeException(u"undefined function: ]%s[ near ( %d, %d )"%(self.fname, self.line, self.col) )
         return rval
 
     def visit(self,walker):
