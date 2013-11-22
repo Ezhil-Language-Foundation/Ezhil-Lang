@@ -617,14 +617,15 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
         self.cmdloop()
     
     def parseline(self,line):
-        arg,cmd = "",""
-        if line in ["exit","help","EOF","copyright","credits","license"]:
+        arg,cmd = u"",u""
+        line = line.decode("utf-8")
+        if line in [u"exit",u"help",u"EOF",u"copyright",u"credits",u"license"]:
             cmd = line
-            line = line+"()"
+            line = line+u"()"
         return [cmd,arg,line]
 
     def update_prompt(self):
-        self.prompt = "%s %d>> "%(self.lang,self.line_no)
+        self.prompt = u"%s %d>> "%(self.lang,self.line_no)
 
     def preloop(self):
         self.update_prompt()
@@ -636,7 +637,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
     def default(self,line):
         """ REPL is carried out primarily through this callback from the looping construct """
         self.line_no += 1
-        
+        line = unicode(line)
         if ( self.debug ): print("evaluating line", line)
         if ( line == 'exit' ): self.exit_hook(doExit=True)
         try:
