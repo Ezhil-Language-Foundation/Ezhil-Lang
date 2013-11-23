@@ -88,8 +88,8 @@ Python Library
 ==============
 Ezhil Tamil programming Python package can be invoked from within the Python shell or IDLE on Windows, by simply typing,
 ```python
->> import ezhil
->> ezhil.start()
+>>> import ezhil
+>>> ezhil.start()
 ```
 
 But to do all of this, you need to build and install the Python packages from this source, by,
