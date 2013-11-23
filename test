@@ -41,7 +41,7 @@ max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n
 neuron.n varavu_selavu.n calc2.n name_var.n
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
-    python ../ezhil/ezhil.py -debug $i $1
+    python ../ezhil/ezhil.py  $i $1
     if [ $? -eq 0 ]
     then
        echo $i >> ../success.txt
