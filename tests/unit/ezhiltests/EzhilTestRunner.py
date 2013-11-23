@@ -4,6 +4,7 @@
 # 
 import os, codecs, sys
 import tempfile
+from glob import glob
 
 import ezhil
 from ezhil import TimeoutException
@@ -176,6 +177,9 @@ class TestTimeoutEzhil(TestEzhil):
             raise ex
         finally:
             print("********* completed Ezhil test *********")
+			# cleanup process files
+            for fileName in glob("*.out"):
+                os.unlink( fileName )
             pass
         return self.success
     
