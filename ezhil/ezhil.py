@@ -12,7 +12,7 @@ from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
 from errors import RuntimeException, ParseException, TimeoutException
 from multiprocessing import Process, current_process
-from time import sleep,clock
+from time import sleep,clock,time
 import codecs, traceback
 
 import codecs, sys
@@ -80,10 +80,17 @@ class EzhilRedirectOutput:
         """ file name with $PID decoration as IPC alt """
         return "ezhil_"+unicode(pid)+".out"
     
-    def __init__(self,redirectop):
+    def dbg_msg(self,message):
+        """ useful routine to debug timeout issues from spawned off process"""
+        if ( self.debug ):
+            self.actop.write(message)
+        return
+    
+    def __init__(self,redirectop,debug=False):
+        self.actop = sys.stdout
         self.op = None
+        self.debug=debug
         self.redirectop = redirectop
-
         self.tmpf = None
         if ( self.redirectop ):
             self.tmpf=tempfile.NamedTemporaryFile(suffix='.output',delete=False)
@@ -106,8 +113,8 @@ class EzhilRedirectOutput:
         return self.op
 
 class EzhilRedirectInputOutput(EzhilRedirectOutput):
-    def __init__(self,input_file,redirectop):
-        EzhilRedirectOutput.__init__(self,redirectop)
+    def __init__(self,input_file,redirectop,debug=False):
+        EzhilRedirectOutput.__init__(self,redirectop,debug)
         self.old_stdin = sys.stdin
         self.stdin = codecs.open( input_file , "r", "utf-8" )
 
@@ -117,7 +124,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         to a file named, 
     """
     def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None):
-        EzhilRedirectOutput.__init__(self,redirectop)
+        EzhilRedirectOutput.__init__(self,redirectop,debug)
+        self.dbg_msg(u"ezil file executer\n")
         if ( not redirectop ): #run serially and exit.
             try:
                 ezhil_file_parse_eval( file_input,redirectop,debug)
@@ -125,17 +133,21 @@ class EzhilFileExecuter(EzhilRedirectOutput):
             except Exception as e:
                 self.exitcode = -1
                 traceback.print_tb(sys.exc_info()[2])
-                raise e            
-        
-        p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})        
+                raise e
+        self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
+        p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})
         try:
+            self.dbg_msg("begin redirect mode\n")
             p.start()
             if ( TIMEOUT is not None ):
-                start = clock()
+                start = time()
+                self.dbg_msg("timeout non-zero\n")
                 while p.is_alive():
-                    sleep(5) #poll every 5 minutes
-                    if ( (clock() - start) > TIMEOUT ):
-                        print("Reached ",TIMEOUT)
+                    self.dbg_msg("in busy loop : %d , %d \n"%(time()-start,TIMEOUT))
+                    self.dbg_msg("SLEEP\n")
+                    sleep(5) #poll every 5 seconds
+                    if ( (time() - start) > TIMEOUT ):
+                        self.dbg_msg("Reached timeout = %d\n"%TIMEOUT)
                         raise TimeoutException( TIMEOUT )
                 # now you try and read all the data from file, , and unlink it all up.
                 fProcName = EzhilRedirectOutput.pidFileName(p.pid);
@@ -143,8 +155,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 # dump stuff from fProcName into the stdout
                 fp = open(fProcName,'r')
                 print(fp.read())
-                fp.close()                
-                os.unlink( fProcName)                
+                fp.close()
+                os.unlink( fProcName)
         except Exception as e:
             print("exception ",unicode(e))
             traceback.print_tb(sys.exc_info()[2])
@@ -157,7 +169,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 sys.stderr = self.old_stderr
                 sys.stdout.flush()
                 sys.stderr.flush()
-            self.exitcode  = p.exitcode        
+            self.exitcode  = p.exitcode
+        return
 
 def ezhil_file_parse_eval( file_input,redirectop,debug):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
