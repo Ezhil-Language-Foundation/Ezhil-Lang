@@ -6,6 +6,7 @@ import os, codecs, sys
 import tempfile
 
 import ezhil
+from ezhil import TimeoutException
 
 class TestEzhil:
     """ run a positive test, and make sure the interpreter doesn't gripe.
@@ -110,7 +111,7 @@ class TestEzhilException( TestEzhil ):
         with TestEzhilException(code,exception,msg) as tst:
             flag = tst.run()
             print(tst)
-        return flag
+        return flag	
 
 class TestInteractiveEzhil(TestEzhil):
     """ run a positive test, and make sure the CLI interpreter doesn't gripe.
@@ -124,19 +125,15 @@ class TestInteractiveEzhil(TestEzhil):
         #sys.stdout = codecs.open(self.filename,"w","utf-8")
     
     def __del__( self ):
-        # destructor - delete tempfile - restore stdin
         TestEzhil.__del__(self)
         sys.stdin = self.actual_stdin
-        #sys.stdout.close()
-        #sys.stdout = self.actual_stdout
-        #print open(self.out_filename)
-        #os.unlink(self.out_filename)
     
     def run( self ):
         """ run the interpreter """
         print("\n******* beginning to run Ezhil test *******")
         self._tested = True
         try:
+            # re-routed stdin will feed the interpreter input
             ezhil.start()
             self.success = True
         except Exception as ex:
@@ -151,6 +148,40 @@ class TestInteractiveEzhil(TestEzhil):
     @staticmethod
     def create_and_test( code ):        
         with TestInteractiveEzhil(code) as tst:
+            flag = tst.run()
+            print(tst)
+        return flag
+
+class TestTimeoutEzhil(TestEzhil):
+    """ run a positive test, to ensure the web interface evaluator 
+    can timeout after the given number of seconds."""
+    
+    def __init__( self, ezhil_test_code, timeout = 20 ):
+        TestEzhil.__init__( self, ezhil_test_code )
+        self.timeout = timeout
+
+    def run( self ):
+        """ run the interpreter """
+        print("\n******* beginning to run Ezhil test with timeout = %d(s)*******"%(self.timeout))
+        self._tested = True
+        self.success = False
+        try:
+            #redirect output = True, when you need a TIMEOUT
+            ezhil.EzhilFileExecuter(self.filename,debug=False,redirectop=True,TIMEOUT=self.timeout)            
+        except TimeoutException as tex:
+            self.success = True #expected to raise an exception
+        except Exception as ex:
+            print("Ezhil Interpreter stopped with the exception ....")
+            print( ex.message, ex.args )
+            raise ex
+        finally:
+            print("********* completed Ezhil test *********")
+            pass
+        return self.success
+    
+    @staticmethod
+    def create_and_test( code, timeout ):        
+        with TestTimeoutEzhil(code,timeout) as tst:
             flag = tst.run()
             print(tst)
         return flag
