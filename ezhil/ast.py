@@ -436,12 +436,7 @@ class Expr(Stmt):
             elif ( isinstance(term,String) ):
                 tval = term.string                            
             else:
-                ## print term.__class__,term,unicode(term)
-                ## possibly leads to inf- recursion
-                ## tval = term.evaluate( env )
                 raise RuntimeException( " cannot normalize token; unknown clause,"+unicode(term)+", to evaluate @ "+obj.get_pos());
-#        elif isinstance(term,list) and len(term) == 1:
-#            tval = term[0]
         else:
             tval = term #float cast not required.
         return tval
