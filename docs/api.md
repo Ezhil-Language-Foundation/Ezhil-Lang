@@ -8,8 +8,8 @@ String Methods
 0. "" - create strings;  ஆ = "ஆடு"
 1. நீளம் - length of string; நீளம்(அ)
 2. + - join two strings; அ  + ஆ
-3. சரம்_கண்டுபிடி - find if one needle string is within other haystack - சரம்_கண்டுபிடி( முக்கனி , "வாழை" ) 
-4. சரம்_இடமாற்று - search and replace; சரம்_இடமாற்று(  முக்கனி , "வாழை", "கொய்யா")
+3. சரம\_கண்டுபிடி - find if one needle string is within other haystack - சரம்\_கண்டுபிடி( முக்கனி , "வாழை" ) 
+4. சரம\_இடமாற்று - search and replace; சரம்\_இடமாற்று(  முக்கனி , "வாழை", "கொய்யா")
 
 
 List Methods
