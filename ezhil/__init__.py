@@ -12,7 +12,7 @@ from Interpreter import Interpreter, REPL, Lex, get_prog_name
 
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
-from errors import RuntimeException, ParseException
+from errors import RuntimeException, ParseException, TimeoutException
 
 from .ezhil import ezhil_file_REPL
 from .ezhil import EzhilInterpreter, EzhilFileExecuter, EzhilInterpExecuter
