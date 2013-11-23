@@ -184,9 +184,10 @@ class Lex:
         self.tokens = []
     
     def __repr__(self):
-        for idx in range(0,len(self.tokens)):
-            print(u"%d] %s"%(idx,repr(self.tokens.pop())))
-        return ""
+        if ( self.debug ):
+            for idx in range(0,len(self.tokens)):
+                print(u"%d] %s"%(idx,repr(self.tokens.pop())))
+        return u""
 
     def get_lexeme(self,chunks , pos):
         if chunks == None:
@@ -319,7 +320,7 @@ class Lex:
         tok_start_idx = 0
 
         while ( idx < len( data ) ):
-            print(idx, data[idx])
+            if ( self.debug ): print(idx, data[idx])
             c = data[idx]
             
             if  ( c == ' 'or c == '\t' or c == '\n' ):
