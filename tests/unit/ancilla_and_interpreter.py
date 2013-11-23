@@ -5,11 +5,9 @@
 # 
 
 # setup the paths
-import ezhiltests
-from ezhiltests import TestEzhil
+from ezhiltests import *
 
 # helper functions for testsuites
-import unittest
 from test import test_support
 
 import ezhil
@@ -27,6 +25,20 @@ class Ancilla(unittest.TestCase):
 class Interpreter(unittest.TestCase):
     def test_run_addition(self):
         TestEzhil.create_and_test("1+5")
-    
+
+class WebEzhil(unittest.TestCase):
+    def test_timeout_infinite_loop(self):
+        infinite_loop_code = u"""
+# மாதிரி =>  முடிவிலா சுழற்சி
+# கூகிள் மொழிபெயர்ப்பு பயன்படுத்தி
+
+i = 0
+@( i >= 0 ) வரை
+ i = i + 1
+முடி
+"""
+        # should timeout soon enough - 10s
+        TestTimeoutEzhil.create_and_test(infinite_loop_code,timeout=4)
+
 if __name__ == '__main__':    
-    test_support.run_unittest(Ancilla,Interpreter)
+    test_support.run_unittest(Ancilla,Interpreter,WebEzhil)
