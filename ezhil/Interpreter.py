@@ -119,6 +119,13 @@ class NoClobberDict(dict):
             raise KeyError("Dictionary is getting clobbered; key "+key+" already present")
         dict.__setitem__(self,key,val)
 
+global_interpreter = None
+
+def ezhil_list_functions(*args):
+    global global_interpreter
+    global_interpreter.list_functions(*args)
+    
+
 ## Gandalf the Grey. One ring to rule them all.
 class Interpreter(DebugUtils):
     """ when you add new language feature, add a AST class 
@@ -141,7 +148,12 @@ class Interpreter(DebugUtils):
         ## run the installation code last
         self.install_builtins()
         self.install_blind_builtins()
-
+        
+        ## update globals
+        global global_interpreter
+        global_interpreter = self
+        
+        
     def reset(self):
         """ reset lexer and parser """
         self.parser.reset()
@@ -155,6 +167,29 @@ class Interpreter(DebugUtils):
                              self.builtin_map, self.debug )
         self.parser = lang_parser
         return True
+    
+    def list_functions(self,*args):
+        if ( not args ):
+            user_prefix = None
+        else:
+            user_prefix = args[0]
+                
+        print(u"######### Builtin Function ########")
+        pos = 0
+        for xpos,fcn in enumerate(self.builtin_map.keys()):
+            if ( user_prefix and not fcn.startswith(user_prefix) ):
+                continue
+            pos = pos + 1
+            print(u"%03d> %s"%(pos,unicode(fcn)))
+        
+        print(u"######### Functions - Library + User defined - ########")
+        pos = 0
+        for xpos,fcn in enumerate(self.function_map.keys()):
+            if ( user_prefix and not fcn.startswith(user_prefix) ):
+                continue
+            pos = pos + 1
+            print(u"%03d> %s"%(pos,unicode(fcn)))
+        
 
     def add_blind_fcns(self, bfn, b):
         """ an internal method to reduce repetition """
@@ -326,9 +361,12 @@ class Interpreter(DebugUtils):
         self.builtin_map['version']=BlindBuiltins(ezhil_version,'version',self.debug) 
         self.builtin_map['credits']=BlindBuiltins(ezhil_credits,'credits',self.debug)
         
+        # global interpreter
+        self.builtin_map['dir']=BlindBuiltins(ezhil_list_functions,'dir',self.debug)
+
         self.builtin_map['delattr']=BlindBuiltins(delattr,'delattr',self.debug)
         self.builtin_map['dict']=BlindBuiltins(dict,'dict',self.debug)
-        self.builtin_map['dir']=BlindBuiltins(dir,'dir',self.debug)
+        self.builtin_map['python_dir']=BlindBuiltins(dir,'python_dir',self.debug)
         self.builtin_map['divmod']=BlindBuiltins(divmod,'divmod',self.debug)
         self.builtin_map['enumerate']=BlindBuiltins(enumerate,'enumerate',self.debug)
         self.builtin_map['eval']=BlindBuiltins(eval,'eval',self.debug)

@@ -50,6 +50,12 @@ do
     fi
     sleep 0
 done
+
+if [ -e names.txt ];
+then
+    rm names.txt
+fi
+
 cd ../
 
 echo "**************************************************"
