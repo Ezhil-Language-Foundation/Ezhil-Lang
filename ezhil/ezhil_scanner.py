@@ -220,7 +220,7 @@ class EzhilLex ( Lex ) :
                 start = idx;
                 while ( idx < len( data ) and not (data[idx] in [u'\r',u'\n']) ):
                     idx = idx + 1
-                if ( data[idx] == u'\r' ):
+                if ( idx < len(data) and data[idx] == u'\r' ):
                     idx = idx + 1
                 end = idx
                 self.comments[self.line]= data[start:end]
