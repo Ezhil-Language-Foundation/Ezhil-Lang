@@ -36,7 +36,7 @@ File Methods
 
 System Methods
 ==============
-1. date()
+1. time() - time in seconds since epoch;
 2. 
 3. 
 4. 
@@ -48,3 +48,9 @@ Math
 2. cos
 3. tan
 4. sqrt
+5. hypot
+6. pow - power calculation - pow(x,y); x^y; pow(x,y)
+7. exp - exponent
+8. log - natural log
+9. log10 - log10
+10. 
