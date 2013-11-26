@@ -1,0 +1,11 @@
+@( 2 > 3 ) ஆனால்
+	பதிப்பி "wont print"	
+@( 3 > 4 ) இல்லைஆனால்
+	பதிப்பி "this won't either"
+முடி
+
+@( 2 < 3 ) ஆனால்
+	பதிப்பி "first and only to print"	
+@( 3 < 4 ) இல்லைஆனால்
+	பதிப்பி "this won't even if its true"
+முடி
