@@ -1,17 +1,11 @@
 #!/usr/bin/python
 ##
-## (C) 2007, 2008 Muthiah Annamalai,
+## (C) 2007, 2008-2013 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ## 
-## parser & AST  use the parsing frontend and 
-## AST elements to build the parse tree.
-## Class Parser
-##
-## ezhil parser & AST builder
-## use the parsing frontend and similar
-## AST elements from the previous classes
-## TODO: extract scanner and AST members into a module for sharing.
-## and use them here.
+## ezhil parser & AST builder - ezhil frontend and  AST elements to build the parse tree.
+## refactored left-recursion in the examples
+
 
 import copy
 import os, sys, string, inspect
@@ -46,11 +40,13 @@ class EzhilParser(Parser):
         if ( not isinstance(lexer, EzhilLex) ):
                 raise RuntimeException(u"Cannot find Ezhil lexer class")
         Parser.__init__(self,lexer,fcn_map,builtin_map,dbg)
+        self.open_if_stmts = 0
+        self.backtrack_atexpr = None
 
+    @staticmethod
     def factory(lexer,fcn_map,builtin_map, dbg = False):
         """ Factory method """
         return EzhilParser(lexer,fcn_map,builtin_map, dbg)
-    factory = staticmethod(factory)
 
     def match(self,kind):
         ## if match return token, else ParseException
@@ -77,7 +73,7 @@ class EzhilParser(Parser):
                 self.ast.append(DeclarationStmt(func)) #add to AST
             else:
                 self.dbg_msg( u"parsing for stmt" )
-                st = self.stmt()
+                st = self.stmtlist()
                 if ( not self.parsing_function ):
                     self.ast.append(st)
         return self.ast
