@@ -21,11 +21,15 @@ String Methods
 5. தலைகீழ்( ப ) - reverse order of elements in list, inplace; தலைகீழ்( ப )
 6. நீட்டிக்க( ப1 , ப2  ) - extend the list with contents of another list; 
 7. நுழைக்க( x, 0, -5 ) - insert into list 'x' at position 0, value -5
-8. வை (set item) -  set, i.e. x[0] = pi()
+8. வை (set item) -  set, i.e. set(x,0,pi())
+Note: Currently natural array access like x[0] = pi() is not supported
 
 Dict Methods
 ============
-
+0. dictionary specification : food  = {"fruit":"apple"}
+1. வை (set item) -  set, i.e. வை(x,"fruit", "apple")
+2. எடு (get item) - get, i.e. எடு(x,"fruit")
+Note: Currently dictionary access like x{"fruit"} = "apple" is not supported yet.
 
 File Methods
 ============
@@ -53,4 +57,4 @@ Math
 7. exp - exponent
 8. log - natural log
 9. log10 - log10
-10. 
+10.
