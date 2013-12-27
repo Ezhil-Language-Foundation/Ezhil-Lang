@@ -99,6 +99,8 @@ class EzhilParser(Parser):
                    or ptok.kind == EzhilToken.CASE 
                    or ptok.kind == EzhilToken.OTHERWISE ) ):
                 break
+            elif( ptok.kind ==  EzhilToken.DEF ):
+                break
             st = self.stmt(pass_in_ATexpr)
             pass_in_ATexpr = None
             stlist.append( st )
