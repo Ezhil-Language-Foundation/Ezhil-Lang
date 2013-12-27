@@ -75,10 +75,10 @@ require(["ace/ace"], function(ace) {
 	var editor = ace.edit("editor");
     if ( editor ) {
       	aceEditor = editor;
-	    editor.setTheme("ace/theme/xcode");
-	    editor.getSession().setMode("ace/mode/ezhil");
+	editor.setTheme("ace/theme/xcode");
+	editor.getSession().setMode("ace/mode/ezhil");
         editor.setValue($("#default_program").html());
-	    checkEzhilCookie();
+	checkEzhilCookie();
     } else {
         $("#editor").html( $("#default_program").html() )
     }
