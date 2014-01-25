@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# 
+# (C) 2008-2014 முத்தையா அண்ணாமலை 
+# ezhil language project
 
 from distutils.core import setup
 from codecs import open
