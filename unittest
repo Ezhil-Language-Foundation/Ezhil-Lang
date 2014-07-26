@@ -35,6 +35,10 @@ if [ $?  -eq 0 ]
 then
    echo "Testing Successful!"
    exitcode=0 # success
+
+   # cleanup only on success
+   rm failed.txt
+   rm success.txt
 else
    echo "Expecting $NFAIL failures, but found $TOTFAIL failures"
    echo ""
@@ -45,8 +49,6 @@ else
    exitcode=255 #failed failures != $NFAIL
 fi
 
-# cleanup
-rm failed.txt
-rm success.txt
+
 cd ../../
 exit $exitcode

@@ -34,9 +34,8 @@ class StmtNeg(unittest.TestCase):
         1+1 #nested function
     முடி
 முடி""" #error message is bad for nested function case. but alteast it errors out.
-        TestEzhilException.create_and_test(exprCode,ParseException,[r"Expected Number, found something","Line=7, Col=5"])
-        
-    
+        TestEzhilException.create_and_test(exprCode,ParseException,u"Parse error: cannot find token END")
+	
     def test_return_stmt_dangling_function(self):
         exprCode  = u"""
 # (C) முத்தையா அண்ணாமலை 2013
@@ -50,8 +49,7 @@ class StmtNeg(unittest.TestCase):
             பின்கொடு    n*fact( n - 1 )
     முடி"""
         TestEzhilException.create_and_test(exprCode,ParseException,"return statement outside of function body")
-        
-
+	
     def test_missing_ifstmt(self):
         exprCode  = u"""
 # (C) முத்தையா அண்ணாமலை 2013

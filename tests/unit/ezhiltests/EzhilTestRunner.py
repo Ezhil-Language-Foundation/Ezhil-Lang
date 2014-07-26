@@ -81,6 +81,7 @@ class TestEzhilException( TestEzhil ):
         """ this class expects to receive an exception on running the Ezhil interpreter,
             and when we match the exception message the test is supposed to pass
         """
+        print "\n"*3
         try:
             TestEzhil.run( self )
             self.success = False # we expected an exception
@@ -88,23 +89,31 @@ class TestEzhilException( TestEzhil ):
             self.success = False
             if self.exception:
                 self.success = isinstance( ex, self.exception )
-                print("We found an exception %s"%ex)
+                print(">>>>>>>>>>>> We found an exception \n %s \n"%ex)
             
             if not self.success:
                 raise Exception("Expected exception class %s was not found"%(self.exception,ex))
             
-            print( unicode(ex) )
+            print( u"### EXCEPTION ==> \n %s"%unicode(ex) )
             if self.message:
                 self.success = True
                 # check multiple messages
+                if not isinstance(self.message, list):
+                    self.message = [self.message]
+                
                 for msg in self.message:
+                    print self.success
+                    print "### testing ",unicode(msg)
                     self.success = self.success and \
                         (( ex.message.find( msg ) >= 0 ) or \
-                             len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 )
+                             len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 or unicode(ex).find( msg ) >= 0 )
+                    print self.success
             
             if not self.success:
-                raise Exception(u"Expected message %s was not found. We found message %s"%(self.message,ex.message))
-            
+                print "######## TEST FAILED #############"
+                print(u"ACTUAL == %s"%unicode(ex))
+                print(u"EXPECTED == %s"%unicode(self.message))
+                raise Exception(u"Expected message %s was not found. We found message %s"%(self.message,unicode(ex)))            
             return self.success
 
     @staticmethod
