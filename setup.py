@@ -8,7 +8,7 @@ from distutils.core import setup
 from codecs import open
 
 setup(name='ezhil',
-      version='0.75-dev-update',
+      version='0.76',
       description='Ezhil - Tamil programming language implemented in Python',
       author='Muthiah Annamalai',
       author_email='ezhillang@gmail.com',
