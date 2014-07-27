@@ -46,7 +46,7 @@ from transform import Visitor
 import collections
 
 def ezhil_version():
-        return 0.75
+        return 0.76
 
 def ezhil_copyright():
     return u"(C) 2007-2013 Muthiah Annamalai"
