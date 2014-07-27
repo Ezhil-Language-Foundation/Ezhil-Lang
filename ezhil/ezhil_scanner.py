@@ -191,7 +191,10 @@ class EzhilLex ( Lex ) :
                 raise ScannerException("Lexer: token Q has previous session tokens ")
             self.tokens = list()
         else:
-            data = u"".join(self.File.readlines())
+            if hasattr(self.File,'data'):
+                data = self.File.data
+            else:
+                data = u"".join(self.File.readlines())
         if ( self.debug ): print(data)
         idx = 0
         tok_start_idx = 0

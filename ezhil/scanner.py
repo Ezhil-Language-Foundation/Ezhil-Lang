@@ -133,10 +133,9 @@ class Lexeme:
 
 class DummyFile:
     """ wrap a bunch of string data in a file interface """
-    def __init__(self,data):
-        file.__init__(self)
-        self.data = data;
-        
+    def __init__(self,data):        
+        self.data = data;        
+    
     def close(self):
         pass
     
