@@ -78,7 +78,7 @@ class EzhilRedirectOutput:
     @staticmethod
     def pidFileName( pid ):
         """ file name with $PID decoration as IPC alt """
-        return "ezhil_"+unicode(pid)+".out"
+        return "/tmp/"+"ezhil_"+unicode(pid)+".out"
     
     def dbg_msg(self,message):
         """ useful routine to debug timeout issues from spawned off process"""
@@ -100,6 +100,12 @@ class EzhilRedirectOutput:
             sys.stderr = self.tmpf
         pass
     
+    def __delete__(self):
+        if self.redirectop:
+            sys.stdout = self.old_stdout
+            sys.stderr = self.old_stderr
+        pass
+	
     def get_output( self ):
         """ read the output from tmpfile once and delete it. Use cached copy for later. Memoized. """ 
         if ( not isinstance(self.op,str) ):
@@ -162,7 +168,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
             traceback.print_tb(sys.exc_info()[2])
             raise e
         finally:
-            p.terminate()
+            if hasattr(p,'terminate'):
+                p.terminate()
             if ( redirectop ):
                 self.tmpf.close()
                 sys.stdout = self.old_stdout
@@ -177,7 +184,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
         the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
         cleanup the cruft. Note file_input can be a string version of a program to be evaluated if it is
         enclosed properly in a list format
-    """    
+    """
     if ( redirectop ):
         sys.stdout = codecs.open(EzhilRedirectOutput.pidFileName(current_process().pid),"w","utf-8")
         sys.stderr = sys.stdout;
