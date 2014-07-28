@@ -167,13 +167,15 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 if ( TIMEOUT is not None ):
                     start = time()
                     self.dbg_msg("timeout non-zero\n")
+                    raise_timeout = False
                     while self.p.is_alive():
                         self.dbg_msg("in busy loop : %d , %d \n"%(time()-start,TIMEOUT))
                         self.dbg_msg("SLEEP\n")
                         sleep(5) #poll every 5 seconds
                         if ( (time() - start) > TIMEOUT ):
                             self.dbg_msg("Reached timeout = %d\n"%TIMEOUT)
-                            raise TimeoutException( TIMEOUT )
+                            raise_timeout = True
+                            break
                         # now you try and read all the data from file, , and unlink it all up.
                     self.fProcName = EzhilRedirectOutput.pidFileName(self.p.pid);
                     self.tmpf_name = self.tmpf.name;
@@ -184,6 +186,9 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                     self.data = fp.read()
                     print(self.data)
                     fp.close()
+
+                    if raise_timeout:
+                        raise TimeoutException( TIMEOUT )
                     #os.unlink( fProcName)
             except Exception as e:
                 print("exception ",unicode(e))
