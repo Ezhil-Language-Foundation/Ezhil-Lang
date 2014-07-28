@@ -129,9 +129,27 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         When constructed with a @TIMEOUT value, the process may terminate without and output, otherwise it dumps the output
         to a file named, 
     """
+    def get_output(self):
+        return [self.tmpf_name,self.fProcName,self.data]
+    
+	def __delete__(self):
+		if self.tmpf and hasattr(self.tmpf,'name'):
+			os.unlink( self.tmpf.name )
+			self.tmpf = None
+		if self.fProcName:
+			os.unlink( self.fProcName )
+			self.fProcName = None
+		if hasattr(self.p,'terminate'):
+			self.p.terminate()
+		pass
+	
     def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None):
         EzhilRedirectOutput.__init__(self,redirectop,debug)
         self.dbg_msg(u"ezil file executer\n")
+        self.fProcName = ""
+        self.data = ""
+        self.tmpf_name = ""
+        self.p = None
         if ( not redirectop ): #run serially and exit.
             try:
                 ezhil_file_parse_eval( file_input,redirectop,debug)
@@ -140,43 +158,58 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 self.exitcode = -1
                 traceback.print_tb(sys.exc_info()[2])
                 raise e
-        self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
-        p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})
-        try:
-            self.dbg_msg("begin redirect mode\n")
-            p.start()
-            if ( TIMEOUT is not None ):
-                start = time()
-                self.dbg_msg("timeout non-zero\n")
-                while p.is_alive():
-                    self.dbg_msg("in busy loop : %d , %d \n"%(time()-start,TIMEOUT))
-                    self.dbg_msg("SLEEP\n")
-                    sleep(5) #poll every 5 seconds
-                    if ( (time() - start) > TIMEOUT ):
-                        self.dbg_msg("Reached timeout = %d\n"%TIMEOUT)
-                        raise TimeoutException( TIMEOUT )
-                # now you try and read all the data from file, , and unlink it all up.
-                fProcName = EzhilRedirectOutput.pidFileName(p.pid);
-                
-                # dump stuff from fProcName into the stdout
-                fp = open(fProcName,'r')
-                print(fp.read())
-                fp.close()
-                os.unlink( fProcName)
-        except Exception as e:
-            print("exception ",unicode(e))
-            traceback.print_tb(sys.exc_info()[2])
-            raise e
-        finally:
-            if hasattr(p,'terminate'):
-                p.terminate()
-            if ( redirectop ):
-                self.tmpf.close()
-                sys.stdout = self.old_stdout
-                sys.stderr = self.old_stderr
-                sys.stdout.flush()
-                sys.stderr.flush()
-            self.exitcode  = p.exitcode
+        else:
+            self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
+            self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})
+            try:
+                self.dbg_msg("begin redirect mode\n")
+                self.p.start()
+                if ( TIMEOUT is not None ):
+                    start = time()
+                    self.dbg_msg("timeout non-zero\n")
+                    while self.p.is_alive():
+                        self.dbg_msg("in busy loop : %d , %d \n"%(time()-start,TIMEOUT))
+                        self.dbg_msg("SLEEP\n")
+                        sleep(5) #poll every 5 seconds
+                        if ( (time() - start) > TIMEOUT ):
+                            self.dbg_msg("Reached timeout = %d\n"%TIMEOUT)
+                            raise TimeoutException( TIMEOUT )
+                        # now you try and read all the data from file, , and unlink it all up.
+                    self.fProcName = EzhilRedirectOutput.pidFileName(self.p.pid);
+                    self.tmpf_name = self.tmpf.name;
+                    
+                    # dump stuff from fProcName into the stdout
+                    fp = open(self.fProcName,'r')
+                    print(u"######### ------- dump output ------- ##############")
+                    self.data = fp.read()
+                    print(self.data)
+                    fp.close()
+                    #os.unlink( fProcName)
+            except Exception as e:
+                print("exception ",unicode(e))
+                traceback.print_tb(sys.exc_info()[2])
+                raise e
+            finally:
+                # reset the buffers
+                if ( redirectop ):
+                    #self.tmpf.close()
+                    sys.stdout = self.old_stdout
+                    sys.stderr = self.old_stderr
+                    sys.stdout.flush()
+                    sys.stderr.flush()
+
+                # cleanup the cruft files
+                #if self.tmpf and hasattr(self.tmpf,'name'):
+                #    os.unlink( self.tmpf.name )
+                #self.tmpf = None
+                #if self.fProcName:
+                #    os.unlink( self.fProcName )
+                #self.fProcName = None
+
+                # nuke the process
+                if hasattr(self.p,'terminate'):
+                    self.p.terminate()
+                self.exitcode  = self.p.exitcode
         return
 
 def ezhil_file_parse_eval( file_input,redirectop,debug):
@@ -209,7 +242,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
             # cerrar - முடி
             sys.stdout.flush()
             sys.stderr.flush()
-            sys.stdout.close()
+            #sys.stdout.close()
     return exit_code
 
 def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):    
@@ -295,7 +328,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
             raise e
         finally:
             if ( redirectop ):
-                self.tmpf.close()
+                #self.tmpf.close()
                 sys.stdout = self.old_stdout
                 sys.stderr = self.old_stderr
                 sys.stdin = self.old_stdin
