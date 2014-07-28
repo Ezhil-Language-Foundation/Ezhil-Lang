@@ -116,7 +116,16 @@ class EzhilWeb():
         try:
             failed = False
             obj = EzhilFileExecuter( file_input = [program], redirectop = True, TIMEOUT = 60*2 ) # 2 minutes
-            progout = obj.get_output()
+            obj.run()
+
+            [f1,f2,progout] = obj.get_output()
+            for f in [f1,f2]:
+                try:
+                    os.unlink( f )
+                except Exception as e:
+                    pass
+            
+        
             #SUCCESS_STRING = "<H2> Your program executed correctly! Congratulations. </H2>"            
             if ( self.debug ):
                 print(obj.exitcode)
@@ -137,6 +146,7 @@ class EzhilWeb():
                 op = op + saveYourCode(program)
                 op = op + "</TABLE>"
         except Exception as e:
+            raise e
             if( not close_comment ):
                 print("-->")
             if ( self.debug ):
@@ -173,5 +183,5 @@ def saveYourCode( program ):
 if __name__ == '__main__':
     print("Content-Type: text/html")    # HTML is following
     print("")                              # blank line, end of headers
-    # do the Ezhil thing    
+    # do the Ezhil thing
     EzhilWeb(debug=False)
