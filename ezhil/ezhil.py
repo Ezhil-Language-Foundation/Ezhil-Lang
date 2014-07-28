@@ -148,11 +148,12 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         self.dbg_msg(u"ezil file executer\n")
         self.fProcName = ""
         self.data = ""
-        self.tmpf_name = ""
+        self.tmpf_name = ""		
         self.p = None
+        self.TIMEOUT = TIMEOUT
         if ( not redirectop ): #run serially and exit.
             try:
-                ezhil_file_parse_eval( file_input,redirectop,debug)
+                ezhil_file_parse_eval( file_input,self.redirectop,self.debug)
                 self.exitcode = 0
             except Exception as e:
                 self.exitcode = -1
@@ -161,19 +162,22 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         else:
             self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
             self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})
+        
+    def run(self):
+        if self.p :
             try:
                 self.dbg_msg("begin redirect mode\n")
                 self.p.start()
-                if ( TIMEOUT is not None ):
+                if ( self.TIMEOUT is not None ):
                     start = time()
                     self.dbg_msg("timeout non-zero\n")
                     raise_timeout = False
                     while self.p.is_alive():
-                        self.dbg_msg("in busy loop : %d , %d \n"%(time()-start,TIMEOUT))
+                        self.dbg_msg("in busy loop : %d , %d \n"%(time()-start,self.TIMEOUT))
                         self.dbg_msg("SLEEP\n")
                         sleep(5) #poll every 5 seconds
-                        if ( (time() - start) > TIMEOUT ):
-                            self.dbg_msg("Reached timeout = %d\n"%TIMEOUT)
+                        if ( (time() - start) > self.TIMEOUT ):
+                            self.dbg_msg("Reached timeout = %d\n"%self.TIMEOUT)
                             raise_timeout = True
                             break
                         # now you try and read all the data from file, , and unlink it all up.
@@ -188,7 +192,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                     fp.close()
 
                     if raise_timeout:
-                        raise TimeoutException( TIMEOUT )
+                        raise TimeoutException( self.TIMEOUT )
                     #os.unlink( fProcName)
             except Exception as e:
                 print("exception ",unicode(e))
@@ -196,7 +200,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 raise e
             finally:
                 # reset the buffers
-                if ( redirectop ):
+                if ( self.redirectop ):
                     #self.tmpf.close()
                     sys.stdout = self.old_stdout
                     sys.stderr = self.old_stderr
@@ -215,7 +219,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 if hasattr(self.p,'terminate'):
                     self.p.terminate()
                 self.exitcode  = self.p.exitcode
-        return
+        else:
+            pass #nothing to run
 
 def ezhil_file_parse_eval( file_input,redirectop,debug):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
@@ -361,7 +366,7 @@ if __name__ == u"__main__":
         for idx,aFile in enumerate(fnames):
             if ( debug):  print(u" **** Executing file #  ",1+idx,u"named ",aFile)
             try:
-                EzhilFileExecuter( aFile, debug )
+                EzhilFileExecuter( aFile, debug ).run()
             except Exception as e:
                 print(u"executing file, "+aFile.decode("utf-8")+u" with exception "+unicode(e))
                 if ( debug ):
