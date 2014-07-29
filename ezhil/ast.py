@@ -202,7 +202,10 @@ class ExprCall:
             ## use applicative order evaluation.
             eval_arglist = [ i.evaluate(env) for i in self.arglist.get_list()];
             env.set_args(  eval_arglist )
-            rval = fval.evaluate(env)
+            try:
+                rval = fval.evaluate(env)
+            except Exception as e:
+                raise RuntimeException( str(e) )
             self.dbg_msg( u"function retval ="+unicode(rval)+unicode(type(rval)))
         else:
             raise RuntimeException(u"undefined function: ]%s[ near ( %d, %d )"%(self.fname, self.line, self.col) )
