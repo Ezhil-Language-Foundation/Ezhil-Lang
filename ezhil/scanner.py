@@ -152,7 +152,7 @@ class Lex:
         self.comments = {} #comments dict indexed by line number with comments present as string value
         if ( isinstance(fname,str) ):
             self.fname = fname
-            self.File = codecs.open(fname,"r","utf-8")
+            self.File = codecs.open(fname,"r","utf-8")            
         elif ( isinstance(fname,list) ):
             """ specify, fname = ["contents of program as a string"] """
             self.fname = u"<DUMMYFILE>"
@@ -188,7 +188,7 @@ class Lex:
                 print(u"%d] %s"%(idx,repr(self.tokens.pop())))
         return u""
 
-    def get_lexeme(self,chunks , pos):
+    def get_lexeme(self,chunks , pos):        
         if chunks == None:
             return None
 
@@ -274,11 +274,11 @@ class Lex:
                 tval=Lexeme(float(chunks),Token.NUMBER)
             else:
                 tval=Lexeme(int(chunks),Token.NUMBER)
-            
         elif chunks[0].isalpha():
             tval=Lexeme(chunks,Token.ID)
         else:
-            raise ScannerException(u"Lexical error: " + unicode(chunks) + u" at Line , Col "+unicode(self.get_line_col( pos )) +u" in file "+self.fname )
+            scanner_exception = u"Lexical error: " + unicode(chunks) + u" at Line , Col "+unicode(self.get_line_col( pos )) +u" in file "+self.fname;
+            raise ScannerException( scanner_exception )
         
         [l,c]=self.get_line_col( pos )
         tval.set_line_col( [l,c] )
