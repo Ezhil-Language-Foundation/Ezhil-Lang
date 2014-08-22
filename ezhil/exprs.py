@@ -5,8 +5,11 @@
 ##
 ## Interpreter for EXRS language 
 
-import os, sys, string, inspect
+import os, sys, string, inspect, codecs
 from Interpreter import Interpreter, REPL, Lex, get_prog_name
+
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+#sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 if __name__ == "__main__":      
     lang = 'exprs';

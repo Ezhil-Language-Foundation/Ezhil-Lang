@@ -101,7 +101,7 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # failed tests you have to bump this up.
 
 NFAIL=6 #08/27/13 - this many
-TOTFAIL=`wc -l failed.txt | cut -d' ' -f1`
+TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; exit( $TOTFAIL !=  $NFAIL )" | python
 if [ $?  -eq 0 ]
 then
@@ -112,9 +112,10 @@ else
    echo "Too few/many failures; some negative tests may have failed"
    echo ""
    echo "######### LIST OF FAILED FILES ##############"
-   cat failed.txt | nl
+   cat failed.txt
    echo " "
    exitcode=255 #failed failures != $NFAIL
+   exit $exitcode
 fi
 
 # cleanup
