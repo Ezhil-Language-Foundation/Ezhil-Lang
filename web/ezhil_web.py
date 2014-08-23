@@ -22,19 +22,6 @@ import cgi
 import urllib
 import re
 
-def chrome_url_fixup( prog ):
-    prog = prog.decode("utf-8")
-    prog = urllib.unquote( prog )
-    patt = re.compile('(&#[0-9]{4};)')
-    parts = re.split( patt, prog )
-    newpart = []
-    for encoded in parts:
-        if ( re.match(patt,encoded) ):
-            newpart.append( u"%c"%int(encoded[2:-1]) )
-        else:
-            newpart.append( encoded )
-    return u"".join(newpart)
-
 class EzhilWeb():
     """ Class that does the job on construction """
     def __init__(self,debug = False):
@@ -54,19 +41,11 @@ class EzhilWeb():
             if ( not program ):
                 program = "printf(\"You can write Tamil programs from your browser!\")"
         
-        try:
-            if ( os.environ.get("HTTP_USER_AGENT","").lower().find("chrome") >= 0 ):
-                print "<B> code works only in Chrome </B>"
-                program = chrome_url_fixup( program )
-        except Exception as e:
-            print "chrome url fixup routine failed"
-            raise e
-                
         if ( self.debug ):
             print(str(program))
-    
+        
         self.do_ezhil_execute( program )
-
+    
     @staticmethod
     def get_image( kind ):
         if kind == 'success':
