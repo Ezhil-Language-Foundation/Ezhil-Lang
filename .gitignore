@@ -4,12 +4,12 @@ post_commit_ezhil.py
 MANIFEST
 *.py[cod]
 *~
-./website/lib
-./website/lib/*
-./web/ICONS/
-./web/ICONS/*
-./Notes
-./Notes/*
+website/lib
+website/lib/*
+web/ICONS/
+web/ICONS/*
+Notes/
+Notes/*
 ezhil_tests/names.txt
 # C extensions
 *.so
