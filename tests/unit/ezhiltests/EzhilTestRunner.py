@@ -121,7 +121,7 @@ class TestEzhilException( TestEzhil ):
         with TestEzhilException(code,exception,msg) as tst:
             flag = tst.run()
             print(tst)
-        return flag	
+        return flag 
 
 class TestInteractiveEzhil(TestEzhil):
     """ run a positive test, and make sure the CLI interpreter doesn't gripe.
@@ -177,7 +177,7 @@ class TestTimeoutEzhil(TestEzhil):
         self.success = False
         try:
             #redirect output = True, when you need a TIMEOUT
-            ezhil.EzhilFileExecuter(self.filename,debug=False,redirectop=True,TIMEOUT=self.timeout)            
+            ezhil.EzhilFileExecuter(self.filename,debug=False,redirectop=True,TIMEOUT=self.timeout)
         except TimeoutException as tex:
             self.success = True #expected to raise an exception
         except Exception as ex:
@@ -186,7 +186,7 @@ class TestTimeoutEzhil(TestEzhil):
             raise ex
         finally:
             print("********* completed Ezhil test *********")
-			# cleanup process files
+            # cleanup process files
             for fileName in glob("*.out"):
                 os.unlink( fileName )
             pass
