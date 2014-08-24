@@ -15,9 +15,14 @@ from SimpleHTTPServer import SimpleHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 from CGIHTTPServer import CGIHTTPRequestHandler
 from os import unlink
-import cgi, codecs
+import cgi, cgitb, codecs
+import sys, traceback
 
-class BaseEzhilWeb(SimpleHTTPRequestHandler):
+cgitb.enable()
+
+DEBUG=False
+
+class BaseEzhilWeb(SimpleHTTPRequestHandler):    
     def do_GET(self):
         print(str(self.headers), "in thread =", threading.currentThread().getName())    
         #delegate to parent
@@ -44,11 +49,10 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
             return
         
         self.send_response(200)
-        self.send_header("Content-type","text/html")
+        self.send_header("Content-type","text/html; charset=utf-8")
         self.end_headers()
-        self.do_ezhil_execute( program )
-        # echo file back
-        # self.wfile.write('<pre>'+program+'</pre>')
+        self.do_ezhil_execute( program )        
+        
         return
     
     def do_ezhil_execute(self,program):
@@ -71,24 +75,48 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
         try:
             failed = True #default failed mode
             obj = EzhilFileExecuter( file_input = [program], redirectop = True, TIMEOUT = 60*2 ) # 2 minutes
-            progout = obj.get_output()
+            
+            # actually run the process
+            obj.run()
+        
+            # get executed output in 'progout' and name of the two tmp files to cleanup
+            [tmpfile,filename,progout] = obj.get_output()
+            
+            for f in [tmpfile,filename]:
+                try:
+                    os.unlink( f )
+                except Exception as e:
+                    pass
+                
+            if obj.exitcode != 0: #and EzhilWeb.error_qualifiers(progout)
+                failed = True
+            else:
+                failed = False
+
+            # output from ezhil interpreter is in form of UTF-8 strings, we extract
+            # it from ASCII format I/O since we are in CGI mode.
+            progout = progout.decode('utf-8')
+            if DEBUG:
+                print u"output = "
+                print progout
+            
             #SUCCESS_STRING = "<H2> Your program executed correctly! Congratulations. </H2>"
             FAILED_STRING = "Traceback (most recent call last)"
             if obj.exitcode != 0 and progout.find(FAILED_STRING) > -1:
-                print "Exitcode => ",obj.exitcode
-                print progout
-                op = "%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
+                print u"Exitcode => ",obj.exitcode
+                op = u"%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
             else:
                 failed = False
                 obj.exitcode = 0
-                op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
+                op = u"%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
             print u"FAILED EXECUTION"
             print str(e)
+            traceback.print_tb(sys.exc_info()[2])
             failed = True
             op = u"%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e))
         else:
-            print "Output file"
+            print u"Output file"
             obj.get_output()
         
         prev_page = u"""<script>
@@ -100,7 +128,10 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
         else:
             op = u"<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>"+op            
         op = prev_page + op
-        self.wfile.write(u"<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n"%op)
+        real_op = u"<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n"%op
+        
+        # CGI pipe only allows ASCII style strings
+        self.wfile.write(real_op.encode('utf-8'))
         
         return op
 
