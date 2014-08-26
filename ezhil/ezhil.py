@@ -78,7 +78,14 @@ class EzhilRedirectOutput:
     @staticmethod
     def pidFileName( pid ):
         """ file name with $PID decoration as IPC alt """
-        return "/tmp/"+"ezhil_"+unicode(pid)+".out"
+        name = "ezhil_"+str(pid)+".out";
+        if sys.platform.find('win') >= 0:
+            # Windows OS
+            name = tempfile.gettempdir()+name
+        else:
+            # LINUX or like systems
+            name = "/tmp/"+name
+        return name
     
     def dbg_msg(self,message):
         """ useful routine to debug timeout issues from spawned off process"""
