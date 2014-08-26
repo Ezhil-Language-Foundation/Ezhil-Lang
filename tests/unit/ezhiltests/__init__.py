@@ -8,7 +8,7 @@
 import sys, os
 import unittest
 
-ezhil_path = "/".join(os.getcwd().split('/')[:-2])
+ezhil_path = (os.sep).join(os.getcwd().split( os.sep )[:-2])
 #print ezhil_path
 sys.path.insert(0,ezhil_path)
 
