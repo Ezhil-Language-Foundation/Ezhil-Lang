@@ -29,7 +29,7 @@ do
 done
 
 NFAIL=0 #ideally no unittests should fail
-TOTFAIL=`wc -l failed.txt | cut -d' ' -f1`
+TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; exit( $TOTFAIL !=  $NFAIL )" | python
 if [ $?  -eq 0 ]
 then
@@ -43,7 +43,7 @@ else
    echo "Expecting $NFAIL failures, but found $TOTFAIL failures"
    echo ""
    echo "######### LIST OF FAILED FILES ###########"
-   cat failed.txt | nl
+   cat failed.txt 
    echo " "
    echo "Too few/many failures; some negative tests may have failed"
    exitcode=255 #failed failures != $NFAIL
