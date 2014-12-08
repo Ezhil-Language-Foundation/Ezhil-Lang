@@ -1,0 +1,416 @@
+﻿<!-- (C) 2013 Muthiah Annamalai 
+     This HTML file is part of Ezhil - The Tamil Programming Language
+-->
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+ <link rel="stylesheet" href="gh-fork-ribbon.css" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<style type="text/css" media="screen">
+    #editor{
+	  position: relative;
+	  height: 500px;
+	  width: 100%;
+	}
+</style>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-43234778-1', '54.214.234.20');
+  ga('send', 'pageview');  
+</script>
+    <title>வலை உலாவியில் இருந்து நேரடியாக "எழில்" மொழியில் நிரல் எழுதிப் பழகுங்கள் (Try Ezhil Now!) Write Code in #Tamil from Web browser</title>
+
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://requirejs.org/docs/release/2.1.8/minified/require.js" type="text/javascript"></script>
+<script src="ezhil_eval.js" type="text/javascript"></script>
+
+</head>
+<body bgcolor="white">
+<center>
+<a href="./index.html">முதல் பக்கம் [home page]</a> 
+<a href="./grammar.html">மொழி இலக்கணம் [grammar]</a>  | 
+<a href="./example.html">உதாரண நிரல்கள் [examples]</a> |
+<a href="./download.html">எழில் தரவிறக்கம் [download]</a> 
+</center>
+<HR />
+<!--    <table align="center">
+    <tr><td>
+    <img src="ezhil-logo.png"/></td><td><H4>உங்கள் வலை உலாவியிலேயே நேரடியாக "எழில்" நிரல்களை எழுதி இயக்குங்கள்!<BR/>
+       (Run Ezhil Programs from your Web Browser)</H4></td></tr>
+</table> -->
+<table>
+<tr>
+<td width="65%">
+    <form>
+<!-- Tamil Keyboard, (C) 2013 Ezhil Language Foundation -->
+    <div><B> சிறப்புச் சொற்கள் உதவி (Keywords Helper)</B></div>
+<input type="button" name="btn_kw_0" value="பதிப்பி" onClick="appendText('பதிப்பி');" />
+<input type="button" name="btn_kw_1" value="தேர்ந்தெடு" onClick="appendText('தேர்ந்தெடு');" />
+<input type="button" name="btn_kw_2" value="தேர்வு" onClick="appendText('தேர்வு');" />
+<input type="button" name="btn_kw_3" value="ஏதேனில்" onClick="appendText('ஏதேனில்');" />
+<input type="button" name="btn_kw_4" value="ஆனால்" onClick="appendText('ஆனால்');" />
+<input type="button" name="btn_kw_5" value="இல்லைஆனால்" onClick="appendText('இல்லைஆனால்');" />
+<input type="button" name="btn_kw_6" value="இல்லை" onClick="appendText('இல்லை');" />
+<input type="button" name="btn_kw_7" value="ஆக" onClick="appendText('ஆக');" />
+<input type="button" name="btn_kw_8" value="வரை" onClick="appendText('வரை');" />
+<input type="button" name="btn_kw_9" value="செய்" onClick="appendText('செய்');" />
+<input type="button" name="btn_kw_36" value="முடியேனில்" onClick="appendText('முடியேனில்');" />
+<BR />
+<input type="button" name="btn_kw_10" value="பின்கொடு" onClick="appendText('பின்கொடு');" />
+<input type="button" name="btn_kw_11" value="முடி" onClick="appendText('முடி');" />
+<input type="button" name="btn_kw_12" value="நிரல்பாகம்" onClick="appendText('நிரல்பாகம்');" />
+<input type="button" name="btn_kw_13" value="தொடர்" onClick="appendText('தொடர்');" />
+<input type="button" name="btn_kw_14" value="நிறுத்து" onClick="appendText('நிறுத்து');" />
+<input type="button" name="btn_kw_34" value="ஒவ்வொன்றாக" onClick="appendText('ஒவ்வொன்றாக');" />
+<input type="button" name="btn_kw_35" value="இல்" onClick="appendText('இல்');" />
+<input type="button" name="btn_kw_15" value="@" onClick="appendText('@');" />
+<input type="button" name="btn_kw_16" value="==" onClick="appendText('==');" />
+<input type="button" name="btn_kw_17" value="-" onClick="appendText('-');" />
+<input type="button" name="btn_kw_18" value="+" onClick="appendText('+');" />
+<input type="button" name="btn_kw_19" value=">" onClick="appendText('>');" />
+<input type="button" name="btn_kw_20" value="<" onClick="appendText('<');" />
+<BR />
+<input type="button" name="btn_kw_21" value=">=" onClick="appendText('>=');" />
+<input type="button" name="btn_kw_22" value="<=" onClick="appendText('<=');" />
+<input type="button" name="btn_kw_23" value="!=" onClick="appendText('!=');" />
+<input type="button" name="btn_kw_24" value="!" onClick="appendText('!');" />
+<input type="button" name="btn_kw_25" value="*" onClick="appendText('*');" />
+<input type="button" name="btn_kw_26" value="/" onClick="appendText('/');" />
+<input type="button" name="btn_kw_27" value="," onClick="appendText(',');" />
+<input type="button" name="btn_kw_28" value="( )" onClick="appendText('( )');" />
+<input type="button" name="btn_kw_30" value="[ ]" onClick="appendText('[ ]');" />
+<input type="button" name="btn_kw_32" value="%" onClick="appendText('%');" />
+<input type="button" name="btn_kw_33" value="^" onClick="appendText('^');" />
+<!-- last btn_kw_36 -->
+</form>
+</td>
+<td width="35%">
+<div><B> எழில் நிரல்பாகம் உதவி (Ezhil functions+statements)</B></div>
+<form>
+<input type="button" name="bltn_fn_set" value="வை- set" onClick="appendText('வை');" />
+<input type="button" name="bltn_fn_get" value="எடு - get" onClick="appendText('எடு');" />
+<input type="button" name="bltn_fn_if_then_else" value="@(  ) ஆனால் இல்லை   முடி" onClick="appendText('@(  ) ஆனால்\n\t\nஇல்லை\n  முடி');" />
+<input type="button" name="bltn_fn_while_end" value=" @(  ) வரை  முடி" onClick="appendText('@(  ) வரை\n  முடி');" />
+</form>
+</td>
+</tr>
+</table>
+<HR />
+<div align="left" >கீழே உள்ள பெட்டியில் உங்களுடைய நிரல்களைத் தட்டச்சு செய்யுங்கள். <BR />
+அல்லது, இங்கே உள்ள பொத்தான்களைப் பயன்படுத்துங்கள். 
+பின்னர், "நிரலை இயக்குங்கள்"  என்ற பொத்தானை க்ளிக் செய்யுங்கள்! <BR />
+(Enter your program in the form below, and click "Execute Program" to execute the code!)</div>
+<table>
+ <tr>
+  <td width="60%">
+<div algin="center">
+<!-- onClick="javascript:updateEditorWithExample($('#examples').val())" -->
+<!-- எழில் உதாரணம் பார்க்க (Browse Examples) -->
+<HR />
+<DIV>
+நீங்கள் அடுத்த பயிற்சியாகப் பின்வரும் உதாரணங்கள், நிரலை எழுதி இயக்க முயற்சி செய்யுங்கள்!
+</DIV>
+<select id="examples">
+<option value="ackermann.n">ackermann.n</option>
+<option value="age.n">age.n</option>
+<option value="armstrong.n">armstrong.n</option>
+<option value="array0.n">array0.n</option>
+<option value="array1.n">array1.n</option>
+<option value="array2.n">array2.n</option>
+<option value="array_nd.n">array_nd.n</option>
+<option value="binary.n">binary.n</option>
+<option value="bisect.n">bisect.n</option>
+<option value="bmi.n">bmi.n</option>
+<option value="boolean.n">boolean.n</option>
+<option value="bubblesort.n">bubblesort.n</option>
+<option value="calc_asmd.n">calc_asmd.n</option>
+<option value="calc.n">calc.n</option>
+<option value="calendar_days.n">calendar_days.n</option>
+<option value="centerofmass.n">centerofmass.n</option>
+<option value="change.n">change.n</option>
+<option value="chaos.n">chaos.n</option>
+<option value="convert2kelvin.n">convert2kelvin.n</option>
+<option value="countwords.n">countwords.n</option>
+<option value="datetime.n">datetime.n</option>
+<option value="dict.n">dict.n</option>
+<option value="dict_ta.n">dict_ta.n</option>
+<option value="dowhile.n">dowhile.n</option>
+<option value="even_odd.n">even_odd.n</option>
+<option value="fact.n">fact.n</option>
+<option value="fern2.n">fern2.n</option>
+<option value="fern.n">fern.n</option>
+<option value="fibo2.n">fibo2.n</option>
+<option value="fibo.n">fibo.n</option>
+<option value="filedemo.n">filedemo.n</option>
+<option value="filerw.n">filerw.n</option>
+<option value="find.n">find.n</option>
+<option value="findvowels.n">findvowels.n</option>
+<option value="floatpthole.n">floatpthole.n</option>
+<option value="ford2.n">ford2.n</option>
+<option value="ford.n">ford.n</option>
+<option value="foreach.n">foreach.n</option>
+<option value="foriter.n">foriter.n</option>
+<option value="fornested.n">fornested.n</option>
+<option value="friends.n">friends.n</option>
+<option value="fruity.n">fruity.n</option>
+<option value="gcd.n">gcd.n</option>
+<option value="guess.n">guess.n</option>
+<option value="hailstone.n">hailstone.n</option>
+<option value="hanoi.n">hanoi.n</option>
+<option value="hello.n">hello.n</option>
+<option value="hex.n">hex.n</option>
+<option value="hist.n">hist.n</option>
+<option value="histogram.n">histogram.n</option>
+<option value="hw.n">hw.n</option>
+<option value="ifchain.n">ifchain.n</option>
+<option value="ifelse.n">ifelse.n</option>
+<option value="ifnested.n">ifnested.n</option>
+<option value="infinite_loop.n">infinite_loop.n</option>
+<option value="interest.n">interest.n</option>
+<option value="isbalanced.n">isbalanced.n</option>
+<option value="lcmgcd.n">lcmgcd.n</option>
+<option value="leapyear.n">leapyear.n</option>
+<option value="letters.n">letters.n</option>
+<option value="lex2.n">lex2.n</option>
+<option value="listmt.n">listmt.n</option>
+<option value="list.n">list.n</option>
+<option value="list_ta.n">list_ta.n</option>
+<option value="logical_not.n">logical_not.n</option>
+<option value="logo.n">logo.n</option>
+<option value="loopupdate.n">loopupdate.n</option>
+<option value="mangalyaan.n">mangalyaan.n</option>
+<option value="magic_coins.n">magic_coins.n</option>
+<option value="max_wo_compare.n">max_wo_compare.n</option>
+<option value="nqueens.n">nqueens.n</option>
+<option value="only.n">only.n</option>
+<option value="optional.n">optional.n</option>
+<option value="palindromes.n">palindromes.n</option>
+<option value="peanut_candy.n">peanut_candy.n</option>
+<option value="polygons.n">polygons.n</option>
+<option value="powers_of_two.n">powers_of_two.n</option>
+<option value="predicates.n">predicates.n</option>
+<option value="primefactors.n">primefactors.n</option>
+<option value="prime.n">prime.n</option>
+<option value="printtest.n">printtest.n</option>
+<option value="quadroots.n">quadroots.n</option>
+<option value="quiz.n">quiz.n</option>
+<option value="ranges.n">ranges.n</option>
+<option value="reverse.n">reverse.n</option>
+<option value="reverse_stack.n">reverse_stack.n</option>
+<option value="rich_poor.n">rich_poor.n</option>
+<option value="rndclr.n">rndclr.n</option>
+<option value="select_case2.n">select_case2.n</option>
+<option value="select_case.n">select_case.n</option>
+<option value="select.n">select.n</option>
+<option value="sexpr.n">sexpr.n</option>
+<option value="sine_qua_non.n">sine_qua_non.n</option>
+<option value="solo_return.n">solo_return.n</option>
+<option value="sort.n">sort.n</option>
+<option value="speedoflight.n">speedoflight.n</option>
+<option value="split_text.n">split_text.n</option>
+<option value="square_loop.n">square_loop.n</option>
+<option value="square.n">square.n</option>
+<option value="string_demo.n">string_demo.n</option>
+<option value="stringreverse.n">stringreverse.n</option>
+<option value="strings.n">strings.n</option>
+<option value="strrev.n">strrev.n</option>
+<option value="sum_of_digits.n">sum_of_digits.n</option>
+<option value="sumofseries.n">sumofseries.n</option>
+<option value="sum_of_squares.n">sum_of_squares.n</option>
+<option value="ta247.n">ta247.n</option>
+<option value="tables.n">tables.n</option>
+<option value="tamil_letters.n">tamil_letters.n</option>
+<option value="tamil_months.n">tamil_months.n</option>
+<option value="temple.n">temple.n</option>
+<option value="tictok.n">tictok.n</option>
+<option value="tower_of_hanoi.n">tower_of_hanoi.n</option>
+<option value="tree.n">tree.n</option>
+<option value="trials.n">trials.n</option>
+<option value="unaryop.n">unaryop.n</option>
+<option value="vannakm.n">vannakm.n</option>
+<option value="windoze.n">windoze.n</option>
+<option value="yinyang.n">yinyang.n</option>
+<option value="கூட்டு.n">கூட்டு.n</option>
+</select>
+<input id="example_load" type="button" onClick="javascript:updateEditorWithExample($('#examples').val())" value="உதாரணம் பார்க்க (Browse Examples)"></input>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" value="நிரலை இயக்குங்கள் (Execute Program)" onClick='evaluateProg()'></input>
+</div>
+<div>
+<!-- default don't show nothing -->
+<span id="disclaimer" style="display: none; background-color:yellow">This site only works with Mozilla Firefox. Don't use Chrome or I.E</span> 
+</div>
+<br>
+<div align="left">
+<div id="editor">
+</div>
+</td>
+<td width = "20%">
+<form>
+<div><B>உயிரெழுத்துகள் (Vowels)</B></div>
+<input type="button" name="btn_kw_40" value="அ" onClick="appendText('அ');" />
+<input type="button" name="btn_kw_41" value="ஆ" onClick="appendText('ஆ');" />
+<input type="button" name="btn_kw_42" value="இ" onClick="appendText('இ');" />
+<input type="button" name="btn_kw_43" value="ஈ" onClick="appendText('ஈ');" />
+<input type="button" name="btn_kw_44" value="உ" onClick="appendText('உ');" />
+<input type="button" name="btn_kw_45" value="ஊ" onClick="appendText('ஊ');" />
+<input type="button" name="btn_kw_46" value="எ" onClick="appendText('எ');" />
+<input type="button" name="btn_kw_47" value="ஏ" onClick="appendText('ஏ');" />
+<input type="button" name="btn_kw_48" value="ஐ" onClick="appendText('ஐ');" />
+<input type="button" name="btn_kw_49" value="ஒ" onClick="appendText('ஒ');" />
+<input type="button" name="btn_kw_50" value="ஓ" onClick="appendText('ஓ');" />
+<input type="button" name="btn_kw_51" value="ஔ" onClick="appendText('ஔ');" />
+<BR />
+<div><B>மெய்யெழுத்துகள் (Consonants)</B></div>
+<input type="button" name="btn_kw_52" value="க்" onClick="appendText('க்');" />
+<input type="button" name="btn_kw_53" value="ச்" onClick="appendText('ச்');" />
+<input type="button" name="btn_kw_54" value="ட்" onClick="appendText('ட்');" />
+<input type="button" name="btn_kw_55" value="த்" onClick="appendText('த்');" />
+<input type="button" name="btn_kw_56" value="ப்" onClick="appendText('ப்');" />
+<input type="button" name="btn_kw_57" value="ற்" onClick="appendText('ற்');" />
+<input type="button" name="btn_kw_58" value="ஞ்" onClick="appendText('ஞ்');" />
+<input type="button" name="btn_kw_59" value="ங்" onClick="appendText('ங்');" />
+<input type="button" name="btn_kw_60" value="ண்" onClick="appendText('ண்');" />
+<input type="button" name="btn_kw_61" value="ந்" onClick="appendText('ந்');" />
+<input type="button" name="btn_kw_62" value="ம்" onClick="appendText('ம்');" />
+<input type="button" name="btn_kw_63" value="ன்" onClick="appendText('ன்');" />
+<input type="button" name="btn_kw_64" value="ய்" onClick="appendText('ய்');" />
+<input type="button" name="btn_kw_65" value="ர்" onClick="appendText('ர்');" />
+<input type="button" name="btn_kw_66" value="ல்" onClick="appendText('ல்');" />
+<input type="button" name="btn_kw_67" value="வ்" onClick="appendText('வ்');" />
+<input type="button" name="btn_kw_68" value="ழ்" onClick="appendText('ழ்');" />
+<input type="button" name="btn_kw_69" value="ள்" onClick="appendText('ள்');" />
+<div><B>உயிர் மெய் எழுத்துகள்(Uyir mei)</B></div>
+<input type="button" name="btn_kw_70" value="க" onClick="appendText('க');" />
+<input type="button" name="btn_kw_71" value="ச" onClick="appendText('ச');" />
+<input type="button" name="btn_kw_72" value="ட" onClick="appendText('ட');" />
+<input type="button" name="btn_kw_73" value="த" onClick="appendText('த');" />
+<input type="button" name="btn_kw_74" value="ப" onClick="appendText('ப');" />
+<input type="button" name="btn_kw_75" value="ற" onClick="appendText('ற');" />
+<input type="button" name="btn_kw_76" value="ஞ" onClick="appendText('ஞ');" />
+<input type="button" name="btn_kw_77" value="ங" onClick="appendText('ங');" />
+<input type="button" name="btn_kw_78" value="ண" onClick="appendText('ண');" />
+<input type="button" name="btn_kw_79" value="ந" onClick="appendText('ந');" />
+<input type="button" name="btn_kw_80" value="ம" onClick="appendText('ம');" />
+<input type="button" name="btn_kw_81" value="ன" onClick="appendText('ன');" />
+<input type="button" name="btn_kw_82" value="ய" onClick="appendText('ய');" />
+<input type="button" name="btn_kw_83" value="ர" onClick="appendText('ர');" />
+<input type="button" name="btn_kw_84" value="ல" onClick="appendText('ல');" />
+<input type="button" name="btn_kw_85" value="வ" onClick="appendText('வ');" />
+<input type="button" name="btn_kw_86" value="ழ" onClick="appendText('ழ');" />
+<input type="button" name="btn_kw_87" value="ள" onClick="appendText('ள');" />
+<div><B> இணைப்புக் குறியீடுகள் (Connecting Symbols)</B></div>
+<!-- <input type="button" name="btn_kw_88" value="" onClick="appendText('');" /> -->
+<input type="button" name="btn_kw_89" value="ா" onClick="appendText('ா');" />
+<input type="button" name="btn_kw_90" value="ி" onClick="appendText('ி');" />
+<input type="button" name="btn_kw_91" value="ீ" onClick="appendText('ீ');" />
+<input type="button" name="btn_kw_92" value="ு" onClick="appendText('ு');" />
+<input type="button" name="btn_kw_93" value="ூ" onClick="appendText('ூ');" />
+<input type="button" name="btn_kw_94" value="ெ" onClick="appendText('ெ');" />
+<input type="button" name="btn_kw_95" value="ே" onClick="appendText('ே');" />
+<input type="button" name="btn_kw_96" value="ை" onClick="appendText('ை');" />
+<input type="button" name="btn_kw_97" value="ொ" onClick="appendText('ொ');" />
+<input type="button" name="btn_kw_98" value="ோ" onClick="appendText('ோ');" />
+<input type="button" name="btn_kw_99" value="ௌ" onClick="appendText('ௌ');" />
+<input type="button" name="btn_kw_100" value="ஃ" onClick="appendText('ஃ');" />
+<BR />
+<div><B>கிரந்த எழுத்துகள் / சமஸ்கிருத எழுத்துகள் (Sanskrit Letters)</B></div>
+<input type="button" name="btn_kw_36" value="ஜ" onClick="appendText('ஜ');" />
+<input type="button" name="btn_kw_37" value="ஷ" onClick="appendText('ஷ');" />
+<input type="button" name="btn_kw_38" value="ஸ" onClick="appendText('ஸ');" />
+<input type="button" name="btn_kw_39" value="ஹ" onClick="appendText('ஹ');" />
+<input type="button" name="btn_kw_101" value="ஜ்" onClick="appendText('ஜ்');" />
+<input type="button" name="btn_kw_102" value="ஷ்" onClick="appendText('ஷ்');" />
+<input type="button" name="btn_kw_103" value="ஸ்" onClick="appendText('ஸ்');" />
+<input type="button" name="btn_kw_104" value="ஹ்" onClick="appendText('ஹ்');" />
+</form>
+<div> (Google+ல் எங்களைப் பின்தொடருங்கள்) Follow us on Google+ </div>
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<g:community showcoverphoto="false" layout="landscape" href="https://plus.google.com/communities/103299049995094273538"></g:community>
+</td> </tr>
+</table>
+<table align="center">
+<tr>
+<td align="left" bgcolor="#C0FFEE"><B> >> </B> See over <B>80+</B> Ezhil examples (மேலும் உதாரணங்கள்) <a href="https://github.com/arcturusannamalai/Ezhil-Lang/tree/master/ezhil_tests">@ GitHub ezhil-lang/ezhil_tests/</a>. To share email me <IMG src="email_ez.png" alg="gmail" /> </td></tr>
+<tr>
+<td align="left" bgcolor="#ABCDEF"><B> >> </B> More Ezhil examples, <B>10</B>, (மேலும் உதாரணங்கள்) <a href="http://rosettacode.org/wiki/Category:Ezhil">@ Rosetta Code</a>. Rosetta Code இணையத் தளத்தில் உள்ள "எழில்" நிரல்களை வாசிக்கலாம். நீங்களும் உங்களுடைய நிரல்களைச் சேர்க்கலாம். Contribute your Ezhil programs to Rosetta.</td>
+</tr>
+<tr>
+<td align="left" bgcolor="C0EEFF"><B> >></B> What do you think? Share your thoughts on Ezhil? <a href="http://www.surveymonkey.com/s/5R2KXR9">take my survey now</a>. (Twitterல் எங்களைப் பின்தொடருங்கள்)</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script> <a href="https://twitter.com/ezhillang" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">
+</td>
+</tr>
+</table>
+<HR />
+<table>
+    <tr>
+      <td align="left" width="50%" >மின்னஞ்சல் மூலம் உங்களுடைய நிரல்களை எங்களுடன் பகிர்ந்துகொள்ளுங்கள். To share your code email me <IMG src="email_ez.png" alg="gmail" />, and via Twitter <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://ezhillang.org" data-via="ezhillang" data-size="large" data-hashtags="Ezhil" data-dnt="true">Tweet</a>
+ </td>
+<td align="left" width="50%" > Rosetta Code இணையத் தளத்தில் உள்ள "எழில்" நிரல்களை வாசிக்கலாம். நீங்களும் உங்களுடைய நிரல்களைச் சேர்க்கலாம். Contribute your Ezhil programs to <a href="http://rosettacode.org/wiki/Category:Ezhil">Rosetta Code</a>.</td>
+
+
+</tr>
+</table>
+<HR />
+<DIV>எழில் பற்றி மேலும் அறிய விக்கிப்பீடியா கட்டுரை <a href="http://ta.wikipedia.org/w/index.php?title=%E0%AE%8E%E0%AE%B4%E0%AE%BF%E0%AE%B2%E0%AF%8D_%28%E0%AE%A8%E0%AE%BF%E0%AE%B0%E0%AE%B2%E0%AE%BE%E0%AE%95%E0%AF%8D%E0%AE%95_%E0%AE%AE%E0%AF%8A%E0%AE%B4%E0%AE%BF%29">தமிழில்</a> அல்லது <a href="http://en.wikipedia.org/wiki/Ezhil_%28programming_language%29">ஆங்கிலத்தில்</a> வாசிக்க. ( To learn more about Ezhil read the Wikipedia article in <a href="http://en.wikipedia.org/wiki/Ezhil_%28programming_language%29">English</a> or <a href="http://ta.wikipedia.org/w/index.php?title=%E0%AE%8E%E0%AE%B4%E0%AE%BF%E0%AE%B2%E0%AF%8D_%28%E0%AE%A8%E0%AE%BF%E0%AE%B0%E0%AE%B2%E0%AE%BE%E0%AE%95%E0%AF%8D%E0%AE%95_%E0%AE%AE%E0%AF%8A%E0%AE%B4%E0%AE%BF%29">Tamil</a>)<BR/>
+<B>(C) 2013 எழில் : தமிழ் நிரலாக்க மொழி</B></DIV>
+<!-- (C) 2013 முத்தையா அண்ணாமலை;  -->
+<div id="default_program" style="display : none;">
+# (C) 2013 Ezhil Language Project
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Define - Center of Mass of Polygon
+# URL - http://ta.wikipedia.org/wiki/%E0%AE%A4%E0%AE%BF%E0%AE%A3%E0%AE%BF%E0%AE%B5%E0%AF%81_%E0%AE%AE%E0%AF%88%E0%AE%AF%E0%AE%AE%E0%AF%8D
+# பல்கோணத்தின் திணிவு மையம்
+
+நிரல்பாகம் திணிவு_மையம்( X, Y)
+   cX = 0
+    cY = 0
+   அளவு = 0
+   @( range(0,len(X)) இல் இடம் ) ஒவ்வொன்றாக
+
+       @( (இடம்+1) == len(X) ) ஆனால்
+       இடம்p1 = 0
+       இல்லை
+           இடம்p1 = இடம்  + 1
+       முடி
+
+       x1 = எடு(X,இடம்)
+       x2 = எடு(X,இடம்p1)
+
+       y1 = எடு(Y,இடம்)
+       y2 = எடு(Y,இடம்p1)
+       அளவுp1 = (x1*y2) - (x2*y1)
+       cX = cX + (x1+x2)*அளவுp1
+       cY = cY + (y1+y2)*அளவுp1
+       அளவு = அளவு + அளவுp1
+
+       #பதிப்பி cX, cY
+       #பதிப்பி y1, y2
+       #பதிப்பி அளவு
+   முடி
+  
+   அளவு = அளவு/2.0
+   cX = cX/(6*அளவு)
+   cY = cY/(6*அளவு)
+   பின்கொடு [cX, cY]
+முடி
+
+# find center of mass of a 4x4 square
+X = [4,4,0,0]
+Y = [0,4,4,0]
+
+# it should be at [2,2]
+பதிப்பி திணிவு_மையம்( X, Y)
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://requirejs.org/docs/release/2.1.8/minified/require.js" type="text/javascript"></script>
+  </head>
+<body bgcolor="white">
+<input type="button" value="Execute" onClick='evaluateProg()'>
+<br>
+
+<style type="text/css" media="screen">
+    #editor{
+	  position: absolute;
+	  height: 500px;
+	  width: 80%;
+	}
+</style>
+
+<script>
+
+  var aceEditor;
+  
+  require.config({
+	   baseUrl: "http://54.214.234.20/",
+	   paths: {
+	      ace: "lib/ace"
+	   }
+	});
+	
+	require(["ace/ace"], function(ace) {
+		var editor = ace.edit("editor");
+		aceEditor = editor;
+		editor.setTheme("ace/theme/XCode");
+		editor.getSession().setMode("ace/mode/ezhil");
+	 });
+	   
+	   
+  function evaluateProg() {  
+     $('<form>', {
+    "id": "EvaluageProgramForm",
+    "html": '<input type="text" name="eval" value="true" /><textarea name="prog">' + aceEditor.getValue() + '</textarea>'  ,
+    "action": 'http://54.214.234.20/cgi-bin/ezhil_web.py'
+    }).appendTo(window.open("_blank","height=820,width=784,toolbar=no,scrollbars=yes").document.body).submit();
+  }
+
+</script>
+<div id="editor">
+# (C) 2013 Ezhil Language Project
+# (C) முத்தையா அண்ணாமலை 2013
+# இந்த ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Define - Center of Mass of Polygon
+# URL - http://ta.wikipedia.org/wiki/%E0%AE%A4%E0%AE%BF%E0%AE%A3%E0%AE%BF%E0%AE%B5%E0%AF%81_%E0%AE%AE%E0%AF%88%E0%AE%AF%E0%AE%AE%E0%AF%8D
+# பல்கோணத்தின் திணிவு மையம்
+
+நிரல்பாகம் திணிவு_மையம்( X, Y)
+   cX = 0
+    cY = 0
+   அளவு = 0
+   @( range(0,len(X)) இல் இடம் ) ஒவ்வொன்றாக
+
+       @( (இடம்+1) == len(X) ) ஆனால்
+       இடம்p1 = 0
+       இல்லை
+           இடம்p1 = இடம்  + 1
+       முடி
+
+       x1 = எடு(X,இடம்)
+       x2 = எடு(X,இடம்p1)
+
+       y1 = எடு(Y,இடம்)
+       y2 = எடு(Y,இடம்p1)
+       அளவுp1 = (x1*y2) - (x2*y1)
+       cX = cX + (x1+x2)*அளவுp1
+       cY = cY + (y1+y2)*அளவுp1
+       அளவு = அளவு + அளவுp1
+
+       #பதிப்பி cX, cY
+       #பதிப்பி y1, y2
+       #பதிப்பி அளவு
+   முடி
+  
+   அளவு = அளவு/2.0
+   cX = cX/(6*அளவு)
+   cY = cY/(6*அளவு)
+   பின்கொடு [cX, cY]
+முடி
+
+# find center of mass of a 4x4 square
+X = [4,4,0,0]
+Y = [0,4,4,0]
+
+# it should be at [2,2]
+பதிப்பி திணிவு_மையம்( X, Y)
+</div>
+
+</body>
+</html>
