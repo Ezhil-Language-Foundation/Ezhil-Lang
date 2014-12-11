@@ -1,377 +1,425 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ta" encoding="UTF-8" lang="ta" dir="ltr">
-<!-- AUTHOR: (C) 2007-2014 முத்தையா அண்ணாமலை , Modified 12/07/14 -->
-<head  profile="http://www.w3.org/2005/10/profile"> 
-  <!-- Chrome don't like this -->
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link href="https://plus.google.com/u/0/communities/103299049995094273538?hl=en_US" rel="publisher" />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="keywords" content=" தமிழ்,  எழில், தமிழ் நிரல் மொழி " />
-  <link rel="copyright" href="http://www.gnu.org/copyleft/fdl.html" />
-  <meta charset="utf-8">
-  <meta name="generator" content="Bootply" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/styles.css" rel="stylesheet">
-  
-  <title>எழில்: தமிழ் நிரலாக்க மொழி (Ezhil: The Tamil Programming Language)</title>
-  <script type="text/javascript">
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
-    
-    ga('create', 'UA-43234778-1', 'ezhillang.org');
-    ga('send', 'pageview');
-  </script>
-</head>
-<body>
-<div class="navbar-wrapper">
-  <div class="container">
-    <div class="navbar navbar-default  navbar-static-top">      
-        <div class="navbar-header">
-	    <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	      <span class="icon-bar"></span>
-	      <span class="icon-bar"></span>
-	      <span class="icon-bar"></span>
-	    </a>
-            <a class="navbar-brand" href="#">எழில்: தமிழ் நிரலாக்க மொழி</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-	      <a href="#" class="dropdown-toggle" data-toggle="dropdown" alt="Contact">Learn about Ezhil<b class="caret"></b></a>
-	      <ul class="dropdown-menu">
-		<li><a href="/grammar.html" title="Grammar">மொழி இலக்கணம்</a></li>
-		<li><a href="/example.html" title="Examples">உதாரண நிரல்கள்</a></li>
-		<li class="divider"></li>
-		<li><a href="#publications" title="Publications">research publications</a></li>
-	      </ul>
-	    </li>
-            <li><a href="/download.html" title="Download">எழில் தரவிறக்கம்</a></li>
-	    <li><a href="#register4book" title="Download eBook">எழில் eBook தரவிறக்கம்</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" alt="Contact">மேலும் தொடர்பு கொள்ள<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#signup_for_mailinglist">Signup for mailing list</a></li>
-                <li><a href="#survey">Take Ezhil Survey</a></li>
-                <li class="divider"></li>
-                <li><a href="#twitter">Twitter @ezhillang</a></li>
-                <li><a href="#feedback">Contact us</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+  <!-- AUTHOR: (C) 2007-2014 முத்தையா அண்ணாமலை , Modified 12/07/14 -->
+  <head  profile="http://www.w3.org/2005/10/profile"> 
+    <!-- Chrome don't like this -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link href="https://plus.google.com/u/0/communities/103299049995094273538?hl=en_US" rel="publisher" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content=" தமிழ்,  எழில், தமிழ் நிரல் மொழி " />
+    <link rel="copyright" href="http://www.gnu.org/copyleft/fdl.html" />
+    <meta charset="utf-8">
+      <meta name="generator" content="Bootply" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	  <link href="css/styles.css" rel="stylesheet">
+	    
+	    <title>எழில்: தமிழ் நிரலாக்க மொழி (Ezhil: The Tamil Programming Language)</title>
+	    <script type="text/javascript">
+	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	      })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+	      
+	      ga('create', 'UA-43234778-1', 'ezhillang.org');
+	      ga('send', 'pageview');
+	    </script>
+	  </head>
+	  <body>
+	    <div class="navbar-wrapper">
+	      <div class="container">
+		<div class="navbar navbar-default  navbar-static-top">      
+		  <div class="navbar-header">
+		    <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		      <span class="icon-bar"></span>
+		      <span class="icon-bar"></span>
+		      <span class="icon-bar"></span>
+		    </a>
+		    <a class="navbar-brand" href="#">எழில்: தமிழ் நிரலாக்க மொழி</a>
+		  </div>
+		  <div class="navbar-collapse collapse">
+		    <ul class="nav navbar-nav">
+		      <li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" alt="Contact">Learn about Ezhil<b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			  <li><a href="/grammar.html" title="Grammar">மொழி இலக்கணம்</a></li>
+			  <li><a href="/example.html" title="Examples">உதாரண நிரல்கள்</a></li>
+			  <li class="divider"></li>
+			  <li><a href="#publications" title="Publications">research publications</a></li>
+			</ul>
+		      </li>
+		      <li><a href="/download.html" title="Download">எழில் தரவிறக்கம்</a></li>
+		      <li><a href="#register4book" title="Download eBook chapter">எழில் eBook chapter தரவிறக்கம்</a></li>
+		      <li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" alt="Contact">மேலும் தொடர்பு கொள்ள<b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			  <li><a href="#signup_for_mailinglist">Signup for mailing list</a></li>
+			  <li><a href="#survey">Take Ezhil Survey</a></li>
+			  <li class="divider"></li>
+			  <li><a href="#twitter">Twitter @ezhillang</a></li>
+			  <li><a href="#feedback">Contact us</a></li>
+			</ul>
+		      </li>
+		    </ul>
+		  </div>
 
-    </div>
-  </div><!-- /container -->
-</div><!-- /navbar wrapper -->
-
-
-<!-- Carousel
-================================================== -->
-<div id="myCarousel" class="carousel slide">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-    <li data-target="#myCarousel" data-slide-to="1"></li>
-    <li data-target="#myCarousel" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="item active">
-      <div class="container">
-	<img class="img-circle img-right" src="/images/ezhil-logo.png" /> 
-        <div class="carousel-caption">	  
-          <h1>எழில் : தமிழ் நிரலாக்க மொழி</h1>
-          <p>எழில் : தமிழ் நிரலாக்க மொழி (Ezhil : The Tamil programming language)</p>
-	  <b>Program in Tamil</b>
-          <p><a class="btn btn-large btn-primary" href="#learn-more">Learn more</a></p>
-        </div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="container">
-	<img class="img-circle img-right" src="/images/EzhilRichTextEditor.png" width="350"/>
-        <div class="carousel-caption">	  
-	  <h1>உங்கள் வலை உலாவியில் ”எழில்” நிரல் எழுதிப் பழகுங்கள் (Try Ezhil from your Web Browser Now!)</h1>	  
-	  <p><a class="btn btn-large btn-primary" href="/koodam/play/eval/">Try Ezhil today!</a></p>
-        </div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="container">
-	<img class="img-circle img-right" src="" width="350"/>
-	<div class="carousel-caption">
-	  <h1>Download. Develop. Improve Ezhil</h1>
-	  <p>Contribute to this project, and please fork our repository on GitHub.</a>
-          <p><a class="btn btn-large btn-primary" href="https://github.com/arcturusannamalai/Ezhil-Lang">git "எழில்" தமிழ் மொழி GitHub நிரல் பார்க்க</a></p>
-	</div>
-      </div>      
-    </div>
-  </div>
-  <!-- Controls -->
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-    <span class="icon-prev"></span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-    <span class="icon-next"></span>
-  </a>  
-</div>
-<!-- /.carousel -->
+		</div>
+	      </div><!-- /container -->
+	    </div><!-- /navbar wrapper -->
 
 
-<div class="container marketing">
-
-  <!-- Three columns of text below the carousel -->
-  <div class="row">
-    <div class="col-md-4 text-center" id="learn-more">
-      <img class="img-circle" src="/images/ezhil-logo.png">      
-      <h2>Ezhil - Programming in Tamil</h2>      
-<div align="left">
-<UL>
-<LI> <B>எழில்</B> என்பது தமிழில் கணினி நிரல்களை எழுத உதவும் ஒரு நிரலாக்க மொழி
-<div style="font-size:8pt;font-style:italic;">Ezhil is a Tamil programming language</div></LI>
-<BR/>
-<LI> <strike>(English)</strike> ஆங்கிலம் அறியாதவர்கள் கணிப்பொறியை இயக்க உதவும்
-<div style="font-size:8pt;font-style:italic">English language is not a pre-requisite</div>
-</LI>
-<BR />
-<LI> நிரலாக்கம் பற்றிக் கற்பதற்கு உதவும் 
-<div style="font-size:8pt;font-style:italic">N00b welcome</div>
-</LI>
-<BR/>
-<LI><B>எழில்</B> உங்களுக்கு முதன்முறையாக நிரல்கள் எழுத உதவும்
-<div style="font-size:8pt;font-style:italic">Write your first program in Ezhil</div>
-</LI>
-<BR/>
-<LI>இது ஒரு திறமூல (Open Source) மென்பொருள். (Free) இலவசமாக பயன்படுத்தலாம்</LI>
-<LI> <span>Read Ezhil-Language <a href="http://ezhillang.wordpress.com">blog</a></span></LI>
-</UL>
-</div>
-      <p><a class="btn btn-default" href="/download.html">Download and try today!</a></p>
-    </div>
-
-    <div class="col-md-4 text-center">
-      <img class="img-circle" src="/images/ezhil-logo-tamil-concept.png" width="140px">
-      <h2>Ezhil Language Tutorials</h2>
-      <p>Learn more about Ezhil language and program in Tamil. Watch the Youtube videos.</p>
-
-      <p><iframe width="420" height="315" src="http://www.youtube.com/embed/H8Lb5grUleU?rel=0" frameborder="0" allowfullscreen></iframe></p>
-      <p><a class="btn btn-default" href="http://www.youtube.com/embed/H8Lb5grUleU">Watch Lessons on Video</a></p>
-    </div>
-    <div class="col-md-4 text-center">
-      <h2>உங்கள் வலை உலாவியில் ”எழில்” நிரல் எழுதிப் பழகுங்கள்!</h2>
-      <img src="/images/EzhilRichTextEditor.png" width="300px">
-      <p><a class="btn btn-default" href="/koodam/play/eval/">Try Ezhil from your browser, now!</a></p>
-      
-    </div>
-  </div><!-- row -->
-
-  <!-- START THE FEATURETTES -->
-
-  <!-- WHAT IS EZHIL -->
-  <div class="featurette">
-    <h2 class="featurette-heading">What is Ezhil? <span class="text-muted">the programming language</span></h2>
-  <p class="lead">
-    Ezhil is a <a href="http://en.wikipedia.org/wiki/Tamil">Tamil</a> programming language. Using Ezhil you can run a computer using instructions written in Tamil script. Ezhil includes both Tamil and English identifiers. Ezhil is intended to be useful for Tamil-speaking students who donot learn English early, but wish to learn programming for first time. Ezhil is released under GNU GPL license.
-  </p>
-    <p><a class="btn btn-default" href="//en.wikipedia.org/wiki/Ezhil_%28programming_language%29">Browse our Wikipedia entry</a></p>
-  </div>  
-  <hr class="featurette-divider"/>
-  <!-- LEARN EZHIL -->
-  <div class="featurette">
-    <img class="featurette-image img-circle pull-right" src="/images/EzhilRichTextEditor.png">
-    <h2 class="featurette-heading">Learn Ezhil online! <span class="text-muted">It's pretty awesome</span></h2>
-    <p class="lead">Try Ezhil, right on your web browser. Bye bye installation. Hello web-based learning.</p>
-    <p><a class="btn btn-default" href="/koodam/play/eval/">Try Ezhil today!</a></p>
-  </div>
-
-  <div class="featurette">
-    <img class="featurette-image img-circle pull-right" src="/images/book-cover.png">
-    <h2 class="featurette-heading">Download the Ezhil book, <span class="text-muted">  free with registration!</span></h2>
-  <p class="lead"  id="register4book">
-    Learn Ezhil Language using this book, written by M. Annamalai, and N.Chokkan. The book is in Tamil, and allows you to learn or teach Ezhil at the 8-12th grade level.
-  </p>
-    <p><a class="btn btn-default" href="/book/register">Register and Download free book</a></p>
-  </div>
-  <hr class="featurette-divider"/>
-
-  <!-- RESEARCH PAPERS - 2009 -2014 -->
-  <h2 class="featurette-heading"> Research Papers - <span class="text-muted">  published in INFITT and ArXiV (2009-2014)</span></h2>
-  <div class="lead"  id="publications">
-    <p>
-      <h2><span class="text-muted"> 2009 </span></h2>
-        <ol>
-	  <li><a class="btn btn-default" href="/Ezhil-Publications/2009/ezhil-2009-ArXiV-0907.4960.pdf">'Ezhil: A Tamil programming language' , M. Annamalai,</a>, also at <a href="//arxiv.org/abs/0907.4960">ArXiV</a></li>
-	</ol>
-    </p>    
-    <p>
-      <h2><span class="text-muted"> 2013 </span></h2>      
-        <ol>
-	  <li><a class="btn btn-default" href="/Ezhil-Publications/2013/ezhil-INFITT2013-ArXiV-1308.1733v1.pdf">'Invitation to Ezhil: A Tamil Programming Language for Early Computer-Science Education', M. Annamalai, INFITT-2013</a> also at <a href="//arxiv.org/abs/1308.1733">at ArXiV</a></li>
-	</ol>
-    </p>
-    <p>
-      <h2><span class="text-muted"> 2014</span></h2>
-      <ol>
-	<li><a class="btn btn-default" href="/Ezhil-Publications/2014/Learning-Ezhil-Language-Via-Web_v4_081014.pdf">'Learning Ezhil Language via Web', M. Annamalai, INFITT-2014</a> </li>
-	<li><a class="btn btn-default" href="/Ezhil-Publications/2014/Write-Code-in-Tamil_v2_081014.pdf">'Write code in Tamil', (Tamil article), M. Annamalai, 2014</a></li>
-      </ol>
-    </p>
-  </div>
-  <hr class="featurette-divider"/>
-
-  <!-- contributors -->
-    <div class="featurette">
-      <h2 class="featurette-heading" id="contributors">Contributors<span class="text-muted"> and volunteers</span></h2>
-  <p class="lead">
-  </p>
-  <p>Click here to see the <a class="btn-default" href="//github.com/arcturusannamalai/Ezhil-Lang/blob/master/CREDITS">contributors</a> list for Ezhil language over the years.</p>
-  </div> 
-  
-  <hr class="featurette-divider"/>
-
-    <div class="featurette">
-      <h2 class="featurette-heading" id="blog">Blog<span class="text-muted"> : Ezhil language tips and tricks</span></h2>      
-  <p class="lead">
-    Our blog is hosted at the site,  <a href="//ezhillang.wordpress.com" class="btn btn-default">ezhillang.wordpress.com</a>. We discuss tips and tricks, tutorials, and other useful information while using Ezhil language environment, or similar Tamil computing issues.
-  </p>
-      <p>This article discusses <a class="btn btn-default" href="//ezhillang.wordpress.com/2013/09/18/tutorial01/">வாங்க, நிரல் எழுதுவோம்! (an invitation to write Programs)</a></p>
-      <p class="lead" align="center" >
-	<iframe src="//ezhillang.wordpress.com/2013/09/18/tutorial01/" width="650" height="650" name="EzhilLang Blog" scrolling="auto" >
-	</iframe>
-  </div>
-  
-  <hr class="featurette-divider"/>
-
-  <div class="featurette" id="signup_for_mailinglist"> 
-    <h2 class="featurette-heading">Stay connected - <span class="text-muted"> get latest Ezhil news</span></h2>
-    <!-- Begin MailChimp Signup Form -->
-<link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-	#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
-	/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-	   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-</style>
-<div id="mc_embed_signup" align="center">
-<form action="//ezhillang.us7.list-manage.com/subscribe/post?u=fc173f534915e1befc940a0c0&amp;id=04700cd471" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <div id="mc_embed_signup_scroll" >
-	<h2>Subscribe to our mailing list</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-	<label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-	<input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-<div class="mc-field-group">
-	<label for="mce-FNAME">First Name </label>
-	<input type="text" value="" name="FNAME" class="" id="mce-FNAME">
-</div>
-<div class="mc-field-group">
-	<label for="mce-LNAME">Last Name </label>
-	<input type="text" value="" name="LNAME" class="" id="mce-LNAME">
-</div>
-	<div id="mce-responses" class="clear">
-		<div class="response" id="mce-error-response" style="display:none"></div>
-		<div class="response" id="mce-success-response" style="display:none"></div>
-	</div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_fc173f534915e1befc940a0c0_04700cd471" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-    </div>
-</form>
-</div>
-<!--End mc_embed_signup-->
-  </div>
-
-  <hr class="featurette-divider"/>
-  <div class="featurette" id="twitter"> 
-    <h2 class="featurette-heading">Ezhil on Twitter, <span class="text-muted"> and on social media</span></h2>
-    <div align="center">
-      <table>
-	<tr><td>
-	    <div>
-	      <a class="twitter-timeline" width="350" height="380" href="https://twitter.com/ezhillang"  data-widget-id="367824190675496960">Tweets by @ezhillang</a>
-	      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	    <!-- Carousel
+		 ================================================== -->
+	    <div id="myCarousel" class="carousel slide">
+	      <!-- Indicators -->
+	      <ol class="carousel-indicators">
+		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+		<li data-target="#myCarousel" data-slide-to="1"></li>
+		<li data-target="#myCarousel" data-slide-to="2"></li>
+	      </ol>
+	      <div class="carousel-inner">
+		<div class="item active">
+		  <div class="container">
+		    <img class="img-circle" src="/images/ezhil-logo.png" />
+		    <div class="carousel-caption">	  
+		      <h1>எழில் : தமிழ் நிரலாக்க மொழி</h1>
+		      <p>எழில் : தமிழ் நிரலாக்க மொழி (Ezhil : The Tamil programming language)</p>
+		      <b>Program in Tamil</b>
+		      <p><a class="btn btn-large btn-primary" href="#learn-more">Learn more</a></p>
+		    </div>
+		  </div>
+		</div>
+		<div class="item">
+		  <div class="container">
+		    <img class="img-circle img-right" src="/images/EzhilRichTextEditor.png" width="350"/>
+		    <div class="carousel-caption">	  
+		      <h1>உங்கள் வலை உலாவியில் ”எழில்” நிரல் எழுதிப் பழகுங்கள் (Try Ezhil now!)</h1>
+		      <p><a class="btn btn-large btn-primary" href="/koodam/play/eval/">Try Ezhil today!</a></p>
+		    </div>
+		  </div>
+		</div>
+		<div class="item">
+		  <div class="container">
+		    <img class="img-circle img-right" src="" width="350"/>
+		    <div class="carousel-caption">
+		      <h1>Download. Develop. Improve Ezhil</h1>
+		      <p>Contribute to this project, and please fork our repository on GitHub.</a>
+		      <p><a class="btn btn-large btn-primary" href="https://github.com/arcturusannamalai/Ezhil-Lang">git "எழில்" தமிழ் மொழி GitHub நிரல் பார்க்க</a></p>
+		    </div>
+		  </div>      
+		</div>
+	      </div>
+	      <!-- Controls -->
+	      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+		<span class="icon-prev"></span>
+	      </a>
+	      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+		<span class="icon-next"></span>
+	      </a>  
 	    </div>
-	  </td><td width="150"></td><td>
-	    <div>
-	      <p>Follow Ezhil Language project on G+</p>
-	      <script src="https://apis.google.com/js/platform.js" async defer></script>
-	      <g:community href="https://plus.google.com/communities/103299049995094273538" layout="landscape"></g:community>
-	    </div>
-	</td></tr>
-      </table>
-    </div>
-  </div>
-  
-  <hr class="featurette-divider"/>
-  
-  <!-- Survey featurette -->
-  <div class="featurette" id="survey"> 
-    <h2 class="featurette-heading">Take the survey - <span class="text-muted"> make Ezhil better</span></h2>
-  <div align="center">
-<div id="wufoo-momnh0c1ozrvtc">
-Fill out my <a href="https://ezhillang.wufoo.com/forms/momnh0c1ozrvtc">online form</a>.
-</div>
-<script type="text/javascript">var momnh0c1ozrvtc;(function(d, t) {
-var s = d.createElement(t), options = {
-'userName':'ezhillang',
-'formHash':'momnh0c1ozrvtc',
-'autoResize':true,
-'height':'1660',
-'async':true,
-'host':'wufoo.com',
-'header':'show',
-'ssl':true};
-s.src = ('https:' == d.location.protocol ? 'https://' : 'http://') + 'www.wufoo.com/scripts/embed/form.js';
-s.onload = s.onreadystatechange = function() {
-var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return;
-try { momnh0c1ozrvtc = new WufooForm();momnh0c1ozrvtc.initialize(options);momnh0c1ozrvtc.display(); } catch (e) {}};
-var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);
-})(document, 'script');</script>
-  </div>
-  <hr class="featurette-divider"/>
-  <!-- Feedback Form -->
-  <div class="featurette">
-    <h2 class="featurette-heading">Tell us what you think - <span class="text-muted">  write freely</span></h2>
-  <p class="lead"  id="feedback">
-    <div id="wufoo-q8qksdr0xbmxyc">
-Fill out my <a href="https://ezhillang.wufoo.com/forms/q8qksdr0xbmxyc">online form</a>.
-</div>
-<script type="text/javascript">var q8qksdr0xbmxyc;(function(d, t) {
-var s = d.createElement(t), options = {
-'userName':'ezhillang',
-'formHash':'q8qksdr0xbmxyc',
-'autoResize':true,
-'height':'509',
-'async':true,
-'host':'wufoo.com',
-'header':'show',
-'ssl':true};
-s.src = ('https:' == d.location.protocol ? 'https://' : 'http://') + 'www.wufoo.com/scripts/embed/form.js';
-s.onload = s.onreadystatechange = function() {
-var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return;
-try { q8qksdr0xbmxyc = new WufooForm();q8qksdr0xbmxyc.initialize(options);q8qksdr0xbmxyc.display(); } catch (e) {}};
-var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);
-})(document, 'script');</script>
-  </p>
-  </div>
-  <hr class="featurette-divider"/>
-  
-  <!-- /END THE FEATURETTES -->
+	    <!-- /.carousel -->
 
-  <!-- FOOTER -->
-  <footer>
-    <div style="font-size:8pt;font-style:italic">
-      &copy; 2008-2014  முத்தையா அண்ணாமலை; | Template by <a href="http://startbootstrap.com/">start bootstrap</a> | Forms by <a href="//wufoo.com">WuFoo</a> | Mailing List by <a href="//mailchimp.com">MailChimp</a> | Powered by <a href="//python.org">python</a> and <a href="//djangoproject.com">Django</a>
-    </div>
-  </footer>
-</div>
-<!-- script references -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery-ui.min.js"></script>
-</body>
-</html>
-<!-- (C) Muthiah Annamalai 2008-2013 -->
+
+	    <div class="container marketing">
+
+	      <div>
+		<h2> Welcome to Ezhil Language Website!</h2>
+		<p class="lead">
+		  எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதன் முரை கணிப்பொரி நிரல் ஏழுதுவதர்கு உதவும் <BR />
+		  (Ezhil, is a fun Tamil programming language for K-12). Tamil, is an Indian language spoken by over 60 million people.
+		</p>
+		<p class="lead">
+		  நிரலாக்க மொழி பற்றி மேலும் அறிய இந்த வலைவாசல் (Learn about the EzhilLanguage) http://ezhillang.org எழில் கணினி நிரல் மொழி வரவேற்கிறது.
+		</p>
+	      </div>
+	      
+	      <!-- Three columns of text below the carousel -->
+	      <div class="row">
+		<div class="col-md-4 text-center" id="learn-more">
+		  <img class="img-circle" src="/images/ezhil-logo.png" />
+		  <h2>Ezhil - Programming in Tamil</h2>      
+		  <div align="left">
+		    <UL>
+		      <LI> <B>எழில்</B> என்பது தமிழில் கணினி நிரல்களை எழுத உதவும் ஒரு நிரலாக்க மொழி
+			<div style="font-size:8pt;font-style:italic;">Ezhil is a Tamil programming language</div></LI>
+		      <BR/>
+		      <LI> <strike>(English)</strike> ஆங்கிலம் அறியாதவர்கள் கணிப்பொறியை இயக்க உதவும்
+			<div style="font-size:8pt;font-style:italic">English language is not a pre-requisite</div>
+		      </LI>
+		      <BR />
+		      <LI> நிரலாக்கம் பற்றிக் கற்பதற்கு உதவும் 
+			<div style="font-size:8pt;font-style:italic">Beginners welcome</div>
+		      </LI>
+		      <BR/>
+		      <LI><B>எழில்</B> உங்களுக்கு முதன்முறையாக நிரல்கள் எழுத உதவும்
+			<div style="font-size:8pt;font-style:italic">Write your first program in Ezhil</div>
+		      </LI>
+		      <BR/>
+		      <LI>இது ஒரு திறமூல (Open Source) மென்பொருள். (Free) இலவசமாக பயன்படுத்தலாம்</LI>
+		      <LI> <span>Read Ezhil-Language <a href="http://ezhillang.wordpress.com">blog</a></span></LI>
+		    </UL>
+		  </div>
+		  <p><a class="btn btn-default" href="/download.html">Download and try today!</a></p>
+		</div>
+		
+		<div class="col-md-4 text-center">
+		  <img class="img-circle" src="/images/ezhil-logo-tamil-concept.png" width="140px" />
+		  <h2>Ezhil Language Tutorials</h2>
+		  <p>Learn more about Ezhil language and program in Tamil. Watch the Youtube videos.</p>
+
+		  <!-- <p><iframe width="420" height="315" src="http://www.youtube.com/embed/H8Lb5grUleU?rel=0" frameborder="0" allowfullscreen></iframe></p> -->
+		  <p><a class="btn btn-default" href="http://www.youtube.com/embed/H8Lb5grUleU">Watch Lessons on Video</a></p>
+		</div>
+		<div class="col-md-4 text-center">
+		  <h2>உங்கள் வலை உலாவியில் ”எழில்” நிரல் எழுதிப் பழகுங்கள்!</h2>
+		  <img src="/images/EzhilRichTextEditor.png" width="300px" />
+		  <p><a class="btn btn-default" href="/koodam/play/eval/">Try Ezhil now!</a></p>
+		  
+		</div>
+	      </div>
+	    
+	    <!-- START THE FEATURETTES -->
+	    <div class="featurette">
+	      <!-- WHAT IS EZHIL -->
+	      <h2 class="featurette-heading">What is Ezhil? <span class="text-muted">the programming language</span></h2>
+	      <p class="lead">
+		Ezhil is a <a href="http://en.wikipedia.org/wiki/Tamil">Tamil</a> programming language. Using Ezhil you can run a computer using instructions written in Tamil script. Ezhil includes both Tamil and English identifiers. Ezhil is intended to be useful for Tamil-speaking students who donot learn English early, but wish to learn programming for first time. Ezhil is released under GNU GPL license.
+	      </p>
+	      <p><a class="btn btn-default" href="//en.wikipedia.org/wiki/Ezhil_%28programming_language%29">Browse our Wikipedia entry</a></p>
+	    </div>  
+	    
+	    <hr class="featurette-divider"/>
+	    <!-- LEARN EZHIL -->
+	    <div class="featurette">
+	      <img class="featurette-image img-circle pull-left" src="/images/EzhilRichTextEditor.png" />
+	      <h2 class="featurette-heading">Learn Ezhil online! <span class="text-muted">It's pretty awesome</span></h2>
+	      <p class="lead">Try Ezhil, right on your web browser. Bye bye installation. Hello web-based learning.</p>
+	      <p><a class="btn btn-default" href="/koodam/play/eval/">Try Ezhil today!</a></p>
+	    </div>
+	    <hr class="featurette-divider"/>
+
+	    <!-- REGISTER FOR THE BOOK -->
+	    <div class="featurette">
+	      <img class="featurette-image pull-right" src="/images/book-cover.png" />
+	      <h2 class="featurette-heading">Download the Ezhil book, <span class="text-muted">  free with registration!</span></h2>
+	      <p class="lead"  id="register4book">
+		Learn Ezhil Language using this book. The book is in Tamil, and allows you to learn or teach basic computer science through Ezhil at the 8-12th grade level.
+	      </p>
+	      <!-- <p><a class="btn btn-default" href="/book/register/">Register and Download free book</a></p> -->
+	      <p><a class="btn btn-default" href="/downloads/Book-TOC+Ch1.pdf">Download first chapter of eBook</a></p>
+	    </div>
+	    <hr class="featurette-divider"/>
+	    
+	    <!-- RESEARCH PAPERS - 2009 -2014 -->
+	    <div class="featurette">
+	      <img class="featurette-image img-circle pull-left" src="/images/120px-Hubble_01.jpg" alt="Hubble Space telescope" width="350px"/>
+	      <h2 class="featurette-heading"> Research Papers - <span class="text-muted">  published in INFITT and ArXiV (2009-2014)</span></h2>
+	      <p class="lead"  id="publications">
+		<h2><b>2009</b></h2>
+		  <ol>
+		    <li><a class="btn btn-default" href="/Ezhil-Publications/2009/ezhil-2009-ArXiV-0907.4960.pdf">'Ezhil: A Tamil programming language' , M. Annamalai,</a> also at <a href="//arxiv.org/abs/0907.4960">ArXiV</a></li>
+		  </ol>
+		</p>    
+		<p>
+		  <h2><b>2013</b></h2>
+		  <ol>
+		    <li><a class="btn btn-default" href="/Ezhil-Publications/2013/ezhil-INFITT2013-ArXiV-1308.1733v1.pdf">'Invitation to Ezhil: A Tamil Programming Language for Early Computer-Science Education', M. Annamalai, INFITT-2013</a> also at <a href="//arxiv.org/abs/1308.1733">at ArXiV</a></li>
+		  </ol>
+		</p>
+		<p>
+		  <h2><b>2014</b></h2>
+		  <ol>
+		    <li><a class="btn btn-default" href="/Ezhil-Publications/2014/Learning-Ezhil-Language-Via-Web_v4_081014.pdf">'Learning Ezhil Language via Web', M. Annamalai, INFITT-2014</a> </li>
+		    <li><a class="btn btn-default" href="/Ezhil-Publications/2014/Write-Code-in-Tamil_v2_081014.pdf">'Write code in Tamil', (Tamil article), M. Annamalai, 2014</a></li>
+		  </ol>
+		</p>
+	      </p>
+	    </div>
+	    <hr class="featurette-divider"/>
+
+	    <!-- contributors -->
+	    <div class="featurette">
+	      <img class="featurette-image img-circle pull-right" src="/images/220px-Marina_Beach.jpg" alt="Marina beach" width="350px"/>
+	      <h2 class="featurette-heading" id="contributors">Contributors<span class="text-muted"> and volunteers</span></h2>
+	      <p class="lead">
+		<a class="btn-default" href="//github.com/arcturusannamalai/Ezhil-Lang/blob/master/CREDITS">Click here</a> to see the contributors list for Ezhil language over the years.
+	      </p>
+	    </div>
+	    
+	    <hr class="featurette-divider"/>
+
+	    <div class="featurette">
+	      <img class="featurette-image img-circle pull-left" src="/images/wordpress-logo-stacked-bg.png" alt="Wordpress blog" width="350px"/>
+	      <h2 class="featurette-heading" id="blog">Ezhil Language Blog</h2>
+	      <p class="lead">
+		We share with you the development/website updates, tips &amp; tricks on our blog. Ezhil blog is hosted at the site,  <a href="//ezhillang.wordpress.com" class="btn btn-default">ezhillang.wordpress.com</a>. We discuss tips and tricks, tutorials, and other useful information while using Ezhil language environment, or similar Tamil computing issues.	      
+		This article discusses <a class="btn btn-default" href="//ezhillang.wordpress.com/2013/09/18/tutorial01/">வாங்க, நிரல் எழுதுவோம்! (an invitation to write Programs)</a>
+	      </p>
+	      <!--  
+		    <p class="lead" align="center" >
+		      <iframe src="//ezhillang.wordpress.com/2013/09/18/tutorial01/" width="650" height="650" name="EzhilLang Blog" scrolling="auto" >
+		      </iframe> 
+		    </p>
+	        -->
+	      </div>
+	      <hr class="featurette-divider"/>
+	      
+	      <div class="featurette" id="signup_for_mailinglist"> 
+		<h2 class="featurette-heading">Stay connected - <span class="text-muted"> get latest Ezhil news</span></h2>
+		<!-- Begin MailChimp Signup Form -->
+		<link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">
+		  <style type="text/css">
+		    #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+		    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+		  We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+		  </style>
+		  <div id="mc_embed_signup" align="center">
+		    <form action="//ezhillang.us7.list-manage.com/subscribe/post?u=fc173f534915e1befc940a0c0&amp;id=04700cd471" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+		    <div id="mc_embed_signup_scroll" >
+		      <h2>Subscribe to our mailing list</h2>
+		      <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+		      <div class="mc-field-group">
+			<label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+			</label>
+			<input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" />
+		      </div>
+		      <div class="mc-field-group">
+			<label for="mce-FNAME">First Name </label>
+			<input type="text" value="" name="FNAME" class="" id="mce-FNAME" />
+		      </div>
+		      <div class="mc-field-group">
+			<label for="mce-LNAME">Last Name </label>
+			<input type="text" value="" name="LNAME" class="" id="mce-LNAME" />
+		      </div>
+		      <div id="mce-responses" class="clear">
+			<div class="response" id="mce-error-response" style="display:none"></div>
+			<div class="response" id="mce-success-response" style="display:none"></div>
+		      </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+		      <div style="position: absolute; left: -5000px;"><input type="text" name="b_fc173f534915e1befc940a0c0_04700cd471" tabindex="-1" value="" /></div>
+		      <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" /></div>
+		    </div>
+		  </form>
+		</div>
+		<!--End mc_embed_signup-->
+		</div>
+		
+		<hr class="featurette-divider"/>
+		<div class="featurette" id="twitter"> 
+		  <h2 class="featurette-heading">Ezhil on Twitter, <span class="text-muted"> and on social media</span></h2>
+		  <div align="center">
+		    <table>		      		      
+		      <tr><td>
+			<div>
+			  <a class="twitter-timeline" width="350" height="380" href="https://twitter.com/ezhillang"  data-widget-id="367824190675496960">Tweets by @ezhillang</a>
+			  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+			</div>
+			</td><td width="75px"></td><td>
+			<div>
+			  <p>Follow Ezhil Language project on G+</p>
+			  <script src="https://apis.google.com/js/platform.js" async defer></script>
+			  <g:community href="https://plus.google.com/communities/103299049995094273538" layout="landscape"></g:community>
+			</div>
+			</td><td width="75px"></td><td>			  
+			  <div>
+			    Fork us on  <a class="btn btn-default" href="https://github.com/arcturusannamalai/Ezhil-Lang">Git Hub</a>
+			  </div>
+			</td>			
+		      </tr>
+		  </table>
+		</div>
+	      </div>
+	      
+	      <hr class="featurette-divider"/>
+	      
+	      <!-- Survey featurette -->
+	      <div class="featurette" id="survey"> 
+		<h2 class="featurette-heading">Take the survey - <span class="text-muted"> make Ezhil better</span></h2>
+		<div align="center">
+		  <div id="wufoo-momnh0c1ozrvtc">
+		    Fill out my <a href="https://ezhillang.wufoo.com/forms/momnh0c1ozrvtc">online form</a>.
+		  </div>
+		  <script type="text/javascript">var momnh0c1ozrvtc;(function(d, t) {
+		    var s = d.createElement(t), options = {
+		    'userName':'ezhillang',
+		    'formHash':'momnh0c1ozrvtc',
+		    'autoResize':true,
+		    'height':'1660',
+		    'async':true,
+		    'host':'wufoo.com',
+		    'header':'show',
+		    'ssl':true};
+		    s.src = ('https:' == d.location.protocol ? 'https://' : 'http://') + 'www.wufoo.com/scripts/embed/form.js';
+		    s.onload = s.onreadystatechange = function() {
+		    var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return;
+		    try { momnh0c1ozrvtc = new WufooForm();momnh0c1ozrvtc.initialize(options);momnh0c1ozrvtc.display(); } catch (e) {}};
+		    var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);
+		    })(document, 'script');</script>
+		</div>
+		<hr class="featurette-divider"/>
+		<!-- Feedback Form -->
+		<div class="featurette">
+		  <h2 class="featurette-heading">Open feedback form - <span class="text-muted">  write freely</span></h2>
+		  <p class="lead"  id="feedback">
+		    <div id="wufoo-q8qksdr0xbmxyc">
+		      Fill out my <a href="https://ezhillang.wufoo.com/forms/q8qksdr0xbmxyc">online form</a>.
+		    </div>
+		    <script type="text/javascript">var q8qksdr0xbmxyc;(function(d, t) {
+		      var s = d.createElement(t), options = {
+		      'userName':'ezhillang',
+		      'formHash':'q8qksdr0xbmxyc',
+		      'autoResize':true,
+		      'height':'509',
+		      'async':true,
+		      'host':'wufoo.com',
+		      'header':'show',
+		      'ssl':true};
+		      s.src = ('https:' == d.location.protocol ? 'https://' : 'http://') + 'www.wufoo.com/scripts/embed/form.js';
+		      s.onload = s.onreadystatechange = function() {
+		      var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return;
+		      try { q8qksdr0xbmxyc = new WufooForm();q8qksdr0xbmxyc.initialize(options);q8qksdr0xbmxyc.display(); } catch (e) {}};
+		      var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);
+		      })(document, 'script');</script>
+		  </p>
+		</div>
+		<hr class="featurette-divider"/>
+	      </div>
+
+
+	      <div class="featurette">
+		<h2 class="featurette-heading">Leave Your Comments</h2>
+		<!--disquis -->
+		<div id="disqus_thread"></div>
+		<script type="text/javascript">
+		  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+		  var disqus_shortname = 'ezhillang'; // required: replace example with your forum shortname
+		  
+		  /* * * DON'T EDIT BELOW THIS LINE * * */
+		  (function() {
+		  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		  })();
+		</script>
+		<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		<!-- end disquis -->		
+	      </div>
+	    
+	    </div><!-- row -->
+	    <!-- /END THE FEATURETTES -->	    	    	    
+
+	    <!-- FOOTER -->
+	    <footer>
+	      <div style="font-size:8pt;" align="center">
+		&copy; 2008-2014  முத்தையா அண்ணாமலை; | Template by <a href="http://startbootstrap.com/">start bootstrap</a> | Forms by <a href="//wufoo.com">WuFoo</a> | Mailing List by <a href="//mailchimp.com">MailChimp</a> | Powered by <a href="//python.org">python</a> and <a href="//djangoproject.com">Django</a> | Images courtesy <a href="//commons.wikimedia.org/">Wikimedia Commons</a> | Forum by <a href="//DISQUS.com">DISQUS</a>
+		</div>
+	    </footer>
+	    
+	    <!-- script references -->
+	    <script src="js/jquery.min.js"></script>
+	    <script src="js/bootstrap.min.js"></script>
+	    <script src="js/jquery-ui.min.js"></script>
+	  </body>
+	</html>
+	<!-- (C) Muthiah Annamalai 2008-2014 -->	
