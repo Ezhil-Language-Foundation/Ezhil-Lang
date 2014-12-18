@@ -130,8 +130,9 @@ def ezhil_list_functions(*args):
 class Interpreter(DebugUtils):
     """ when you add new language feature, add a AST class 
     and its evaluate methods. Also add a parser method """
-    def __init__(self,lexer, dbg = False):
+    def __init__(self,lexer, dbg = False,safe_mode=True):
         DebugUtils.__init__(self,dbg)
+        self.SAFE_MODE = safe_mode
         self.debug = dbg
         self.MAX_REC_DEPTH = 10000
         self.lexer=lexer
@@ -208,7 +209,11 @@ class Interpreter(DebugUtils):
         still add them to the builtin_map """
         
         for b in dir(os):
+            if self.SAFE_MODE:
+                break
             bfn = getattr( os ,b)
+            if str(b).find('exec') >= 0 or str(b).find('spawn') >= 0:
+                continue
             self.add_blind_fcns( bfn, b)
         
         for b in dir(sys):
@@ -350,9 +355,9 @@ class Interpreter(DebugUtils):
         self.builtin_map['bytes']=BlindBuiltins(bytes,'bytes',self.debug)
         self.builtin_map['callable']=BlindBuiltins(callable,'callable',self.debug)
         self.builtin_map['chr']=BlindBuiltins(chr,'chr',self.debug)
-        self.builtin_map['classmethod']=BlindBuiltins(classmethod,'classmethod',self.debug)
+        #self.builtin_map['classmethod']=BlindBuiltins(classmethod,'classmethod',self.debug)
         self.builtin_map['cmp']=BlindBuiltins(cmp,'cmp',self.debug)
-        self.builtin_map['coerce']=BlindBuiltins(coerce,'coerce',self.debug)
+        #self.builtin_map['coerce']=BlindBuiltins(coerce,'coerce',self.debug)
         self.builtin_map['compile']=BlindBuiltins(compile,'compile',self.debug)
         self.builtin_map['complex']=BlindBuiltins(complex,'complex',self.debug)
 
@@ -369,16 +374,19 @@ class Interpreter(DebugUtils):
         self.builtin_map['python_dir']=BlindBuiltins(dir,'python_dir',self.debug)
         self.builtin_map['divmod']=BlindBuiltins(divmod,'divmod',self.debug)
         self.builtin_map['enumerate']=BlindBuiltins(enumerate,'enumerate',self.debug)
-        self.builtin_map['eval']=BlindBuiltins(eval,'eval',self.debug)
-        self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
+
+        # skip these system functions
+        #self.builtin_map['eval']=BlindBuiltins(eval,'eval',self.debug)
+        #self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
         #self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
+        
         self.builtin_map['file']=BlindBuiltins(file,'file',self.debug)
         self.builtin_map['filter']=BlindBuiltins(filter,'filter',self.debug)
         self.builtin_map['float']=BlindBuiltins(float,'float',self.debug)
         self.builtin_map['format']=BlindBuiltins(format,'format',self.debug)
         self.builtin_map['frozenset']=BlindBuiltins(frozenset,'frozenset',self.debug)
         self.builtin_map['getattr']=BlindBuiltins(getattr,'getattr',self.debug)
-        self.builtin_map['globals']=BlindBuiltins(globals,'globals',self.debug)
+        #self.builtin_map['globals']=BlindBuiltins(globals,'globals',self.debug)
         self.builtin_map['hasattr']=BlindBuiltins(hasattr,'hasattr',self.debug)
         self.builtin_map['hash']=BlindBuiltins(hash,'hash',self.debug)
         self.builtin_map['help']=BlindBuiltins(help,'help',self.debug)
