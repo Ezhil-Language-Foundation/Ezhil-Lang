@@ -1,0 +1,21 @@
+# (C) 2015 Muthiah Annamalai
+# Simple dynamic program to compute number of ways to reach @rem number of steps
+# given you may take only 3 or 5 hop step at a time.
+நிரல்பாகம் dyn_steps( rem, nresults )
+    allowed_steps = [3,5]
+    @( rem == 0 ) ஆனால்
+          பின்கொடு nresults + 1
+    @( rem < 0 ) இல்லைஆனால்
+        # not a solution
+        பின்கொடு nresults
+    முடி
+    @( allowed_steps இல் itr   ) ஒவ்வொன்றாக 
+        val = dyn_steps( rem - itr, nresults )
+        nresults = val;
+    முடி
+    பின்கொடு nresults
+முடி
+
+number_of_times = dyn_steps( 30, 0 )
+பதிப்பி number_of_times
+assert( number_of_times == 58 )
