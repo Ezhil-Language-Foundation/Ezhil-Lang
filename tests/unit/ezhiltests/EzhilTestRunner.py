@@ -72,10 +72,11 @@ class TestEzhilException( TestEzhil ):
     while running the @ezhil_test_code; you can also check for message @msg being contained
     in the exception. Empty (None) values for either argument will bypass the check. Not checking
     either will result in default error """
-    def __init__(self, ezhil_test_code, exception, msg ):
+    def __init__(self, ezhil_test_code, exception, msg, dbg = False ):
         TestEzhil.__init__( self, ezhil_test_code )
         self.exception = exception
         self.message = msg
+        self.dbg = dbg
         
     def run( self ):
         """ this class expects to receive an exception on running the Ezhil interpreter,
@@ -83,10 +84,11 @@ class TestEzhilException( TestEzhil ):
         """
         print "\n"*3
         try:
-            TestEzhil.run( self )
+            self._tested = True
+            ezhil.EzhilFileExecuter( self.filename , self.dbg, False )
             self.success = False # we expected an exception
         except Exception as ex:
-            self.success = False
+            self.success = False # we expected a particular kind of exception
             if self.exception:
                 self.success = isinstance( ex, self.exception )
                 print(">>>>>>>>>>>> We found an exception \n %s \n"%ex)
@@ -115,7 +117,14 @@ class TestEzhilException( TestEzhil ):
                 print(u"EXPECTED == %s"%unicode(self.message))
                 raise Exception(u"Expected message %s was not found. We found message %s"%(self.message,unicode(ex)))            
             return self.success
+        raise Exception(u"Expected message %s was not found.",str(self.exception))
 
+    @staticmethod
+    def create_and_test_spl( code, exception, msg):
+        with TestEzhilException(code,exception,msg,True) as tst:
+            flag = tst.run()
+            print(tst)
+        return flag
     @staticmethod
     def create_and_test( code, exception, msg ):
         with TestEzhilException(code,exception,msg) as tst:
