@@ -8,6 +8,7 @@
 ## 
 
 from errors import RuntimeException
+import keyword
 
 ## RUNTIME / LIBRARY etc
 class DebugUtils:
@@ -222,6 +223,9 @@ class Environment:
         if idee in ['True', 'False']:
             return (idee == 'True')
         if not self.has_id(idee):
+            note = ''
+            if idee in keyword.kwlist:
+                note = 'Did you possibly confuse the Python english keyword %s for Ezhil keyword ?'%idee
             raise RuntimeException("Identifier %s not found"%idee)
         variables = self.local_vars[-1]
         val = variables[idee]

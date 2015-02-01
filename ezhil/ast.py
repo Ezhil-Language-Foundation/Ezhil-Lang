@@ -11,6 +11,7 @@
 ## ValueList, Function, StmtList, Identifier, String, Number,
 ## Array, Dict, NoOp
 
+import keyword
 import copy
 import math
 ## scanner for exprs language
@@ -59,9 +60,11 @@ class Identifier:
                 pass
             self.dbg_msg( unicode(self) + " = val ["+unicode(val) + "]" )
             return val
-        raise RuntimeException("Cannot Find Identifier %s at \
- Line %d, col %d"%( self.id, self.line,self.col ) )
-        return None
+        note = ''
+        if self.id in keyword.kwlist:
+            note = 'Did you possibly confuse the Python english keyword %s for Ezhil keyword ?'%self.id
+        note = "Cannot Find Identifier %s at Line %d, col %d."%( self.id, self.line,self.col ) + ' ' + note
+        raise RuntimeException(note)
 
     def visit(self, walker):
         """ visitor - do something with a identifier """

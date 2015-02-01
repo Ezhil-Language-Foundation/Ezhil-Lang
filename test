@@ -11,7 +11,7 @@ fi
 touch success.txt
 touch failed.txt
 ## run all the success programs
-for i in `ls ./tests/*.prog`;
+for i in `ls ./tests/*.prog | sort`;
 do
     echo "Testing file", $i
     python ./ezhil/exprs.py $i $1
@@ -26,7 +26,7 @@ done
 
 # run tests for Ezhil as well
 cd ./ezhil_tests
-for i in hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n\
+for i in `echo py1.n hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n\
  ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n \
 string_demo.n list_ta.n yinyang.n unaryop.n boolean.n chaos.n \
 prime.n array1.n array2.n filedemo.n filerw.n reverse.n friends.n  \
@@ -38,7 +38,7 @@ change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
 fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
 tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
 max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n \
-neuron.n varavu_selavu.n calc2.n name_var.n
+neuron.n varavu_selavu.n calc2.n name_var.n | sort`
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
     python ../ezhil/ezhil.py  $i $1
