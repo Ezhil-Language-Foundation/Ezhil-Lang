@@ -27,6 +27,10 @@ do
         echo $i >> failed.txt
     fi
 done
+echo ""
+echo "***********Summary of UnitTests******************"
+echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
+echo "*************************************************"
 
 NFAIL=0 #ideally no unittests should fail
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`

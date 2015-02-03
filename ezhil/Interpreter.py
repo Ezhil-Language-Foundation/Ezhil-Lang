@@ -665,6 +665,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
         self.debug = debug
         self.line_no = 1
         self.env = None ## get the first instance from evaluate_interactive
+        self.prevlines = u'' ## support for continued lines
         self.cmdloop()
     
     def parseline(self,line):
@@ -678,8 +679,12 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
     def update_prompt(self):
         self.prompt = u"%s %d>> "%(self.lang,self.line_no)
 
+    def continuedline(self):
+        return len(self.prevlines) > 0
+        
     def preloop(self):
-        self.update_prompt()
+        if not self.continuedline():
+            self.update_prompt()
         print(self.banner)
     
     def emptyline(self):
@@ -693,12 +698,43 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
         if ( line == 'exit' ): self.exit_hook(doExit=True)
         try:
             self.lexer.set_line_col([self.line_no, 0])
-            self.lexer.tokenize(line)
+            if len(self.prevlines) > 0:
+                total_line = self.prevlines + u'\n' + line
+            else:
+                total_line = line
+            self.lexer.tokenize(total_line)
+            #self.lexer.warn_incomplete_tokens()
+            nbraces = list()
+            COMPLEMENT = {'}':'{',')':'(',']':'['}
+            for TKN_idx in range(len(self.lexer.tokens)-1,-1,-1):
+                TKN = self.lexer.tokens[ TKN_idx ]
+                if ( self.debug ): print(TKN, TKN_idx)
+                if TKN.val in ["(", "[", "{"]:
+                    nbraces.append(TKN.val)
+                elif TKN.val in [")","]","}"]:
+                    if len(nbraces) > 0 and nbraces[-1] == COMPLEMENT[TKN.val]:
+                        del nbraces[-1]
+                        if ( self.debug ): print "matched braces.."
+                else:
+                    if ( self.debug ): print "nota brace token",TKN.val
+            if len(nbraces) > 0:
+                if ( self.debug ): 
+                    print ("MIsmatched braces")
+                    for idx in nbraces:
+                        print idx
+                self.prevlines += u'\n' + line
+                self.lexer.reset() #reset lexer
+                return
+            else:
+                if ( self.debug ): print ("Braces matched")
+                self.prevlines = u''
             [line_no,c] = self.lexer.get_line_col( 0 )
             if ( self.debug ): self.lexer.dump_tokens()
+            
+            self.prevlines = u'' #erase prev
             self.parse_eval.parse()
-            if ( self.debug ):  
-                                print(u"*"*60);  
+            if ( self.debug ):
+                print(u"*"*60);  
             [rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
             if ( self.debug ): print( u"return value", unicode(rval) )
             if hasattr( rval, 'evaluate' ):

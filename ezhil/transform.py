@@ -104,4 +104,3 @@ class Visitor:
     def visit_program_or_script(self):
         ## entry point
         return
-

@@ -27,10 +27,10 @@ class EzhilLexeme(Lexeme):
                 self.line,self.col,self.fname)
     
 class EzhilToken( Token):
-    """ add '@' token in extending the Token type """    
-    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%","{","}",";" ]
+    """ add '@' token in extending the Token type """
+    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%","{","}",";","'","\"","$","@","#"]
     Token.token_types.append("@")
-    Token.ATRATEOF = len(Token.token_types)    
+    Token.ATRATEOF = len(Token.token_types)
     
     Token.token_types.append(u"FOREACH|ஒவ்வொன்றாக")
     Token.FOREACH = len(Token.token_types)
@@ -61,7 +61,7 @@ class EzhilLex ( Lex ) :
     def get_lexeme(self,chunks , pos):
         if ( self.debug ):
             print(u"get_lexeme",chunks,pos)
-
+        
         if chunks == None:
             return None
         
@@ -159,7 +159,7 @@ class EzhilLex ( Lex ) :
             tval = EzhilLexeme( chunks[1:-1], EzhilToken.STRING )
         elif chunks[0].isdigit() or chunks[0]=='+' or chunks[0]=='-':
             #tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
-            # deduce a float or integer            
+            # deduce a float or integer
             if ( chunks.find(u'.') >= 0 or chunks.find(u'e') >= 0 or chunks.find(u'E') >= 0 ):
                 tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             else:
@@ -177,6 +177,10 @@ class EzhilLex ( Lex ) :
         
         if ( self.debug ): print(u"Lexer token = ",tval)
         return l
+    
+    @staticmethod
+    def is_allowed_for_identifier(letter):
+        return ( not letter in EzhilToken.FORBIDDEN_FOR_IDENTIFIERS )
     
     def tokenize(self,data=None):
         """ do hard-work of tokenizing and
@@ -203,14 +207,17 @@ class EzhilLex ( Lex ) :
             c = data[idx]
             if ( self.debug ): print(idx,c)
             if ( istamil( c ) or c.isalpha( ) or c == u'_' ):
-                tok_start_idx = idx 
+                tok_start_idx = idx
                 s = c; idx = idx + 1
                 while ( ( idx < len( data ) )
-                        and ( not data[idx] in EzhilToken.FORBIDDEN_FOR_IDENTIFIERS ) ):
+                        and self.is_allowed_for_identifier( data[idx] ) ):
                     s = s + data[idx]
-                    idx = idx + 1                
+                    idx = idx + 1
+                if idx < len(data) and not data[idx].isspace():
+                    if  data[idx] in ['#','$','@','\'','"']:
+                        raise ScannerException("Lexer: token %s is not valid for identifier, with prefix %s"%(data[idx],s))
                 self.get_lexeme( s , tok_start_idx )
-            elif  ( c == u' 'or c == u'\t' or c == u'\n'):
+            elif  ( c.isspace() ): # or c in u' 'or c == u'\t' or c == u'\n'
                 if ( c == u'\n' ):
                     ##actual col = idx - col_idx
                     self.update_line_col(idx)

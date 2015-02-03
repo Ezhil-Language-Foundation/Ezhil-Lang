@@ -7,4 +7,3 @@ python:
 install:  python setup.py install && pip install argparse 
 # command to run tests, e.g. python setup.py test
 script: ./unittest && ./test
-
