@@ -41,6 +41,9 @@ class EzhilToken( Token):
     Token.token_types.append(u"DOWHILE|முடியேனில்")
     Token.DOWHILE = len(Token.token_types)
 
+    RE_ALPHA_ =  re.compile('[a-zA-Z_]')
+    RE_ALPHA_NUMERIC = re.compile(u'[a-zA-Z0-9_]')
+    
     @staticmethod
     def is_keyword(kind):
         if Token.is_keyword(kind):
@@ -164,7 +167,7 @@ class EzhilLex ( Lex ) :
                 tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             else:
                 tval=EzhilLexeme(int(chunks),EzhilToken.NUMBER)
-        elif chunks[0].isalpha() or has_tamil(chunks) or chunks[0] == u'_':
+        elif re.match(EzhilToken.RE_ALPHA_,chunks[0]) or has_tamil(chunks):
             ## check for tamil/english/mixed indentifiers even starting with a lead '_'
             tval=EzhilLexeme(chunks,EzhilToken.ID)
         else:
