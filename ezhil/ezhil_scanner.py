@@ -42,7 +42,7 @@ class EzhilToken( Token):
     Token.DOWHILE = len(Token.token_types)
 
     RE_ALPHA_ =  re.compile('[a-zA-Z_]')
-    RE_ALPHA_NUMERIC = re.compile(u'[a-zA-Z0-9_]')
+    #RE_ALPHA_NUMERIC_ = re.compile(u'[a-zA-Z0-9_]')
     
     @staticmethod
     def is_keyword(kind):
