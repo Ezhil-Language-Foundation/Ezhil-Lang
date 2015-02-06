@@ -102,7 +102,7 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 
 NFAIL=7 #02/06/15
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
-echo "from sys import exit; exit( $TOTFAIL <=  $NFAIL )" | python
+echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]
 then
    echo "Expected failures"
