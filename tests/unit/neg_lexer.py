@@ -8,6 +8,7 @@
 import ezhiltests
 from ezhiltests import TestEzhilException, ezhil
 from  ezhil.errors import ScannerException
+from random import choice
 
 # helper functions for testsuites
 import unittest
@@ -27,5 +28,10 @@ class IdentifierNeg(unittest.TestCase):
             TestEzhilException.create_and_test(wrongID,ScannerException,"Lexical error")
         return
     
+    def test_neg_lex(self):
+        for wrongID in [u"λஃ = 5",u"x☺ = 5 #not legal"]:
+            TestEzhilException.create_and_test(wrongID,ScannerException,"Lexical error")
+        return
+
 if __name__ == "__main__":
     unittest.main()

@@ -72,11 +72,12 @@ class TestEzhilException( TestEzhil ):
     while running the @ezhil_test_code; you can also check for message @msg being contained
     in the exception. Empty (None) values for either argument will bypass the check. Not checking
     either will result in default error """
-    def __init__(self, ezhil_test_code, exception, msg, dbg = False ):
+    def __init__(self, ezhil_test_code, exception, msg, dbg = False, partial = False ):
         TestEzhil.__init__( self, ezhil_test_code )
         self.exception = exception
         self.message = msg
         self.dbg = dbg
+        self.partial = partial
         
     def run( self ):
         """ this class expects to receive an exception on running the Ezhil interpreter,
@@ -88,6 +89,9 @@ class TestEzhilException( TestEzhil ):
             ezhil.EzhilFileExecuter( self.filename , self.dbg, False )
             self.success = False # we expected an exception
         except Exception as ex:
+            if self.partial:
+                return True
+            
             self.success = False # we expected a particular kind of exception
             if self.exception:
                 self.success = isinstance( ex, self.exception )
@@ -111,8 +115,9 @@ class TestEzhilException( TestEzhil ):
                              len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 or unicode(ex).find( msg ) >= 0 )
                     print self.success
             
-            if not self.success:
+            if not self.success and not self.partial:
                 print "######## TEST FAILED #############"
+                print self.success,self.partial
                 print(u"ACTUAL == %s"%unicode(ex))
                 print(u"EXPECTED == %s"%unicode(self.message))
                 raise Exception(u"Expected message %s was not found. We found message %s"%(self.message,unicode(ex)))            
@@ -126,8 +131,8 @@ class TestEzhilException( TestEzhil ):
             print(tst)
         return flag
     @staticmethod
-    def create_and_test( code, exception, msg ):
-        with TestEzhilException(code,exception,msg) as tst:
+    def create_and_test( code, exception, msg,partial=False ):
+        with TestEzhilException(code,exception,msg,partial=partial) as tst:
             flag = tst.run()
             print(tst)
         return flag 

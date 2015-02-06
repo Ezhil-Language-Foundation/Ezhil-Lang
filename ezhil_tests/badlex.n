@@ -1,0 +1,2 @@
+λஃ = 5 #not legal
+x☺ = 5 #not legal
