@@ -729,8 +729,8 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
             if ( self.debug ): print( u"return value", unicode(rval) )
             if hasattr( rval, 'evaluate' ):
                 print(rval.__str__())
-            elif rval: #print everything except a None object
-                print(rval)
+            elif hasattr(rval,'__str__'): #print everything except a None object
+                print( str(rval) )
         except Exception as excep:
             print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,unicode(excep)))
             if ( self.debug ):
