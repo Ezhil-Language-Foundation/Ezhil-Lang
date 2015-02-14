@@ -3,12 +3,12 @@
 ## add test - பயன்படுத்தும் பரிசோதனை 
 ## gcd as a recursive function
 நிரல்பாகம்  gcd ( x, y )
-    மு = max(x,y)
-     q = min(x,y)
+     மு = max(x,y)
+    q = min(x,y)
 
     @( q == 0 ) ஆனால்
            பின்கொடு  மு
-    முடி
+     முடி
     பின்கொடு  gcd( மு - q , q )
 முடி
 
@@ -18,9 +18,8 @@
 
     @( q != 0 ) வரை
         rem = int(p%q)
-        quo = int((p-rem)/q)
-        p = max(rem,q)
-        q = min(rem,q)
+        p = q
+        q = rem
     முடி
     பின்கொடு  p
 முடி
