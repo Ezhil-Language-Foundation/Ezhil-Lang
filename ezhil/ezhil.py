@@ -266,7 +266,7 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
     #refactor out REPL for ezhil and exprs
     env = None ## get the first instance from evaluate_interactive
     do_quit = False
-        ## world-famous REPL
+    ## world-famous REPL
     with open(file_input) as fp:
         lines = fp.readlines()
     #lines = "\n".join([line.strip() for line in lines])
@@ -319,8 +319,8 @@ def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):
             [rval, env] = parse_eval.evaluate_interactive(env)
             if hasattr( rval, 'evaluate' ):
                 print(rval.__str__())
-            elif rval:
-                print(rval)
+            elif hasattr(rval,'__str__'): #print everything except a None object
+                print( str(rval) )
             else:
                 print(u"\n")
         except Exception as e:

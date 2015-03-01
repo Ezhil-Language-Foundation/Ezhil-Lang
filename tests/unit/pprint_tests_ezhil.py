@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 # (C) 2013 Muthiah Annamalai
 # 
@@ -16,7 +17,7 @@ from ezhil import PrettyPrint
 
 class TestPrettyPrinter(unittest.TestCase):
     def test_run_addition(self):
-        relpath  = "../../ezhil_tests/"
+        relpath  = "../../tests/"
 
         hello_patterns = u"""<span style="color:#00FF00">exit</span><span style="color:#FF0000">)</span><BR />
 <span style="color:#C0FFEE">"# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்"</span><BR />

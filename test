@@ -26,7 +26,7 @@ done
 
 # run tests for Ezhil as well
 cd ./tests
-for i in `echo gigo.n oklex.n badlex.n hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n\
+for i in `echo gigo.n lisp0.n oklex.n badlex.n hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n\
  ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n \
 string_demo.n list_ta.n yinyang.n unaryop.n boolean.n chaos.n \
 prime.n array1.n array2.n filedemo.n filerw.n reverse.n friends.n  \

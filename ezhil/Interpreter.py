@@ -533,9 +533,11 @@ class Interpreter(DebugUtils):
         except ImportError as ie:
             if ( self.debug ): 
                 print(u"Cannot Import EZTurtle module; ignoring for now")
-        self.builtin_map["ascii_letters"] = BuiltinFunction(string.ascii_letters,"ascii_letters",0)
-        self.builtin_map["ascii_lowercase"] = BuiltinFunction(string.ascii_lowercase,"ascii_lowercase",0)
-        self.builtin_map["ascii_uppercase"] = BuiltinFunction(string.ascii_uppercase,"ascii_uppercase",0)
+        # all builtin functions should pass the following test:
+        # for attr in dir(module):
+        #     assert callable( getattr( module, attr ) )
+        # non-callable attributes cannot be in the builtins list        
+        # string module builtins
         self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
         self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
         self.builtin_map["atoi"] = BuiltinFunction(string.atoi,"atoi",1)
@@ -546,23 +548,16 @@ class Interpreter(DebugUtils):
         self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
         self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
         self.builtin_map["count_string"] = BuiltinFunction(string.count,"count",1)
-        self.builtin_map["digits"] = BuiltinFunction(string.digits,"digits",1)
         self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
         self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
-        self.builtin_map["hexdigits"] = BuiltinFunction(string.hexdigits,"hexdigits",1)
         self.builtin_map["index_string"] = BuiltinFunction(string.index,"index",2)
         self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
         self.builtin_map["join"] = BuiltinFunction(string.join,"join",1)
         self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
-        self.builtin_map["letters"] = BuiltinFunction(string.letters,"letters",1)
         self.builtin_map["ljust"] = BuiltinFunction(string.ljust,"ljust",1)
         self.builtin_map["lower"] = BuiltinFunction(string.lower,"lower",1)
-        self.builtin_map["lowercase"] = BuiltinFunction(string.lowercase,"lowercase",1)
         self.builtin_map["lstrip"] = BuiltinFunction(string.lstrip,"lstrip",1)
         self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
-        self.builtin_map["octdigits"] = BuiltinFunction(string.octdigits,"octdigits",1)
-        self.builtin_map["printable"] = BuiltinFunction(string.printable,"printable",1)
-        self.builtin_map["punctuation"] = BuiltinFunction(string.punctuation,"punctuation",1)
         self.builtin_map["replace"] = BuiltinFunction(string.replace,"replace",3)
         self.builtin_map["rfind"] = BuiltinFunction(string.rfind,"rfind",2)
         self.builtin_map["rindex"] = BuiltinFunction(string.rindex,"rindex",1)
@@ -575,8 +570,6 @@ class Interpreter(DebugUtils):
         self.builtin_map["swapcase"] = BuiltinFunction(string.swapcase,"swapcase",1)
         self.builtin_map["translate"] = BuiltinFunction(string.translate,"translate",1)
         self.builtin_map["upper"] = BuiltinFunction(string.upper,"upper",1)
-        self.builtin_map["uppercase"] = BuiltinFunction(string.uppercase,"uppercase",1)
-        self.builtin_map["whitespace"] = BuiltinFunction(string.whitespace,"whitespace",1)
         self.builtin_map["zfill"] = BuiltinFunction(string.zfill,"zfill",2)
         # get/set methods are handled by generic __getitem__ and __setitem__
         
@@ -606,9 +599,6 @@ class Interpreter(DebugUtils):
         self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
         self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
         self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
-        #self.builtin_map["viewitems"]= BuiltinFunction(dict.viewitems,"viewitems",1)
-        #self.builtin_map["viewkeys"]= BuiltinFunction(dict.viewkeys,"viewkeys",1)
-        #self.builtin_map["viewvalues"]= BuiltinFunction(dict.viewvalues,"viewvalues",1)
         
         return True
     
@@ -739,8 +729,8 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
             if ( self.debug ): print( u"return value", unicode(rval) )
             if hasattr( rval, 'evaluate' ):
                 print(rval.__str__())
-            elif rval: #print everything except a None object
-                print(rval)
+            elif hasattr(rval,'__str__'): #print everything except a None object
+                print( str(rval) )
         except Exception as excep:
             print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,unicode(excep)))
             if ( self.debug ):

@@ -14,6 +14,15 @@ from test import test_support
 
 import ezhil
 
+class Interactive2(unittest.TestCase):
+    def test_numbers_and_printing(self):
+        code = u"""
+        1 + 1
+        1 - 1
+        1 + 2 - 3
+    """
+        TestInteractiveEzhil.create_and_test(code)
+
 class Interactive(unittest.TestCase):
     def test_numbers_and_printing(self):
         code = u"""
@@ -32,4 +41,4 @@ class Interactive(unittest.TestCase):
         TestInteractiveEzhil.create_and_test(code)
 
 if __name__ == '__main__':    
-    test_support.run_unittest(Interactive)
+    test_support.run_unittest(Interactive,Interactive2)
