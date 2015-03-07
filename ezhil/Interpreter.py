@@ -53,16 +53,27 @@ def ezhil_copyright():
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-    return u"Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2013."%(ezhil_version())
+    return u"Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2015."%(ezhil_version())
 
 def ezhil_license():
     return u"Licensed under GPL Version 3"
 
-def ezhil_getitem(x,idx):
+def ezhil_getitem(*args):
+    if len(args) < 2:
+       raise Exception("getitem - too-few arguments, 2 or 3 arguments expected")
+    with_default = (len(args) == 3)
+    x = args[0]
+    idx = args[1]
+    if with_default:
+        idxs = [idx,args[2]]
+    else:
+        idxs = [idx]
     #print("dispatching ezhil getitem",type(x),type(idx),x,idx,x[idx])
-    if ( isinstance(x,list) or hasattr( x, '__getitem__') ):
-        return x.__getitem__(idx)
-    return x[idx]
+    if ( isinstance(x,dict) ):
+        return x.get(*idxs)
+    elif ( isinstance(x,list) or hasattr( x, '__getitem__') ):
+        return x.__getitem__(*idxs)
+    return x.__getitem__(*idxs)
 
 def ezhil_islist( x ):
     return Boolean(isinstance(x,list))
@@ -440,8 +451,8 @@ class Interpreter(DebugUtils):
         self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
         
-            # common/generic functions
-        self.builtin_map['__getitem__']=BuiltinFunction(ezhil_getitem,"__getitem__",2)
+        # common/generic functions
+        self.builtin_map['__getitem__']=BlindBuiltins(ezhil_getitem,"__getitem__")
         self.builtin_map['__setitem__']=BuiltinFunction(ezhil_setitem,"__setitem__",3)
         
         #file-IO functions
