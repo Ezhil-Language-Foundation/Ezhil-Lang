@@ -24,7 +24,7 @@ class IdentifierNeg(unittest.TestCase):
         return
     
     def test_invalid_id_lex(self):
-        for wrongID in [u"é.€ = 1.23", u"பதிப்பி é.€"]:
+        for wrongID in [u"é.€ = 1.23", u"பதிப்பி é.€","Raj.Reddy","Edsger.Dijkstra"]:
             TestEzhilException.create_and_test(wrongID,ScannerException,"Lexical error")
         return
     

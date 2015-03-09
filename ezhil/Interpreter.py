@@ -483,7 +483,6 @@ class Interpreter(DebugUtils):
         # islist, isnumber predicates
         self.add_builtin("islist",ezhil_islist,nargin=1,ta_alias=u"பட்டியலா")
         self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias=u"எண்ணா")    
-    
         # get tamil letters
         self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
 
