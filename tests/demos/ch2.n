@@ -1,7 +1,7 @@
 # (C) 2015 முத்தையா அண்ணாமலை
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 
-# Ref: Ch.1. John Guttag, Introduction to Computation and Programming Using Python, 3rd Ed. (2013).
+# Ref: Ch.2. John Guttag, Introduction to Computation and Programming Using Python, 3rd Ed. (2013).
 
 # உதாரணம் 1 : வானிலை என்ன ?
 பதிப்பி "சென்னையில் மழை பெய்தால், திருச்சியில் என்ன வானிலை ?"
