@@ -126,3 +126,7 @@ Scholarly articles on Ezhil include,
 
 1. M. Annamalai, "Ezhil : A Tamil Programming Language," (2009). http://arxiv.org/abs/0907.4960
 2. -do-, "Invitation to Ezhil: A Tamil Programming Language for Early Computer-Science Education," (2013). http://arxiv.org/abs/1308.1733
+
+Development notes
+=================
+Ezhil project is hosted on Thamizaa project, as well on Ezhil Language Foundation github pages.
