@@ -58,6 +58,9 @@ def ezhil_credits():
 def ezhil_license():
     return u"Licensed under GPL Version 3"
 
+def ezhil_tamil_length(arg):
+	return Number( len( tamil.utf8.get_letters( arg ) ) )
+
 def ezhil_getitem(*args):
     if len(args) < 2:
        raise Exception("getitem - too-few arguments, 2 or 3 arguments expected")
@@ -484,8 +487,8 @@ class Interpreter(DebugUtils):
         self.add_builtin("islist",ezhil_islist,nargin=1,ta_alias=u"பட்டியலா")
         self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias=u"எண்ணா")    
         # get tamil letters
-        self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
-
+        self.add_builtin("get_tamil_letters",tamil.utf8.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
+	self.add_builtin("tamil_length",ezhil_tamil_length,nargin=1,ta_alias=u"தநீளம்")
         # random functions
         aslist = True;
         self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)
@@ -655,8 +658,8 @@ class REPL(Cmd):
             @debug the boolean """
         Cmd.__init__(self)
         ## ala-Python like
-        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Tue Jul  2 20:22:25 EDT 2013)
-Ezhil : A Tamil Programming Language - version %g, (C) 2007-2013
+        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Sat Mar 14 17:53:58 EDT 2015)
+Ezhil : A Tamil Programming Language - version %g, (C) 2007-2015
 Type "help", "copyright", "credits" or "license" for more information."""%ezhil_version()
         
         self.lang = lang

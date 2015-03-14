@@ -10,7 +10,7 @@
 
 import re
 from scanner import Token, Lexeme, Lex
-from tamil import has_tamil, istamil, istamil_alnum
+from tamil.utf8 import has_tamil, istamil, istamil_alnum
 from errors import ScannerException
 
 class EzhilLexeme(Lexeme):
