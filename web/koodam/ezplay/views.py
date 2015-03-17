@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.core.context_processors import csrf
 from django.template import Context, RequestContext
 from django.http import StreamingHttpResponse, HttpResponse
+from django.utils import simplejson
 
 from ezhil import EzhilFileExecuter
 import ezhil
@@ -34,6 +35,7 @@ def evaluate( request ):
     exception = ''
 
     if request.method == "POST":
+        print "received POST request"
         vars = {}
         vars['eval'] = request.POST['eval']
         vars['prog'] = request.POST['prog']
@@ -44,10 +46,10 @@ def evaluate( request ):
             # 10s timeout and executor
             obj = EzhilFileExecuter( file_input = [vars['prog']],
                                      redirectop =  True, TIMEOUT = 10 )
-			
+            
             # actually run the process
             obj.run()
-			
+            
             # get executed output in 'progout' and name of the two tmp files to cleanup
             [tmpfile,filename,progout] = obj.get_output()
             os.unlink( tmpfile )
@@ -72,17 +74,20 @@ def evaluate( request ):
                 os.unlink( filename )
             except Except as e:
                 pass
-			
+            
             #traceback.print_tb(sys.exc_info()[2])
             #raise e #debug mode
-    
-    ctx = Context({'evaluated_flag':evaluated,
+    ctx_data = {'evaluated_flag':evaluated,
                    'failed_flag':failed,
                    'program_input':progin,
                    'program_output':progout,
-                   'exception_message':exception})
-    
-    return StreamingHttpResponse( render(request,"ezplay/eval.html", ctx ) )
+                   'exception_message':exception}
+    ctx = Context(ctx_data)
+
+    if request.is_ajax():
+        json_data = simplejson.dumps( ctx_data )
+        return HttpResponse( json_data )
+    return StreamingHttpResponse( render(request,"ezplay/ezhil_eval.html", ctx ) )
 
 def save( request, prefix ):
     return render_to_response("cannot save "+prefix+" at this moment")
