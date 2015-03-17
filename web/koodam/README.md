@@ -13,9 +13,9 @@ Code in this directory provides the following
 6. Source code is persisted between sessions in terms of cookies
 
 ==Tech Specs==
-# Koodam is a Django-based web-app to run Ezhil on server backend, and respond to users.
-# Students can learn Ezhil with the power of Internet connection to ezhillang.org along with the help of the book 'Write Code in Tamil'.
-# Koodam has limitations in drawing graphical output, and taking command line based inputs.
+1. Koodam is a Django-based web-app to run Ezhil on server backend, and respond to users.
+2. Students can learn Ezhil with the power of Internet connection to ezhillang.org along with the help of the book 'Write Code in Tamil'.
+3. Koodam has limitations in drawing graphical output, and taking command line based inputs.
 
 * Users *
-# This is almost the same version deployed at ezhillang.org
+This is almost the same version deployed at ezhillang.org
