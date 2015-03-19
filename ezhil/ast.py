@@ -129,11 +129,11 @@ class Boolean(Number):
 
     def __unicode(self):
         return self.__str__()
-
+    
     def __str__(self):
         if ( self.num ):
-            return u"True"
-        return u"False"
+            return u"மெய்"
+        return u"பொய்"
 
 class Dict(dict):
     def __init__(self):
