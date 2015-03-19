@@ -1,5 +1,5 @@
 #!/usr/bin/python
-##
+## -*- coding: utf-8 -*-
 ## (C) 2007, 2008, 2013 Muthiah Annamalai
 ## Licensed under GPL Version 3
 ##
@@ -201,6 +201,8 @@ class Environment:
         rval = False
         if idee in ['True', 'False']:
             return True
+        if idee in [u"மெய்", u"பொய்"]:
+            return True
         if ( len( self.local_vars ) == 0 ):
             return False
         variables = self.local_vars[-1]
@@ -222,6 +224,8 @@ class Environment:
         val = None
         if idee in ['True', 'False']:
             return (idee == 'True')
+        if idee in [u"மெய்", u"பொய்"]:
+            return (idee == u"மெய்")
         if not self.has_id(idee):
             note = ''
             if idee in keyword.kwlist:

@@ -3,6 +3,12 @@
 
 பதிப்பி "வணக்கம்!", assert( 1 > 0 )
 பதிப்பி  assert( False == False ), assert( False != True ), assert( True == True )
-assert( False )
+assert( !False )
+
+x = [ மெய், பொய் ]
+பதிப்பி "வணக்கம்!", மெய்
+பதிப்பி  assert( பொய் == பொய்  ), assert( மெய் != பொய் ), assert( மெய் == மெய் )
+assert(  பொய் || False || மெய்)
+
 பதிப்பி "******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******"
 exit()
