@@ -1,5 +1,5 @@
 ## -*- coding: utf-8 -*-
-## (C) 2007, 2008, 2013 Muthiah Annamalai,
+## (C) 2007, 2008, 2013-2015 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
 ## 
@@ -11,7 +11,7 @@ import os, sys, string, inspect
 import string
 import tamil
 from cmd import Cmd
-
+from pprint import pprint
 import time
 ezhil_sleep = time.sleep
 ezhil_date_time = time.asctime
@@ -205,7 +205,6 @@ class Interpreter(DebugUtils):
             pos = pos + 1
             print(u"%03d> %s"%(pos,unicode(fcn)))
         
-
     def add_blind_fcns(self, bfn, b):
         """ an internal method to reduce repetition """
         if ( not inspect.ismethod(bfn) 
@@ -326,8 +325,7 @@ class Interpreter(DebugUtils):
            return String(args[0][::-1]) #string-reverse
        
        return list.reverse(args[0])
-       
-
+    
     @staticmethod
     def ezhil_pause(*args):
         if ( len(args) >= 1 ):
@@ -486,9 +484,7 @@ class Interpreter(DebugUtils):
         # islist, isnumber predicates
         self.add_builtin("islist",ezhil_islist,nargin=1,ta_alias=u"பட்டியலா")
         self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias=u"எண்ணா")    
-        # get tamil letters
-        self.add_builtin("get_tamil_letters",tamil.utf8.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
-	self.add_builtin("tamil_length",ezhil_tamil_length,nargin=1,ta_alias=u"தநீளம்")
+	
         # random functions
         aslist = True;
         self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)
@@ -612,7 +608,42 @@ class Interpreter(DebugUtils):
         self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
         self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
         self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
+	
+        # open-tamil API
+        # get tamil letters
+        self.add_builtin("get_tamil_letters",tamil.utf8.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
+        self.add_builtin("tamil_length",ezhil_tamil_length,nargin=1,ta_alias=u"தநீளம்")        
         
+        # functions returning constant list of Tamil strings
+        self.add_builtin("tamil_letters",lambda :  tamil.utf8.tamil_letters,
+                         nargin=0,ta_alias=u"தமிழ்எழுத்து")
+        self.add_builtin("tamil_uyir",lambda :  tamil.utf8.uyir_letters,
+                         nargin=0,ta_alias=u"உயிர்எழுத்து")
+        self.add_builtin("tamil_mei",lambda: tamil.utf8.mei_letters,
+                         nargin=0,ta_alias=u"மெய்எழுத்து") 
+        self.add_builtin("tamil_kuril",lambda: tamil.utf8.kuril_letters,
+                         nargin=0,ta_alias=u"குரில்எழுத்து") 
+        self.add_builtin("tamil_nedil",lambda: tamil.utf8.nedil_letters,
+                         nargin=0,ta_alias=u"நேடில்எழுத்து") 
+        self.add_builtin("tamil_vallinam",lambda: tamil.utf8.vallinam_letters,
+                         nargin=0,ta_alias=u"வல்லினம்எழுத்து") 
+        self.add_builtin("tamil_mellinam",lambda: tamil.utf8.mellinam_letters,
+                         nargin=0,ta_alias=u"மெல்லினம்") 
+        self.add_builtin("tamil_idayinam",lambda: tamil.utf8.idayinam_letters,
+                         nargin=0,ta_alias=u"இடைனம்எழுத்து") 
+        self.add_builtin("tamil_agaram",lambda: tamil.utf8.agaram_letters,
+                         nargin=0,ta_alias=u"அகரம்எழுத்து") 
+        self.add_builtin("tamil_uyirmei",lambda: tamil.utf8.uyirmei_letters,
+                         nargin=0,ta_alias=u"உயிர்மெய்எழுத்து")
+        
+        self.add_builtin("tamil_istamil_prefix",tamil.utf8.istamil_prefix,
+                         nargin=1)
+        self.add_builtin("tamil_all_tamil", tamil.utf8.all_tamil,
+                         nargin=1,ta_alias=u"தனித்தமிழா")
+        self.add_builtin("tamil_hastamil",tamil.utf8.has_tamil,
+                         nargin=1,ta_alias=u"தமிழ்கொண்டதா")
+        self.add_builtin("tamil_reverse_word",tamil.utf8.reverse_word,
+                         nargin=1,ta_alias=u"அந்தாதிமாற்று")
         return True
     
     def __repr__(self):
@@ -741,9 +772,9 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
             [rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
             if ( self.debug ): print( u"return value", unicode(rval) )
             if hasattr( rval, 'evaluate' ):
-                print(rval.__str__())
+                pprint(rval.__str__())
             elif hasattr(rval,'__str__'): #print everything except a None object
-                print( str(rval) )
+                pprint( rval )
         except Exception as excep:
             print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,unicode(excep)))
             if ( self.debug ):

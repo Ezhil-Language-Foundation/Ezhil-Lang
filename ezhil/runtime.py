@@ -1,6 +1,6 @@
 #!/usr/bin/python
 ## -*- coding: utf-8 -*-
-## (C) 2007, 2008, 2013 Muthiah Annamalai
+## (C) 2007, 2008, 2013-2015 Muthiah Annamalai
 ## Licensed under GPL Version 3
 ##
 ## This module is the runtime elements for the exprs language.
@@ -102,8 +102,9 @@ class Environment:
         self.arg_stack = []#list of lists
         self.ret_stack = [] #list
         self.debug = dbg #use to turn debugging on.
+        self.readonly_global_vars = {'True':True, 'False':False,u"மெய்":True, u"பொய்":False} #dict of global vars
         self.clear_break_return_continue()
-
+        
     def get_break_return(self):
         """ get if break or return was set for use in loops """
         val = self.Break or self.Return
@@ -199,9 +200,7 @@ class Environment:
     def has_id(self, idee):
         """ check various 'scopes' for ID variable """
         rval = False
-        if idee in ['True', 'False']:
-            return True
-        if idee in [u"மெய்", u"பொய்"]:
+        if idee in self.readonly_global_vars:
             return True
         if ( len( self.local_vars ) == 0 ):
             return False
@@ -211,21 +210,24 @@ class Environment:
 
     def set_id(self, idee, val, global_id = False):
         """ someday do global_id """
+        if idee in self.readonly_global_vars:
+            raise Exception(u"Error: Attempt to reassign constant %s"%idee)
         if ( len(self.local_vars) > 0 ):
             d=self.local_vars[-1]
         else:
             d=dict()
             self.local_vars.append(d)
+        #if not (idee in d) and (idee in self.global_vars):
+        #    self.global_vars[idee] = val
+        # else:
         d[idee]=val
         self.dbg_msg("set_id: " + unicode(idee) +" = "+unicode(val))
         return
 
     def get_id(self, idee):
         val = None
-        if idee in ['True', 'False']:
-            return (idee == 'True')
-        if idee in [u"மெய்", u"பொய்"]:
-            return (idee == u"மெய்")
+        if idee in self.readonly_global_vars:
+            return self.readonly_global_vars[idee]
         if not self.has_id(idee):
             note = ''
             if idee in keyword.kwlist:
