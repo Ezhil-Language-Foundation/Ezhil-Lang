@@ -612,7 +612,8 @@ class Interpreter(DebugUtils):
         # open-tamil API
         # get tamil letters
         self.add_builtin("get_tamil_letters",tamil.utf8.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
-        self.add_builtin("tamil_length",ezhil_tamil_length,nargin=1,ta_alias=u"தநீளம்")        
+        self.add_builtin(u"த",tamil.utf8.get_letters,nargin=1)
+        self.add_builtin("tamil_length",ezhil_tamil_length,nargin=1,ta_alias=u"தநீளம்")     
         
         # functions returning constant list of Tamil strings
         self.add_builtin("tamil_letters",lambda :  tamil.utf8.tamil_letters,

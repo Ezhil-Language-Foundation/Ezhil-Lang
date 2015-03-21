@@ -1,3 +1,4 @@
+
 i#!/bin/bash
 # Tests for Ezhil language
 # (C) 2007, 2008, 2013-2015 முத்தையா அண்ணாமலை
@@ -42,7 +43,7 @@ change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
 fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
 tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
 max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n \
-boolf.n globalvars.n tamil1.n tamil2.n \ 
+boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \ 
 neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n | sort`
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
