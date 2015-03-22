@@ -7,7 +7,7 @@
 ## Interpreter for Ezhil language
 
 import os, sys, string, tempfile
-from Interpreter import Interpreter, REPL, Lex, get_prog_name
+from Interpreter import Interpreter, REPL, Lex, get_prog_name, PYTHON3
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
 from errors import RuntimeException, ParseException, TimeoutException
@@ -16,7 +16,8 @@ from time import sleep,clock,time
 import codecs, traceback
 
 import codecs, sys
-sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+if not PYTHON3:
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 #sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 class EzhilInterpreter( Interpreter ):
@@ -142,17 +143,17 @@ class EzhilFileExecuter(EzhilRedirectOutput):
     def get_output(self):
         return [self.tmpf_name,self.fProcName,self.data]
     
-	def __delete__(self):
-		if self.tmpf and hasattr(self.tmpf,'name'):
-			os.unlink( self.tmpf.name )
-			self.tmpf = None
-		if self.fProcName:
-			os.unlink( self.fProcName )
-			self.fProcName = None
-		if hasattr(self.p,'terminate'):
-			self.p.terminate()
-		pass
-	
+    def __delete__(self):
+        if self.tmpf and hasattr(self.tmpf,'name'):
+            os.unlink( self.tmpf.name )
+            self.tmpf = None
+        if self.fProcName:
+            os.unlink( self.fProcName )
+            self.fProcName = None
+        if hasattr(self.p,'terminate'):
+            self.p.terminate()
+        pass
+    
     def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None):
         EzhilRedirectOutput.__init__(self,redirectop,debug)
         self.dbg_msg(u"ezil file executer\n")

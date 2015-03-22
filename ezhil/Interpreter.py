@@ -4,6 +4,8 @@
 ##
 ## 
 ## TODO: extract scanner and AST members into a module for sharing.
+from __future__ import print_function
+
 import argparse
 from math import *
 import copy, codecs
@@ -13,6 +15,9 @@ import tamil
 from cmd import Cmd
 from pprint import pprint
 import time
+
+PYTHON3 = (sys.version[0] == '3')
+
 ezhil_sleep = time.sleep
 ezhil_date_time = time.asctime
 
@@ -129,7 +134,7 @@ class NoClobberDict(dict):
     def __init__(self):
         dict.__init__(self)
     def __setitem__(self,key,val):
-        if ( self.has_key(key) ):
+        if ( self.get(key,None) ):
             raise KeyError("Dictionary is getting clobbered; key "+key+" already present")
         dict.__setitem__(self,key,val)
 
@@ -338,14 +343,14 @@ class Interpreter(DebugUtils):
     
     def add_builtin(self,call_name,call_handle,nargin=1,ta_alias=None):        
         # make sure you don't clobber yourself
-        assert not self.builtin_map.has_key(call_name)
+        assert not self.builtin_map.get(call_name,None)
         if ( nargin == -1 ):
             self.builtin_map[call_name] = BlindBuiltins( call_handle, call_name, self.debug)
         else:
             self.builtin_map[call_name] = BuiltinFunction( call_handle, call_name, nargin, self.debug )
         # update the alias if something was supplied
         if ( ta_alias ):
-            assert not self.builtin_map.has_key(ta_alias) #noclobber
+            assert not self.builtin_map.get(ta_alias,None) #noclobber
             self.builtin_map[ta_alias] = self.builtin_map[call_name]
         
         return True
@@ -358,17 +363,18 @@ class Interpreter(DebugUtils):
         self.builtin_map['abs']=BlindBuiltins(abs,'abs',self.debug)
         self.builtin_map['all']=BlindBuiltins(all,'all',self.debug)
         self.builtin_map['any']=BlindBuiltins(any,'any',self.debug)
-        self.builtin_map['apply']=BlindBuiltins(apply,'apply',self.debug)
+        if not PYTHON3:
+            self.builtin_map['apply']=BlindBuiltins(apply,'apply',self.debug)
+            self.builtin_map['buffer']=BlindBuiltins(buffer,'buffer',self.debug)
+            self.builtin_map['cmp']=BlindBuiltins(cmp,'cmp',self.debug)
         self.builtin_map['basestring']=BlindBuiltins(str,'basestring',self.debug)
         self.builtin_map['bin']=BlindBuiltins(bin,'bin',self.debug)
         self.builtin_map['bool']=BlindBuiltins(bool,'bool',self.debug)
-        self.builtin_map['buffer']=BlindBuiltins(buffer,'buffer',self.debug)
         self.builtin_map['bytearray']=BlindBuiltins(bytearray,'bytearray',self.debug)
         self.builtin_map['bytes']=BlindBuiltins(bytes,'bytes',self.debug)
         self.builtin_map['callable']=BlindBuiltins(callable,'callable',self.debug)
         self.builtin_map['chr']=BlindBuiltins(chr,'chr',self.debug)
         #self.builtin_map['classmethod']=BlindBuiltins(classmethod,'classmethod',self.debug)
-        self.builtin_map['cmp']=BlindBuiltins(cmp,'cmp',self.debug)
         #self.builtin_map['coerce']=BlindBuiltins(coerce,'coerce',self.debug)
         self.builtin_map['compile']=BlindBuiltins(compile,'compile',self.debug)
         self.builtin_map['complex']=BlindBuiltins(complex,'complex',self.debug)
@@ -391,8 +397,10 @@ class Interpreter(DebugUtils):
         #self.builtin_map['eval']=BlindBuiltins(eval,'eval',self.debug)
         #self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
         #self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
+        if not PYTHON3:
+            self.builtin_map['file']=BlindBuiltins(file,'file',self.debug)
+            self.builtin_map['intern']=BlindBuiltins(intern,'intern',self.debug)
         
-        self.builtin_map['file']=BlindBuiltins(file,'file',self.debug)
         self.builtin_map['filter']=BlindBuiltins(filter,'filter',self.debug)
         self.builtin_map['float']=BlindBuiltins(float,'float',self.debug)
         self.builtin_map['format']=BlindBuiltins(format,'format',self.debug)
@@ -405,7 +413,6 @@ class Interpreter(DebugUtils):
         self.builtin_map['hex']=BlindBuiltins(hex,'hex',self.debug)
         self.builtin_map['id']=BlindBuiltins(id,'id',self.debug)        
         self.builtin_map['int']=BlindBuiltins(int,'int',self.debug)
-        self.builtin_map['intern']=BlindBuiltins(intern,'intern',self.debug)
         self.builtin_map['isinstance']=BlindBuiltins(isinstance,'isinstance',self.debug)
         self.builtin_map['issubclass']=BlindBuiltins(issubclass,'issubclass',self.debug)
         self.builtin_map['iter']=BlindBuiltins(iter,'iter',self.debug)
@@ -431,8 +438,11 @@ class Interpreter(DebugUtils):
         self.builtin_map['property']=BlindBuiltins(property,'property',self.debug)
         self.builtin_map['quit']=BlindBuiltins(quit,'quit',self.debug)
         self.builtin_map['range']=BlindBuiltins(range,'range',self.debug)        
-        self.builtin_map['reduce']=BlindBuiltins(reduce,'reduce',self.debug)
-        self.builtin_map['reload']=BlindBuiltins(reload,'reload',self.debug)
+        if not PYTHON3:
+            self.builtin_map['reduce']=BlindBuiltins(reduce,'reduce',self.debug)
+            self.builtin_map['reload']=BlindBuiltins(reload,'reload',self.debug)
+            self.builtin_map['unicode']=BlindBuiltins(str,'unicode',self.debug)
+        
         self.builtin_map['repr']=BlindBuiltins(repr,'repr',self.debug)
         self.builtin_map['reversed']=BlindBuiltins(reversed,'reversed',self.debug)
         self.builtin_map['round']=BlindBuiltins(round,'round',self.debug)
@@ -441,15 +451,14 @@ class Interpreter(DebugUtils):
         self.builtin_map['slice']=BlindBuiltins(slice,'slice',self.debug)
         self.builtin_map['sorted']=BlindBuiltins(sorted,'sorted',self.debug)
         self.builtin_map['staticmethod']=BlindBuiltins(staticmethod,'staticmethod',self.debug)
-        self.builtin_map[u'str']=BlindBuiltins(unicode,u'str',self.debug)
         self.builtin_map['sum']=BlindBuiltins(sum,'sum',self.debug)
         self.builtin_map['super']=BlindBuiltins(super,'super',self.debug)
         self.builtin_map['tuple']=BlindBuiltins(tuple,'tuple',self.debug)
         self.builtin_map['type']=BlindBuiltins(type,'type',self.debug)
         self.builtin_map['unichr']=BlindBuiltins(chr,'unichr',self.debug)
-        self.builtin_map['unicode']=BlindBuiltins(str,'unicode',self.debug)
         self.builtin_map['vars']=BlindBuiltins(vars,'vars',self.debug)
-        self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
+        if not PYTHON3:
+            self.builtin_map['xrange']=BlindBuiltins(xrange,'xrange',self.debug)
         self.builtin_map['zip']=BlindBuiltins(zip,'zip',self.debug)
         
         # common/generic functions
@@ -547,39 +556,44 @@ class Interpreter(DebugUtils):
         #     assert callable( getattr( module, attr ) )
         # non-callable attributes cannot be in the builtins list        
         # string module builtins
-        self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
-        self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
-        self.builtin_map["atoi"] = BuiltinFunction(string.atoi,"atoi",1)
-        self.builtin_map["atoi_error"] = BuiltinFunction(string.atoi_error,"atoi_error",1)
-        self.builtin_map["atol"] = BuiltinFunction(string.atol,"atol",1)
-        self.builtin_map["atol_error"] = BuiltinFunction(string.atol_error,"atol_error",1)
-        self.builtin_map["capitalize"] = BuiltinFunction(string.capitalize,"capitalize",1)
-        self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
-        self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
-        self.builtin_map["count_string"] = BuiltinFunction(string.count,"count",1)
-        self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
-        self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
-        self.builtin_map["index_string"] = BuiltinFunction(string.index,"index",2)
-        self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
-        self.builtin_map["join"] = BuiltinFunction(string.join,"join",1)
-        self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
-        self.builtin_map["ljust"] = BuiltinFunction(string.ljust,"ljust",1)
-        self.builtin_map["lower"] = BuiltinFunction(string.lower,"lower",1)
-        self.builtin_map["lstrip"] = BuiltinFunction(string.lstrip,"lstrip",1)
+        self.builtin_map["find"] = BuiltinFunction(str.find,"find",2)
+        if not PYTHON3:
+            self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
+            self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
+            self.builtin_map["atoi"] = BuiltinFunction(string.atoi,"atoi",1)
+            self.builtin_map["atoi_error"] = BuiltinFunction(string.atoi_error,"atoi_error",1)
+            self.builtin_map["atol"] = BuiltinFunction(string.atol,"atol",1)
+            self.builtin_map["atol_error"] = BuiltinFunction(string.atol_error,"atol_error",1)
+            self.builtin_map["capitalize"] = BuiltinFunction(string.capitalize,"capitalize",1)
+            self.builtin_map["capwords"] = BuiltinFunction(string.capwords,"capwords",1)
+            self.builtin_map["center"] = BuiltinFunction(string.center,"center",1)
+            self.builtin_map["count_string"] = BuiltinFunction(string.count,"count",1)
+            self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
+
+        self.builtin_map["index_string"] = BuiltinFunction(str.index,"index",2)
+        if not PYTHON3:
+            self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
+        self.builtin_map["join"] = BuiltinFunction(str.join,"join",1)
+        if not PYTHON3:
+            self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
+        self.builtin_map["ljust"] = BuiltinFunction(str.ljust,"ljust",1)
+        self.builtin_map["lower"] = BuiltinFunction(str.lower,"lower",1)
+        self.builtin_map["lstrip"] = BuiltinFunction(str.lstrip,"lstrip",1)
         self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
-        self.builtin_map["replace"] = BuiltinFunction(string.replace,"replace",3)
-        self.builtin_map["rfind"] = BuiltinFunction(string.rfind,"rfind",2)
-        self.builtin_map["rindex"] = BuiltinFunction(string.rindex,"rindex",1)
-        self.builtin_map["rjust"] = BuiltinFunction(string.rjust,"rjust",1)
-        self.builtin_map["rsplit"] = BuiltinFunction(string.rsplit,"rsplit",1)
-        self.builtin_map["rstrip"] = BuiltinFunction(string.rstrip,"rstrip",1)
-        self.builtin_map["split"] = BuiltinFunction(string.split,"split",2)
-        self.builtin_map["splitfields"] = BuiltinFunction(string.splitfields,"splitfields",1)
-        self.builtin_map["strip"] = BuiltinFunction(string.strip,"strip",1)
-        self.builtin_map["swapcase"] = BuiltinFunction(string.swapcase,"swapcase",1)
-        self.builtin_map["translate"] = BuiltinFunction(string.translate,"translate",1)
-        self.builtin_map["upper"] = BuiltinFunction(string.upper,"upper",1)
-        self.builtin_map["zfill"] = BuiltinFunction(string.zfill,"zfill",2)
+        self.builtin_map["replace"] = BuiltinFunction(str.replace,"replace",3)
+        self.builtin_map["rfind"] = BuiltinFunction(str.rfind,"rfind",2)
+        self.builtin_map["rindex"] = BuiltinFunction(str.rindex,"rindex",1)
+        self.builtin_map["rjust"] = BuiltinFunction(str.rjust,"rjust",1)
+        self.builtin_map["rsplit"] = BuiltinFunction(str.rsplit,"rsplit",1)
+        self.builtin_map["rstrip"] = BuiltinFunction(str.rstrip,"rstrip",1)
+        self.builtin_map["split"] = BuiltinFunction(str.split,"split",2)
+        if not PYTHON3:
+            self.builtin_map["splitfields"] = BuiltinFunction(string.splitfields,"splitfields",1)
+        self.builtin_map["strip"] = BuiltinFunction(str.strip,"strip",1)
+        self.builtin_map["swapcase"] = BuiltinFunction(str.swapcase,"swapcase",1)
+        self.builtin_map["translate"] = BuiltinFunction(str.translate,"translate",1)
+        self.builtin_map["upper"] = BuiltinFunction(str.upper,"upper",1)
+        self.builtin_map["zfill"] = BuiltinFunction(str.zfill,"zfill",2)
         # get/set methods are handled by generic __getitem__ and __setitem__
         
         # list methods - first argument, when required, is always a list obj
@@ -597,15 +611,18 @@ class Interpreter(DebugUtils):
         self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
         self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
         self.builtin_map["fromkeys"]= BuiltinFunction(dict.fromkeys,"fromkeys",1)
-        self.builtin_map["has_key"]= BuiltinFunction(dict.has_key,"has_key",1)
         self.builtin_map["items"]= BuiltinFunction(dict.items,"items",1)
-        self.builtin_map["iteritems"]= BuiltinFunction(dict.iteritems,"iteritems",1)
-        self.builtin_map["iterkeys"]= BuiltinFunction(dict.iterkeys,"iterkeys",1)
-        self.builtin_map["itervalues"]= BuiltinFunction(dict.itervalues,"itervalues",1)
+        
+        if not PYTHON3:
+            self.builtin_map["has_key"]= BuiltinFunction(dict.has_key,"has_key",1)
+            self.builtin_map["iteritems"]= BuiltinFunction(dict.iteritems,"iteritems",1)
+            self.builtin_map["iterkeys"]= BuiltinFunction(dict.iterkeys,"iterkeys",1)
+            self.builtin_map["itervalues"]= BuiltinFunction(dict.itervalues,"itervalues",1)
+            self.builtin_map["pop_dict"]= BuiltinFunction(dict.pop,"pop",1)
+            self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
+            self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
+        
         self.builtin_map["keys"]= BuiltinFunction(dict.keys,"keys",1)
-        self.builtin_map["pop_dict"]= BuiltinFunction(dict.pop,"pop",1)
-        self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
-        self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
         self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
         self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
 	
@@ -749,14 +766,14 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
                 elif TKN.val in [")","]","}"]:
                     if len(nbraces) > 0 and nbraces[-1] == COMPLEMENT[TKN.val]:
                         del nbraces[-1]
-                        if ( self.debug ): print "matched braces.."
+                        if ( self.debug ): print("matched braces..")
                 else:
-                    if ( self.debug ): print "nota brace token",TKN.val
+                    if ( self.debug ): print("nota brace token",TKN.val)
             if len(nbraces) > 0:
                 if ( self.debug ): 
                     print ("MIsmatched braces")
                     for idx in nbraces:
-                        print idx
+                        print(idx)
                 self.prevlines += u'\n' + line
                 self.lexer.reset() #reset lexer
                 return
