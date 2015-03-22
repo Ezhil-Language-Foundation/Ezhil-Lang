@@ -99,6 +99,11 @@ $ cd ezhil-lang/ && python setup.py build
 $ cd ezhil-lang/ && python setup.py install
 ```
 
+Installation from Python Package Index is also recommended, following the commands,
+```
+$ pip install ezhil
+```
+
 Learn more, and contribute 
 ==========================
 '''Rosetta Code''', the wiki platform for sharing standard algorithms, in
