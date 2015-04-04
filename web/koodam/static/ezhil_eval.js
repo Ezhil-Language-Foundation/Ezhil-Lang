@@ -1,5 +1,4 @@
-/* (C) 2013 Muthiah Annamalai */
-
+/* (C) 2013-2015 Muthiah Annamalai */
 
 var aceEditor = null;
 
@@ -50,15 +49,13 @@ function checkEzhilCookie()
 {
     var program = getEzhilCookie("program");
     if ( program != null && program != "") {
-        /** alert("I remember you, and your program!")
-            alert(program); */
         if ( aceEditor != null ) {
             aceEditor.setValue(program);
             aceEditor.clearSelection();
         }
     }
     else {
-        /**  alert("Cookie not found, or no cookie set yet!"); */
+        console.log("Cookie not found, or no cookie set yet!");
     }
 }
 
@@ -69,7 +66,6 @@ require.config({
     }
 });
 
-
 //evaluate on-load - check cookie and populate the editor field if we were here before.
 require(["ace/ace"], function(ace) {
     var editor = ace.edit("editor");
@@ -77,29 +73,26 @@ require(["ace/ace"], function(ace) {
         aceEditor = editor;
     editor.setTheme("ace/theme/xcode");
     editor.getSession().setMode("ace/mode/ezhil");
-        editor.setValue($("#default_program").html());
+    editor.setValue($("#default_program").html());
+    editor.clearSelection();
+    
+    jQuery(window).bind('beforeunload', function(e) {
+        var message = "உங்கள் நிரலை சேமிக்கவில்லை!";
+        e.returnValue = message;
+        
+        //save current state
+        setEzhilCookie("program",aceEditor.getValue());
+        
+        return message;
+    });
+    
+    // load the previous state
     checkEzhilCookie();
+    
     } else {
         $("#editor").html( $("#default_program").html() )
     }
 });
-
-function evaluateProg() {  
-    if ( aceEditor == null ) {
-        alert("editor could not be loaded! cannot evaluate program");
-        return null;
-    }
-    /* Save program as cookie */        
-    setEzhilCookie("program",aceEditor.getValue());
-    
-    output = window.open( "","Ezhil evaluator output","width=700,height=400,scrollbars=yes");
-    $('<form>', {
-        "id": 'EvaluateProgramForm',
-        "html": '<input type="hidden" name="eval" value="true" /><textarea rows="20" cols="80" id="EzhiCodeWidget" name="prog">' + aceEditor.getValue() + '</textarea><input type="submit" label="submit" />'  ,
-        "action": "/play/eval/",
-        "method":"POST"
-    }).appendTo(output.document.body).submit();
-}
 
 function updateEditorWithExample( filename ) {
 
@@ -119,6 +112,11 @@ function updateEditorWithExample( filename ) {
 
 // inline output
 function ezhilPostEval(  ) {
+    //0. on callback for failure
+    var ezhilPostEval_fail_widget = function ( xhr, state_str, other ) {
+        $('#EzhilOutput').html('<div><h3>Evaluation failed! Server response '+state_str+'</h3></div>');
+    }
+    
     //1. on callback return display success
     var ezhilPostEval_update_widget = function ( raw_data )  {
 	var dataObj = JSON.parse( raw_data );
@@ -144,28 +142,24 @@ function ezhilPostEval(  ) {
     //0. make the call
     $("#EzhilOutput").html("<b> Processing request; please wait ... ... ... ... .. .");
 
+    //0.5 save current state
+    setEzhilCookie("program",aceEditor.getValue());
+    
+    //0.75 setup the call
     $.ajaxSetup({
 	beforeSend: function(xhr, settings) {
 	    xhr.setRequestHeader("X-CSRFToken", getEzhilCookie('csrftoken'));
 	}
     });
 
+    //1.0 make the call
     $.ajax({
 	type:"POST",
 	url:"/play/eval/",
 	data: {"eval":true,"prog":aceEditor.getValue()},
-	success:ezhilPostEval_update_widget});
+	success:ezhilPostEval_update_widget,
+    error:ezhilPostEval_fail_widget});
 }
 
-/* Currently web-based evaluator works only in FireFox */
-function showDisclaimer() {
-    var isMozillaBased = navigator.userAgent.search("Mozilla") >= 0 && !(navigator.userAgent.search("Chrome") >= 0);
-    if ( ! isMozillaBased ) {
-        $("#disclaimer").show();
-    }
-    return false;
-}
-
-$.ready(showDisclaimer);
-$.ready(function () { aceEditor.clearSelection() });
+//    $(window).unbind("beforeunload");
 
