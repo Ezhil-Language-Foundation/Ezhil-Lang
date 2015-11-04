@@ -112,20 +112,24 @@ def get_prog_name(lang):
     parser.add_argument("-debug",action="store_true",
                         default=False,
                         help="enable debugging information on screen")
+    parser.add_argument("-tamilencoding",action="store_true",default="UTF-8",
+                        help="option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
     parser.add_argument("-stdin",action="store_true",
                         default=None,
                         help="read input from the standard input")
     args = parser.parse_args()
-    
-    if len(args.files) == 0 and (not args.stdin):
+
+    if (len(args.files) == 0 and (not args.stdin)) or \
+       not(args.tamilencoding in ["utf-8","tscii","TSCII","UTF-8"]):
         parser.print_help()
         sys.exit(-1)
     
     prog_name = args.files
     debug = args.debug
     dostdin = args.stdin
-    
-    return [prog_name, debug, dostdin]
+    encoding = args.tamilencoding
+    #print("###### chosen encoding => ",encoding)
+    return [prog_name, debug, dostdin,encoding]
 
 class NoClobberDict(dict):
     """ dictionary structure with a set like mathematical structure.

@@ -9,6 +9,7 @@
 
 from errors import ScannerException
 import codecs, re
+import tamil
 
 ## SCANNER
 class Token:
@@ -146,13 +147,22 @@ class Lex:
     """ Lexer automatically starts lexing on init.
     Maybe use some Library module? """
 
-    def __init__(self,fname=None,dbg=False):
+    def __init__(self,fname=None,dbg=False,encoding="utf-8"):
+        self.encoding=encoding.lower()
         self.stdin_mode = False
         self.debug = dbg
+        self.converted_data = None
         self.comments = {} #comments dict indexed by line number with comments present as string value
         if ( isinstance(fname,str) ):
             self.fname = fname
-            self.File = codecs.open(fname,"r","utf-8")            
+            if self.encoding == "utf-8":
+                self.File = codecs.open(fname,"r","utf-8")
+            elif self.encoding == "tscii":
+                # use open-tamil libraries to translate the source file
+                self.File = open(fname,"r")
+                self.converted_data = tamil.tscii.convert_to_unicode( self.File.read() )
+            else:
+                raise Exception("Unknown encoding %s used for file %s"%(encoding,fname))    
         elif ( isinstance(fname,list) ):
             """ specify, fname = ["contents of program as a string"] """
             self.fname = u"<DUMMYFILE>"
@@ -313,8 +323,12 @@ class Lex:
                 raise ScannerException("Lexer: token Q has previous session tokens ")
             self.tokens = list()
         else:
-            data = u"".join(self.File.readlines())
-        
+            if self.encoding == "utf-8":
+                data = u"".join(self.File.readlines())
+            elif self.encoding == "tscii":
+                data = self.converted_data
+            else:
+                assert False
         idx = 0 
         tok_start_idx = 0
 
