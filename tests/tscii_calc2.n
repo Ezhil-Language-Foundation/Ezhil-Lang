@@ -1,0 +1,12 @@
+# (C) Óò¨¾Â¡ «ñ½¡Á¨Ä 2013
+# þÐ ´Õ ±Æ¢ø ¾Á¢ú ¿¢ÃÄ¡ì¸ ¦Á¡Æ¢ ¯¾¡Ã½õ
+
+À¾¢ôÀ¢ "10+15 = ",10 + 15,"17/3.0=", 17/3.0
+À¾¢ôÀ¢ "17%3 = ", 17%3,"50 - 6*5= ", 50 - 6*5
+À¾¢ôÀ¢ "(50-5*6)/4 = ", ( 50 - 5*6 )/4
+
+# scientific notation, pi = 
+À¾¢ôÀ¢ "pi()-3.14159 =",pi()-3.14159,2/1000000.00
+
+# 1. Pi - https://en.wikipedia.org/wiki/Pihttps://en.wikipedia.org/wiki/Pi
+# 2. Scientific notation -https://en.wikipedia.org/wiki/Scientific_notation

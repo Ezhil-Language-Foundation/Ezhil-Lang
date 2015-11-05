@@ -1,7 +1,7 @@
 #!/usr/bin/python
 ## -*- coding: utf-8 -*-
 ## 
-## (C) 2008, 2013 Muthiah Annamalai
+## (C) 2008, 2013, 2015 Muthiah Annamalai
 ## Licensed under GPL Version 3
 ##
 ## This module is the scanner for the Ezhil language.
@@ -58,7 +58,7 @@ class EzhilLex ( Lex ) :
     """ Lex Tamil characters : RAII principle - lex on object construction"""
     
     def __init__(self,fname=None,dbg=False,encoding="utf-8"):
-        if ( dbg ): print(u"init")
+        if ( dbg ): print(u"init/EzhilLex")
         Lex.__init__(self,fname,dbg,encoding)
         
     def get_lexeme(self,chunks , pos):
@@ -204,8 +204,13 @@ class EzhilLex ( Lex ) :
         else:
             if hasattr(self.File,'data'):
                 data = self.File.data
-            else:
+            elif self.encoding == "utf-8":
                 data = u"".join(self.File.readlines())
+            elif self.encoding == "tscii":
+                if self.debug: print("Loading TSCII converted data -> ")
+                data = self.converted_data
+            else:
+                assert False
         if ( self.debug ): print(data)
         idx = 0
         tok_start_idx = 0

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 ##
-## (C) 2007, 2008 Muthiah Annamalai
+## (C) 2007, 2008, 2015 Muthiah Annamalai
 ## Licensed under GPL Version 3
 ##
 ## This module is the scanner for the exprs language.
@@ -143,11 +143,12 @@ class DummyFile:
     def readlines(self):
         return self.data.split(u"\n")
 
-class Lex:
+class Lex(object):
     """ Lexer automatically starts lexing on init.
     Maybe use some Library module? """
 
     def __init__(self,fname=None,dbg=False,encoding="utf-8"):
+        object.__init__(self)
         self.encoding=encoding.lower()
         self.stdin_mode = False
         self.debug = dbg
@@ -161,6 +162,9 @@ class Lex:
                 # use open-tamil libraries to translate the source file
                 self.File = open(fname,"r")
                 self.converted_data = tamil.tscii.convert_to_unicode( self.File.read() )
+                if (self.debug ):
+                    print("########## TSCII CONVERSION  TO UNICODE DONE ##########")
+                    print("######################### %d letters found #################"%len(self.converted_data))
             else:
                 raise Exception("Unknown encoding %s used for file %s"%(encoding,fname))    
         elif ( isinstance(fname,list) ):

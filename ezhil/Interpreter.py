@@ -1,5 +1,5 @@
 ## -*- coding: utf-8 -*-
-## (C) 2007, 2008, 2013-2015 Muthiah Annamalai,
+## (C) 2007, 2008, 2013, 2014, 2015 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
 ## 
@@ -101,35 +101,6 @@ def ezhil_load(filename):
     # load the file into the interpreter
     # we have a symbol table and use it
     pass
-
-# program name
-def get_prog_name(lang):
-    prog_name=None
-    debug=False
-    
-    parser = argparse.ArgumentParser(prog=lang)
-    parser.add_argument("files",nargs='*',default=[])
-    parser.add_argument("-debug",action="store_true",
-                        default=False,
-                        help="enable debugging information on screen")
-    parser.add_argument("-tamilencoding",action="store_true",default="UTF-8",
-                        help="option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
-    parser.add_argument("-stdin",action="store_true",
-                        default=None,
-                        help="read input from the standard input")
-    args = parser.parse_args()
-
-    if (len(args.files) == 0 and (not args.stdin)) or \
-       not(args.tamilencoding in ["utf-8","tscii","TSCII","UTF-8"]):
-        parser.print_help()
-        sys.exit(-1)
-    
-    prog_name = args.files
-    debug = args.debug
-    dostdin = args.stdin
-    encoding = args.tamilencoding
-    #print("###### chosen encoding => ",encoding)
-    return [prog_name, debug, dostdin,encoding]
 
 class NoClobberDict(dict):
     """ dictionary structure with a set like mathematical structure.
@@ -819,3 +790,34 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
         if doExit:
             sys.exit( 0 )
         return
+
+# program name / CLI args handler
+def get_prog_name(lang):
+    prog_name=None
+    debug=False
+    parser = argparse.ArgumentParser(prog=lang)
+    parser.add_argument("files",nargs='*',default=[])
+    parser.add_argument("-debug",action="store_true",
+                        default=False,
+                        help="enable debugging information on screen")
+    parser.add_argument("-tamilencoding",default="UTF-8",
+                        help="option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
+    parser.add_argument("-stdin",action="store_true",
+                        default=None,
+                        help="read input from the standard input")
+    args = parser.parse_args()
+    if args.debug:
+        print("===>",args.tamilencoding," | ===> files: ".join(args.files))
+    error_fcn = lambda :   parser.print_help() or sys.exit(-1)
+    if (len(args.files) == 0 and (not args.stdin)):
+        error_fcn()
+    if not(args.tamilencoding in ["utf-8","tscii","TSCII","UTF-8"]):
+        print("Unsupported encoding %s; use values TSCII or UTF-8, or see Help"%args.tamilencoding)
+        error_fcn()
+    prog_name = args.files
+    debug = args.debug
+    dostdin = args.stdin
+    encoding = args.tamilencoding
+    if args.debug:
+        print("###### chosen encoding => ",encoding)
+    return [prog_name, debug, dostdin,encoding]

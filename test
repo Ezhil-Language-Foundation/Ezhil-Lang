@@ -56,6 +56,16 @@ do
     sleep 0
 done
 
+echo "**********Special TSCII Test**********"
+        python ../ezhil/ezhil.py  -tamilencoding tscii  tscii_calc2.n 
+	if [ $? -eq 0 ]
+	then
+	    echo "tscii_calc2.n" >> ../success.txt
+	else
+	    echo "tscii_calc2.n" >> ../failed.txt
+	fi
+echo "********************************************"
+
 if [ -e names.txt ];
 then
     rm names.txt
