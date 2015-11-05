@@ -1,0 +1,28 @@
+FAQs - Frequently asked questiosn
+
+
+Q. Help, I cannot use Ezhil from the console! I installed Ezhil from the github repository.
+   Even the GNOME Terminal, Windows CMD, KDE Konsole terminal software don't render Tamil text.
+   How can I now learn/use Ezhil ?
+
+Answer:
+   Short answer: you need the single-page Ezhil web app.
+   
+   You have installed Konsole correctly; even though this software works well for Tamil, compared to Gnome Terminal, it still has problems.
+
+   My recommendation is to use Ezhil via your localhost via the web-browser; do the following steps,
+
+   1. Navigate to the root directory of Ezhil project
+     $ cd ezhil-lang/ 
+
+   2. Start the webserver
+     $ ./webserver.sh
+
+   3. Open firefox or chrome and navigate to URL for the Ezhil web-app:
+      http://localhost:8080/
+
+   This page will have your Ezhil online browser where you can type programs.
+
+   You can type the code in the text box and enter to evaluate the program. The output will be
+   shown in the new webpage. This page contains your output and/or error messages, and also allows you
+   to navigate backwards to enter a newer program or view the older code.

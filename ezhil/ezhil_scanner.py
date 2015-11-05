@@ -57,9 +57,9 @@ class EzhilToken( Token):
 class EzhilLex ( Lex ) :
     """ Lex Tamil characters : RAII principle - lex on object construction"""
     
-    def __init__(self,fname=None,dbg=False):
+    def __init__(self,fname=None,dbg=False,encoding="utf-8"):
         if ( dbg ): print(u"init")
-        Lex.__init__(self,fname,dbg)
+        Lex.__init__(self,fname,dbg,encoding)
         
     def get_lexeme(self,chunks , pos):
         if ( self.debug ):

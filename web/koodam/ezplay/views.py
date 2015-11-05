@@ -8,6 +8,7 @@ from ezhil import EzhilFileExecuter
 import ezhil
 import os, sys, tempfile, traceback, codecs
 
+from koodam import settings
 # Create your views here.
 
 class EzhilWeb:
@@ -81,7 +82,8 @@ def evaluate( request ):
                    'failed_flag':failed,
                    'program_input':progin,
                    'program_output':progout,
-                   'exception_message':exception}
+                   'exception_message':exception,
+                   'DOCROOT':settings.DOCROOT}
     ctx = Context(ctx_data)
 
     if request.is_ajax():

@@ -7,7 +7,7 @@
 ## Interpreter for Ezhil language
 
 import os, sys, string, tempfile
-from Interpreter import Interpreter, REPL, Lex, get_prog_name
+from Interpreter import Interpreter, REPL, Lex, get_prog_name, PYTHON3
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
 from errors import RuntimeException, ParseException, TimeoutException
@@ -16,7 +16,8 @@ from time import sleep,clock,time
 import codecs, traceback
 
 import codecs, sys
-sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+if not PYTHON3:
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 #sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 class EzhilInterpreter( Interpreter ):
@@ -142,18 +143,19 @@ class EzhilFileExecuter(EzhilRedirectOutput):
     def get_output(self):
         return [self.tmpf_name,self.fProcName,self.data]
     
-	def __delete__(self):
-		if self.tmpf and hasattr(self.tmpf,'name'):
-			os.unlink( self.tmpf.name )
-			self.tmpf = None
-		if self.fProcName:
-			os.unlink( self.fProcName )
-			self.fProcName = None
-		if hasattr(self.p,'terminate'):
-			self.p.terminate()
-		pass
-	
-    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None):
+    def __delete__(self):
+        if self.tmpf and hasattr(self.tmpf,'name'):
+            os.unlink( self.tmpf.name )
+            self.tmpf = None
+        if self.fProcName:
+            os.unlink( self.fProcName )
+            self.fProcName = None
+        if hasattr(self.p,'terminate'):
+            self.p.terminate()
+        pass
+    
+    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None,encoding="utf-8"):
+        encoding = encoding.lower()        
         EzhilRedirectOutput.__init__(self,redirectop,debug)
         self.dbg_msg(u"ezil file executer\n")
         self.fProcName = ""
@@ -163,7 +165,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         self.TIMEOUT = TIMEOUT
         if ( not redirectop ): #run serially and exit.
             try:
-                ezhil_file_parse_eval( file_input,self.redirectop,self.debug)
+                ezhil_file_parse_eval( file_input,self.redirectop,self.debug,encoding)
                 self.exitcode = 0
             except Exception as e:
                 self.exitcode = -1
@@ -232,7 +234,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         else:
             pass #nothing to run
 
-def ezhil_file_parse_eval( file_input,redirectop,debug):
+def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8"):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
         the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
         cleanup the cruft. Note file_input can be a string version of a program to be evaluated if it is
@@ -241,7 +243,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug):
     if ( redirectop ):
         sys.stdout = codecs.open(EzhilRedirectOutput.pidFileName(current_process().pid),"w","utf-8")
         sys.stderr = sys.stdout;
-    lexer = EzhilLex(file_input,debug)
+    lexer = EzhilLex(file_input,debug,encoding=encoding)
     if ( debug ): lexer.dump_tokens()
     parse_eval = EzhilInterpreter( lexer, debug )
     web_ast = parse_eval.parse()
@@ -338,7 +340,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         
         try:
             lang = u"எழில்"
-            lexer = EzhilLex(debug)
+            lexer = EzhilLex(debug,encoding="utf-8")
             if ( debug ): print( unicode(lexer) )
             parse_eval = EzhilInterpreter( lexer, debug )
             ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
@@ -366,8 +368,9 @@ def ezhil_interactive_interpreter(lang = u"எழில்",debug=False):
 
 if __name__ == u"__main__":
     lang = u"எழில்"
-    [fnames, debug, dostdin ]= get_prog_name(lang)
+    [fnames, debug, dostdin, encoding ]= get_prog_name(lang)
     if ( dostdin ):
+        # ignore fnames, and encoding here
         ezhil_interactive_interpreter(lang,debug)
     else:
         ## evaluate a files sequentially except when exit() was called in one of them,
@@ -376,7 +379,7 @@ if __name__ == u"__main__":
         for idx,aFile in enumerate(fnames):
             if ( debug):  print(u" **** Executing file #  ",1+idx,u"named ",aFile)
             try:
-                EzhilFileExecuter( aFile, debug ).run()
+                EzhilFileExecuter( aFile, debug, encoding=encoding ).run()
             except Exception as e:
                 print(u"executing file, "+aFile.decode("utf-8")+u" with exception "+unicode(e))
                 if ( debug ):

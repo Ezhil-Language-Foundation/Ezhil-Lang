@@ -2,6 +2,8 @@
 ##
 ##  PROG:  STMT; FUNCDEF
 ##
+##  INCLUDESTMT : INCLUDE (உள்ளடக்கு) "program_name.n"
+##  
 ##  FUNCDEF : 'def' id '(' ARGLIST ')'  STMTLIST END
 ##
 ##  STMTLIST : STMT, STMTLIST | NONE
@@ -10,7 +12,9 @@
 ##  ASSIGNSTMT: id := EXPR 
 ##  ## copying is a value based deep-copy, not a reference.
 ##  ## later this may change however.
-##
+##  
+##  STMT: INCLUDESTMT
+##  
 ##  STMT: PRINTSTMT
 ##  PRINTSTMT : 'print' EXPR
 ##

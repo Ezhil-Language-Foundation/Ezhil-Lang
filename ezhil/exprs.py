@@ -13,7 +13,8 @@ sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
 if __name__ == "__main__":      
     lang = 'exprs';
-    [fname, debug, dostdin ]= get_prog_name(lang)
+    [fname, debug, dostdin, encoding ]= get_prog_name(lang)
+    # don't care about encoding right now
     if ( dostdin ):
         ## interactive interpreter
         lexer = Lex( )
