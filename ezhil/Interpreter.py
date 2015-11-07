@@ -215,12 +215,8 @@ class Interpreter(DebugUtils):
     
     @staticmethod
     def ezhil_assert( x  ):
-        try:
-           assert x
-        except Exception as excep:
-           print(unicode(excep))
-           raise Exception(u'Assertion failed!')
-           return False
+        # we raise Exception(u'Assertion failed!') further up stack
+        assert x
         return True
     
     # file IO functions - 6 total

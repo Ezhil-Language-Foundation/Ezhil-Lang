@@ -37,6 +37,8 @@ class BuiltinFunction:
     def evaluate(self,env):
         try:
             return self.do_evaluate(env)
+        except AssertionError as assert_excep:
+            raise RuntimeException( unicode(assert_excep) + u' Assertion failed!')
         except Exception as excep:
             print(u"failed dispatching function ",unicode(self),u"with exception",unicode(excep))
             raise excep
@@ -72,6 +74,8 @@ class BuiltinFunction:
                     rval = self.fn(*[args])
                 else:
                     rval = self.fn(*args)
+            except AssertionError as assert_excep:
+                raise assert_excep
             except Exception as excep:
                 #print u"catch exception", excep
                 raise RuntimeException( unicode(excep) )
