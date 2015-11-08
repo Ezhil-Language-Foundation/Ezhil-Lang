@@ -64,7 +64,7 @@ def ezhil_license():
     return u"Licensed under GPL Version 3"
 
 def ezhil_tamil_length(arg):
-	return Number( len( tamil.utf8.get_letters( arg ) ) )
+	return Number( len( tamil.get_letters( arg ) ) )
 
 def ezhil_getitem(*args):
     if len(args) < 2:
@@ -599,39 +599,40 @@ class Interpreter(DebugUtils):
 	
         # open-tamil API
         # get tamil letters
-        self.add_builtin("get_tamil_letters",tamil.utf8.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
-        self.add_builtin(u"த",tamil.utf8.get_letters,nargin=1)
+        self.add_builtin("get_tamil_letters",tamil.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
+        self.add_builtin(u"த",tamil.get_letters,nargin=1)
         self.add_builtin("tamil_length",ezhil_tamil_length,nargin=1,ta_alias=u"தநீளம்")     
         
         # functions returning constant list of Tamil strings
-        self.add_builtin("tamil_letters",lambda :  tamil.utf8.tamil_letters,
+        self.add_builtin("tamil_letters",lambda :  tamil.tamil_letters,
                          nargin=0,ta_alias=u"தமிழ்எழுத்து")
-        self.add_builtin("tamil_uyir",lambda :  tamil.utf8.uyir_letters,
+        self.add_builtin("tamil_uyir",lambda :  tamil.uyir_letters,
                          nargin=0,ta_alias=u"உயிர்எழுத்து")
-        self.add_builtin("tamil_mei",lambda: tamil.utf8.mei_letters,
+        self.add_builtin("tamil_mei",lambda: tamil.mei_letters,
                          nargin=0,ta_alias=u"மெய்எழுத்து") 
-        self.add_builtin("tamil_kuril",lambda: tamil.utf8.kuril_letters,
+        self.add_builtin("tamil_kuril",lambda: tamil.kuril_letters,
                          nargin=0,ta_alias=u"குரில்எழுத்து") 
-        self.add_builtin("tamil_nedil",lambda: tamil.utf8.nedil_letters,
+        self.add_builtin("tamil_nedil",lambda: tamil.nedil_letters,
                          nargin=0,ta_alias=u"நேடில்எழுத்து") 
-        self.add_builtin("tamil_vallinam",lambda: tamil.utf8.vallinam_letters,
+        self.add_builtin("tamil_vallinam",lambda: tamil.vallinam_letters,
                          nargin=0,ta_alias=u"வல்லினம்எழுத்து") 
-        self.add_builtin("tamil_mellinam",lambda: tamil.utf8.mellinam_letters,
+        self.add_builtin("tamil_mellinam",lambda: tamil.mellinam_letters,
                          nargin=0,ta_alias=u"மெல்லினம்") 
-        self.add_builtin("tamil_idayinam",lambda: tamil.utf8.idayinam_letters,
+        self.add_builtin("tamil_idayinam",lambda: tamil.idayinam_letters,
                          nargin=0,ta_alias=u"இடைனம்எழுத்து") 
-        self.add_builtin("tamil_agaram",lambda: tamil.utf8.agaram_letters,
+        self.add_builtin("tamil_agaram",lambda: tamil.agaram_letters,
                          nargin=0,ta_alias=u"அகரம்எழுத்து") 
-        self.add_builtin("tamil_uyirmei",lambda: tamil.utf8.uyirmei_letters,
+        self.add_builtin("tamil_uyirmei",lambda: tamil.uyirmei_letters,
                          nargin=0,ta_alias=u"உயிர்மெய்எழுத்து")
         
-        self.add_builtin("tamil_istamil_prefix",tamil.utf8.istamil_prefix,
+        self.add_builtin("tamil_istamil_prefix",tamil.istamil_prefix,
                          nargin=1)
-        self.add_builtin("tamil_all_tamil", tamil.utf8.all_tamil,
-                         nargin=1,ta_alias=u"தனித்தமிழா")
-        self.add_builtin("tamil_hastamil",tamil.utf8.has_tamil,
+        ##NEEDS FIX
+        ##self.add_builtin("tamil_all_tamil", tamil.all_tamil,
+                    ##      nargin=1,ta_alias=u"தனித்தமிழா")
+        self.add_builtin("tamil_hastamil",tamil.has_tamil,
                          nargin=1,ta_alias=u"தமிழ்கொண்டதா")
-        self.add_builtin("tamil_reverse_word",tamil.utf8.reverse_word,
+        self.add_builtin("tamil_reverse_word",tamil.reverse_word,
                          nargin=1,ta_alias=u"அந்தாதிமாற்று")
         return True
     
