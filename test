@@ -44,6 +44,7 @@ tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
 max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n \
 boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \ 
 array_wr.n \
+dict_rw.n \
 neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    

@@ -51,7 +51,7 @@ from transform import Visitor
 import collections
 
 def ezhil_version():
-        return 0.76
+        return 0.8
 
 def ezhil_copyright():
     return u"(C) 2007-2013 Muthiah Annamalai"
@@ -550,7 +550,8 @@ class Interpreter(DebugUtils):
         self.builtin_map["ljust"] = BuiltinFunction(str.ljust,"ljust",1)
         self.builtin_map["lower"] = BuiltinFunction(str.lower,"lower",1)
         self.builtin_map["lstrip"] = BuiltinFunction(str.lstrip,"lstrip",1)
-        self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
+        if not PYTHON3:
+            self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
         self.builtin_map["replace"] = BuiltinFunction(str.replace,"replace",3)
         self.builtin_map["rfind"] = BuiltinFunction(str.rfind,"rfind",2)
         self.builtin_map["rindex"] = BuiltinFunction(str.rindex,"rindex",1)
@@ -708,7 +709,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
     def preloop(self):
         if not self.continuedline():
             self.update_prompt()
-        print(self.banner)
+        print(u"%s"%(self.banner))
     
     def emptyline(self):
         pass
@@ -792,28 +793,28 @@ def get_prog_name(lang):
     prog_name=None
     debug=False
     parser = argparse.ArgumentParser(prog=lang)
-    parser.add_argument("files",nargs='*',default=[])
-    parser.add_argument("-debug",action="store_true",
+    parser.add_argument(u"files",nargs='*',default=[])
+    parser.add_argument(u"-debug",action=u"store_true",
                         default=False,
-                        help="enable debugging information on screen")
-    parser.add_argument("-tamilencoding",default="UTF-8",
-                        help="option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
-    parser.add_argument("-stdin",action="store_true",
+                        help=u"enable debugging information on screen")
+    parser.add_argument(u"-tamilencoding",default=u"UTF-8",
+                        help=u"option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
+    parser.add_argument(u"-stdin",action=u"store_true",
                         default=None,
-                        help="read input from the standard input")
+                        help=u"read input from the standard input")
     args = parser.parse_args()
     if args.debug:
-        print("===>",args.tamilencoding," | ===> files: ".join(args.files))
-    error_fcn = lambda :   parser.print_help() or sys.exit(-1)
+        print(u"===>",args.tamilencoding,u" | ===> files: ".join(args.files))
+    error_fcn = lambda : parser.print_help() or sys.exit(-1)
     if (len(args.files) == 0 and (not args.stdin)):
         error_fcn()
     if not(args.tamilencoding in ["utf-8","tscii","TSCII","UTF-8"]):
-        print("Unsupported encoding %s; use values TSCII or UTF-8, or see Help"%args.tamilencoding)
+        print(u"Unsupported encoding %s; use values TSCII or UTF-8, or see Help"%args.tamilencoding)
         error_fcn()
     prog_name = args.files
     debug = args.debug
     dostdin = args.stdin
     encoding = args.tamilencoding
     if args.debug:
-        print("###### chosen encoding => ",encoding)
+        print(u"###### chosen encoding => ",encoding)
     return [prog_name, debug, dostdin,encoding]

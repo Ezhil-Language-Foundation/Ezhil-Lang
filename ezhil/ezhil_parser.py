@@ -579,7 +579,7 @@ class EzhilParser(Parser):
                     val = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug)
             elif ( ptok.kind ==  EzhilToken.LCURLBRACE ):
                 val=None
-                raise ParseException("dictionary indexing not implemented"+unicode(ptok));
+                raise ParseException("dictionary indexing uses square brackets '[' only ']'"+unicode(ptok));
         elif tok.kind ==  EzhilToken.STRING :
             str_tok = self.dequeue()
             [l,c] = str_tok.get_line_col()
