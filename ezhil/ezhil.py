@@ -7,6 +7,17 @@
 ## Interpreter for Ezhil language
 
 import os, sys, string, tempfile
+
+try:
+    import tamil
+except ImportError as no_open_tamil:
+    print(u"Incomplete Ezhil interpreter installation;")
+    print(u"\tFATAL ERROR: %s"%(no_open_tamil))
+    print(u"Missing installation of open-tamil library.")
+    print(u"Get latest version of open-tamil library using Python Package index as")
+    print(u"\t$ pip install open-tamil")
+    sys.exit(255)
+
 from Interpreter import Interpreter, REPL, Lex, get_prog_name, PYTHON3
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
