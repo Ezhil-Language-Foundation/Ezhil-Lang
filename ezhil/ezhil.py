@@ -122,7 +122,7 @@ class EzhilRedirectOutput:
             sys.stderr = self.tmpf
         pass
     
-    def __delete__(self):
+    def __del__(self):
         if self.redirectop:
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
@@ -154,7 +154,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
     def get_output(self):
         return [self.tmpf_name,self.fProcName,self.data]
     
-    def __delete__(self):
+    def __del__(self):
         if self.tmpf and hasattr(self.tmpf,'name'):
             os.unlink( self.tmpf.name )
             self.tmpf = None

@@ -377,6 +377,13 @@ class EzhilParser(Parser):
                 rhs = self.expr()
                 [l,c]=assign_tok.get_line_col()
                 self.currently_parsing.pop()
+                if isinstance(lhs,ExprCall):
+                    # however array assignment is carried out through setitem
+                    # print 'expr-->',lhs,'rhs-->',rhs
+                    newlhs = lhs
+                    newlhs.fname = '__setitem__'
+                    newlhs.arglist.append(rhs)
+                    return EvalStmt(newlhs,l,c,self.debug)
                 return AssignStmt( lhs, assign_tok, rhs, l, c, self.debug)
             self.currently_parsing.pop()
             return EvalStmt( lhs, l, c, self.debug )
@@ -570,10 +577,9 @@ class EzhilParser(Parser):
                 for itr in range(1,len(exp)):
                     VL2 = ValueList([val,exp[itr]],l,c,self.debug)
                     val = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug)
-                #raise ParseException("array indexing implemented"+unicode(ptok));
             elif ( ptok.kind ==  EzhilToken.LCURLBRACE ):
                 val=None
-                raise ParseException("dictionary indexing implemented"+unicode(ptok));
+                raise ParseException("dictionary indexing not implemented"+unicode(ptok));
         elif tok.kind ==  EzhilToken.STRING :
             str_tok = self.dequeue()
             [l,c] = str_tok.get_line_col()

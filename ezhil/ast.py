@@ -611,7 +611,7 @@ class WhileStmt(Stmt):
         self.class_name = "WhileStmt"
 
     def __repr__(self):
-        rval = u"\t\n [%s[["%unicode(self.__class__)+unicode(self.expr)+ u"]] "+unicode(self.body) +u"]"
+        rval = u"\t\n [%s[["%unicode('WhileStmt')+unicode(self.expr)+ u"]] "+unicode(self.body) +u"]"
         return rval
 
     def evaluate(self,env):
@@ -808,7 +808,11 @@ class ValueList:
         self.debug = dbg
         self.line = l
         self.col = c
-
+    
+    def append(self,obj):
+        self.args.append(obj)
+        return
+        
     def __len__(self):
         return len(self.args)
         
