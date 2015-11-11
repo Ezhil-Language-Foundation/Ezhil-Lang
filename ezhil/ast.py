@@ -14,6 +14,12 @@
 import keyword
 import copy
 import math
+import sys
+
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
+
 ## scanner for exprs language
 from scanner import Token, Lexeme, Lex
 
@@ -126,14 +132,14 @@ class Number:
 class Boolean(Number):
     def __init__(self,n, l = 0, c = -1, dbg = False):
         Number.__init__(self,n,l,c,dbg)
-
+    
     def __unicode(self):
         return self.__str__()
     
     def __str__(self):
         if ( self.num ):
-            return u"மெய்"
-        return u"பொய்"
+            return u"மெய் (T)"
+        return u"பொய் (F)"
 
 class Dict(dict):
     def __init__(self):
@@ -156,7 +162,6 @@ class Dict(dict):
         """ how do you evaluate dictionaries? just return the favor """
         return self.base_evaluate( env )
 
-## FIXME: implement arrays
 class Array(list):
     def __init__(self):
         pass
@@ -331,6 +336,9 @@ class UnaryExpr(Stmt):
                 return Boolean( True )
             else:
                 return Boolean( False )
+        elif ( self.unaryop.kind == Token.BITWISE_COMPLEMENT):
+            # do the unary bitwise complement
+            return ~ tval
         else:
             raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")
         return
@@ -348,8 +356,8 @@ class UnaryExpr(Stmt):
         return term
 
 class Expr(Stmt):
-    One = Number ( 1 );
-    Zero = Number ( 0 );
+    One = ( 1 );
+    Zero = ( 0 );
     def __init__(self,t,op,next_expr,l,c,dbg=False):
         Stmt.__init__(self,l,c,dbg)
         self.term=t
@@ -372,19 +380,19 @@ class Expr(Stmt):
             val = (opr1+opr2)
         elif binop == Token.MINUS:
             self.dbg_msg("subtraction")
-            val = Number(opr1-opr2)
+            val = (opr1-opr2)
         elif binop == Token.PROD:
             self.dbg_msg("multiplication")
-            val = Number(opr1*opr2)
+            val = (opr1*opr2)
         elif binop == Token.DIV:
             self.dbg_msg("division")
-            val = Number(opr1/opr2)
+            val = (opr1/opr2)
         elif binop == Token.MOD:
             self.dbg_msg("modulo")
-            val = Number(math.fmod(opr1,opr2));
+            val = (math.fmod(opr1,opr2));
         elif binop == Token.EXP:
             self.dbg_msg("exponent")
-            val = Number(math.pow(opr1,opr2));
+            val = (math.pow(opr1,opr2));
         elif binop == Token.GT:
             self.dbg_msg("GT > ")
             val = self.Zero;
@@ -427,8 +435,14 @@ class Expr(Stmt):
             val = self.Zero
             if ( opr1 or opr2 ):
                 val = self.One;
-        elif binop in [Token.BITWISE_AND, Token.BITWISE_OR]:
-            raise Exception("Ezhil : Bitwise operators AND '&' and OR '|' are not supported currently!")
+        elif binop == Token.BITWISE_AND:
+            val = opr1 & opr2
+        elif binop == Token.BITWISE_OR:
+            val = opr1 | opr2
+        elif binop == Token.BITWISE_LSHIFT:
+            val = opr1 << opr2
+        elif binop == Token.BITWISE_RSHIFT:
+            val = opr1 >> opr2
         else:
             raise SyntaxError("Binary operator syntax not OK @ "+self.get_pos())
         self.dbg_msg("value = "+unicode(val))
@@ -746,10 +760,7 @@ class PrintStmt(Stmt):
         return u"\n\t [PrintStmt[ "+ unicode(self.exprlst)+u"]]"
 
     def do_printop(self,env):
-        val = self.exprlst.evaluate( env  )
-        if hasattr(val,'evaluate') :
-            assert( False )
-            val = val.evaluate( env )
+        val = self.exprlst.evaluate( env  ) 
         print(val) #this prints to output
         return val
     

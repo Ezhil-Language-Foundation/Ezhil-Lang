@@ -19,7 +19,7 @@ class ErrorException(Exception):
 
     def __str__(self):
         ##works in python2.6
-        return " ".join(self.args)
+        return u" ".join(self.args)
 
 
 class ScannerException(ErrorException):

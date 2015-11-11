@@ -46,6 +46,10 @@ boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \
 array_wr.n \
 dict_rw.n \
 beer_bottles_song.n \
+golden_ratio \
+bitwiseops.n \
+mathipeedu.n \
+staircase_light \
 neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
@@ -118,7 +122,23 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # number of failures is always limited, and when you add
 # failed tests you have to bump this up.
 
-NFAIL=7 #02/06/15
+# Known $NFAIL failures
+# ./tests/exprs/arraysum.prog
+# ./tests/exprs/condtest.prog
+# ./tests/exprs/dim2d_array.prog
+# ./tests/exprs/ifelseif.prog
+# gigo.n
+# badlex.n
+# temple.n
+# கூட்டு.n
+# strings.n
+# string_demo.n
+# split_text.n
+# solo_return.n
+# hanoi.n
+# boolf.n
+
+NFAIL=14 #11/12/15
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]

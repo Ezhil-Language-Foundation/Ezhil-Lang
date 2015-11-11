@@ -9,7 +9,9 @@ from __future__ import print_function
 import argparse
 from math import *
 import copy, codecs
-import os, sys, string, inspect
+import os
+import sys
+import inspect
 import string
 import tamil
 from cmd import Cmd
@@ -17,6 +19,8 @@ from pprint import pprint
 import time
 
 PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
 
 ezhil_sleep = time.sleep
 ezhil_date_time = time.asctime
@@ -25,6 +29,7 @@ from ast import String, Number
 
 ## scanner for exprs language
 from scanner import Token, Lexeme, Lex
+from ezhil_scanner import EzhilLex
 
 ## exceptions
 from errors import RuntimeException, ParseException
@@ -119,17 +124,30 @@ def ezhil_list_functions(*args):
     global global_interpreter
     global_interpreter.list_functions(*args)
     
+def ezhil_eval(*args):
+    global global_interpreter
+    env = global_interpreter.env
+    debug = global_interpreter.debug
+    
+    # do the honors
+    lexer = EzhilLex(fname=[args[0]])
+    if ( debug ): lexer.dump_tokens()
+    parse_eval = Interpreter( lexer, debug, global_interpreter.SAFE_MODE,False)
+    web_ast = parse_eval.parse()
+    
+    return parse_eval.evaluate()
 
 ## Gandalf the Grey. One ring to rule them all.
 class Interpreter(DebugUtils):
     """ when you add new language feature, add a AST class 
     and its evaluate methods. Also add a parser method """
-    def __init__(self,lexer, dbg = False,safe_mode=True):
+    def __init__(self,lexer, dbg = False,safe_mode=True,update=True):
         DebugUtils.__init__(self,dbg)
         self.SAFE_MODE = safe_mode
         self.debug = dbg
         self.MAX_REC_DEPTH = 10000
         self.lexer=lexer
+        self.env=None
         self.ast=None
         self.function_map = NoClobberDict()#parsed functions
         self.builtin_map = NoClobberDict() #pointers to builtin functions
@@ -144,9 +162,10 @@ class Interpreter(DebugUtils):
         self.install_builtins()
         self.install_blind_builtins()
         
-        ## update globals
-        global global_interpreter
-        global_interpreter = self
+        if update:
+            ## update globals
+            global global_interpreter
+            global_interpreter = self
         
         
     def reset(self):
@@ -212,7 +231,7 @@ class Interpreter(DebugUtils):
         for b in dir(sys):
             bfn = getattr( sys ,b)
             self.add_blind_fcns( bfn, b)
-    
+        
     @staticmethod
     def ezhil_assert( x  ):
         # we raise Exception(u'Assertion failed!') further up stack
@@ -349,7 +368,7 @@ class Interpreter(DebugUtils):
         #self.builtin_map['coerce']=BlindBuiltins(coerce,'coerce',self.debug)
         self.builtin_map['compile']=BlindBuiltins(compile,'compile',self.debug)
         self.builtin_map['complex']=BlindBuiltins(complex,'complex',self.debug)
-
+        self.builtin_map['xor'] = BlindBuiltins(lambda *x: reduce(lambda a,b: a^b,x),'xor',self.debug)
         # special ezhil commands
         self.builtin_map['copyright']=BlindBuiltins(ezhil_copyright,'copyright',self.debug)
         self.builtin_map['version']=BlindBuiltins(ezhil_version,'version',self.debug) 
@@ -365,7 +384,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['enumerate']=BlindBuiltins(enumerate,'enumerate',self.debug)
 
         # skip these system functions
-        #self.builtin_map['eval']=BlindBuiltins(eval,'eval',self.debug)
+        self.builtin_map['eval']=BlindBuiltins(ezhil_eval,'eval',self.debug)
         #self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
         #self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
         if not PYTHON3:
@@ -450,7 +469,13 @@ class Interpreter(DebugUtils):
 
         # assert
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
-    
+        
+        # str - used for simple serialization in Ezhil
+        self.builtin_map["str"]=BuiltinFunction(str,"str")
+        
+        # sys_platform - used for Windows/Linux identification
+        self.builtin_map["sys_platform"]=BuiltinFunction(lambda : sys.platform,"sys_platform",padic=0)
+        
         # sleep/pause
         self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
         self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
@@ -650,13 +675,15 @@ class Interpreter(DebugUtils):
         return self.ast
 
     def evaluate(self):
-        env = Environment( self.call_stack, self.function_map, \
-                               self.builtin_map, self.debug, int(self.MAX_REC_DEPTH/10) )
+        if not self.env:
+            self.env = Environment( self.call_stack, self.function_map, \
+                                    self.builtin_map, self.debug, int(self.MAX_REC_DEPTH/10) )
         try:
-            env.call_function("__toplevel__") ##some context
-            return self.ast.evaluate(env)
+            if ( len(self.call_stack) == 0 ):
+                self.env.call_function("__toplevel__") ##some context
+            return self.ast.evaluate(self.env)
         except Exception as e:
-            env.disp_stack()
+            self.env.disp_stack()
             raise e
         
     def evaluate_interactive(self,env = None):

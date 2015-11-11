@@ -8,8 +8,14 @@
 ## 
 
 from errors import ScannerException
-import codecs, re
+import codecs
+import re
+import sys
 import tamil
+
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
 
 ## SCANNER
 class Token:
@@ -18,8 +24,9 @@ class Token:
                  u"=",u"END",u"DEF",u"RETURN",u"IF",u"ELSEIF",u"ELSE",
                  u"DO",u"WHILE",u"FOR",u"STRING",u">",u"<",u">=",u"<=",u"!=",
                  u"==",u"[",u"]",u"^",u"%",u"BREAK",u"CONTINUE",u"SWITCH",
-                 u"CASE",u"OTHERWISE",u"&&",u"||",u"&",u"|",u"!"]
-
+                 u"CASE",u"OTHERWISE",u"&&",u"||",u"&",u"|",u"!",
+                 u"{",u"}",u":",u"<<",u">>",u"~"]
+    
     @staticmethod
     def is_string(kind):
         """ predicate to check if @kind token is a string """
@@ -95,18 +102,21 @@ class Token:
     LCURLBRACE = 42
     RCURLBRACE = 43
     COLON = 44
-
-    UNARYOP = [LOGICAL_NOT]
+    BITWISE_LSHIFT = 45
+    BITWISE_RSHIFT = 46
+    BITWISE_COMPLEMENT = 47
+    
+    ## operator classifications
+    UNARYOP = [LOGICAL_NOT,BITWISE_COMPLEMENT]
     ADDSUB = [PLUS, MINUS]
     MULDIV = [PROD,DIV]
     COMPARE = [ GT, LT, GTEQ, LTEQ, NEQ, EQUALITY ]
     EXPMOD = [EXP, MOD]
-    BITWISE_AND_LOGICAL = [LOGICAL_AND, LOGICAL_OR, BITWISE_AND, BITWISE_OR]
+    BITWISE_AND_LOGICAL = [LOGICAL_AND, LOGICAL_OR, BITWISE_AND, BITWISE_OR, BITWISE_LSHIFT, BITWISE_RSHIFT]
     BINOP = []
     for i in [ADDSUB, MULDIV, COMPARE, EXPMOD, BITWISE_AND_LOGICAL]:
         BINOP.extend( i )
     ASSIGNOP = [EQUALS]
-    
 
 class Lexeme:
     def __init__(self,val,kind,fname=""):
@@ -185,7 +195,7 @@ class Lex(object):
         self.spc=re.compile(u"\s+")
         self.newlines=re.compile(u"\n+")
         self.unary_binary_ops = \
-            [ '+','-','=','*','/','>','<','%','^','!=','!','&&','||','|','&','!']
+            [ '+','-','=','*','/','>','<','%','^','!=','!','&&','||','|','&','!','>>','<<','~']
         ## need to be the last on init & only for files
         if ( not self.stdin_mode  ): self.tokenize()
         ## REPL loop can call tokenize_string whenever it
@@ -278,6 +288,12 @@ class Lex(object):
             tval=Lexeme(chunks,Token.BITWISE_AND)
         elif chunks == u"||":
             tval=Lexeme(chunks,Token.LOGICAL_OR)
+        elif chunks == u"<<":
+            tval=Lexeme(chunks,Token.BITWISE_LSHIFT)
+        elif chunks == u">>":
+            tval=Lexeme(chunks,Token.BITWISE_RSHIFT)
+        elif chunks == u"~":
+            tval=Lexeme(chunks,Token.BITWISE_COMPLEMENT)
         elif chunks == u"|":
             tval=Lexeme(chunks,Token.BITWISE_OR)
         elif ( chunks[0] == u"\"" and chunks[-1] == u"\"" ):
@@ -391,7 +407,7 @@ class Lex(object):
             elif ( c in self.unary_binary_ops ):
                 tok_start_idx = idx 
                 if ( len(data) > ( 1 + idx  ) 
-                     and data[idx+1] in ['=','|','&']  ):
+                     and data[idx+1] in ['=','|','&','>','<']  ):
                     c = c +data[idx+1]
                     idx = idx + 1
                 self.get_lexeme(  c , tok_start_idx )

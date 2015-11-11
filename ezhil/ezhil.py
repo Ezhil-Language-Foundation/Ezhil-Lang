@@ -6,7 +6,11 @@
 ## 
 ## Interpreter for Ezhil language
 
-import os, sys, string, tempfile
+import os
+import sys
+import tempfile
+import codecs
+import traceback
 
 try:
     import tamil
@@ -24,11 +28,12 @@ from ezhil_scanner import EzhilLex
 from errors import RuntimeException, ParseException, TimeoutException
 from multiprocessing import Process, current_process
 from time import sleep,clock,time
-import codecs, traceback
 
-import codecs, sys
-if not PYTHON3:
+if True or PYTHON3:
     sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+if PYTHON3:
+    unicode = str
+
 #sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 class EzhilInterpreter( Interpreter ):
@@ -155,6 +160,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         return [self.tmpf_name,self.fProcName,self.data]
     
     def __del__(self):
+        #print(u"Proc deletion method...")
         if self.tmpf and hasattr(self.tmpf,'name'):
             os.unlink( self.tmpf.name )
             self.tmpf = None
@@ -162,7 +168,9 @@ class EzhilFileExecuter(EzhilRedirectOutput):
             os.unlink( self.fProcName )
             self.fProcName = None
         if hasattr(self.p,'terminate'):
+            print(u".... terminate!!! ....")
             self.p.terminate()
+        #print(u"exit code = %d"%self.exitcode)
         pass
     
     def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None,encoding="utf-8"):
@@ -176,15 +184,19 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         self.TIMEOUT = TIMEOUT
         if ( not redirectop ): #run serially and exit.
             try:
+                #print(u"run in non-redirect mode")
                 ezhil_file_parse_eval( file_input,self.redirectop,self.debug,encoding)
+                #print(u"finished... file parse eval")
                 self.exitcode = 0
             except Exception as e:
-                self.exitcode = -1
+                #print(u"raise exception herexxx")
+                self.exitcode = 255
                 traceback.print_tb(sys.exc_info()[2])
                 raise e
         else:
             self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
             self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})
+        #print("done...")
         
     def run(self):
         if self.p :
@@ -252,6 +264,7 @@ def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8"):
         enclosed properly in a list format
     """
     if ( redirectop ):
+        print(u"redirect mode @ ezhil file parse eval")
         sys.stdout = codecs.open(EzhilRedirectOutput.pidFileName(current_process().pid),"w","utf-8")
         sys.stderr = sys.stdout;
     lexer = EzhilLex(file_input,debug,encoding=encoding)
@@ -265,17 +278,19 @@ def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8"):
     try:
         env = parse_eval.evaluate()
     except Exception as e:
-        exit_code = -1
+        #print(u"xxception raised... %s"%str(redirectop))
+        exit_code = 255
         print(unicode(e))
         if ( debug ):
             traceback.print_tb(sys.exc_info()[2])
-            raise e
+        raise e
     finally:
         if ( redirectop ):
             # cerrar - முடி
             sys.stdout.flush()
             sys.stderr.flush()
             #sys.stdout.close()
+    #print(u"returning back...")
     return exit_code
 
 def ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug=False):    
@@ -387,15 +402,16 @@ if __name__ == u"__main__":
         ## evaluate a files sequentially except when exit() was called in one of them,
         ## while exceptions trapped per file without stopping the flow
         exitcode = 0
+        # print(u"mode with fnames")
         for idx,aFile in enumerate(fnames):
-            if ( debug):  print(u" **** Executing file #  ",1+idx,u"named ",aFile)
+            if ( debug ):  print(u" **** Executing file #  ",1+idx,u"named ",aFile)
             try:
                 EzhilFileExecuter( aFile, debug, encoding=encoding ).run()
             except Exception as e:
-                print(u"executing file, "+aFile.decode("utf-8")+u" with exception "+unicode(e))
+                exitcode = 255
+                print(u"executing file, "+aFile+u" with exception "+unicode(e))
                 if ( debug ):
-                    #traceback.print_tb(sys.exc_info()[2])
-                    raise e
-                exitcode = -1
+                    traceback.print_tb(sys.exc_info()[2])
+                #raise e
         sys.exit(exitcode)
     pass

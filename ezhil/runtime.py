@@ -9,6 +9,11 @@
 
 from errors import RuntimeException
 import keyword
+import sys
+
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
 
 ## RUNTIME / LIBRARY etc
 class DebugUtils:

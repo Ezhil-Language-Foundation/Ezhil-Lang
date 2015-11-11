@@ -1,14 +1,19 @@
 #!/usr/bin/python
 ##
-## (C) 2007, 2008-2013 Muthiah Annamalai,
+## (C) 2007, 2008-2013, 2015 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ## 
 ## ezhil parser & AST builder - ezhil frontend and  AST elements to build the parse tree.
 ## refactored left-recursion in the examples
 
-
 import copy
-import os, sys, string, inspect
+import os
+import sys
+import inspect
+
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
 
 ## scanner for Ezhil language
 from ezhil_scanner import EzhilToken, EzhilLex, EzhilLexeme
@@ -551,7 +556,12 @@ class EzhilParser(Parser):
             tok_not = self.dequeue()
             [l, c] = tok_not.get_line_col()
             val = UnaryExpr( self.expr(), tok_not , l, c, self.debug )
-            self.dbg_msg("completed parsing unary expression"+unicode(val))
+            self.dbg_msg("completed parsing unary logical-not expression"+unicode(val))
+        elif tok.kind == EzhilToken.BITWISE_COMPLEMENT:
+            tok_compl = self.dequeue()
+            [l, c] = tok_compl.get_line_col()
+            val = UnaryExpr( self.expr(), tok_compl , l, c, self.debug )
+            self.dbg_msg("completed parsing unary bitwise-complement expression"+unicode(val))
         elif tok.kind ==  EzhilToken.ID:
             tok_id = self.dequeue()
             [l, c] = tok_id.get_line_col()
@@ -625,6 +635,8 @@ class EzhilParser(Parser):
             assert( self.peek().kind == EzhilToken.RSQRBRACE )
             list_end = self.dequeue()
         else:
-            raise ParseException("Expected Number, found something "+unicode(tok))
+            exception_msg = "Expected Number, found something "+unicode(tok)
+            print(exception_msg)
+            raise ParseException(exception_msg)
         self.dbg_msg( u"factor-returning: "+unicode(val) )
         return val

@@ -9,7 +9,14 @@
 
 from math import *
 import copy
-import os, sys, string, inspect
+import os
+import sys
+import string
+import inspect
+
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
 
 ## scanner for exprs language
 from scanner import Token, Lexeme, Lex

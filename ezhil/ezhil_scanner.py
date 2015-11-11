@@ -156,6 +156,12 @@ class EzhilLex ( Lex ) :
             tval=Lexeme(chunks,EzhilToken.LOGICAL_OR)
         elif chunks == u"|":
             tval=Lexeme(chunks,EzhilToken.BITWISE_OR)
+        elif chunks == u"<<":
+            tval=Lexeme(chunks,EzhilToken.BITWISE_LSHIFT)
+        elif chunks == u">>":
+            tval=Lexeme(chunks,EzhilToken.BITWISE_RSHIFT)
+        elif chunks == u"~":
+            tval=Lexeme(chunks,EzhilToken.BITWISE_COMPLEMENT)
         elif chunks == u"!":
             tval=Lexeme(chunks,EzhilToken.LOGICAL_NOT)
         elif ( chunks[0] == u"\"" and chunks[-1] == u"\"" ):
@@ -285,11 +291,11 @@ class EzhilLex ( Lex ) :
                     idx  = idx + 1
                 s = s+data[idx]
                 idx  = idx + 1
-                self.get_lexeme( s , tok_start_idx )            
+                self.get_lexeme( s , tok_start_idx )
             elif ( c in self.unary_binary_ops ):
                 tok_start_idx = idx                 
                 if ( len(data) > ( 1 + idx  ) 
-                     and data[idx+1] in [u'=',u'|',u'&'] ):
+                     and data[idx+1] in [u'=',u'|',u'&',u'>',u'<'] ):
                     c = c +data[idx+1]
                     idx = idx + 1
                 self.get_lexeme(  c , tok_start_idx )
