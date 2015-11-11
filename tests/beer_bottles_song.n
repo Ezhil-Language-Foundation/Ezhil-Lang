@@ -1,0 +1,24 @@
+# (C) முத்தையா அண்ணாமலை 2015
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Ref: http://www.99-bottles-of-beer.net/lyrics.html
+# Ref: submitted to http://www.99-bottles-of-beer.net/abc.html
+
+அ = 100
+@( range(அ,-1,-1) இல் இ ) ஒவ்வொன்றாக
+  @( இ == 1 ) ஆனால்
+    பதிப்பி "1 bottle of beer on the wall, 1 bottle of beer."
+    பதிப்பி "Take one down and pass it around, no more bottles of beer on the wall."
+  @( இ == 2 )    இல்லைஆனால்
+    பதிப்பி இ," bottles of beer on the wall",இ,"bottles of beer."
+    பதிப்பி "Take one down and pass it around",இ-1,"bottle of beer on the wall."
+  @( இ == 0 )    இல்லைஆனால்
+    பதிப்பி "No more bottles of beer on the wall, no more bottles of beer."
+    பதிப்பி "Go to the store and buy some more, 99 bottles of beer on the wall."
+  இல்லை
+     #இ > 2
+    பதிப்பி இ," bottles of beer on the wall",இ,"bottles of beer."
+    பதிப்பி "Take one down and pass it around",இ-1,"bottles of beer on the wall."
+  முடி
+  பதிப்பி ""
+முடி

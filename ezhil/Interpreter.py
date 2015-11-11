@@ -54,7 +54,7 @@ def ezhil_version():
         return 0.8
 
 def ezhil_copyright():
-    return u"(C) 2007-2013 Muthiah Annamalai"
+    return u"(C) 2007-2015 Muthiah Annamalai"
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
