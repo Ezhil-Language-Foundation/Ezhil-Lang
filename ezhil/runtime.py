@@ -38,12 +38,13 @@ class BuiltinFunction:
         try:
             return self.do_evaluate(env)
         except AssertionError as assert_excep:
+            env.disp_stack()
             raise RuntimeException( unicode(assert_excep) + u' Assertion failed!')
         except Exception as excep:
+            env.disp_stack()
             print(u"failed dispatching function ",unicode(self),u"with exception",unicode(excep))
             raise excep
-        assert False, u"unreachable state"
-    
+        
     def do_evaluate(self,env):
         ## push stuff into the call-stack
         env.call_function(self.name)
@@ -109,6 +110,15 @@ class Environment:
         self.readonly_global_vars = {'True':True, 'False':False,u"மெய்":True, u"பொய்":False} #dict of global vars
         self.clear_break_return_continue()
         
+    def disp_stack(self):
+        # we skip BOS since it is a __toplevel__
+        for i in range(1,len(self.call_stack)):
+            print(u"Error in function called from %s"%str(self.call_stack[i]))
+        while len(self.call_stack) > 0:
+            tos = self.call_stack.pop()
+            #print(u"Error in location %s"%str(tos))
+        return
+    
     def get_break_return(self):
         """ get if break or return was set for use in loops """
         val = self.Break or self.Return

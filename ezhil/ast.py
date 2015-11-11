@@ -211,7 +211,7 @@ class ExprCall:
                 raise RuntimeException( str(e) )
             self.dbg_msg( u"function retval ="+unicode(rval)+unicode(type(rval)))
         else:
-            raise RuntimeException(u"undefined function: ]%s[ near ( %d, %d )"%(self.fname, self.line, self.col) )
+            raise RuntimeException(u"undefined function: %s near ( %d, %d )"%(self.fname, self.line, self.col) )
         return rval
 
     def visit(self,walker):

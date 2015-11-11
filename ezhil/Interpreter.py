@@ -652,9 +652,13 @@ class Interpreter(DebugUtils):
     def evaluate(self):
         env = Environment( self.call_stack, self.function_map, \
                                self.builtin_map, self.debug, int(self.MAX_REC_DEPTH/10) )
-        env.call_function("__toplevel__") ##some context
-        return self.ast.evaluate(env)
-
+        try:
+            env.call_function("__toplevel__") ##some context
+            return self.ast.evaluate(env)
+        except Exception as e:
+            env.disp_stack()
+            raise e
+        
     def evaluate_interactive(self,env = None):
         ## use a persistent environment for interactive interpreter
         if ( not env ):
@@ -664,10 +668,16 @@ class Interpreter(DebugUtils):
             env = Environment( self.call_stack, self.function_map, \
                                    self.builtin_map, self.debug )
             env.call_function("__toplevel__") ##some context
-        ## use this from the interactive-interpreter
-        rval = self.ast.evaluate(env)
-        return [ rval, env ]
-
+        
+        try:
+            ## use this from the interactive-interpreter
+            rval = self.ast.evaluate(env)
+            return [ rval, env ]
+        except Exception as e:
+            env.disp_stack()
+            raise e
+        return [None,env]
+        
 # world-famous REPL
 # derive from the Python standard library - Cmd
 # refactor out REPL for ezhil and exprs
