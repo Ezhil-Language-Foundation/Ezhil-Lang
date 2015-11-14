@@ -385,6 +385,7 @@ class Interpreter(DebugUtils):
 
         # skip these system functions
         self.builtin_map['eval']=BlindBuiltins(ezhil_eval,'eval',self.debug)
+        self.builtin_map[u'மதிப்பீடு']=self.builtin_map['eval']
         #self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
         #self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
         if not PYTHON3:
