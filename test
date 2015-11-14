@@ -49,7 +49,9 @@ beer_bottles_song.n \
 golden_ratio \
 bitwiseops.n \
 mathipeedu.n \
-staircase_light \
+staircase_light.n \
+boolean_fcns.n \
+boolean_demorgan.n \
 neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    

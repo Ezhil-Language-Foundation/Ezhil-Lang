@@ -805,6 +805,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
                 pprint( rval )
         except Exception as excep:
             print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s "%(self.line_no-1,line,unicode(excep)))
+            self.lexer.reset()
             if ( self.debug ):
                 raise excep
                 ## clear tokens in lexer
