@@ -191,7 +191,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
             except Exception as e:
                 #print(u"raise exception herexxx")
                 self.exitcode = 255
-                traceback.print_tb(sys.exc_info()[2])
+                if ( self.debug ):
+                    traceback.print_tb(sys.exc_info()[2])
                 raise e
         else:
             self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
@@ -409,7 +410,7 @@ if __name__ == u"__main__":
                 EzhilFileExecuter( aFile, debug, encoding=encoding ).run()
             except Exception as e:
                 exitcode = 255
-                print(u"executing file, "+aFile+u" with exception "+unicode(e))
+                print(u"Faile executing file '"+aFile+u"':\n  "+unicode(e))
                 if ( debug ):
                     traceback.print_tb(sys.exc_info()[2])
                 #raise e

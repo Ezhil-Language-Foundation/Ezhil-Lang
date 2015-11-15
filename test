@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/bash -x
 # Tests for Ezhil language
 # (C) 2007, 2008, 2013-2015 முத்தையா அண்ணாமலை
-# 
+
 if [ -e success.txt ];
 then
     rm success.txt
@@ -13,6 +13,7 @@ fi
 
 touch success.txt
 touch failed.txt
+
 ## run all the success programs
 for i in `ls ./tests/exprs/*.prog | sort`;
 do
@@ -52,6 +53,9 @@ mathipeedu.n \
 staircase_light.n \
 boolean_fcns.n \
 boolean_demorgan.n \
+nonexistent_file.n \
+half_adder.n \
+full_adder.n \
 neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
 do
     echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
@@ -139,8 +143,9 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # solo_return.n
 # hanoi.n
 # boolf.n
+# nonexistent_file.n
 
-NFAIL=14 #11/12/15
+NFAIL=15 #11/15/15
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]
