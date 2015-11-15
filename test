@@ -149,7 +149,7 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # boolf.n
 # nonexistent_file.n
 
-NFAIL=15 #11/15/15
+NFAIL=16 #11/15/15
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]

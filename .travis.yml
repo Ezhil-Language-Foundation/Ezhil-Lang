@@ -1,9 +1,15 @@
+sudo: false
 language: python
 python:
 #  - "3.3" #Ezhil is not 3.3 ready yet.
   - "2.7"
   - "2.6"
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install:  python setup.py install && pip install argparse  && pip install open-tamil
-# command to run tests, e.g. python setup.py test
-script: ./unittest && ./test
+  - "pypy"
+install:
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install --use-mirrors ordereddict; fi
+  - python setup.py install && pip install argparse
+  - pip install .
+  - pip install nose-cov
+script:
+  - ./unittest
+  - ./test
