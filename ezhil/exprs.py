@@ -29,5 +29,8 @@ if __name__ == "__main__":
             parse_eval = Interpreter( lexer, debug )  
             parse_eval.parse()
             if ( debug ):  print("*"*60);  print(str(parse_eval))
-            env = parse_eval.evaluate()
+            try:
+                env = parse_eval.evaluate()
+            except Exception as e:
+                if debug: print("*"*60);  print(str(e))
     pass

@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # Tests for Ezhil language
 # (C) 2007, 2008, 2013-2015 முத்தையா அண்ணாமலை
 
@@ -10,15 +10,20 @@ if [ -e failed.txt ];
 then
     rm failed.txt
 fi
+if [ -e dump_file ];
+then
+    rm dump_file
+fi
 
 touch success.txt
 touch failed.txt
+touch dump_file
 
 ## run all the success programs
 for i in `ls ./tests/exprs/*.prog | sort`;
 do
-    echo "Testing file", $i
-    python ./ezhil/exprs.py $i $1
+    echo "########## Testing file $i" | tee -a dump_file
+    python ./ezhil/exprs.py $i $1 2>&1 >> dump_file
     if [ $? -eq 0 ]
     then
 	echo $i >> success.txt
@@ -58,8 +63,8 @@ half_adder.n \
 full_adder.n \
 neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
 do
-    echo "Testing Ezhil script","python ../ezhil/ezhil.py $i $1"    
-    python ../ezhil/ezhil.py  $i $1
+    echo "########## Testing Ezhil script $i $1" | tee -a ../dump_file    
+    python ../ezhil/ezhil.py  $i $1 2>&1 >> ../dump_file
     if [ $? -eq 0 ]
     then
        echo $i >> ../success.txt
@@ -70,7 +75,7 @@ do
 done
 
 echo "**********Special TSCII Test**********"
-        python ../ezhil/ezhil.py  -tamilencoding tscii  tscii_calc2.n 
+    python ../ezhil/ezhil.py  -tamilencoding tscii  tscii_calc2.n |  tee -a ../dump_file
 	if [ $? -eq 0 ]
 	then
 	    echo "tscii_calc2.n" >> ../success.txt
@@ -87,11 +92,10 @@ fi
 cd ../
 
 echo "**************************************************"
-echo " Running Web tests"
+echo " Running Web tests" | tee -a dump_file
 echo "**************************************************"
-
 # this test needs Ezhil to be installed via pip
-python ./web/ezhil_web.py 
+python ./web/ezhil_web.py 2>&1 >> dump_file
 if [ $? -eq 0 ]
 then
     echo "ezhil_web.py" >> success.txt
@@ -105,8 +109,8 @@ echo "**************************************************"
 sleep 2
 for i in `ls ./tests/*.fprog`;
 do
-    echo "Testing file", $i
-    python ./ezhil/exprs.py $i $1
+    echo "Testing file $i" | tee -a dump_file
+    python ./ezhil/exprs.py $i $1 2>&1 >> dump_file
     if [ $? -eq 0 ]
     then
 	echo $i >> failed.txt
@@ -150,15 +154,15 @@ TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]
 then
-   echo "Expected failures"
+   echo "########## Expected failures" | tee -a dump_file
    exitcode=0 # success
 else
-   echo "Expecting $NFAIL failures, but found $TOTFAIL failures"
-   echo "Too few/many failures; some negative tests may have failed"
-   echo ""
-   echo "######### LIST OF FAILED FILES ##############"
-   cat failed.txt
-   echo " "
+   echo "Expecting $NFAIL failures, but found $TOTFAIL failures" | tee -a dump_file
+   echo "Too few/many failures; some negative tests may have failed" | tee -a dump_file
+   echo "" | tee -a dumpfile
+   echo "######### LIST OF FAILED FILES ##############" | tee -a dump_file
+   cat failed.txt | tee -a dumpfile
+   echo " " | tee -a dumpfile
    exitcode=255 #failed failures != $NFAIL
    exit $exitcode
 fi
