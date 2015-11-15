@@ -13,4 +13,4 @@ ezhil_path = (os.sep).join(os.getcwd().split( os.sep )[:-2])
 sys.path.insert(0,ezhil_path)
 
 import ezhil
-from  .EzhilTestRunner import TestEzhil, TestEzhilException, TestInteractiveEzhil, TestTimeoutEzhil
+from  .EzhilTestRunner import TestEzhil, TestEzhilException, TestInteractiveEzhil, TestTimeoutEzhil, QuietTestCase

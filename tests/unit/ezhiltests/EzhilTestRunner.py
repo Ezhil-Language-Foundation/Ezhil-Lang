@@ -2,12 +2,32 @@
 # 
 # This file is part of Ezhil Language project
 # 
-import os, codecs, sys
+import os
+import sys
+import codecs
 import tempfile
 from glob import glob
 
 import ezhil
+import unittest
 from ezhil import TimeoutException
+
+class QuietTestCase(unittest.TestCase):
+    """ run quiet unit-tests without verbosity """
+    def get_filename(self):
+        raise Exception("Abstract method of class")
+        
+    def setUp(self):
+        self.old = sys.stdout
+        self.olderr = sys.stderr
+        sys.stdout = codecs.open(self.get_filename(),'w','utf-8')
+        sys.stderr = codecs.open("err_"+self.get_filename(),'w','utf-8')
+    
+    def tearDown(self):
+        sys.stdout.close()
+        sys.stderr.close()
+        os.unlink(self.get_filename())
+        os.unlink("err_"+self.get_filename())
 
 class TestEzhil:
     """ run a positive test, and make sure the interpreter doesn't gripe.
@@ -95,12 +115,12 @@ class TestEzhilException( TestEzhil ):
             self.success = False # we expected a particular kind of exception
             if self.exception:
                 self.success = isinstance( ex, self.exception )
-                print(">>>>>>>>>>>> We found an exception \n %s \n"%ex)
+                if ( self.dbg ): print(">>>>>>>>>>>> We found an exception \n %s \n"%ex)
             
             if not self.success:
                 raise Exception("Expected exception class %s was not found"%(self.exception,ex))
             
-            print( u"### EXCEPTION ==> \n %s"%unicode(ex) )
+            if ( self.dbg ): print( u"### EXCEPTION ==> \n %s"%unicode(ex) )
             if self.message:
                 self.success = True
                 # check multiple messages
@@ -108,12 +128,12 @@ class TestEzhilException( TestEzhil ):
                     self.message = [self.message]
                 
                 for msg in self.message:
-                    print self.success
-                    print "### testing ",unicode(msg)
+                    if ( self.dbg ): print self.success
+                    if ( self.dbg ): print "### testing ",unicode(msg)
                     self.success = self.success and \
                         (( ex.message.find( msg ) >= 0 ) or \
                              len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 or unicode(ex).find( msg ) >= 0 )
-                    print self.success
+                    if ( self.dbg ): print self.success
             
             if not self.success and not self.partial:
                 print "######## TEST FAILED #############"
@@ -126,7 +146,7 @@ class TestEzhilException( TestEzhil ):
 
     @staticmethod
     def create_and_test_spl( code, exception, msg):
-        with TestEzhilException(code,exception,msg,True) as tst:
+        with TestEzhilException(code,exception,msg,dbg=False) as tst:
             flag = tst.run()
             print(tst)
         return flag
@@ -161,8 +181,8 @@ class TestInteractiveEzhil(TestEzhil):
             ezhil.start()
             self.success = True
         except Exception as ex:
-            print("Ezhil Interpreter stopped with the exception ....")
-            print( ex.message, ex.args )
+            if ( self.dbg ): print("Ezhil Interpreter stopped with the exception ....")
+            if ( self.dbg ): print( ex.message, ex.args )
             raise ex
         finally:
             print("********* completed Ezhil test *********")
@@ -195,8 +215,8 @@ class TestTimeoutEzhil(TestEzhil):
         except TimeoutException as tex:
             self.success = True #expected to raise an exception
         except Exception as ex:
-            print("Ezhil Interpreter stopped with the exception ....")
-            print( ex.message, ex.args )
+            if ( self.dbg ): print("Ezhil Interpreter stopped with the exception ....")
+            if ( self.dbg ): print( ex.message, ex.args )
             raise ex
         finally:
             print("********* completed Ezhil test *********")

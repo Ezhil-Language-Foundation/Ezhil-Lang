@@ -15,10 +15,12 @@ program = u"""# மாதிரி =>  முடிவிலா சுழற்�
 
 i = 0
 @( i < 100 ) வரை
- i = i + 1
-பதிப்பி "வணக்கம் >> ", i
+ i = i + 11
+#பதிப்பி "வணக்கம் >> ", i
 முடி
 """
+
+debug = False
 
 class Executer(unittest.TestCase):
     def test_basic_file_settings(self):
@@ -30,18 +32,17 @@ class Executer(unittest.TestCase):
         
         # get executed output in 'progout' and name of the two tmp files to cleanup
         [tmpfile,filename,progout] = obj.get_output()
-        
-        #os.unlink( tmpfile )
-        #os.unlink( filename )
-        
+                
         if obj.exitcode != 0 and EzhilWeb.error_qualifiers(progout):
             failed = True
         else:
             failed = False
         
-        print u"output = "
-        print u"%s,%s"%(progout.decode('utf-8'), str(failed))
-        
+        if ( debug ):
+            print u"output = "
+            print u"%s,%s"%(progout.decode('utf-8'), str(failed))
+        return
+
     def test_basic_file_settings_no_redirect(self):
         #print program
         obj = EzhilFileExecuter( file_input = [program], debug=False, redirectop = False, TIMEOUT = 10 ) # 2 minutes
@@ -60,8 +61,10 @@ class Executer(unittest.TestCase):
         else:
             failed = False
         
-        print u"output = "
-        print u"%s,%s"%(progout.decode('utf-8'), str(failed))
+        if ( debug ):
+            print u"output = "
+            print u"%s,%s"%(progout.decode('utf-8'), str(failed))
+        return
 
 if __name__ == '__main__':    
     test_support.run_unittest(Executer)

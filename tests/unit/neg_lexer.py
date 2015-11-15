@@ -6,7 +6,7 @@
 
 # setup the paths
 import ezhiltests
-from ezhiltests import TestEzhilException, ezhil
+from ezhiltests import TestEzhilException, QuietTestCase, ezhil
 from  ezhil.errors import ScannerException
 from random import choice
 
@@ -17,7 +17,10 @@ from test import test_support
 # this test suite contains negative tests, to trap the 
 # correct error behavior of Ezhil language
 
-class IdentifierNeg(unittest.TestCase):
+class IdentifierNeg(QuietTestCase):
+    def get_filename(self):
+        return 'dummy_IdentifierNeg.txt'
+    
     def test_lexer_error(self):        
         for wrongID in [u"Turing'",u"babb@ge",u"Ada'",u"Grace'",u"Hopper\"",u"Li$kov",u"sch@figoldw@$$er"]:
             TestEzhilException.create_and_test(wrongID,ScannerException,"is not valid for identifier")

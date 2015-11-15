@@ -7,15 +7,23 @@
 
 # setup the paths
 import ezhiltests
-from ezhiltests import TestEzhil
+from ezhiltests import TestEzhil, QuietTestCase
 
 # helper functions for testsuites
+import sys
+import os
+import codecs
 import unittest
 from test import test_support
 
 from ezhil import PrettyPrint
 
-class TestPrettyPrinter(unittest.TestCase):
+debug = False
+
+class TestPrettyPrinter(QuietTestCase):
+    def get_filename(self):
+        return 'dummy_TestPrettyPrinter.txt'
+    
     def test_run_addition(self):
         relpath  = "../../tests/"
 
@@ -79,11 +87,11 @@ class TestPrettyPrinter(unittest.TestCase):
             expt_fmt = expt_fmt.split("\n");
             formatted_str = PrettyPrint(relpath+filename).pretty_print()
             if not ( all([( formatted_str.find( line ) >= 0 ) for line in expt_fmt]) ):
-                print "file "+filename+" did not find expected strings "
-                print u"\n>>>".join(expt_fmt)
+                if debug: print "file "+filename+" did not find expected strings "
+                if debug: print u"\n>>>".join(expt_fmt)
                 flag = False
             else:
-                print "file " + filename + " passed the test"
+                if debug: print "file " + filename + " passed the test"
         
         self.assertTrue( flag )
 
