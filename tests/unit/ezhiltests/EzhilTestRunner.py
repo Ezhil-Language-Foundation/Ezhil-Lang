@@ -14,6 +14,10 @@ from ezhil import TimeoutException
 
 class QuietTestCase(unittest.TestCase):
     """ run quiet unit-tests without verbosity """
+    def __init__(self,*args):
+        unittest.TestCase.__init__(self,*args)
+        self.debug = False
+    
     def get_filename(self):
         raise Exception("Abstract method of class")
         
@@ -26,9 +30,24 @@ class QuietTestCase(unittest.TestCase):
     def tearDown(self):
         sys.stdout.close()
         sys.stderr.close()
+
+        sys.stdout = self.old
+        sys.stdout = self.olderr
+
+        if self.debug:
+            print("############### STDOUT #################")
+            fp = codecs.open(self.get_filename(),"r","utf-8")
+            print(fp.read())
+            fp.close()
+            print("################ STDERR #################")
+            fp = codecs.open("err_"+self.get_filename(),"r","utf-8")
+            print(fp.read())
+            fp.close()
+            print("################ END QUIET TEST ##########")
+        
         os.unlink(self.get_filename())
         os.unlink("err_"+self.get_filename())
-
+        
 class TestEzhil:
     """ run a positive test, and make sure the interpreter doesn't gripe.
         currently there is no way to check the output of Ezhil """
@@ -118,7 +137,7 @@ class TestEzhilException( TestEzhil ):
                 if ( self.dbg ): print(">>>>>>>>>>>> We found an exception \n %s \n"%ex)
             
             if not self.success:
-                raise Exception("Expected exception class %s was not found"%(self.exception,ex))
+                raise Exception("Expected exception class %s was not found; instead %s was received."%(self.exception,ex))
             
             if ( self.dbg ): print( u"### EXCEPTION ==> \n %s"%unicode(ex) )
             if self.message:

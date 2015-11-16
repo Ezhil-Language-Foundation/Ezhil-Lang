@@ -164,9 +164,10 @@ class Lex(object):
         self.debug = dbg
         self.converted_data = None
         self.comments = {} #comments dict indexed by line number with comments present as string value
-        if ( isinstance(fname,str) ):
+        if ( isinstance(fname,str) or isinstance(fname,unicode) ):
             self.fname = fname
             if self.encoding == "utf-8":
+                if( self.debug ): print(u"-> opening file %s",fname)
                 self.File = codecs.open(fname,"r","utf-8")
             elif self.encoding == "tscii":
                 # use open-tamil libraries to translate the source file

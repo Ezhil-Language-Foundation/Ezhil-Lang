@@ -10,6 +10,9 @@
 from errors import RuntimeException
 import keyword
 import sys
+import time
+import traceback
+from profile import Profiler
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -46,8 +49,10 @@ class BuiltinFunction:
             env.disp_stack()
             raise RuntimeException( unicode(assert_excep) + u' Assertion failed!')
         except Exception as excep:
-            env.disp_stack()
+            env.disp_stack()            
             print(u"failed dispatching function ",unicode(self),u"with exception",unicode(excep))
+            if ( self.debug ):
+                traceback.print_tb(sys.exc_info()[2])
             raise excep
         
     def do_evaluate(self,env):
@@ -104,6 +109,8 @@ class BlindBuiltins(BuiltinFunction):
 class Environment:
     """ used to manage the side-effects of an interpreter """
     def __init__(self,call_stack, function_map, builtin_map, dbg = False, MAX_REC_DEPTH  = 128 ):
+        self.do_profiling = False
+        self.profiler = None
         self.max_recursion_depth = MAX_REC_DEPTH #keep it smaller than Python stack
         self.call_stack = call_stack#list
         self.function_map = function_map#dicts
@@ -114,9 +121,36 @@ class Environment:
         self.debug = dbg #use to turn debugging on.
         self.readonly_global_vars = {'True':True, 'False':False,u"மெய்":True, u"பொய்":False} #dict of global vars
         self.clear_break_return_continue()
+
+    def  __del__(self):
+        if (self.debug): print(u"deleting environment")
+        
+    def enable_profiling(self):
+        self.do_profiling =True
+        self.profiler = Profiler()
+        return
+    
+    def is_profiling(self):
+        return self.do_profiling
+    
+    def disable_profiling(self):
+        self.do_profiling = False
+        
+    def report_profiling(self):
+        self.disable_profiling()
+        self.profiler.report_stats()
+        
+    def reset_profiling(self):
+        self.disable_profiling()
+        self.profiler = None
         
     def disp_stack(self):
         # we skip BOS since it is a __toplevel__
+        if (self.debug): print("clearing locals")
+        if len(self.call_stack) > 0:
+            if self.call_stack[-1] != "__toplevel__":
+                self.clear_call()
+        
         for i in range(1,len(self.call_stack)):
             print(u"Error in function called from %s"%str(self.call_stack[i]))
         while len(self.call_stack) > 0:
@@ -163,11 +197,16 @@ class Environment:
         if ( self.debug ):
             print(msg)
         return
-
+    
+    def __unicode__(self):
+        if (self.debug):
+            return repr(self)
+        return u"<env>"
+    
     def __repr__(self):
-        retval = unicode(self.call_stack) + u"\n" \
-            + unicode(self.local_vars) + u"\n" \
-            + unicode(self.arg_stack) + u"\n" 
+        retval = u"CallStack =>"+unicode(self.call_stack) + u"\n" \
+            u"LocalVars =>"+ unicode(self.local_vars) + u"\n" \
+            u"ArgStack =>"+ unicode(self.arg_stack) + u"\n" 
         return retval
 
     def set_retval( self, rval ):
@@ -264,12 +303,16 @@ class Environment:
                                     unicode(self.max_recursion_depth) + 
                                     " ] exceeded; stack overflow." )
         self.dbg_msg(u"calling function"+unicode(fn))
+        if ( self.is_profiling() ):
+            self.profiler.add_function( fn )
         self.call_stack.append( fn )
     
     def return_function(self, fn):
         va = self.call_stack.pop( )
         if ( fn != va ):
             raise RuntimeException("function %s doesnt match Top-of-Stack"%fn)
+        if ( self.is_profiling() ):
+            self.profiler.update_function( va )
         return va
     
     def has_function(self, fn):

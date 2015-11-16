@@ -24,6 +24,7 @@
     பின்கொடு  p
 முடி
 
+profile("begin")
 பதிப்பி "GCD(5,9) = ", gcd(5,9), gcd_iter(5,9)
 assert( gcd(5,9) == 1 )
 assert( gcd_iter(5,9) == 1 )
@@ -35,3 +36,5 @@ assert( gcd_iter(25,20) == 5 )
 பதிப்பி "GCD(44,121) = ", gcd(44,121)
 assert( gcd(44,121) == 11 )
 assert( gcd_iter(44,121) == 11 )
+profile("end")
+profile("results")

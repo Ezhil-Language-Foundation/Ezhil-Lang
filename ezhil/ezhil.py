@@ -5,11 +5,17 @@
 ## Licensed under GPL Version 3
 ## 
 ## Interpreter for Ezhil language
+import codecs
+import sys
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
+else:
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+    #sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 import os
-import sys
 import tempfile
-import codecs
 import traceback
 
 try:
@@ -22,19 +28,12 @@ except ImportError as no_open_tamil:
     print(u"\t$ pip install open-tamil")
     sys.exit(255)
 
-from Interpreter import Interpreter, REPL, Lex, get_prog_name, PYTHON3
+from Interpreter import Interpreter, REPL, Lex, get_prog_name
 from ezhil_parser import EzhilParser
 from ezhil_scanner import EzhilLex
 from errors import RuntimeException, ParseException, TimeoutException
 from multiprocessing import Process, current_process
 from time import sleep,clock,time
-
-if True or PYTHON3:
-    sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
-if PYTHON3:
-    unicode = str
-
-#sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 class EzhilInterpreter( Interpreter ):
     def __init__(self, lexer, debug = False ):
@@ -173,10 +172,10 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         #print(u"exit code = %d"%self.exitcode)
         pass
     
-    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None,encoding="utf-8"):
+    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None,encoding="utf-8",doprofile=False):
         encoding = encoding.lower()        
         EzhilRedirectOutput.__init__(self,redirectop,debug)
-        self.dbg_msg(u"ezil file executer\n")
+        self.dbg_msg(u"ezhil file executer\n")
         self.fProcName = ""
         self.data = ""
         self.tmpf_name = ""		
@@ -184,9 +183,9 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         self.TIMEOUT = TIMEOUT
         if ( not redirectop ): #run serially and exit.
             try:
-                #print(u"run in non-redirect mode")
-                ezhil_file_parse_eval( file_input,self.redirectop,self.debug,encoding)
-                #print(u"finished... file parse eval")
+                self.dbg_msg(u"run in non-redirect mode")
+                ezhil_file_parse_eval( file_input,self.redirectop,self.debug,encoding,doprofile=doprofile)
+                self.dbg_msg(u"finished... file parse eval")
                 self.exitcode = 0
             except Exception as e:
                 #print(u"raise exception herexxx")
@@ -196,7 +195,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 raise e
         else:
             self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
-            self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug})
+            self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug,'doprofile':doprofile})
         #print("done...")
         
     def run(self):
@@ -258,20 +257,27 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         else:
             pass #nothing to run
 
-def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8"):
+def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8",doprofile=False):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
         the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
         cleanup the cruft. Note file_input can be a string version of a program to be evaluated if it is
-        enclosed properly in a list format
+        enclosed properly in a list format.
+        @doprofile : automatically attach profile("begin") to entry of a file and calls profile("results") to end of file.
     """
     if ( redirectop ):
         print(u"redirect mode @ ezhil file parse eval")
         sys.stdout = codecs.open(EzhilRedirectOutput.pidFileName(current_process().pid),"w","utf-8")
         sys.stderr = sys.stdout;
     lexer = EzhilLex(file_input,debug,encoding=encoding)
-    if ( debug ): lexer.dump_tokens()
+    if ( debug ): 
+        print(u"####### dump tokens ########")
+        lexer.dump_tokens()
+        print(u"##########################")
     parse_eval = EzhilInterpreter( lexer, debug )
     web_ast = parse_eval.parse()
+    if doprofile:
+        web_ast.add_profile_at_entry_and_exit()
+    
     if( debug ):
         print(unicode(web_ast))
     if ( debug ):  print(u"*"*60);  print(unicode(parse_eval))
@@ -395,7 +401,7 @@ def ezhil_interactive_interpreter(lang = u"எழில்",debug=False):
 
 if __name__ == u"__main__":
     lang = u"எழில்"
-    [fnames, debug, dostdin, encoding ]= get_prog_name(lang)
+    [fnames, debug, dostdin, encoding,stacksize,doprofile]= get_prog_name(lang)
     if ( dostdin ):
         # ignore fnames, and encoding here
         ezhil_interactive_interpreter(lang,debug)
@@ -407,10 +413,10 @@ if __name__ == u"__main__":
         for idx,aFile in enumerate(fnames):
             if ( debug ):  print(u" **** Executing file #  ",1+idx,u"named ",aFile)
             try:
-                EzhilFileExecuter( aFile, debug, encoding=encoding ).run()
+                EzhilFileExecuter( aFile, debug, encoding=encoding, doprofile=doprofile ).run()
             except Exception as e:
                 exitcode = 255
-                print(u"Faile executing file '"+aFile+u"':\n  "+unicode(e))
+                print(u"Failed executing file '"+aFile+u"':\n  "+unicode(e))
                 if ( debug ):
                     traceback.print_tb(sys.exc_info()[2])
                 #raise e

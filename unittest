@@ -3,6 +3,15 @@
 # run unit tests when previous bits passed
 cd tests/unit/
 
+# use python3 for testing if passed an arg
+if [ $# -ge 1 ]
+then
+    PYTHON=python3
+else
+    PYTHON=python
+fi
+
+#echo "Using Interpreter $PYTHON"
 
 if [ -e success.txt ];
 then
@@ -19,7 +28,7 @@ touch failed.txt
 for i in `ls *.py`
 do
     echo Running test $i
-    python $i
+    $PYTHON $i
     if [ $? -eq 0 ]
     then
         echo $i >> success.txt

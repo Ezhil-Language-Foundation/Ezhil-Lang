@@ -1,0 +1,43 @@
+#!/bin/bash
+cd ./tests 
+# last space important before the \
+for i in `echo gigo.n lisp0.n oklex.n badlex.n hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n\
+ ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n \
+string_demo.n list_ta.n yinyang.n unaryop.n boolean.n chaos.n \
+prime.n array1.n array2.n filedemo.n filerw.n reverse.n friends.n  \
+palindromes.n ford2.n trials.n fornested.n loopupdate.n foreach.n foriter.n \
+dowhile.n select_case2.n magic_coins.n rich_poor.n peanut_candy.n logical_not.n \
+binary.n fibo.n floatpthole.n ifnested.n hailstone.n split_text.n lcmgcd.n \
+windoze.n convert2kelvin.n dict.n speedoflight.n tictok.n \
+change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
+fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
+tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
+max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n \
+boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \
+array_wr.n \
+dict_rw.n \
+beer_bottles_song.n \
+goldenratio.n \
+bitwiseops.n \
+mathipeedu.n \
+staircase_light.n \
+boolean_fcns.n \
+boolean_demorgan.n \
+nonexistent_file.n \
+half_adder.n \
+full_adder.n \
+neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
+do
+    echo "########## Testing Ezhil script $i $1" | tee -a ../dump_file    
+    echo 'profile("begin")' > foo.n
+    cat $i >> foo.n
+    echo 'profile("results")' >> foo.n
+    python ../ezhil/ezhil.py  foo.n $X 2>&1 >> ../dump_file
+    if [ $? -eq 0 ]
+    then
+       echo $i >> ../success.txt
+    else
+       echo $i >> ../failed.txt
+    fi
+    sleep 0
+done

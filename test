@@ -48,11 +48,19 @@ change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
 fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
 tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
 max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n \
-boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \ 
+boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \
+ta_strings.n \
 array_wr.n \
+math_arithprogression.n \
+math_geomprogression.n \
+math_harmonicseries.n \
+math_complex.n \
+math_goldenratio.n \
+math_horner.n \
 dict_rw.n \
+ml.n \
 beer_bottles_song.n \
-golden_ratio \
+sort.n \
 bitwiseops.n \
 mathipeedu.n \
 staircase_light.n \
@@ -61,6 +69,9 @@ boolean_demorgan.n \
 nonexistent_file.n \
 half_adder.n \
 full_adder.n \
+eval0.n \
+eval1.n \
+ta_sort.n \
 neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
 do
     echo "########## Testing Ezhil script $i $1" | tee -a ../dump_file    
@@ -104,13 +115,27 @@ else
 fi
 
 echo "**************************************************"
+echo " Running interactive tests " | tee -a dump_file
+echo "***************************************************"
+for i in `echo demos/ch2.n \
+`
+do
+    echo "ezhil" | python ./ezhil/ezhil.py ./tests/$i  >>  dump_file
+    if [ $? -eq 0 ]
+    then
+	echo "passed ezhil interactive test for  $i" >> success.txt
+    else
+	echo "failed ezhil interactive test for $i" >> failed.txt
+    fi
+done
+
+echo "**************************************************"
 echo " Running all the failure programs, that must fail."
 echo "**************************************************"
-sleep 2
 for i in `ls ./tests/*.fprog`;
 do
     echo "Testing file $i" | tee -a dump_file
-    python ./ezhil/exprs.py $i $1 2>&1 >> dump_file
+    python ./ezhil/exprs.py $i $1 -stacksize 10 2>&1 >> dump_file
     if [ $? -eq 0 ]
     then
 	echo $i >> failed.txt
@@ -137,19 +162,13 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # ./tests/exprs/condtest.prog
 # ./tests/exprs/dim2d_array.prog
 # ./tests/exprs/ifelseif.prog
-# gigo.n
 # badlex.n
 # temple.n
-# கூட்டு.n
-# strings.n
-# string_demo.n
-# split_text.n
 # solo_return.n
-# hanoi.n
 # boolf.n
 # nonexistent_file.n
-
-NFAIL=16 #11/15/15
+# eval1.n
+NFAIL=12 #11/18/15
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]
@@ -159,10 +178,10 @@ then
 else
    echo "Expecting $NFAIL failures, but found $TOTFAIL failures" | tee -a dump_file
    echo "Too few/many failures; some negative tests may have failed" | tee -a dump_file
-   echo "" | tee -a dumpfile
+   echo "" | tee -a dump_file
    echo "######### LIST OF FAILED FILES ##############" | tee -a dump_file
-   cat failed.txt | tee -a dumpfile
-   echo " " | tee -a dumpfile
+   cat failed.txt | tee -a dump_file
+   echo " " | tee -a dump_file
    exitcode=255 #failed failures != $NFAIL
    exit $exitcode
 fi

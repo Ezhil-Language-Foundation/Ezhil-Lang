@@ -83,15 +83,16 @@ class TestPrettyPrinter(QuietTestCase):
                         }
                 
         flag = True
+        self.debug = False
         for filename, expt_fmt in file_patterns.items():
             expt_fmt = expt_fmt.split("\n");
             formatted_str = PrettyPrint(relpath+filename).pretty_print()
             if not ( all([( formatted_str.find( line ) >= 0 ) for line in expt_fmt]) ):
-                if debug: print "file "+filename+" did not find expected strings "
-                if debug: print u"\n>>>".join(expt_fmt)
+                if self.debug: print "file "+filename+" did not find expected strings "
+                if self.debug: print u"\n>>>".join(expt_fmt)
                 flag = False
             else:
-                if debug: print "file " + filename + " passed the test"
+                if self.debug: print "file " + filename + " passed the test"
         
         self.assertTrue( flag )
 

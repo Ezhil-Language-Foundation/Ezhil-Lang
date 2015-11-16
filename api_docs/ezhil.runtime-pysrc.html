@@ -281,9 +281,9 @@ ezhil.transform.Visitor.__init__" class="py-name" href="#" onclick="return docli
 <a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
 </div><a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line"> </tt>
 <a name="Environment.__repr__"></a><div id="Environment.__repr__-def"><a name="L146"></a><tt class="py-lineno">146</tt> <a class="py-toggle" href="#" id="Environment.__repr__-toggle" onclick="return toggle('Environment.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.runtime.Environment-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="Environment.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Environment.__repr__-expanded"><a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-name">retval</tt> <tt class="py-op">=</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">call_stack</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"\n"</tt> \ </tt>
-<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">local_vars</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"\n"</tt> \ </tt>
-<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">            <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">arg_stack</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"\n"</tt>  </tt>
+</div><div id="Environment.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Environment.__repr__-expanded"><a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-name">retval</tt> <tt class="py-op">=</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">call_stack</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">u"\n"</tt> \ </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">local_vars</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">u"\n"</tt> \ </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">            <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">arg_stack</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">u"\n"</tt>  </tt>
 <a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">retval</tt> </tt>
 </div><a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"> </tt>
 <a name="Environment.set_retval"></a><div id="Environment.set_retval-def"><a name="L152"></a><tt class="py-lineno">152</tt> <a class="py-toggle" href="#" id="Environment.set_retval-toggle" onclick="return toggle('Environment.set_retval');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.runtime.Environment-class.html#set_retval">set_retval</a><tt class="py-op">(</tt> <tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">rval</tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
@@ -320,10 +320,11 @@ ezhil.prettify.Printer.append" class="py-name" href="#" onclick="return doclink(
 </div><a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"> </tt>
 <a name="Environment.set_args"></a><div id="Environment.set_args-def"><a name="L183"></a><tt class="py-lineno">183</tt> <a class="py-toggle" href="#" id="Environment.set_args-toggle" onclick="return toggle('Environment.set_args');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="ezhil.runtime.Environment-class.html#set_args">set_args</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">val</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="Environment.set_args-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Environment.set_args-expanded"><a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">        <tt class="py-docstring">""" manage a global argument stack """</tt> </tt>
-<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method ezhil.ast.ExprCall.dbg_msg()=ezhil.ast.ExprCall-class.html#dbg_msg,Method ezhil.ast.Function.dbg_msg()=ezhil.ast.Function-class.html#dbg_msg,Method ezhil.ast.Identifier.dbg_msg()=ezhil.ast.Identifier-class.html#dbg_msg,Method ezhil.ast.Stmt.dbg_msg()=ezhil.ast.Stmt-class.html#dbg_msg,Method ezhil.runtime.DebugUtils.dbg_msg()=ezhil.runtime.DebugUtils-class.html#dbg_msg,Method ezhil.runtime.Environment.dbg_msg()=ezhil.runtime.Environment-class.html#dbg_msg"><a title="ezhil.ast.ExprCall.dbg_msg
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method ezhil.ast.ExprCall.dbg_msg()=ezhil.ast.ExprCall-class.html#dbg_msg,Method ezhil.ast.Function.dbg_msg()=ezhil.ast.Function-class.html#dbg_msg,Method ezhil.ast.Identifier.dbg_msg()=ezhil.ast.Identifier-class.html#dbg_msg,Method ezhil.ast.Stmt.dbg_msg()=ezhil.ast.Stmt-class.html#dbg_msg,Method ezhil.ezhil.EzhilRedirectOutput.dbg_msg()=ezhil.ezhil.EzhilRedirectOutput-class.html#dbg_msg,Method ezhil.runtime.DebugUtils.dbg_msg()=ezhil.runtime.DebugUtils-class.html#dbg_msg,Method ezhil.runtime.Environment.dbg_msg()=ezhil.runtime.Environment-class.html#dbg_msg"><a title="ezhil.ast.ExprCall.dbg_msg
 ezhil.ast.Function.dbg_msg
 ezhil.ast.Identifier.dbg_msg
 ezhil.ast.Stmt.dbg_msg
+ezhil.ezhil.EzhilRedirectOutput.dbg_msg
 ezhil.runtime.DebugUtils.dbg_msg
 ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return doclink('link-19', 'dbg_msg', 'link-19');">dbg_msg</a></tt><tt class="py-op">(</tt> <tt class="py-string">"setting args "</tt> <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt> <tt class="py-name">val</tt> <tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
 <a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">arg_stack</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="ezhil.ast.StmtList.append
@@ -336,6 +337,7 @@ ezhil.prettify.Printer.append" class="py-name" href="#" onclick="return doclink(
 ezhil.ast.Function.dbg_msg
 ezhil.ast.Identifier.dbg_msg
 ezhil.ast.Stmt.dbg_msg
+ezhil.ezhil.EzhilRedirectOutput.dbg_msg
 ezhil.runtime.DebugUtils.dbg_msg
 ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return doclink('link-22', 'dbg_msg', 'link-19');">dbg_msg</a></tt><tt class="py-op">(</tt> <tt class="py-string">"setting locals "</tt> <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt> <tt class="py-name">vars</tt> <tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
 <a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="ezhil.runtime.Environment.clear_break_return_continue" class="py-name" href="#" onclick="return doclink('link-23', 'clear_break_return_continue', 'link-14');">clear_break_return_continue</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
@@ -369,6 +371,7 @@ ezhil.prettify.Printer.append" class="py-name" href="#" onclick="return doclink(
 ezhil.ast.Function.dbg_msg
 ezhil.ast.Identifier.dbg_msg
 ezhil.ast.Stmt.dbg_msg
+ezhil.ezhil.EzhilRedirectOutput.dbg_msg
 ezhil.runtime.DebugUtils.dbg_msg
 ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return doclink('link-25', 'dbg_msg', 'link-19');">dbg_msg</a></tt><tt class="py-op">(</tt><tt class="py-string">"set_id: "</tt> <tt class="py-op">+</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">idee</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt><tt class="py-string">" = "</tt><tt class="py-op">+</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">val</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> </tt>
@@ -385,6 +388,7 @@ ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return docl
 ezhil.ast.Function.dbg_msg
 ezhil.ast.Identifier.dbg_msg
 ezhil.ast.Stmt.dbg_msg
+ezhil.ezhil.EzhilRedirectOutput.dbg_msg
 ezhil.runtime.DebugUtils.dbg_msg
 ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return doclink('link-28', 'dbg_msg', 'link-19');">dbg_msg</a></tt><tt class="py-op">(</tt><tt class="py-string">"get_id: val = "</tt><tt class="py-op">+</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">val</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">val</tt> </tt>
@@ -399,6 +403,7 @@ ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return docl
 ezhil.ast.Function.dbg_msg
 ezhil.ast.Identifier.dbg_msg
 ezhil.ast.Stmt.dbg_msg
+ezhil.ezhil.EzhilRedirectOutput.dbg_msg
 ezhil.runtime.DebugUtils.dbg_msg
 ezhil.runtime.Environment.dbg_msg" class="py-name" href="#" onclick="return doclink('link-30', 'dbg_msg', 'link-19');">dbg_msg</a></tt><tt class="py-op">(</tt><tt class="py-string">u"calling function"</tt><tt class="py-op">+</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">fn</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">call_stack</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="ezhil.ast.StmtList.append
@@ -461,7 +466,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Nov 22 01:01:44 2013
+    Generated by Epydoc 3.0.1 on Mon Nov 16 03:21:02 2015
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

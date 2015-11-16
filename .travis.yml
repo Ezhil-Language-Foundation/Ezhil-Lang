@@ -1,7 +1,7 @@
 sudo: false
 language: python
 python:
-#  - "3.3" #Ezhil is not 3.3 ready yet.
+  - "3.3" #Ezhil boots on Python 3
   - "2.7"
   - "2.6"
 #  - "pypy" #unittests are broke in PyPy
@@ -11,5 +11,6 @@ install:
   - pip install .
   - pip install nose-cov
 script:
-  - ./unittest
-  - ./test
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "3.3" ]];  then ./test3; fi
+  - if [[ "$TRAVIS_PYTHON_VERSION" != "3.3"  ]];  then . /unittest; fi
+  - if [[ "$TRAVIS_PYTHON_VERSION" != "3.3"  ]];  then . /test; fi

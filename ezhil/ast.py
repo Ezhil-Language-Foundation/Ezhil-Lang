@@ -91,7 +91,7 @@ class String:
         return self.string
 
     def __unicode__(self):
-        return unicode( self.string )
+        return ( self.string )
 
     def evaluate(self,env):
         return self.string
@@ -781,7 +781,10 @@ class EvalStmt(Stmt):
     def __repr__(self):
         return u"\n\t [EvalStmt[ "+ unicode(self.expr)+u"/"+unicode((self.expr.__class__))+u"]]"
 
-    def evaluate(self,env):
+    def evaluate(self,env): 
+        if ( self.debug ) : 
+            print(u"evaluating EvalStmt")
+            print(self.expr.__class__)
         return self.expr.evaluate(env)
 
     def visit(self, walker):
@@ -868,15 +871,29 @@ class StmtList(Stmt):
     def evaluate(self,env):
         rval = None
         for stmt in self.List:
-            self.dbg_msg( "STMTLIST => STMT" )
+            self.dbg_msg(  u"STMTLIST => STMT" )
             if ( env.break_return_continue() ):
                 break;
+            self.dbg_msg( stmt.__class__ )
             rval = stmt.evaluate(env)
         return rval
 
     def visit(self,walker):
         """ visit stmt list method """
         walker.visit_stmt_list(self)
+        return
+    
+    def add_profile_at_entry_and_exit(self):
+        l,c=0,0
+        self.dbg_msg(" add call : profile(\"begin\")")
+        begin = ValueList([String("begin")],l,c,self.debug)
+        call_profile_begin = ExprCall( Identifier("profile",l,c), begin, l, c, self.debug )
+        self.List.insert(0,call_profile_begin)
+        
+        self.dbg_msg(" add call : 'profile(\"results\")'")
+        results = ValueList([String("results")],l,c,self.debug)
+        call_profile_results = ExprCall( Identifier("profile",l,c), results, l, c, self.debug )
+        self.append( call_profile_results )
         return
 
 class Function(Stmt):

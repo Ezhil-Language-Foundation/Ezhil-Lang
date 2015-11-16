@@ -8,7 +8,8 @@ from __future__ import print_function
 
 import argparse
 from math import *
-import copy, codecs
+import copy
+import  codecs
 import os
 import sys
 import inspect
@@ -17,10 +18,13 @@ import tamil
 from cmd import Cmd
 from pprint import pprint
 import time
+import traceback
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
     unicode = str
+    string = str
+    raw_input = input
 
 ezhil_sleep = time.sleep
 ezhil_date_time = time.asctime
@@ -129,30 +133,59 @@ def ezhil_eval(*args):
     env = global_interpreter.env
     debug = global_interpreter.debug
     
-    # do the honors
     lexer = EzhilLex(fname=[args[0]])
     if ( debug ): lexer.dump_tokens()
-    parse_eval = Interpreter( lexer, debug, global_interpreter.SAFE_MODE,False)
-    web_ast = parse_eval.parse()
-    
-    return parse_eval.evaluate()
+    parse_eval = Interpreter( lexer, debug, global_interpreter.SAFE_MODE,False,env=global_interpreter.env)
+    try:
+        web_ast = parse_eval.parse()
+        parse_eval.call_stack.append("__tmptop__")
+        return parse_eval.evaluate()
+    except Exception as e:
+        raise e
+    return 
 
-## Gandalf the Grey. One ring to rule them all.
+def ezhil_profile(*args):
+    global global_interpreter
+    env = global_interpreter.env
+    if args[0] == u"begin":
+        env.enable_profiling()
+        return True
+    
+    if not env.profiler:
+        raise RuntimeException(u"profile begin should be called before other profile commands like end, results etc")
+    
+    if args[0] == u"end":
+        env.disable_profiling()
+        return
+    
+    if args[0] == u"results":
+        env.report_profiling()
+        env.reset_profiling()
+        return
+    
+    raise RuntimeException(u"profile command used with unknown argument %s"%args[0])
+
+## Iyakki : Ezhil inge irunthu iyakkapadum
 class Interpreter(DebugUtils):
     """ when you add new language feature, add a AST class 
     and its evaluate methods. Also add a parser method """
-    def __init__(self,lexer, dbg = False,safe_mode=True,update=True):
+    def __init__(self,lexer, dbg = False,safe_mode=True,update=True,stacksize=500,env=None):
         DebugUtils.__init__(self,dbg)
         self.SAFE_MODE = safe_mode
         self.debug = dbg
-        self.MAX_REC_DEPTH = 10000
+        self.MAX_REC_DEPTH = 10000 #for Python
+        self.stacksize = stacksize #for Ezhil stacksize
         self.lexer=lexer
-        self.env=None
         self.ast=None
         self.function_map = NoClobberDict()#parsed functions
         self.builtin_map = NoClobberDict() #pointers to builtin functions
         self.call_stack = list() #call stack
-        sys.setrecursionlimit( self.MAX_REC_DEPTH ) # have a large enough Python stack        
+        if not env:
+            self.env = Environment( self.call_stack, self.function_map, \
+                                        self.builtin_map, self.debug, self.stacksize )
+        else:
+            self.env = env
+        sys.setrecursionlimit( self.MAX_REC_DEPTH ) # have a large enough Python stack
         ## use the default Exprs parser.
         lang_parser = Parser(self.lexer,self.function_map, \
                              self.builtin_map, self.debug )
@@ -162,7 +195,7 @@ class Interpreter(DebugUtils):
         self.install_builtins()
         self.install_blind_builtins()
         
-        if update:
+        if update :
             ## update globals
             global global_interpreter
             global_interpreter = self
@@ -241,20 +274,28 @@ class Interpreter(DebugUtils):
     # file IO functions - 6 total
     @staticmethod
     def file_open(*args):
-        args = list(args)
-        if ( len(args) < 2 ):
+        try:
+            args = list(args)
+            if ( len(args) < 2 ):
                 args.append('r') #default op = read
-        if ( len(args) < 3 ):
+            if ( len(args) < 3 ):
                 args.append('utf-8') #default encoding = utf-8
-        fp = codecs.open(*args)
-        return fp
+            fp = codecs.open(*args)
+            return fp
+        except Exception as e:
+            print(u"WARNING : cannot open file %s with exception %s",args[0],str(e))
+        return -1
     
     @staticmethod
     def file_close(*args):
-        assert( len(args) == 1 )
-        assert( hasattr(args[0],'close') )
-        args[0].close()
-        return
+        try:
+            assert( len(args) == 1 )
+            assert( hasattr(args[0],'close') )
+            args[0].close()
+        except Exception as e:
+            print(u"WARNING: file_close failed with exception %s"%str(e))
+            return -1
+        return 0
     
     @staticmethod
     def file_read(*args):
@@ -267,7 +308,7 @@ class Interpreter(DebugUtils):
         assert( len(args) == 1 )
         assert( hasattr(args[0],'readlines') )
         return args[0].readlines()
-
+    
     @staticmethod
     def file_write(*args):
         assert( len(args) == 2 )
@@ -283,12 +324,20 @@ class Interpreter(DebugUtils):
     # marshalling            
     @staticmethod
     def RAWINPUT(args):
-        op = raw_input(args)
+        try:
+            op = raw_input(args)
+        except KeyboardInterrupt as e :
+            print(u"\nTo exit the program type : exit or press CTRL + D on your keyboard")
+            return String("")
         return String(op)
     
     @staticmethod
     def INPUT(args):
-        op = (raw_input(args))
+        try:
+            op = (raw_input(args))
+        except KeyboardInterrupt as e :
+            print(u"\nTo exit the program type : exit or press CTRL + D on your keyboard")
+            return Number(0)
         if ( isinstance(op,int) or isinstance(op,float) ):
             return Number(0.0+op)
         return String( op )
@@ -386,6 +435,7 @@ class Interpreter(DebugUtils):
         # skip these system functions
         self.builtin_map['eval']=BlindBuiltins(ezhil_eval,'eval',self.debug)
         self.builtin_map[u'மதிப்பீடு']=self.builtin_map['eval']
+        self.builtin_map['profile'] = BlindBuiltins(ezhil_profile,'profile',self.debug)
         #self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
         #self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
         if not PYTHON3:
@@ -553,7 +603,7 @@ class Interpreter(DebugUtils):
         #     assert callable( getattr( module, attr ) )
         # non-callable attributes cannot be in the builtins list        
         # string module builtins
-        self.builtin_map["find"] = BuiltinFunction(str.find,"find",2)
+        self.builtin_map["find"] = BuiltinFunction(string.find,"find",2)
         if not PYTHON3:
             self.builtin_map["atof"] = BuiltinFunction(string.atof,"atof",1)
             self.builtin_map["atof_error"] = BuiltinFunction(string.atof_error,"atof_error",1)
@@ -567,27 +617,27 @@ class Interpreter(DebugUtils):
             self.builtin_map["count_string"] = BuiltinFunction(string.count,"count",1)
             self.builtin_map["expandtabs"] = BuiltinFunction(string.expandtabs,"expandtabs",1)
 
-        self.builtin_map["index_string"] = BuiltinFunction(str.index,"index",2)
+        self.builtin_map["index_string"] = BuiltinFunction(string.index,"index",2)
         if not PYTHON3:
             self.builtin_map["index_error"] = BuiltinFunction(string.index_error,"index_error",1)
         self.builtin_map["join"] = BuiltinFunction(str.join,"join",1)
         if not PYTHON3:
             self.builtin_map["joinfields"] = BuiltinFunction(string.joinfields,"joinfields",1)
-        self.builtin_map["ljust"] = BuiltinFunction(str.ljust,"ljust",1)
-        self.builtin_map["lower"] = BuiltinFunction(str.lower,"lower",1)
-        self.builtin_map["lstrip"] = BuiltinFunction(str.lstrip,"lstrip",1)
+        self.builtin_map["ljust"] = BuiltinFunction(string.ljust,"ljust",1)
+        self.builtin_map["lower"] = BuiltinFunction(string.lower,"lower",1)
+        self.builtin_map["lstrip"] = BuiltinFunction(string.lstrip,"lstrip",1)
         if not PYTHON3:
             self.builtin_map["maketrans"] = BuiltinFunction(string.maketrans,"maketrans",1)
-        self.builtin_map["replace"] = BuiltinFunction(str.replace,"replace",3)
-        self.builtin_map["rfind"] = BuiltinFunction(str.rfind,"rfind",2)
-        self.builtin_map["rindex"] = BuiltinFunction(str.rindex,"rindex",1)
-        self.builtin_map["rjust"] = BuiltinFunction(str.rjust,"rjust",1)
-        self.builtin_map["rsplit"] = BuiltinFunction(str.rsplit,"rsplit",1)
-        self.builtin_map["rstrip"] = BuiltinFunction(str.rstrip,"rstrip",1)
-        self.builtin_map["split"] = BuiltinFunction(str.split,"split",2)
+        self.builtin_map["replace"] = BuiltinFunction(string.replace,"replace",3)
+        self.builtin_map["rfind"] = BuiltinFunction(string.rfind,"rfind",2)
+        self.builtin_map["rindex"] = BuiltinFunction(string.rindex,"rindex",1)
+        self.builtin_map["rjust"] = BuiltinFunction(string.rjust,"rjust",1)
+        self.builtin_map["rsplit"] = BuiltinFunction(string.rsplit,"rsplit",1)
+        self.builtin_map["rstrip"] = BuiltinFunction(string.rstrip,"rstrip",1)
+        self.builtin_map["split"] = BuiltinFunction(string.split,"split",2)
         if not PYTHON3:
             self.builtin_map["splitfields"] = BuiltinFunction(string.splitfields,"splitfields",1)
-        self.builtin_map["strip"] = BuiltinFunction(str.strip,"strip",1)
+        self.builtin_map["strip"] = BuiltinFunction(string.strip,"strip",1)
         self.builtin_map["swapcase"] = BuiltinFunction(str.swapcase,"swapcase",1)
         self.builtin_map["translate"] = BuiltinFunction(str.translate,"translate",1)
         self.builtin_map["upper"] = BuiltinFunction(str.upper,"upper",1)
@@ -599,6 +649,9 @@ class Interpreter(DebugUtils):
         self.builtin_map["insert"] = BuiltinFunction(list.insert,"insert",3)
         self.builtin_map["index"] = BuiltinFunction(list.index,"index",2)
         self.builtin_map["list"] = BuiltinFunction(list,"list",0)        
+        #if PYTHON3:
+        #    self.builtin_map["sort"] = BuiltinFunction(lambda x: sorted(x),"sort",1)
+        #else:
         self.builtin_map["sort"] = BuiltinFunction(list.sort,"sort",1)
         self.builtin_map["count"]= BuiltinFunction(list.count,"count",2)
         self.builtin_map["extend"]= BuiltinFunction(list.extend,"extend",2)
@@ -620,10 +673,15 @@ class Interpreter(DebugUtils):
             self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
             self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
         
-        self.builtin_map["keys"]= BuiltinFunction(dict.keys,"keys",1)
+        if PYTHON3:
+            self.builtin_map["keys"]= BuiltinFunction(lambda x: list(dict.keys(x)),"keys",1)
+            self.builtin_map["values"]= BuiltinFunction(lambda x: list(dict.values(x)),"values",1)
+        else:
+            self.builtin_map["keys"]= BuiltinFunction(dict.keys,"keys",1)
+            self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
+        
         self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
-        self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
-	
+        
         # open-tamil API
         # get tamil letters
         self.add_builtin("get_tamil_letters",tamil.utf8.get_letters,nargin=1,ta_alias=u"தமிழ்_எழுத்துக்கள்")
@@ -661,7 +719,9 @@ class Interpreter(DebugUtils):
         self.add_builtin("tamil_reverse_word",tamil.utf8.reverse_word,
                          nargin=1,ta_alias=u"அந்தாதிமாற்று")
         return True
-    
+    def __del__(self):
+        if (self.debug): print("deleting Interpreter...")
+        
     def __repr__(self):
         rval =  u"[Interpreter: "
         rval = rval + u"[Functions["
@@ -676,35 +736,31 @@ class Interpreter(DebugUtils):
         return self.ast
 
     def evaluate(self):
-        if not self.env:
-            self.env = Environment( self.call_stack, self.function_map, \
-                                    self.builtin_map, self.debug, int(self.MAX_REC_DEPTH/10) )
         try:
             if ( len(self.call_stack) == 0 ):
                 self.env.call_function("__toplevel__") ##some context
             return self.ast.evaluate(self.env)
         except Exception as e:
             self.env.disp_stack()
+            if ( self.debug ):
+                traceback.print_tb(sys.exc_info()[2])
             raise e
         
-    def evaluate_interactive(self,env = None):
+    def evaluate_interactive(self,env=None):
         ## use a persistent environment for interactive interpreter
-        if ( not env ):
-            if ( self.debug ): 
-                print("creating a new environment")
-            
-            env = Environment( self.call_stack, self.function_map, \
-                                   self.builtin_map, self.debug )
-            env.call_function("__toplevel__") ##some context
-        
         try:
             ## use this from the interactive-interpreter
-            rval = self.ast.evaluate(env)
-            return [ rval, env ]
+            rval = self.ast.evaluate(self.env)
+            return [ rval, self.env ]
+        #except RuntimeException as e:
+        #    self.env.disp_stack()
+        #    #self.env.call_stack.pop()
         except Exception as e:
-            env.disp_stack()
-            raise e
-        return [None,env]
+            self.env.disp_stack()
+            #self.env.call_stack.pop()
+            print("ERROR : %s"%str(e))
+            if (self.debug): print(str(self.env))
+        return [str(e),self.env]
         
 # world-famous REPL
 # derive from the Python standard library - Cmd
@@ -717,7 +773,7 @@ class REPL(Cmd):
             @debug the boolean """
         Cmd.__init__(self)
         ## ala-Python like
-        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Sat Mar 14 17:53:58 EDT 2015)
+        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Fri Nov 20 08:00:00 EST 2015)
 Ezhil : A Tamil Programming Language - version %g, (C) 2007-2015
 Type "help", "copyright", "credits" or "license" for more information."""%ezhil_version()
         
@@ -729,10 +785,11 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
         self.env = None ## get the first instance from evaluate_interactive
         self.prevlines = u'' ## support for continued lines
         self.cmdloop()
-    
+        
     def parseline(self,line):
         arg,cmd = u"",u""
-        line = line.decode("utf-8")
+        if not PYTHON3:
+            line = line.decode("utf-8")
         if line in [u"exit",u"help",u"EOF",u"copyright",u"credits",u"license"]:
             cmd = line
             line = line+u"()"
@@ -755,7 +812,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
     def default(self,line):
         """ REPL is carried out primarily through this callback from the looping construct """
         self.line_no += 1
-        line = unicode(line)
+        #line = unicode(line)
         if ( self.debug ): print("evaluating line", line)
         if ( line == 'exit' ): self.exit_hook(doExit=True)
         try:
@@ -838,22 +895,39 @@ def get_prog_name(lang):
                         help=u"enable debugging information on screen")
     parser.add_argument(u"-tamilencoding",default=u"UTF-8",
                         help=u"option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
+    parser.add_argument(u"-profile",action=u"store_true",
+                        default=None,
+                        help=u"profile the input file(s)")
     parser.add_argument(u"-stdin",action=u"store_true",
                         default=None,
                         help=u"read input from the standard input")
+    parser.add_argument(u"-stacksize",
+                        default=128,
+                        help=u"default stack size for the Interpreter")
     args = parser.parse_args()
+
+    # do it well w.r.t unicode names    
+    if not PYTHON3:
+        for itr in range(0,len(args.files)):
+            args.files[itr] = args.files[itr].decode("utf-8")
+    
     if args.debug:
         print(u"===>",args.tamilencoding,u" | ===> files: ".join(args.files))
     error_fcn = lambda : parser.print_help() or sys.exit(-1)
     if (len(args.files) == 0 and (not args.stdin)):
         error_fcn()
     if not(args.tamilencoding in ["utf-8","tscii","TSCII","UTF-8"]):
-        print(u"Unsupported encoding %s; use values TSCII or UTF-8, or see Help"%args.tamilencoding)
+        print(u"ERROR: Unsupported encoding %s; use values TSCII or UTF-8, or see Help"%args.tamilencoding)
         error_fcn()
     prog_name = args.files
     debug = args.debug
     dostdin = args.stdin
     encoding = args.tamilencoding
+    profile = args.profile and True or False
+    stacksize = int(args.stacksize)
+    if dostdin and profile:
+        print(u"ERROR: Cannot run profiling and input from console")
+        error_fcn()
     if args.debug:
-        print(u"###### chosen encoding => ",encoding)
-    return [prog_name, debug, dostdin,encoding]
+        print(u"###### chosen encoding => ",encoding,stacksize)
+    return [prog_name, debug, dostdin,encoding,stacksize,profile]

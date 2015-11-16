@@ -13,4 +13,3 @@ If you want to join the project please follow the  directions.
 
 ==Contact==
 Hopefully you can get started on ezhil-lang with these resources. If not always leave a comment, drop an email @gmail.com for ezhillang, or tweet to me @ezhillang.
-

@@ -9,9 +9,12 @@
 ## 
 
 import re
-from scanner import Token, Lexeme, Lex
+from scanner import Token, Lexeme, Lex, PYTHON3
 from tamil.utf8 import has_tamil, istamil, istamil_alnum
 from errors import ScannerException
+
+if PYTHON3:
+    unicode = str
 
 class EzhilLexeme(Lexeme):
     """ Ezhil Lexeme - """ 
@@ -19,7 +22,7 @@ class EzhilLexeme(Lexeme):
         Lexeme.__init__(self,val,kind,fname)
     
     def get_kind(self):
-        return "%s - %s"%(self.val,self.kind)
+        return u"%s - %s"%(self.val,self.kind)
     
     def __unicode__(self):
         return u" %s [%s] Line=%d, Col=%d in File %s "% \
@@ -211,7 +214,7 @@ class EzhilLex ( Lex ) :
             if hasattr(self.File,'data'):
                 data = self.File.data
             elif self.encoding == "utf-8":
-                data = u"".join(self.File.readlines())
+                data = self.File.read()
             elif self.encoding == "tscii":
                 if self.debug: print("Loading TSCII converted data -> ")
                 data = self.converted_data

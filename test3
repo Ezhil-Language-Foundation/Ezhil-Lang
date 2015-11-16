@@ -1,0 +1,213 @@
+#!/bin/bash
+# Tests for Ezhil language in Python 3
+# (C) 2007, 2008, 2013-2015 முத்தையா அண்ணாமலை
+
+if [ -e success3.txt ];
+then
+    rm success3.txt
+fi
+if [ -e failed3.txt ];
+then
+    rm failed3.txt
+fi
+if [ -e dump_file3 ];
+then
+    rm dump_file3
+fi
+
+touch success3.txt
+touch failed3.txt
+touch dump_file3
+
+## run all the success programs
+# for i in `ls ./tests/exprs/*.prog | sort`;
+# do
+#     echo "########## Testing file $i" | tee -a dump_file3
+#     python3 ./ezhil/exprs.py $i $1 2>&1 >> dump_file3
+#     if [ $? -eq 0 ]
+#     then
+# 	echo $i >> success3.txt
+#     else
+# 	echo $i >> failed3.txt
+#     fi
+#     sleep 0
+# done
+
+# run tests for Ezhil as well
+cd ./tests
+# last space important before the \
+for i in `echo gigo.n lisp0.n oklex.n badlex.n hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n\
+ ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n \
+string_demo.n list_ta.n yinyang.n unaryop.n boolean.n chaos.n \
+prime.n array1.n array2.n filedemo.n filerw.n reverse.n friends.n  \
+palindromes.n ford2.n trials.n fornested.n loopupdate.n foreach.n foriter.n \
+dowhile.n select_case2.n magic_coins.n rich_poor.n peanut_candy.n logical_not.n \
+binary.n fibo.n floatpthole.n ifnested.n hailstone.n split_text.n lcmgcd.n \
+windoze.n convert2kelvin.n dict.n speedoflight.n tictok.n \
+change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
+fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
+tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
+max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n \
+boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \
+ta_strings.n \
+array_wr.n \
+math_arithprogression.n \
+math_geomprogression.n \
+math_harmonicseries.n \
+math_complex.n \
+math_goldenratio.n \
+math_horner.n \
+dict_rw.n \
+ml.n \
+beer_bottles_song.n \
+sort.n \
+bitwiseops.n \
+mathipeedu.n \
+staircase_light.n \
+boolean_fcns.n \
+boolean_demorgan.n \
+nonexistent_file.n \
+half_adder.n \
+full_adder.n \
+eval0.n \
+eval1.n \
+ta_sort.n \
+neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
+do
+    echo "########## Testing Ezhil script $i $1" | tee -a ../dump_file3    
+    python3 ../ezhil/ezhil.py  $i $1 2>&1 >> ../dump_file3
+    if [ $? -eq 0 ];
+    then
+       echo $i >> ../success3.txt
+    else
+       echo $i >> ../failed3.txt
+    fi;
+    sleep 0
+done
+
+echo "**********Special TSCII Test**********"
+    python3 ../ezhil/ezhil.py  -tamilencoding tscii  tscii_calc2.n |  tee -a ../dump_file3
+	if [ $? -eq 0 ];
+	then
+	    echo "tscii_calc2.n" >> ../success3.txt
+	else
+	    echo "tscii_calc2.n" >> ../failed3.txt
+	fi
+echo "********************************************"
+
+if [ -e names.txt ];
+then
+    rm names.txt
+fi
+
+cd ../
+
+echo "**************************************************"
+echo " Running Web tests" | tee -a dump_file3
+echo "**************************************************"
+# this test needs Ezhil to be installed via pip
+python3 ./web/ezhil_web.py 2>&1 >> dump_file3
+if [ $? -eq 0 ]
+then
+    echo "ezhil_web.py" >> success3.txt
+else
+    echo "ezhil_web.py" >> failed3.txt
+fi
+
+echo "**************************************************"
+echo " Running interactive tests " | tee -a dump_file3
+echo "***************************************************"
+for i in `echo demos/ch2.n \
+`
+do
+    echo "ezhil" | python3 ./ezhil/ezhil.py ./tests/$i  >>  dump_file3
+    if [ $? -eq 0 ]
+    then
+	echo "passed ezhil interactive test for  $i" >> success3.txt
+    else
+	echo "failed ezhil interactive test for $i" >> failed3.txt
+    fi
+done
+
+echo "**************************************************"
+echo " Running all the failure programs, that must fail."
+echo "**************************************************"
+for i in `ls ./tests/*.fprog`;
+do
+    echo "Testing file $i" | tee -a dump_file3
+    python3 ./ezhil/exprs.py $i $1 -stacksize 10 2>&1 >> dump_file3
+    if [ $? -eq 0 ]
+    then
+	echo $i >> failed3.txt
+    else
+	echo $i >> success3.txt
+    fi
+    sleep 0
+done
+
+echo "**********Successful Tests**********" 
+cat success3.txt
+echo "*************************************"
+echo "***********Failed Tests**************" 
+cat failed3.txt
+
+echo "***********Summary******************"
+echo "Passed = "`wc -l success3.txt`", Failed = "`wc -l failed3.txt`
+
+# number of failures is always limited, and when you add
+# failed tests you have to bump this up.
+
+# Known $NFAIL failures
+#    1	badlex.n
+#    2	bitwiseops.n
+#    3	boolean_demorgan.n
+#    4	boolean_fcns.n
+#    5	boolean.n
+#    6	boolf.n
+#    7	chaos.n
+#    8	dict.n
+#    9	dict_ta.n
+#   10	eval1.n
+#   11	ezhil_web.py
+#   12	fact.n
+#   13	full_adder.n
+#   14	gcd.n
+#   15	half_adder.n
+#   16	isbalanced.n
+#   17	logical_not.n
+#   18	math_geomprogression.n
+#   19	math_goldenratio.n
+#   20	morse.n
+#   21	nonexistent_file.n
+#   22	predicates.n
+#   23	py1.n
+#   24	solo_return.n
+#   25	staircase_light.n
+#   26	strings.n
+#   27	tamil2.n
+#   28	tamil_months.n
+#   29	temple.n
+#   30	unaryop.n
+#   31	yinyang.n
+NFAIL=23 #11/20/15
+TOTFAIL=`wc -l failed3.txt | cut -d'f' -f1`
+echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
+if [ $?  -eq 0 ]
+then
+   echo "########## Expected failures" | tee -a dump_file3
+   exitcode=0 # success
+else
+   echo "Expecting $NFAIL failures, but found $TOTFAIL failures" | tee -a dump_file3
+   echo "Too few/many failures; some negative tests may have failed" | tee -a dump_file3
+   echo "" | tee -a dump_file3
+   echo "######### LIST OF FAILED FILES ##############" | tee -a dump_file3
+   cat failed3.txt | tee -a dump_file3
+   echo " " | tee -a dump_file3
+   exitcode=255 #failed failures != $NFAIL
+   exit $exitcode
+fi
+
+# cleanup
+rm failed3.txt
+rm success3.txt
+exit $exitcode
