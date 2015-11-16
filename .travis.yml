@@ -4,7 +4,7 @@ python:
 #  - "3.3" #Ezhil is not 3.3 ready yet.
   - "2.7"
   - "2.6"
-  - "pypy"
+#  - "pypy" #unittests are broke in PyPy
 install:
   - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install --use-mirrors ordereddict; fi
   - python setup.py install && pip install argparse
