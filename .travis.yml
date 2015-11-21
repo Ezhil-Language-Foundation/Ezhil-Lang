@@ -12,5 +12,5 @@ install:
   - pip install nose-cov
 script:
   - if [[ "$TRAVIS_PYTHON_VERSION" == "3.3" ]];  then ./test3; fi
-  - if [[ "$TRAVIS_PYTHON_VERSION" != "3.3"  ]];  then . /unittest; fi
-  - if [[ "$TRAVIS_PYTHON_VERSION" != "3.3"  ]];  then . /test; fi
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "3.3"  ]];  then echo "nothing to do" else . /unittest; fi
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "3.3"  ]];  then echo "nothing to do" else; . /test; fi
