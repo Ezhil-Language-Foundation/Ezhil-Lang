@@ -192,7 +192,10 @@ class ExprCall:
         if ( self.debug ):
             print("## ",msg)
         return
-
+    
+    def __unicode__(self):
+        return u"Line %d, Column %d : Function call [%s] with [%d] args"%(self.line,self.col,unicode(self.fname),len(self.arglist))
+    
     def __repr__(self):
         return u"\n\t [ExprCall[ "+unicode(self.fname)+u" (" \
             +unicode(self.arglist)+u")]]"
@@ -234,11 +237,11 @@ class ExprList:
         return u"\n\t [ExprList[ "+ u", ".join(map(unicode,self.exprs)) + u"]]"
 
     def evaluate(self,env):
-        """evaluate  a, b, c ... z to a string"""
+        """evaluate  a, b, c ... z to a string w/o commas"""
         z = []
         for exp_itr in self.exprs:
             z.append(exp_itr.evaluate(env))
-        return u", ".join(map(unicode,z))
+        return u" ".join(map(unicode,z))
     
     def visit(self, walker):
         walker.visit_expr_list(self)
@@ -851,9 +854,10 @@ class ValueList:
 
     
 class StmtList(Stmt):
-    def __init__(self,stmt=[], dbg=False):
+    def __init__(self,stmt=[], dbg=False,istoplevel=False):
         Stmt.__init__(self,0,0,dbg)
         self.List = copy.copy(stmt)
+        self.toplevel = istoplevel
         
     def __len__(self):
         return len(self.List)        
@@ -877,25 +881,15 @@ class StmtList(Stmt):
             self.dbg_msg( stmt.__class__ )
             rval = stmt.evaluate(env)
         return rval
-
+    
     def visit(self,walker):
         """ visit stmt list method """
-        walker.visit_stmt_list(self)
+        if self.toplevel:
+            walker.visit_program_or_script(self)
+        else:
+            walker.visit_stmt_list(self)
         return
     
-    def add_profile_at_entry_and_exit(self):
-        l,c=0,0
-        self.dbg_msg(" add call : profile(\"begin\")")
-        begin = ValueList([String("begin")],l,c,self.debug)
-        call_profile_begin = ExprCall( Identifier("profile",l,c), begin, l, c, self.debug )
-        self.List.insert(0,call_profile_begin)
-        
-        self.dbg_msg(" add call : 'profile(\"results\")'")
-        results = ValueList([String("results")],l,c,self.debug)
-        call_profile_results = ExprCall( Identifier("profile",l,c), results, l, c, self.debug )
-        self.append( call_profile_results )
-        return
-
 class Function(Stmt):
     """ function definition itself """
     def __init__(self,fname,arglist,body,l,c,dbg=False):

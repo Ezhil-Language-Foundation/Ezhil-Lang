@@ -17,6 +17,7 @@ from errors import RuntimeException, ParseException, TimeoutException
 from .ezhil import ezhil_file_REPL
 from .ezhil import EzhilInterpreter, EzhilFileExecuter, EzhilInterpExecuter
 from .ezhil import ezhil_interactive_interpreter as start
+from . import ezhil_transforms
 
 from prettify import Printer as PrettyPrint
 import theme as Theme

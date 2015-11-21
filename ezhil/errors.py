@@ -14,26 +14,35 @@ class Messages:
 
 ## Exception states
 class ErrorException(Exception):
+    def __init__(self):
+        Exception.__init__(self)
+        
     def __repr__(self):
         return str(self.args)+"\n"
-
+    
     def __str__(self):
+        return self.__unicode__()
+    
+    def __unicode__(self):
         ##works in python2.6
         return u" ".join(self.args)
 
 
 class ScannerException(ErrorException):
     def __init__(self,desc):
+        ErrorException.__init__(self)
         self.args = [Messages.LEXICAL_ERROR, desc ]
 
 
 class RuntimeException(ErrorException):
     def __init__(self,desc):
+        ErrorException.__init__(self)
         self.args = [Messages.RUNTIME_ERROR, desc ]
 
 
 class ParseException(ErrorException):
     def __init__(self,desc):
+        ErrorException.__init__(self)
         self.args = [Messages.PARSE_ERROR, desc ]
 
 

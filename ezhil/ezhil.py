@@ -34,13 +34,14 @@ from ezhil_scanner import EzhilLex
 from errors import RuntimeException, ParseException, TimeoutException
 from multiprocessing import Process, current_process
 from time import sleep,clock,time
+from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck
 
 class EzhilInterpreter( Interpreter ):
-    def __init__(self, lexer, debug = False ):
+    def __init__(self, **kwargs ):
         """ create a Ezhil Interpeter and initialize runtime builtins etc.. in a RAII fashion,
             and associates a Ezhil parser object with this class
         """
-        Interpreter.__init__(self,lexer,debug)
+        Interpreter.__init__(self,**kwargs)
         Interpreter.change_parser(self,EzhilParser.factory)
         return
     
@@ -172,8 +173,8 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         #print(u"exit code = %d"%self.exitcode)
         pass
     
-    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None,encoding="utf-8",doprofile=False):
-        encoding = encoding.lower()        
+    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None,encoding="utf-8",doprofile=False,safe_mode=False):
+        encoding = encoding.lower()
         EzhilRedirectOutput.__init__(self,redirectop,debug)
         self.dbg_msg(u"ezhil file executer\n")
         self.fProcName = ""
@@ -184,7 +185,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         if ( not redirectop ): #run serially and exit.
             try:
                 self.dbg_msg(u"run in non-redirect mode")
-                ezhil_file_parse_eval( file_input,self.redirectop,self.debug,encoding,doprofile=doprofile)
+                ezhil_file_parse_eval( file_input,self.redirectop,self.debug,encoding,doprofile=doprofile,safe_mode=safe_mode)
                 self.dbg_msg(u"finished... file parse eval")
                 self.exitcode = 0
             except Exception as e:
@@ -195,7 +196,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 raise e
         else:
             self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
-            self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug,'doprofile':doprofile})
+            self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug,'doprofile':doprofile,'safe_mode':safe_mode})
         #print("done...")
         
     def run(self):
@@ -257,7 +258,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         else:
             pass #nothing to run
 
-def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8",doprofile=False):
+def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8",doprofile=False,safe_mode=False):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
         the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
         cleanup the cruft. Note file_input can be a string version of a program to be evaluated if it is
@@ -273,10 +274,11 @@ def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8",doprofil
         print(u"####### dump tokens ########")
         lexer.dump_tokens()
         print(u"##########################")
-    parse_eval = EzhilInterpreter( lexer, debug )
+    parse_eval = EzhilInterpreter( lexer=lexer, debug=debug, safe_mode=safe_mode )
     web_ast = parse_eval.parse()
     if doprofile:
-        web_ast.add_profile_at_entry_and_exit()
+        # add profile at entry and exit
+        TransformEntryExitProfile(interpreter=parse_eval,debug=debug)
     
     if( debug ):
         print(unicode(web_ast))
@@ -375,7 +377,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
             lang = u"எழில்"
             lexer = EzhilLex(debug,encoding="utf-8")
             if ( debug ): print( unicode(lexer) )
-            parse_eval = EzhilInterpreter( lexer, debug )
+            parse_eval = EzhilInterpreter( lexer=lexer, debug=debug )
             ezhil_file_REPL( file_input, lang, lexer, parse_eval, debug )
         except Exception as e:
             print(u"exception ",unicode(e))
@@ -396,7 +398,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
 def ezhil_interactive_interpreter(lang = u"எழில்",debug=False):
     ## interactive interpreter
     lexer = EzhilLex(debug)
-    parse_eval = EzhilInterpreter( lexer, debug )
+    parse_eval = EzhilInterpreter( lexer=lexer, debug=debug )
     REPL( lang, lexer, parse_eval, debug )
 
 if __name__ == u"__main__":

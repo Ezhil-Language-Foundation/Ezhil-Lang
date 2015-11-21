@@ -14,6 +14,8 @@ import os
 import sys
 import inspect
 import string
+import random ## builtins
+import collections
 import tamil
 from cmd import Cmd
 from pprint import pprint
@@ -29,8 +31,7 @@ if PYTHON3:
 ezhil_sleep = time.sleep
 ezhil_date_time = time.asctime
 
-from ast import String, Number
-
+######### E Z H I L - I N T E R P R E T E R ##########################
 ## scanner for exprs language
 from scanner import Token, Lexeme, Lex
 from ezhil_scanner import EzhilLex
@@ -42,9 +43,6 @@ from errors import RuntimeException, ParseException
 from runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils
 
-## builtins
-import random
-
 ## AST elements
 from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
@@ -54,10 +52,8 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
 
 ## Parser
 from ExprsParser import Parser
-
-## Transform / Visitor
-from transform import Visitor
-import collections
+## Transforms
+from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck
 
 def ezhil_version():
         return 0.8
@@ -169,10 +165,10 @@ def ezhil_profile(*args):
 class Interpreter(DebugUtils):
     """ when you add new language feature, add a AST class 
     and its evaluate methods. Also add a parser method """
-    def __init__(self,lexer, dbg = False,safe_mode=True,update=True,stacksize=500,env=None):
-        DebugUtils.__init__(self,dbg)
+    def __init__(self,lexer, debug = False,safe_mode=False,update=True,stacksize=500,env=None):
+        DebugUtils.__init__(self,debug)
         self.SAFE_MODE = safe_mode
-        self.debug = dbg
+        self.debug = debug
         self.MAX_REC_DEPTH = 10000 #for Python
         self.stacksize = stacksize #for Ezhil stacksize
         self.lexer=lexer
@@ -200,6 +196,8 @@ class Interpreter(DebugUtils):
             global global_interpreter
             global_interpreter = self
         
+    def get_fname(self):
+        return self.lexer.fname
         
     def reset(self):
         """ reset lexer and parser """
@@ -402,6 +400,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['abs']=BlindBuiltins(abs,'abs',self.debug)
         self.builtin_map['all']=BlindBuiltins(all,'all',self.debug)
         self.builtin_map['any']=BlindBuiltins(any,'any',self.debug)
+        
         if not PYTHON3:
             self.builtin_map['apply']=BlindBuiltins(apply,'apply',self.debug)
             self.builtin_map['buffer']=BlindBuiltins(buffer,'buffer',self.debug)
@@ -737,6 +736,9 @@ class Interpreter(DebugUtils):
 
     def evaluate(self):
         try:
+            if self.SAFE_MODE:
+                TransformSafeModeFunctionCheck(interpreter=self,debug=self.debug)
+            
             if ( len(self.call_stack) == 0 ):
                 self.env.call_function("__toplevel__") ##some context
             return self.ast.evaluate(self.env)

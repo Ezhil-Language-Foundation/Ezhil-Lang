@@ -23,21 +23,29 @@ class MissingFcnsNeg(unittest.TestCase):
 system("ls -lrt")
 system("cat /etc/passwd")
 """ #missing end function statement
-        TestEzhilException.create_and_test_spl(exprCode,RuntimeException,"system")
+        TestEzhilException.create_and_test_spl_safe_mode(exprCode,RuntimeException,"system")
         
     def test_getenv_OS_module_fcn(self):        
         exprCode  = u"""
 # (C) முத்தையா அண்ணாமலை 2013
 getenv("SHELL") #not avaiable in safe mode
 """ #missing end function statement
-        TestEzhilException.create_and_test_spl(exprCode,RuntimeException,"getenv")
+        TestEzhilException.create_and_test_spl_safe_mode(exprCode,RuntimeException,"getenv")
 
     def test_globals_deleted_fcn(self):        
         exprCode  = u"""
 # (C) முத்தையா அண்ணாமலை 2013
 globals() #not avaiable in safe mode
 """ #missing end function statement
-        TestEzhilException.create_and_test_spl(exprCode,RuntimeException,"globals")
+        TestEzhilException.create_and_test_spl_safe_mode(exprCode,RuntimeException,"globals")
+
+class SafeModeNeg(unittest.TestCase):
+    def test_safe_mode_neg(self):
+        exprCode  = u"""
+# (C) முத்தையா அண்ணாமலை 2014
+raw_input("How old is the earth?>> ")
+""" #missing end function statement
+        TestEzhilException.create_and_test_spl_safe_mode(exprCode,RuntimeException,"may not be used in SAFE MODE")
 
 if __name__ == '__main__':
-    test_support.run_unittest(MissingFcnsNeg)
+    test_support.run_unittest(MissingFcnsNeg,SafeModeNeg)
