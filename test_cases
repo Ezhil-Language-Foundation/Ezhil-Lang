@@ -115,4 +115,5 @@ demoif.n
 morse.n
 partition_estimate.n
 envchecks.n
-
+ifparse.n
+foo.n
