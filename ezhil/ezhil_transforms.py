@@ -38,7 +38,7 @@ class TransformEntryExitProfile(TransformVisitor):
 class TransformSafeModeFunctionCheck(TransformVisitor):
     def __init__(self,**kwargs):
         self.forbidden_fcn_names = [u'raw_input',u'input',u'fopen',u'open',u'fclose',\
-        u'உள்ளீடு']
+        u'உள்ளீடு',u'turtle',u'கோப்பை_எழுது',u'கோப்பை_திற',u'கோப்பை_மூடு']
         TransformVisitor.__init__(self,**kwargs)
         
     def visit_expr_call(self,expr_call):
@@ -47,4 +47,3 @@ class TransformSafeModeFunctionCheck(TransformVisitor):
            raise RuntimeException(u"ERROR %s:\n\t %s may not be used in SAFE MODE ."%(self.interpreter.get_fname(),unicode(expr_call)))
         expr_call.arglist.visit( self )
         return
-    
