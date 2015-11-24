@@ -7,6 +7,3 @@ hexsum = 0xC0ffee - 0x55 + 0xff
 
 பதிப்பி   hexsum
 பதிப்பி   0xdeadBeeF
-
-
-

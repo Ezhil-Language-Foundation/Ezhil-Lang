@@ -115,7 +115,9 @@ class NoClobberDict(dict):
         dict.__init__(self)
     def __setitem__(self,key,val):
         if ( self.get(key,None) ):
-            raise KeyError("Dictionary is getting clobbered; key "+key+" already present")
+            #print(u"-------> %s"%unicode(self.get(key)))
+            #traceback.print_stack()
+            raise KeyError(u"Dictionary is getting clobbered; key '"+key+"' already present '%s'"%unicode(self.get(key)))
         dict.__setitem__(self,key,val)
 
 global_interpreter = None
@@ -256,6 +258,8 @@ class Interpreter(DebugUtils):
                 break
             bfn = getattr( os ,b)
             if str(b).find('exec') >= 0 or str(b).find('spawn') >= 0:
+                continue
+            if PYTHON3 and b == u"replace":
                 continue
             self.add_blind_fcns( bfn, b)
         

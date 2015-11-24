@@ -39,7 +39,7 @@ class BuiltinFunction:
         self.debug = dbg
         self.aslist = False
         
-    def __unicode__(self):
+    def __str__(self):
         return u"[BuiltinFunction[%s,nargs=%d]]"%(self.name,self.padic)
     
     def evaluate(self,env):
@@ -99,12 +99,14 @@ class BlindBuiltins(BuiltinFunction):
     """ also blindly include all functions from the 
         os, sys, curses.ascii, math etc. donot check arguments 
         here.    """
-    def __init__(self,fn,name,dbg = False,aslist=False):
-        self.padic = -1
-        BuiltinFunction.__init__(self,fn,name,self.padic,dbg)
+    def __init__(self,fn,name,dbg = False,aslist=False,padic=-1):
+        BuiltinFunction.__init__(self,fn,name,padic,dbg)
         self.use_adicity = False
         self.aslist = aslist
-
+        
+    def __unicode__(self):
+        return BuiltinFunction.__str__(self)
+    
 ## <<Side-Effects>>: computation is side-effect of programming.
 class Environment:
     """ used to manage the side-effects of an interpreter """
