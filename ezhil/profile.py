@@ -22,7 +22,6 @@ PYTHON3 = (sys.version[0] == '3')
 #    total_time - float
 #FunctionProfileRecord = collections.namedtuple(u'FunctionProfileRecord',\
 #                                                   [u'name',u'start_time',u'end_time',u'cum_time',u'self_time',u'ncalls',u'total_time'])
-
 class FunctionProfileRecord(object):
     def __init__(self,name,start_time,end_time,cum_time,self_time,ncalls,total_time):
         object.__init__(self)

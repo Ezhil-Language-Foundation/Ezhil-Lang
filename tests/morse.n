@@ -72,7 +72,13 @@ decoding = {"-": "T",
    பின்கொடு op
 முடி
 
-fp = கோப்பை_திற("tests/data/netneutrality.dot","r")
+SRCDIR = getenv("EZHIL_DATA_PATH")
+@( !SRCDIR )ஆனால்
+    SRCDIR = "tests/data"
+	பதிப்பி "using default ", SRCDIR	
+முடி
+
+fp = கோப்பை_திற(SRCDIR+"/netneutrality.dot","r")
 வரிகள் = கோப்பை_படி(fp)
 பதிப்பி "data ==> ",வரிகள், len(வரிகள்)
 பதிப்பி decode( வரிகள் )

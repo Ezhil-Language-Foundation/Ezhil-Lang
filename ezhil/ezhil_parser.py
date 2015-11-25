@@ -65,7 +65,7 @@ class EzhilParser(Parser):
 
     def parse(self):
         """ parser routine """
-        self.ast = StmtList()
+        self.ast = StmtList(istoplevel=True)
         self.dbg_msg(u" entering parser " )
         while ( not self.lex.end_of_tokens() ):
             self.dbg_msg( u"AST length = %d"%len(self.ast) )

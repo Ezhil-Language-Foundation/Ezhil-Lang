@@ -307,7 +307,7 @@ class Printer(Visitor):
         return
     
     def pretty_print(self):
-        self.parse_eval = EzhilInterpreter(self.lexer)
+        self.parse_eval = EzhilInterpreter(lexer=self.lexer)
         ast = self.parse_eval.parse()
         print(unicode(ast))
         ast.visit(self)
