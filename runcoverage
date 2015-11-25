@@ -15,7 +15,7 @@ do
 done
 
 # 3) report
-coverage html
+python-coverage html
 
 echo "############### COVERAGE FOR EZHIL SCRIPTS ##################"
 cd $EZHILDIR/tests
@@ -67,4 +67,4 @@ do
 done
 
 # 3) report
-coverage html
+python-coverage html
