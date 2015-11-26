@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# run coverage only if the unittests passed.
+EZHILDIR=`pwd`
+cd tests/unit/
+
+# 1) start from a clean state
+python-coverage erase
+
+# 2) run coverage tests
+for i in `ls *.py`
+do
+    echo Running coverage test $i
+    python-coverage run $i    
+done
+
+# 3) report
+python-coverage html
+
+echo "############### COVERAGE FOR EZHIL SCRIPTS ##################"
+cd $EZHILDIR/tests
+
+# 1) start from a clean state
+python-coverage erase
+
+# 2) run coverage tests
+for i in `echo gigo.n lisp0.n oklex.n badlex.n hello.n fact.n ranges.n gcd.n printtest.n vannakm.n temple.n lex2.n\
+ ifchain.n fern.n கூட்டு.n strings.n tables.n calc_asmd.n list.n \
+string_demo.n list_ta.n yinyang.n unaryop.n boolean.n chaos.n \
+prime.n array1.n array2.n filedemo.n filerw.n reverse.n friends.n  \
+palindromes.n ford2.n trials.n fornested.n loopupdate.n foreach.n foriter.n \
+dowhile.n select_case2.n magic_coins.n rich_poor.n peanut_candy.n logical_not.n \
+binary.n fibo.n floatpthole.n ifnested.n hailstone.n split_text.n lcmgcd.n \
+windoze.n convert2kelvin.n dict.n speedoflight.n tictok.n \
+change.n solo_return.n listmt.n predicates.n sexpr.n dict_ta.n \
+fruity.n optional.n sine_qua_non.n armstrong.n array0.n array_nd.n \
+tamil_letters.n tamil_months.n tower_of_hanoi.n hanoi.n \
+max_wo_compare.n powers_of_two.n sum_of_digits.n bmi.n isbalanced.n mangalyaan.n \
+boolf.n globalvars.n tamil1.n tamil2.n tamil_tha.n \
+ta_strings.n \
+array_wr.n \
+math_arithprogression.n \
+math_geomprogression.n \
+math_harmonicseries.n \
+math_complex.n \
+math_goldenratio.n \
+math_horner.n \
+dict_rw.n \
+ml.n \
+beer_bottles_song.n \
+sort.n \
+bitwiseops.n \
+mathipeedu.n \
+staircase_light.n \
+boolean_fcns.n \
+boolean_demorgan.n \
+nonexistent_file.n \
+half_adder.n \
+full_adder.n \
+eval0.n \
+eval1.n \
+ta_sort.n \
+neuron.n varavu_selavu.n calc2.n name_var.n py1.n demoif.n morse.n partition_estimate.n | sort`
+do
+    echo Running coverage test $i
+    python-coverage run ../ezhil/ezhil.py $i
+done
+
+# 3) report
+python-coverage html

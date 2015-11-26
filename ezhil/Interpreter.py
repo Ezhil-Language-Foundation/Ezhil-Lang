@@ -747,7 +747,7 @@ class Interpreter(DebugUtils):
                 self.env.call_function("__toplevel__") ##some context
             return self.ast.evaluate(self.env)
         except Exception as e:
-            self.env.disp_stack()
+            self.env.unroll_stack()
             if ( self.debug ):
                 traceback.print_tb(sys.exc_info()[2])
             raise e
@@ -759,10 +759,10 @@ class Interpreter(DebugUtils):
             rval = self.ast.evaluate(self.env)
             return [ rval, self.env ]
         #except RuntimeException as e:
-        #    self.env.disp_stack()
+        #    self.env.unroll_stack()
         #    #self.env.call_stack.pop()
         except Exception as e:
-            self.env.disp_stack()
+            self.env.unroll_stack()
             #self.env.call_stack.pop()
             print("ERROR : %s"%str(e))
             if (self.debug): print(str(self.env))

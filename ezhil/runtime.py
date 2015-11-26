@@ -46,10 +46,10 @@ class BuiltinFunction:
         try:
             return self.do_evaluate(env)
         except AssertionError as assert_excep:
-            env.disp_stack()
+            env.unroll_stack()
             raise RuntimeException( unicode(assert_excep) + u' Assertion failed!')
         except Exception as excep:
-            env.disp_stack()            
+            env.unroll_stack()            
             print(u"failed dispatching function ",unicode(self),u"with exception",unicode(excep))
             if ( self.debug ):
                 traceback.print_tb(sys.exc_info()[2])
@@ -146,7 +146,7 @@ class Environment:
         self.disable_profiling()
         self.profiler = None
         
-    def disp_stack(self):
+    def unroll_stack(self):
         # we skip BOS since it is a __toplevel__
         if (self.debug): print("clearing locals")
         if len(self.call_stack) > 0:
