@@ -157,6 +157,9 @@ class Dict(dict):
             fmt = fmt + unicode(k) + u" : " + unicode(v) + u",\n"
         fmt = fmt + u"}"
         return fmt
+
+    def visit(self,walker):
+        return walker.visit_dict(self)
     
     def evaluate(self,env):
         """ how do you evaluate dictionaries? just return the favor """
@@ -174,6 +177,9 @@ class Array(list):
     
     def __unicode__(self):
         return u", ".join( [unicode(item) for item in self] )
+    
+    def visit(self,walker):
+        return walker.visit_array(self)
     
     def evaluate(self,env):
         return self.base_evaluate( env )
@@ -333,6 +339,11 @@ class UnaryExpr(Stmt):
     def __unicode__(self):
         return u"[UnaryExpr["+unicode(self.unaryop)+ ","+unicode(self.term)+"]]"
     
+    def visit(self,walker):
+        """ delegate visitor to transformer/walker"""
+        walker.visit_unaryexpr(self)
+        return
+    
     def do_unaryop(self,tval):
         if ( self.unaryop.kind == Token.LOGICAL_NOT ):
             if not tval:
@@ -345,7 +356,7 @@ class UnaryExpr(Stmt):
         else:
             raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")
         return
-
+    
     def evaluate(self,env):
         term=self.term.evaluate(env)
         self.dbg_msg(u"unaryop=> "+unicode(term) +u" "+ unicode(term.__class__))

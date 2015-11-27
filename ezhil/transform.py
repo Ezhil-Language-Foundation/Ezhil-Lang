@@ -28,7 +28,7 @@ class Visitor:
         # tree-source-transformer etc.
 
     def default(self,*args):
-        raise Exception(u'Not Implemented')
+        raise Exception(u'Transform Visitor Not Implemented for AST [%s]'%str(args[0]))
     
     def visit_identifier(self, id):  
         self.default(id)
@@ -113,12 +113,22 @@ class Visitor:
     def visit_function(self,function):
         self.default(function)
         return
-
+    
     def visit_program_or_script(self,parse_tree):
         # bootstrap if leaf class didn't override this one
         self.visit_stmt_list(parse_tree)
         return
-
+        
+    def visit_dict(self,dictobj):
+        return
+    
+    def visit_array(self,arrayobj):
+        return
+        
+    def visit_unaryexpr(self,unaryexp):
+        unaryexp.term.visit(self)
+        return
+    
 class TransformVisitor(Visitor):
     def __init__(self,interpreter,debug=False):
         """ base class to write transform methods """
@@ -148,8 +158,8 @@ class TransformVisitor(Visitor):
         return
     
     def visit_expr_call(self,expr_call):
-        # expr_call.func_id.id
-        # expr_call.arglist.visit( self )
+        expr_call.func_id.visit(self)
+        expr_call.arglist.visit(self)
         return
 
     def visit_expr_list(self, expr_list):
@@ -179,7 +189,6 @@ class TransformVisitor(Visitor):
         # return may have optional argument
         if hasattr(ret_stmt.rvalue,'visit'):
             ret_stmt.rvalue.visit(self)
-        self.append(self.NEWLINE)
         return
     
     def visit_break_stmt(self, break_stmt ):
@@ -265,6 +274,7 @@ class TransformVisitor(Visitor):
         return
 
     def visit_eval_stmt(self, eval_stmt ):
+        #print(u"==>%s/%s"%(eval_stmt.expr.__class__,unicode(eval_stmt)))
         eval_stmt.expr.visit(self)
         return
     

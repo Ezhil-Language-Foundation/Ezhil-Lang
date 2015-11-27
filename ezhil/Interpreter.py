@@ -53,7 +53,8 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
 ## Parser
 from ExprsParser import Parser
 ## Transforms
-from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck
+from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck,\
+ TransformSemanticAnalyzer
 
 def ezhil_version():
         return 0.8
@@ -116,7 +117,7 @@ class NoClobberDict(dict):
     def __setitem__(self,key,val):
         if ( self.get(key,None) ):
             #print(u"-------> %s"%unicode(self.get(key)))
-            #traceback.print_stack()
+            traceback.print_stack()
             raise KeyError(u"Dictionary is getting clobbered; key '"+key+"' already present '%s'"%unicode(self.get(key)))
         dict.__setitem__(self,key,val)
 
@@ -140,7 +141,7 @@ def ezhil_eval(*args):
         return parse_eval.evaluate()
     except Exception as e:
         raise e
-    return 
+    return
 
 def ezhil_profile(*args):
     global global_interpreter
@@ -162,6 +163,25 @@ def ezhil_profile(*args):
         return
     
     raise RuntimeException(u"profile command used with unknown argument %s"%args[0])
+
+def ezhil_execute(*args):
+    global global_interpreter
+    env = global_interpreter.env
+    debug = global_interpreter.debug
+    
+    if len(args) < 1:
+        raise RuntimeException(u"ezhil_execute: missing filename argument")
+    lexer = EzhilLex(fname=args[0])
+    if ( debug ): lexer.dump_tokens()
+    try:
+        parse_eval = Interpreter( lexer, debug, global_interpreter.SAFE_MODE,False,env=global_interpreter.env)    
+        web_ast = parse_eval.parse()
+        parse_eval.call_stack.append("__evaluate__")
+        return parse_eval.evaluate()
+    except Exception as e:
+        traceback.print_stack()
+        raise e
+    return
 
 ## Iyakki : Ezhil inge irunthu iyakkapadum
 class Interpreter(DebugUtils):
@@ -434,10 +454,13 @@ class Interpreter(DebugUtils):
         self.builtin_map['python_dir']=BlindBuiltins(dir,'python_dir',self.debug)
         self.builtin_map['divmod']=BlindBuiltins(divmod,'divmod',self.debug)
         self.builtin_map['enumerate']=BlindBuiltins(enumerate,'enumerate',self.debug)
-
+        
         # skip these system functions
         self.builtin_map['eval']=BlindBuiltins(ezhil_eval,'eval',self.debug)
         self.builtin_map[u'மதிப்பீடு']=self.builtin_map['eval']
+        self.builtin_map['execute']=BlindBuiltins(ezhil_execute,'execute',self.debug)
+        self.builtin_map[u'இயக்கு']=self.builtin_map['execute']
+        
         self.builtin_map['profile'] = BlindBuiltins(ezhil_profile,'profile',self.debug)
         #self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
         #self.builtin_map['exit']=BlindBuiltins(exit,'exit',self.debug)
@@ -742,6 +765,10 @@ class Interpreter(DebugUtils):
         try:
             if self.SAFE_MODE:
                 TransformSafeModeFunctionCheck(interpreter=self,debug=self.debug)
+            
+            # always verify semantics before running code
+            #if ( self.debug ): print(self.ast )
+            TransformSemanticAnalyzer(interpreter=self,debug=self.debug)
             
             if ( len(self.call_stack) == 0 ):
                 self.env.call_function("__toplevel__") ##some context

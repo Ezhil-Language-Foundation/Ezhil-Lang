@@ -16,7 +16,7 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  ValueList, Function, StmtList, Identifier, Number, \
  String, Boolean
 
-from errors import RuntimeException
+from errors import RuntimeException, SemanticException
 
 class TransformEntryExitProfile(TransformVisitor):
     def __init__(self,**kwargs):
@@ -46,4 +46,31 @@ class TransformSafeModeFunctionCheck(TransformVisitor):
         if callee in self.forbidden_fcn_names:
            raise RuntimeException(u"ERROR %s:\n\t %s may not be used in SAFE MODE ."%(self.interpreter.get_fname(),unicode(expr_call)))
         expr_call.arglist.visit( self )
+        return
+
+#  Type checker for ezhil - rules list #65
+class TransformSemanticAnalyzer(TransformVisitor):
+    def __init__(self,**kwargs):
+        TransformVisitor.__init__(self,**kwargs)
+        return
+
+# Find a list of rules for type checking Ezhil AST.
+# You may only add like types. I.e. (You may only add numbers or strings but never between each other)
+# You may index arrays with only integers or numbers or dictionaries with Strings
+# You can type check argument types, and number of builtin functions.
+# You may type check arguments for number of args in a function call.
+    
+    def visit_expr_call(self,expr_call):
+        callee = expr_call.func_id.id
+        expr_call.arglist.visit( self )
+        return
+    
+    # check if the constants are on lhs of assignment statements
+    # check if the strings are added to numbers 
+    # check ...
+    def visit_assign_stmt(self, assign_stmt):
+        if any( map( lambda typename: isinstance( assign_stmt.lvalue, typename) , [Number,String,Boolean,Function]) ):
+            raise SemanticException("Cannot use number, string, constant or functions on LHS of assignment %s"%unicode(assign_stmt))
+        assign_stmt.lvalue.visit( self )
+        assign_stmt.rvalue.visit( self )
         return

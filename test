@@ -35,6 +35,7 @@ done
 
 # run tests for Ezhil as well
 export EZHIL_DATA_PATH=`pwd`/tests/data
+export EZHIL_TEST_PATH=`pwd`/tests/
 cd ./tests
 # last space important before the \
 for i in `cat ../test_cases | sort`
@@ -135,7 +136,7 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # nonexistent_file.n
 # eval1.n
 # yinyang.n -- fails b/c of no X-window
-NFAIL=13 #11/20/15
+NFAIL=11 #11/20/15
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]

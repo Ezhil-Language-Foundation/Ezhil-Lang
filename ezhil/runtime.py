@@ -90,7 +90,7 @@ class BuiltinFunction:
             except Exception as excep:
                 #print u"catch exception", excep
                 raise RuntimeException( unicode(excep) )
-        env.clear_call()
+        env.clear_call(copyvars= self.name in ["execute","eval",u'இயக்கு',u'மதிப்பீடு'])
         ## pop stuff into the call-stack
         env.return_function(self.name)
         return  rval
@@ -227,9 +227,9 @@ class Environment:
         self.Return = False
         self.Continue = False
 
-    def clear_call(self):
+    def clear_call(self,copyvars=False):
         """ utility to cleanup the stacks etc.. """
-        self.clear_local( ) 
+        self.clear_local( copyvars ) 
         self.clear_args ( )
         self.clear_break_return_continue()
         
@@ -253,10 +253,14 @@ class Environment:
         self.clear_break_return_continue()
         return
     
-    def clear_local(self):
-        self.local_vars.pop()
+    def clear_local(self,copyvars=False):
+        prev_values = self.local_vars.pop()
+        if copyvars:
+            if len(self.local_vars) < 1:
+                self.local_vars.append({})
+            self.local_vars[-1].update(prev_values)
         return
-
+    
     def has_id(self, idee):
         """ check various 'scopes' for ID variable """
         rval = False

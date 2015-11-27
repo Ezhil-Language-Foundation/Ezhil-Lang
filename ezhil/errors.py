@@ -45,6 +45,13 @@ class ParseException(ErrorException):
         ErrorException.__init__(self)
         self.args = [Messages.PARSE_ERROR, desc ]
 
+class SemanticException(ErrorException):
+    def __init__(self,desc):
+        ErrorException.__init__(self)
+        self.args = [Messages.PARSE_ERROR, desc]
+    def __unicode__(self):
+        return u"Semantic error in program: %s"%(ErrorException.__unicode__(self))
+    
 
 class TimeoutException(Exception):
         def __init__(self,timeout):
