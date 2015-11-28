@@ -1,0 +1,3 @@
+# semantic error triggered
+x = 5
+10 = x

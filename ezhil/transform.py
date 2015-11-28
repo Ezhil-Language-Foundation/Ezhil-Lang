@@ -65,7 +65,7 @@ class Visitor:
     def visit_break_stmt(self, break_stmt ):
         self.default(break_stmt)
         return
-
+    
     def visit_continue_stmt(self, cont_stmt):
         self.default(cont_stmt)
         return
@@ -129,6 +129,10 @@ class Visitor:
         unaryexp.term.visit(self)
         return
     
+    def visit_binary_expr(self,binexpr):
+        
+        return
+        
 class TransformVisitor(Visitor):
     def __init__(self,interpreter,debug=False):
         """ base class to write transform methods """
@@ -313,5 +317,8 @@ class TransformVisitor(Visitor):
         # Body expression
         fndecl_stmt.body.visit(self)
         
+        return
+    
+    def visit_binary_expr(self,binexpr):
         return
     

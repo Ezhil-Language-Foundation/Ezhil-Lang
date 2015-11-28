@@ -99,7 +99,7 @@ done
 echo "**************************************************"
 echo " Running all the failure programs, that must fail."
 echo "**************************************************"
-for i in `ls ./tests/*.fprog`;
+for i in `ls ./tests/*.fprog ./tests/typecheck/semantic_error*.n`;
 do
     echo "Testing file $i" | tee -a dump_file3
     python3 ./ezhil/exprs.py $i $1 -stacksize 10 2>&1 >> dump_file3
@@ -156,7 +156,7 @@ echo "Passed = "`wc -l success3.txt`", Failed = "`wc -l failed3.txt`
 #   29	temple.n
 #   30	unaryop.n
 #   31	yinyang.n
-NFAIL=23 #11/20/15
+NFAIL=25 #11/25/15
 TOTFAIL=`wc -l failed3.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]

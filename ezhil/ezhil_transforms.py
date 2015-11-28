@@ -7,8 +7,14 @@
 ## Interpreter for Ezhil language
 from __future__ import print_function
 
+import sys
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
+
 ## Tx
 from transform import Visitor, TransformVisitor
+from scanner import Token
 ## AST elements
 from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
@@ -53,7 +59,7 @@ class TransformSemanticAnalyzer(TransformVisitor):
     def __init__(self,**kwargs):
         TransformVisitor.__init__(self,**kwargs)
         return
-
+    
 # Find a list of rules for type checking Ezhil AST.
 # You may only add like types. I.e. (You may only add numbers or strings but never between each other)
 # You may index arrays with only integers or numbers or dictionaries with Strings
@@ -62,6 +68,9 @@ class TransformSemanticAnalyzer(TransformVisitor):
     
     def visit_expr_call(self,expr_call):
         callee = expr_call.func_id.id
+        if callee == u"__getitem__":
+            # T.B.D
+            pass
         expr_call.arglist.visit( self )
         return
     
@@ -74,3 +83,30 @@ class TransformSemanticAnalyzer(TransformVisitor):
         assign_stmt.lvalue.visit( self )
         assign_stmt.rvalue.visit( self )
         return
+    
+    def visit_binary_expr(self,binexpr):
+        lhs_is_string = isinstance( binexpr.term, String)
+        rhs_is_string = isinstance( binexpr.next_expr, String )
+        lhs_id_expr_call = isinstance( binexpr.term, ExprCall ) or isinstance( binexpr.term, Identifier)
+        rhs_id_expr_call = isinstance( binexpr.next_expr, ExprCall ) or isinstance( binexpr.next_expr, Identifier)
+        
+        if isinstance(binexpr.next_expr,Expr):
+            binexpr.next_expr.visit(self)
+            return
+        
+        binexpr.term.visit(self)
+        
+        if binexpr.binop.kind != Token.PLUS:
+            if lhs_is_string or rhs_is_string:
+                if binexpr.binop.kind in Token.COMPARE:
+                    pass
+                else:
+                    raise SemanticException("Cannot use string with operators other than '+','>=','<=','!=','==','>','<' at expression %s"%unicode(binexpr))
+        else:
+            if lhs_is_string or rhs_is_string:
+                if not ((lhs_is_string and rhs_is_string) or \
+                   (lhs_is_string and rhs_id_expr_call) or \
+                   (rhs_is_string and lhs_id_expr_call)):
+                   raise SemanticException("Cannot join strings and expression at expression %s"%unicode(binexpr))
+        return
+    

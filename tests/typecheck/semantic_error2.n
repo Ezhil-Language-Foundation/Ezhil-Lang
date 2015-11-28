@@ -1,0 +1,2 @@
+# Cannot subtract strings only add them!
+"xkcd" - "cd"

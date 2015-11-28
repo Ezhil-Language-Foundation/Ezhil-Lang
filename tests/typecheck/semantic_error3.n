@@ -1,0 +1,9 @@
+# Cannot subtract strings only add them!
+"xkcd" + "cd" #OK
+# cannot parse this yet
+#"Thanks" + ["Giving"][0]
+printf("Thanks" + str(sum([0,1,2]))) 
+"Thanks" + giving # donot cause semantic error
+பதிப்பி "எனக்கு "+str(எடு(z,"age"))+" வயதாகிறது. "
+பதிப்பி "எனக்கு "+ "எனக்கு "+ "mee" # OK
+"Thanks" / "Giving" #semantic error

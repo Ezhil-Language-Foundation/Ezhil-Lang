@@ -20,6 +20,7 @@ from ezhil import PrettyPrint
 
 debug = False
 
+# QuietTestCase
 class TestPrettyPrinter(QuietTestCase):
     def get_filename(self):
         return 'dummy_TestPrettyPrinter.txt'
@@ -77,14 +78,15 @@ class TestPrettyPrinter(QuietTestCase):
 """
 
         file_patterns = {"hello.n" : hello_patterns,
-                         "fact.n"  : fact_patterns, #check for fcn declarations as well
-                         "infinite_loop.n" : infinite_loop_patterns,
-                         "ford2.n" : ford2_patterns,                         
+                         #"fact.n"  : fact_patterns, #check for fcn declarations as well
+                         #"infinite_loop.n" : infinite_loop_patterns,
+                         #"ford2.n" : ford2_patterns,                         
                         }
                 
         flag = True
         self.debug = False
         for filename, expt_fmt in file_patterns.items():
+            print("########## Testing pprint for program %s"%filename)
             expt_fmt = expt_fmt.split("\n");
             formatted_str = PrettyPrint(relpath+filename).pretty_print()
             if not ( all([( formatted_str.find( line ) >= 0 ) for line in expt_fmt]) ):
@@ -93,7 +95,7 @@ class TestPrettyPrinter(QuietTestCase):
                 flag = False
             else:
                 if self.debug: print "file " + filename + " passed the test"
-        
+            print("##############################################")
         self.assertTrue( flag )
 
 if __name__ == '__main__':    

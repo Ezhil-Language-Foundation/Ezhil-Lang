@@ -493,7 +493,10 @@ class Expr(Stmt):
         return term
 
     def visit(self, walker):
-        walker.visit_expr(self)
+        if self.binop.kind in Token.BINOP:
+            walker.visit_binary_expr(self)
+        else:
+            walker.visit_expr(self)
         return
 
 class ReturnStmt(Stmt):
