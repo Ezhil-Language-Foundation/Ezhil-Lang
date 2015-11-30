@@ -110,3 +110,33 @@ class TransformSemanticAnalyzer(TransformVisitor):
                    raise SemanticException("Cannot join strings and expression at expression %s"%unicode(binexpr))
         return
     
+    def visit_import(self,importstmt):
+        if not isinstance(importstmt.filename,String):
+            raise SemanticException("Import statement should be a string at time of interpretation at %s"%unicode(importstmt))
+        return
+
+class TransformConstantFolder(TransformVisitor):
+    def __init__(self,**kwargs):
+        TransformVisitor.__init__(self,**kwargs)
+        return
+        
+    def can_fold_expr(self,expr):
+        if isinstance(expr,Number):
+            return True, expr
+        
+    def visit_binary_expr(self,binexpr):
+        # if lhs is constant and you are able to fold rhs
+        # then replace binexpr with the value
+        
+        if isinstance(binexpr.next_expr,Expr):
+            binexpr.next_expr.visit(self)
+            return
+        
+        binexpr.term.visit(self)
+        
+        lhs_is_num = isinstance( binexpr.term, Number)
+        [foldable,val] = self.can_fold_expr( binexpr.next_expr )
+        if foldable:
+            # new API needed to replace the node
+            self.binexpr.replace( self.constant_fold( binexpr ) )
+        

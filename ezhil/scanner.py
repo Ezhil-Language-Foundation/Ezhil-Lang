@@ -204,7 +204,7 @@ class Lex(object):
 
     def reset(self):
         """ reset the lexer """
-        if (self.debug): print(u"Dumping out "+ len(self.tokens)+"Lexemes ")
+        if (self.debug): print(u"Dumping out "+ str(len(self.tokens))+"Lexemes ")
         self.tokens = []
     
     def __repr__(self):

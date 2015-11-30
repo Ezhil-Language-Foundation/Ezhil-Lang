@@ -29,7 +29,7 @@ from runtime import  Environment, BuiltinFunction, \
 from ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
  ForStmt, AssignStmt, PrintStmt, DeclarationStmt, EvalStmt, ArgList, \
- ValueList, Function, StmtList, Identifier, Number, \
+ ImportStmt, ValueList, Function, StmtList, Identifier, Number, \
  String, Array, Dict
 
 ## use exprs language parser
@@ -369,6 +369,15 @@ class EzhilParser(Parser):
             self.check_loop_stack(); ##raises a parse error
             cntstmt = ContinueStmt( l, c, self.debug);
             return cntstmt
+        elif ( ptok.kind == EzhilToken.IMPORT ):
+            self.dbg_msg("import-statement")
+            import_tok = self.dequeue()
+            [l,c] = import_tok.get_line_col()
+            self.currently_parsing.append(import_tok)
+            fname = self.expr()
+            self.currently_parsing.pop()
+            importstmt = ImportStmt(l,c,self.debug,fname)
+            return importstmt
         else:
             ## lval := rval
             ptok = self.peek()

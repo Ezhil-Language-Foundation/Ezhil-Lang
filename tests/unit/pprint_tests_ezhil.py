@@ -78,9 +78,9 @@ class TestPrettyPrinter(QuietTestCase):
 """
 
         file_patterns = {"hello.n" : hello_patterns,
-                         #"fact.n"  : fact_patterns, #check for fcn declarations as well
-                         #"infinite_loop.n" : infinite_loop_patterns,
-                         #"ford2.n" : ford2_patterns,                         
+                         "fact.n"  : fact_patterns, #check for fcn declarations as well
+                         "infinite_loop.n" : infinite_loop_patterns,
+                         "ford2.n" : ford2_patterns,                         
                         }
                 
         flag = True

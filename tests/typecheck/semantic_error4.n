@@ -1,0 +1,3 @@
+# Cannot subtract strings only add them!
+உள்ளடக்கு "factorial.n" #OK
+உள்ளடக்கு str("factorial.n") #NOT OK!

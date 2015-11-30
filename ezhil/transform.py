@@ -130,9 +130,12 @@ class Visitor:
         return
     
     def visit_binary_expr(self,binexpr):
-        
+        self.visit_expr(binexpr)
         return
-        
+    
+    def visit_import(self,importstmt):
+        return
+    
 class TransformVisitor(Visitor):
     def __init__(self,interpreter,debug=False):
         """ base class to write transform methods """
@@ -320,5 +323,6 @@ class TransformVisitor(Visitor):
         return
     
     def visit_binary_expr(self,binexpr):
+        self.visit_expr(binexpr)
         return
     

@@ -40,7 +40,7 @@ class Identifier:
         self.debug = dbg
         self.line = l;
         self.col = c;
-
+    
     def __unicode__(self):
         return u"" + self.id
     
@@ -193,6 +193,7 @@ class ExprCall:
         self.debug = dbg
         self.line = l
         self.col = c
+        self.parent = None
 
     def dbg_msg(self, msg):
         if ( self.debug ):
@@ -238,7 +239,8 @@ class ExprList:
         self.debug = dbg
         self.line = l
         self.col = c
-
+        self.parent = None
+    
     def __repr__(self):
         return u"\n\t [ExprList[ "+ u", ".join(map(unicode,self.exprs)) + u"]]"
 
@@ -260,7 +262,8 @@ class Stmt:
         self.col = c
         self.class_name = u"Stmt"
         self.debug = dbg
-
+        self.parent = None
+        
     def __unicode__(self):        
         self.dbg_msg( u" ".join([ u"stmt => ", unicode(self.__class__)]) ) #we're headed toward assertion
         return self.__repr__()
@@ -329,6 +332,31 @@ class DeclarationStmt(Stmt):
     
     def __repr__(self):        
         return self.fcn.__repr__()
+
+class ImportStmt(Stmt):
+    """ hold function declaration statements; have visit option, 
+        but no evaluation options. """
+    def __init__(self,line,col,debug,fname):
+        Stmt.__init__(self,line,col,debug)
+        self.class_name = u"Import_Statement"
+        self.filename = fname
+        
+    def evaluate(self,env):
+        # make a function call to ezhil_execute
+        #self.dbg_msg(" add call : execute(\"begin\")")
+        [l,c] = self.line,self.col
+        fname = ValueList([self.filename],l,c,self.debug)
+        import_via_execute = ExprCall( Identifier("execute",l,c), fname, l, c, self.debug )
+        import_via_execute.evaluate(env)
+        return
+    
+    def visit( self, walker):
+        """ delegate visitor to holding function """
+        walker.visit_import( self )
+        return
+    
+    def __repr__(self):
+        return u"ImportStmt @ %s"%unicode(self.filename)
 
 class UnaryExpr(Stmt):
     def __init__(self,t,op,l,c,dbg=False):
@@ -816,7 +844,8 @@ class ArgList:
         self.args = argvals 
         self.line = l
         self.col = c
-
+        self.parent = None
+        
     def __len__(self):
         return len(self.args)
 
@@ -839,7 +868,8 @@ class ValueList:
         self.debug = dbg
         self.line = l
         self.col = c
-    
+        self.parent = None
+        
     def append(self,obj):
         self.args.append(obj)
         return

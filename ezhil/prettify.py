@@ -109,6 +109,10 @@ class Printer(Visitor):
         stmt.visit(self)
         return
     
+    def visit_binary_expr(self,expr):
+        self.visit_expr(expr)
+        return
+        
     def visit_expr(self, expr):
         op_attrib = self.theme.Operators
         self.update_line(expr)

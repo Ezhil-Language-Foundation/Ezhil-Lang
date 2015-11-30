@@ -106,7 +106,7 @@ def ezhil_setitem(x,key,val):
 def ezhil_load(filename):
     # load the file into the interpreter
     # we have a symbol table and use it
-    pass
+    ezhil_execute([filename])
 
 class NoClobberDict(dict):
     """ dictionary structure with a set like mathematical structure.
@@ -166,11 +166,13 @@ def ezhil_profile(*args):
 
 def ezhil_execute(*args):
     global global_interpreter
+    global_interpreter.reset()
     env = global_interpreter.env
     debug = global_interpreter.debug
     
     if len(args) < 1:
         raise RuntimeException(u"ezhil_execute: missing filename argument")
+    if (debug): print(args[0])
     lexer = EzhilLex(fname=args[0])
     if ( debug ): lexer.dump_tokens()
     try:
@@ -823,11 +825,12 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
         arg,cmd = u"",u""
         if not PYTHON3:
             line = line.decode("utf-8")
+        line=line.strip()
         if line in [u"exit",u"help",u"EOF",u"copyright",u"credits",u"license"]:
             cmd = line
             line = line+u"()"
         return [cmd,arg,line]
-
+    
     def update_prompt(self):
         self.prompt = u"%s %d>> "%(self.lang,self.line_no)
 
@@ -847,7 +850,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
         self.line_no += 1
         #line = unicode(line)
         if ( self.debug ): print("evaluating line", line)
-        if ( line == 'exit' ): self.exit_hook(doExit=True)
+        if ( line == u'exit()' ): self.exit_hook(doExit=True)
         try:
             self.lexer.set_line_col([self.line_no, 0])
             if len(self.prevlines) > 0:
