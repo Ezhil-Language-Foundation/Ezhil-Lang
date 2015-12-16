@@ -887,6 +887,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
             self.parse_eval.parse()
             if ( self.debug ):
                 print(u"*"*60);  
+            TransformSemanticAnalyzer( interpreter = self.parse_eval, debug=self.debug)
             [rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
             if ( self.debug ): print( u"return value", unicode(rval) )
             if hasattr( rval, 'evaluate' ):
