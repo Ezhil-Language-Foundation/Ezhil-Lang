@@ -34,8 +34,9 @@ from errors import RuntimeException, ParseException
 ## ATOMS
 ##
 
-class Identifier:
+class Identifier(object):
     def __init__(self,id, l, c, dbg=False):
+        object.__init__(self)
         self.id=id
         self.debug = dbg
         self.line = l;
@@ -77,8 +78,9 @@ class Identifier:
         walker.visit_identifier(self)
         return
 
-class String:
+class String(object):
     def __init__(self,s, l = 0, c = -1, dbg = False):
+        object.__init__(self)
         self.string = s
         self.debug = dbg
         self.line = l
@@ -100,8 +102,9 @@ class String:
         walker.visit_string(self)
         return
 
-class Number:
+class Number(object):
     def __init__(self,n, l = 0, c = -1, dbg = False):
+        object.__init__(self)
         self.num=n
         self.debug = dbg
         self.line = l
@@ -184,9 +187,10 @@ class Array(list):
     def evaluate(self,env):
         return self.base_evaluate( env )
 
-class ExprCall:
+class ExprCall(object):
     """handle function call statement etc."""
     def __init__(self,func_id,arglist, l, c, dbg = False):
+        object.__init__(self)
         self.func_id = func_id 
         self.fname = func_id.id
         self.arglist = arglist
@@ -233,8 +237,9 @@ class ExprCall:
         walker.visit_expr_call(self)
         return
     
-class ExprList:
+class ExprList(object):
     def __init__(self,exprs, l, c, dbg=False):
+        object.__init__(self)
         self.exprs = exprs
         self.debug = dbg
         self.line = l
@@ -255,9 +260,10 @@ class ExprList:
         walker.visit_expr_list(self)
         return    
 
-class Stmt:
+class Stmt(object):
     def __init__(self, l=0, c=0, dbg =False):
         """ implements an empty statement"""
+        object.__init__(self)
         self.line = l
         self.col = c
         self.class_name = u"Stmt"
@@ -363,6 +369,9 @@ class UnaryExpr(Stmt):
         Stmt.__init__(self,l,c,dbg)
         self.term=t
         self.unaryop=op
+        
+    def __repr__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return u"[UnaryExpr["+unicode(self.unaryop)+ ","+unicode(self.term)+"]]"
