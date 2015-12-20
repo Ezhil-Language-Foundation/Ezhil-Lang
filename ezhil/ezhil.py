@@ -401,26 +401,52 @@ def ezhil_interactive_interpreter(lang = u"எழில்",debug=False):
     parse_eval = EzhilInterpreter( lexer=lexer, debug=debug )
     REPL( lang, lexer, parse_eval, debug )
 
-if __name__ == u"__main__":
+
+def add_stdin():
+    sys.argv.append('-stdin')
+
+
+def execute_file(file_name, debug, encoding, doprofile):
+    """Execute a given file and return the exit code.
+    """
+    try:
+        executer = EzhilFileExecuter(file_name, debug, encoding=encoding,
+                                     doprofile=doprofile)
+        executer.run()
+        return 0
+    except Exception as e:
+        print(u"Failed executing file '{0}':\n{1}'".format(
+            file_name, unicode(e)))
+        if debug:
+            traceback.print_tb(sys.exc_info()[2])
+        return 255
+
+
+def main():
     lang = u"எழில்"
-    [fnames, debug, dostdin, encoding,stacksize,doprofile]= get_prog_name(lang)
-    if ( dostdin ):
+
+    if len(sys.argv) == 1:
+        add_stdin()
+
+    [fnames, debug, dostdin, encoding, stacksize, doprofile] = get_prog_name(
+        lang)
+    if dostdin :
         # ignore fnames, and encoding here
         ezhil_interactive_interpreter(lang,debug)
     else:
-        ## evaluate a files sequentially except when exit() was called in one of them,
-        ## while exceptions trapped per file without stopping the flow
-        exitcode = 0
+        ## evaluate a files sequentially except when exit() was called in
+        ## one of them, while exceptions trapped per file without stopping
+        ## the flow
         # print(u"mode with fnames")
-        for idx,aFile in enumerate(fnames):
-            if ( debug ):  print(u" **** Executing file #  ",1+idx,u"named ",aFile)
-            try:
-                EzhilFileExecuter( aFile, debug, encoding=encoding, doprofile=doprofile ).run()
-            except Exception as e:
-                exitcode = 255
-                print(u"Failed executing file '"+aFile+u"':\n  "+unicode(e))
-                if ( debug ):
-                    traceback.print_tb(sys.exc_info()[2])
-                #raise e
-        sys.exit(exitcode)
+        for idx, file_name in enumerate(fnames):
+            if debug:
+                print(u" **** Executing file # {} named {} ".format(
+                    idx + 1, file_name))
+            exit_code = execute_file(file_name=file_name, debug=debug,
+                                     encoding=encoding, doprofile=doprofile)
+        sys.exit(exit_code)
     pass
+
+
+if __name__ == u"__main__":
+    main()

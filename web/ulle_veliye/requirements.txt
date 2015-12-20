@@ -1,0 +1,2 @@
+Open-Tamil==0.5
+Django==1.8.7
