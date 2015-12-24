@@ -5,11 +5,10 @@
 
 history = []
 append( history, ["BPCL"] )
-append( history, ["B"] )
-append( history, ["C"] )
-append( history[0], ["Lisp"] )
-append( history[0,-1], "CLISP" )
-append( history[0,-1], "Scheme" )
-append( history[0,-1], "ELISP" )
-
-
+append( history[-1], "B" )
+append( history[-1], "C" )
+append( history, ["Lisp"] )
+append( history[-1], "CLISP" )
+append( history[-1], "Scheme" )
+append( history[-1], "ELISP" )
+printf("%s",history)
