@@ -1,0 +1,15 @@
+# (C) முத்தையா அண்ணாமலை 2015
+# உரிமம் : போது
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+#Ref: https://www.le.ac.uk/users/rjm1/cotter/page_06.htm
+
+history = []
+append( history, ["BPCL"] )
+append( history, ["B"] )
+append( history, ["C"] )
+append( history[0], ["Lisp"] )
+append( history[0,-1], "CLISP" )
+append( history[0,-1], "Scheme" )
+append( history[0,-1], "ELISP" )
+
+
