@@ -1,2 +1,3 @@
 #!/bin/bash
-exec ./manage.py runserver 0.0.0.0:5000
+pip install -r requirements.txt
+exec ./manage.py runserver 0.0.0.0:8000

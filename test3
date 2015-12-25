@@ -82,6 +82,15 @@ else
 fi
 
 echo "**************************************************"
+echo " Running API tests"
+echo "**************************************************"
+
+cd web/ulle_veliye/
+pip3 install -r requirements.txt
+python3 manage.py test
+
+cd -
+echo "**************************************************"
 echo " Running interactive tests " | tee -a dump_file3
 echo "***************************************************"
 for i in `echo demos/ch2.n \

@@ -82,6 +82,16 @@ else
 fi
 
 echo "**************************************************"
+echo " Running API tests"
+echo "**************************************************"
+
+cd web/ulle_veliye/
+pip install -r requirements.txt
+python manage.py test
+
+cd -
+
+echo "**************************************************"
 echo " Running interactive tests " | tee -a dump_file
 echo "***************************************************"
 for i in `echo demos/ch2.n \
@@ -111,6 +121,7 @@ do
     fi
     sleep 0
 done
+
 
 echo "**********Successful Tests**********" 
 cat success.txt
