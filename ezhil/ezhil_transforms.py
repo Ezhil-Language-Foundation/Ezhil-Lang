@@ -14,7 +14,7 @@ if PYTHON3:
 
 ## Tx
 from transform import Visitor, TransformVisitor
-from scanner import Token
+from ezhil_scanner import EzhilToken
 ## AST elements
 from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
@@ -96,9 +96,9 @@ class TransformSemanticAnalyzer(TransformVisitor):
         
         binexpr.term.visit(self)
         
-        if binexpr.binop.kind != Token.PLUS:
+        if binexpr.binop.kind != EzhilToken.PLUS:
             if lhs_is_string or rhs_is_string:
-                if binexpr.binop.kind in Token.COMPARE:
+                if binexpr.binop.kind in EzhilToken.COMPARE:
                     pass
                 else:
                     raise SemanticException("Cannot use string with operators other than '+','>=','<=','!=','==','>','<' at expression %s"%unicode(binexpr))
@@ -118,25 +118,61 @@ class TransformSemanticAnalyzer(TransformVisitor):
 class TransformConstantFolder(TransformVisitor):
     def __init__(self,**kwargs):
         TransformVisitor.__init__(self,**kwargs)
+        self.rval = None
+        #print(self.top_ast)
         return
         
+    def constant_fold(self,binexpr):
+        return binexpr.evaluate(None)
+    
     def can_fold_expr(self,expr):
         if isinstance(expr,Number):
             return True, expr
+    
+    def reset(self):
+        self.rval = None
+    
+    def get_rval(self):
+        op = self.rval
+        self.reset()
+        return op
+    
+    def visit_number(self,num):
+        self.rval = num
+        return
         
     def visit_binary_expr(self,binexpr):
         # if lhs is constant and you are able to fold rhs
         # then replace binexpr with the value
-        
+        #print(type(binexpr.term))
+        #print(type(binexpr.next_expr))
+        next_expr_alt = None
         if isinstance(binexpr.next_expr,Expr):
             binexpr.next_expr.visit(self)
-            return
+            next_expr_alt = self.get_rval()
+        else:
+            next_expr_alt = binexpr.next_expr
         
         binexpr.term.visit(self)
+        term_expr_alt = self.get_rval()
         
-        lhs_is_num = isinstance( binexpr.term, Number)
-        [foldable,val] = self.can_fold_expr( binexpr.next_expr )
+        print(type(term_expr_alt))
+        #print("-------")
+        if next_expr_alt == None or term_expr_alt == None:
+            return None
+        #print("------x------")
+        
+        lhs_is_num = isinstance( term_expr_alt, Number)
+        [foldable,val] = self.can_fold_expr( next_expr_alt )
+        
         if foldable:
+            print("foldable")
             # new API needed to replace the node
-            self.binexpr.replace( self.constant_fold( binexpr ) )
-        
+            binexpr.term = term_expr_alt
+            binexpr.next_expr = next_expr_alt
+            newval = self.constant_fold( binexpr )
+            binexpr.replace( newval )
+            print(str(newval),newval)
+            return Number(newval)
+        return None
+    

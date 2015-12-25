@@ -54,8 +54,10 @@ from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
 from ExprsParser import Parser
 ## Transforms
 from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck,\
- TransformSemanticAnalyzer
+ TransformSemanticAnalyzer, TransformConstantFolder
 
+from ezhil_serializer import SerializerXML
+ 
 def ezhil_version():
         return 0.8
 
@@ -762,7 +764,7 @@ class Interpreter(DebugUtils):
         """ parser routine """
         self.ast = self.parser.parse()
         return self.ast
-
+    
     def evaluate(self):
         try:
             if self.SAFE_MODE:
@@ -770,7 +772,11 @@ class Interpreter(DebugUtils):
             
             # always verify semantics before running code
             #if ( self.debug ): print(self.ast )
-            TransformSemanticAnalyzer(interpreter=self,debug=self.debug)
+            TransformSemanticAnalyzer(interpreter=self, debug=self.debug)
+            
+            # constant fold
+            #for i in range(0,2):
+            #    TransformConstantFolder( interpreter = self, debug=self.debug)
             
             if ( len(self.call_stack) == 0 ):
                 self.env.call_function("__toplevel__") ##some context
@@ -891,6 +897,8 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
             if ( self.debug ):
                 print(u"*"*60);  
             TransformSemanticAnalyzer( interpreter = self.parse_eval, debug=self.debug)
+            #TransformConstantFolder( interpreter = self.parse_eval, debug=self.debug)
+            
             [rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
             if ( self.debug ): print( u"return value", unicode(rval) )
             if hasattr( rval, 'evaluate' ):
