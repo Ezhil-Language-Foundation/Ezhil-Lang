@@ -10,12 +10,17 @@ Introduction
 எழில்: தமிழ் நிரலாக்க மொழி; முதன்முறை கணிப்பொறி நிரல் எழுதுகிற 
 தமிழ் மாணவர்களுக்கு இது உதவும்.
 
+எழில் மொழி  குழந்தைகளும்  , பள்ளி மாணவர்களும்  கட்ட்ருகொள்ளும் வகையில் உருவாக்கப்பட்ட ஒரு கணினி நிரல் மொழி.
+எழில் ஒரு செயல்முறை நோக்கு - (Imperative ) கணினி மொழி. இதை ரூபி , பைதான் போன்ற மொழிகளின் நடையில் அமைக்கபட்டது.
+எழில் மொழியில் நிபந்தனை கட்டளைகள், மடக்கு கட்டளைகள் என்றும்  எழுதலாம்; இதில் செயல்பாடுகள், செயல்குருகள் என்று கணினி நிரல்களை 
+பிரிக்கலாம். எழில்  மென்பொருள் அத்யாயம்  எண்  v0.8. பைதான் மொழி அடிப்படையில் உருவாக்கப்பட்டது.
+
 Ezhil-Lang : (Ezhil, is a fun Tamil programming language for K-12) Ezhil is 
 a procedural language with dynamic types, like Ruby/Python. Ezhil has a 
 pascal-like syntax, with for-end, while-end, if-elseif-else-end statements,
 break, continue and def-end for defining functions. Ezhil language is 
 implemented in a handwritten scanner and parser using the Python programming 
-language. Latest version of Ezhil-Language is v0.75.
+language. Latest version of Ezhil-Language is v0.8.
 ```
 
 Motivations
@@ -30,8 +35,8 @@ English language is not a pre-requisite
 Write your first program in Ezhil
 Free as in Open source
 
-Usage
-=====
+எழில் மொழியைபயன்படுத்துவது  (Usage)
+===========================================
 
 Currently Ezhil language is under development, and a little rough around the
 edges. You may still try it out, by going to the git source repository,
@@ -44,8 +49,8 @@ and then use one of the three modes,
 2. Interactive Mode
 3. Web Mode
 
-Batch Mode
-==========
+மொத்தமாக எழில் நிரல்களை இயக்க  | Batch Mode
+=================================================== 
 ```bash
 $ ./ez ./ezhil_tests/hello.n 
 பதிப்பி "வணக்கம்!"
@@ -69,8 +74,8 @@ optional arguments:
   -stdin      read input from the standard input
 ```
 
-Interactive Mode
-================
+உரையாடும் பானியில்  எழில் |Interactive Mode
+================================================
 ```bash
 $ ./ez
 எழில் 1>> 1 + 5
@@ -80,15 +85,15 @@ $ ./ez
 எழில் 3>> exit()
 ```
 
-Web Mode
-========
+வலை உலாவி வழி பயன்பாடு | Web Mode
+==========================================
 You can also run ezhil as a web service by launching the webserver,
 $ ./webserver.sh
 and open the webpage, http://localhost:8080 in google-chrome or firefox,
 to enter your program and evaluate it.
 
-Python Library
-==============
+பைதான்  மொழியில்  இருந்து  பயன்படுத்த | Python Library
+==============================================================
 Ezhil Tamil programming Python package can be invoked from within the Python shell or IDLE on Windows, by simply typing,
 ```python
 >>> import ezhil
@@ -106,14 +111,14 @@ Installation from Python Package Index is also recommended, following the comman
 $ pip install ezhil
 ```
 
-Learn more, and contribute 
-==========================
+மேலும்  எழில்  மொழியிற்கு பங்களிக்க | Learn more, and contribute 
+======================================================================
 '''Rosetta Code''', the wiki platform for sharing standard algorithms, in
 many programming languages, now hosts several algorithms in Ezhil.
 You can find all of Ezhil programs there via http://rosettacode.org/wiki/Category:Ezhil
 
-Download Ezhil
-==============
+தரவிறக்கம் செய்ய | Download Ezhil
+====================================
 If you would like to tryout the code, all you need
 is a python interpreter, and the code from 
 https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip
@@ -122,8 +127,8 @@ Interesting features include support for recursion,
 and an interactive interpreter. Ezhil supports a Turtle module
 for simple on-screen graphics, similar to LOGO language from 1960s.
 
-References
-==========
+மேற்கோள்கள்  | References
+============================
 Read Wikipedia article(s) on Ezhil,
 
 1. (Tamil) http://bit.ly/16MgU6U
