@@ -6,41 +6,53 @@
 ## 
 ## Module has elements of PARSE-TREE  AST 
 ## 
-
+import sys
+import codecs
 from ezhil_scanner import EzhilLex, EzhilToken, Token
 from transform import TransformVisitor, make_mock_interpreter
 
+import xml.sax.saxutils
+
 class Tag(object):
-    def __init__(self,name,tab=0,attrs={}):
+    def __init__(self,fileobj,name,tab=0,attrs={}):
         object.__init__(self)
         self.tagname = name
         self.attrs = attrs
+        self.fileobj = fileobj
         self.tabstr = " "*tab
         if len(attrs) > 0:
             pfx = " "
         else:
             pfx = ""
         serialized_attrs = pfx+u" ".join( [ "%s=\"%s\" "%(str(k),str(v)) for k,v in attrs.items()])
-        print("%s<%s%s>"%(self.tabstr,self.tagname,serialized_attrs))
+        self.fileobj.write("%s<%s%s>\n"%(self.tabstr,self.tagname,serialized_attrs))
     
     def disp(self,content):
-        print(content)
+        self.fileobj.write("%s\n"%content)
     
     def __del__(self):
-        print("%s</%s>"%(self.tabstr,self.tagname))
+        self.fileobj.write("%s</%s>\n"%(self.tabstr,self.tagname))
     
 class SerializerXML(TransformVisitor):
-    def __init__(self,interpreter,debug=False):
+    def __init__(self,interpreter,debug=False,filename=None):
         """ base class to write transform methods """
         self.tab = 0
-        print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        tobj = Tag("ezhil",self.tab)
+        self.filename = filename
+        self.file = sys.stdout
+        if filename:
+           self.file = codecs.open(filename,"w","UTF-8")
+        self.file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+        tobj = Tag(self.file,"ezhil",self.tab)
         self.incr()
         TransformVisitor.__init__(self,interpreter,debug)
         self.decr()
+    
+    def __del__(self):
+        if self.filename:
+            self.file.close()
         
     def disp_basic(self,tagname,contents):
-        print("%s<%s>%s</%s>"%(self.tabstr(),tagname,contents,tagname))
+        self.file.write("%s<%s>%s</%s>\n"%(self.tabstr(),tagname,contents,tagname))
     
     def tabstr(self):
         return " "*self.tab
@@ -52,9 +64,9 @@ class SerializerXML(TransformVisitor):
         self.tab -= 1
         
     @staticmethod
-    def serializeParseTree(parsetree,debug=False):
+    def serializeParseTree(parsetree,debug=False,filename=None):
         interp = make_mock_interpreter(parsetree)
-        SerializerXML(interp,debug)
+        SerializerXML(interp,debug,filename=filename)
     
     def update_line(self,obj):
         pass
@@ -73,17 +85,17 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_expr_call(self,expr_call):
-        tobj = Tag(name="EXPRCALL",tab=self.tab)
+        tobj = Tag(self.file,name="EXPRCALL",tab=self.tab)
         self.incr()
 
-        tobj_id = Tag(name="FUNCID",tab=self.tab)
+        tobj_id = Tag(self.file,name="FUNCID",tab=self.tab)
         self.incr()
         expr_call.func_id.visit(self)
         del tobj_id
         self.decr()
         
         self.incr()
-        tobj_args = Tag(name="FUNCARGS",tab=self.tab)
+        tobj_args = Tag(self.file,name="FUNCARGS",tab=self.tab)
         expr_call.arglist.visit(self)
         del tobj_args
         self.decr()
@@ -92,7 +104,7 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_expr_list(self, expr_list):
-        tobj = Tag(name="EXPRLIST",tab=self.tab)
+        tobj = Tag(self.file,name="EXPRLIST",tab=self.tab)
         self.incr()
         for pos,exp_itr in enumerate(expr_list.exprs):
             exp_itr.visit( self )
@@ -100,7 +112,7 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_stmt_list(self,stmt_list):
-        tobj = Tag(name="STMTLIST",tab=self.tab)
+        tobj = Tag(self.file,name="STMTLIST",tab=self.tab)
         self.incr()
         for stmt in stmt_list.List:
             stmt.visit(self)
@@ -108,16 +120,17 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_stmt( self, stmt):
-        tobj = Tag(name="STMT",tab=self.tab)
+        tobj = Tag(self.file,name="STMT",tab=self.tab)
         ## is this a recipe for getting stuck in a loop?
         stmt.visit(self)
         return
     
     def visit_expr(self, expr):
-        tobj = Tag(name="EXPR",tab=self.tab,attrs={"binop":Token.get_name(expr.binop.kind)})
+        escaped_tok_kind = xml.sax.saxutils.escape( Token.get_name(expr.binop.kind) )
+        tobj = Tag(self.file,name="EXPR",tab=self.tab,attrs={"binop":escaped_tok_kind})
         self.incr()
         
-        tobj_term = Tag(name="TERM",tab=self.tab)
+        tobj_term = Tag(self.file,name="TERM",tab=self.tab)
         self.incr()
         expr.term.visit(self)
         del tobj_term
@@ -129,7 +142,7 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_return_stmt(self, ret_stmt):
-        tobj = Tag(name="RETURN",tab=self.tab)
+        tobj = Tag(self.file,name="RETURN",tab=self.tab)
         keyword = u"பின்கொடு"
         # return may have optional argument
         if hasattr(ret_stmt.rvalue,'visit'):
@@ -137,17 +150,17 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_break_stmt(self, break_stmt ):
-        tobj = Tag(name="BREAK",tab=self.tab)
+        tobj = Tag(self.file,name="BREAK",tab=self.tab)
         keyword = u"நிறுத்து" #EzhilToken.Keywords["break"]
         return
     
     def visit_continue_stmt(self, cont_stmt):
-        tobj = Tag(name="CONTINUE",tab=self.tab)
+        tobj = Tag(self.file,name="CONTINUE",tab=self.tab)
         keyword = u"தொடர்" #EzhilToken.Keywords["continue"]
         return
     
     def visit_else_stmt(self,else_stmt):
-        tobj = Tag(name="ELSE",tab=self.tab)
+        tobj = Tag(self.file,name="ELSE",tab=self.tab)
         self.incr()
         keyword = u"இல்லை"
         else_stmt.stmt.visit( self )
@@ -155,7 +168,7 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_if_elseif_stmt(self,if_elseif_stmt):
-        tobj = Tag(name="IF",tab=self.tab)
+        tobj = Tag(self.file,name="IF",tab=self.tab)
         self.incr()
         
         # condition expression
@@ -169,7 +182,7 @@ class SerializerXML(TransformVisitor):
         
         # False-Body - optionally present
         if hasattr(if_elseif_stmt.next_stmt,'visit'):
-            tobj_else = Tag(name="ELSE",tab=self.tab)
+            tobj_else = Tag(self.file,name="ELSE",tab=self.tab)
             self.incr()
             if_elseif_stmt.next_stmt.visit(self)
             del tobj_else
@@ -189,11 +202,11 @@ class SerializerXML(TransformVisitor):
                         சமம்= சமம் + input[itr]*wts[itr]
             itr = itr + 1
                 முடி"""
-        tobj_while = Tag(name="WHILE",tab=self.tab)
+        tobj_while = Tag(self.file,self.file,name="WHILE",tab=self.tab)
         self.incr()
 
         # condition expression
-        tobj_while_cond = Tag(name="WHILE_COND",tab=self.tab)
+        tobj_while_cond = Tag(self.file,name="WHILE_COND",tab=self.tab)
         self.incr()
         while_stmt.expr.visit(self)
         self.decr()
@@ -217,19 +230,19 @@ class SerializerXML(TransformVisitor):
                         பதிப்பி x, "கருவேபில"
                 முடி
         """
-        tobj_for = Tag(name="FOR",tab=self.tab)
+        tobj_for = Tag(self.file,name="FOR",tab=self.tab)
         self.incr()
         
         # condition expression
-        tobj_for_init = Tag(name="FOR_INIT",tab=self.tab)
+        tobj_for_init = Tag(self.file,name="FOR_INIT",tab=self.tab)
         for_stmt.expr_init.visit(self)
         del tobj_for_init
         
-        tobj_for_cond = Tag(name="FOR_COND",tab=self.tab)
+        tobj_for_cond = Tag(self.file,name="FOR_COND",tab=self.tab)
         for_stmt.expr_cond.visit(self)
         del tobj_for_cond
         
-        tobj_for_update = Tag(name="FOR_UPDATE",tab=self.tab)
+        tobj_for_update = Tag(self.file,name="FOR_UPDATE",tab=self.tab)
         for_stmt.expr_update.visit(self)
         del tobj_for_update
         
@@ -243,16 +256,16 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_assign_stmt(self, assign_stmt):
-        tobj_assign = Tag(name="ASSIGN",tab=self.tab)
+        tobj_assign = Tag(self.file,name="ASSIGN",tab=self.tab)
         self.incr()
         
-        tobj_assign_lval = Tag(name="ASSIGN_LVAL",tab=self.tab)
+        tobj_assign_lval = Tag(self.file,name="ASSIGN_LVAL",tab=self.tab)
         self.incr()
         assign_stmt.lvalue.visit( self )
         self.decr()
         del tobj_assign_lval
         
-        tobj_assign_rval = Tag(name="ASSIGN_RVAL",tab=self.tab)
+        tobj_assign_rval = Tag(self.file,name="ASSIGN_RVAL",tab=self.tab)
         self.incr()
         assign_stmt.rvalue.visit( self )
         self.decr()
@@ -262,7 +275,7 @@ class SerializerXML(TransformVisitor):
         return
     
     def visit_print_stmt(self, print_stmt):
-        tobj = Tag(name="PRINT",tab=self.tab)
+        tobj = Tag(self.file,name="PRINT",tab=self.tab)
         keyword = u"பதிப்பி"
         self.incr()
         print_stmt.exprlst.visit(self)
@@ -270,14 +283,14 @@ class SerializerXML(TransformVisitor):
         return
 
     def visit_eval_stmt(self, eval_stmt ):
-        tobj = Tag(name="EVALSTMT",tab=self.tab)
+        tobj = Tag(self.file,name="EVALSTMT",tab=self.tab)
         self.incr()
         eval_stmt.expr.visit(self)
         self.decr()
         return
     
     def visit_arg_list(self, arg_list):
-        tobj = Tag(name="ARGLIST",tab=self.tab)
+        tobj = Tag(self.file,name="ARGLIST",tab=self.tab)
         self.incr()
         L = len(arg_list.get_list())
         for pos,arg in enumerate(arg_list.get_list()):
@@ -302,7 +315,7 @@ class SerializerXML(TransformVisitor):
                 பின்கொடு ஈ
         முடி
         """
-        tobj = Tag(name="FUNCTION",tab=self.tab,attrs={"name":fndecl_stmt.name})
+        tobj = Tag(self.file,name="FUNCTION",tab=self.tab,attrs={"name":fndecl_stmt.name})
         
         # Function kw
         keyword_fn = u"நிரல்பாகம்"
