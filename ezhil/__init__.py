@@ -18,6 +18,7 @@ from .ezhil import ezhil_file_REPL
 from .ezhil import EzhilInterpreter, EzhilFileExecuter, EzhilInterpExecuter
 from .ezhil import ezhil_interactive_interpreter as start
 from . import ezhil_transforms
+from . import ezhil_serializer
 
 from .prettify import Printer as PrettyPrint
 from . import theme as Theme
