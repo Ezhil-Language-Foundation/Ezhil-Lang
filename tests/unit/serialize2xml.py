@@ -9,6 +9,7 @@ import ezhiltests
 from ezhiltests import TestEzhilException, QuietTestCase, ezhil
 from ezhil import EzhilInterpreter, EzhilLex
 from ezhil.ezhil_serializer import SerializerXML
+from ezhil.ezhil_program_utils import serializeSourceFile, serializeParseTree
 
 # helper functions for testsuites
 import unittest
@@ -44,33 +45,24 @@ class XMLValidator:
 class SerializeToXML(QuietTestCase):
     def get_filename(self):
         return "temp_serialize2XML"
-    
-    def get_ast(self,filename):
-        debug = False
-        safe_mode = False
-        lexer = EzhilLex(filename,debug,encoding="UTF-8")
-        parse_eval = EzhilInterpreter( lexer=lexer, debug=debug, safe_mode=safe_mode )
-        parse_tree = parse_eval.parse()
-        return parse_tree
-    
+
     def run_basic_hook(self,posthook=None):
         relpath  = "../../tests/"
         files = ["hello.n","ford2.n","adukku.n"]
         for file in files:
-            parse_tree = self.get_ast(relpath+file)
-            SerializerXML.serializeParseTree( parse_tree )
+            xmlfilename = relpath+file.replace(".n",".xml")
+            parse_tree = serializeSourceFile( srcfilename = relpath+file,tgtfile = xmlfilename )
             if posthook:
-                posthook(parse_tree,file)
-            
+                posthook(parse_tree,file,xmlfilename)
+            os.unlink(xmlfilename)
+
     def test_basic(self):
         self.run_basic_hook()
         
     def test_save_to_file(self):
         # 1. run same test as above but save contents to file
         # 2. next, run the XML validators to ensure well formed XML
-        def xmlvalidation_hook(parse_tree,file):
-            xmlfilename = file.replace(".n",".xml")
-            SerializerXML.serializeParseTree( parse_tree, filename=xmlfilename )    
+        def xmlvalidation_hook(parse_tree,file,xmlfilename):
             print("Validating XML file %s"%xmlfilename)
             try:
                 XMLValidator(xmlfilename)
@@ -79,7 +71,6 @@ class SerializeToXML(QuietTestCase):
                 with open(xmlfilename,"r") as fp:
                     xmlcontents=fp.read()
                 self.assertTrue(False,xmlcontents)
-            os.unlink(xmlfilename)
         
         self.run_basic_hook(posthook=xmlvalidation_hook)
     
