@@ -245,12 +245,14 @@ class Interpreter(DebugUtils):
             user_prefix = args[0]
                 
         print(u"######### Builtin Function ########")
-        pos = 0
-        for xpos,fcn in enumerate(self.builtin_map.keys()):
-            if ( user_prefix and not fcn.startswith(user_prefix) ):
-                continue
-            pos = pos + 1
-            print(u"%03d> %s"%(pos,unicode(fcn)))
+        if not user_prefix:
+            pos = 0
+            for xpos,fcn in enumerate(self.builtin_map.keys()):
+                if ( user_prefix and not fcn.startswith(user_prefix) ):
+                    continue
+                pos = pos + 1
+                print(u"%03d> %s"%(pos,unicode(fcn)))
+            return
         
         print(u"######### Functions - Library + User defined - ########")
         pos = 0
