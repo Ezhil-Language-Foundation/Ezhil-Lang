@@ -13,7 +13,10 @@
 ans = fact ( ப + 4 )
 பதிப்பி assert( ans == (1*2*3*4*5*6*7*8) )
 profile("begin")
-dir("fa") #list all ezhil builtin and user defined functions starting with 'fa'
+
+@( sys_platform() != "win32") ஆனால்
+    dir("fa") #list all ezhil builtin and user defined functions starting with 'fa'
+முடி
 
 ans = fact ( ப - 4/2 )
 பதிப்பி ans, assert( ans == 2 )

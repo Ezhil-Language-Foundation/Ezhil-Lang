@@ -2,8 +2,6 @@
 ## (C) 2007, 2008, 2013, 2014, 2015 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
-## 
-## TODO: extract scanner and AST members into a module for sharing.
 from __future__ import print_function
 
 import argparse
@@ -57,6 +55,7 @@ from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctio
  TransformSemanticAnalyzer, TransformConstantFolder
 
 from ezhil_serializer import SerializerXML
+from ezhil_library import Load_URL_APIs
  
 def ezhil_version():
         return 0.8
@@ -711,6 +710,10 @@ class Interpreter(DebugUtils):
             self.builtin_map["values"]= BuiltinFunction(dict.values,"values",1)
         
         self.builtin_map["update"]= BuiltinFunction(dict.update,"update",1)
+        
+        # URL API's - load except in safe mode
+        if not self.SAFE_MODE:
+            Load_URL_APIs( self )
         
         # open-tamil API
         # get tamil letters
