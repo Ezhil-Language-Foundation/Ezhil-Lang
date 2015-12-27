@@ -6,10 +6,20 @@
 ## 
 ## Module has elements of PARSE-TREE  AST 
 ## 
-import sys
 import codecs
-from ezhil_scanner import EzhilLex, EzhilToken, Token
-from transform import TransformVisitor, make_mock_interpreter
+import functools
+import sys
+
+from ezhil_scanner import EzhilToken, Token
+from transform import TransformVisitor
+
+try:
+    import graphviz as gv
+
+    graph = functools.partial(gv.Graph, format='svg')
+    digraph = functools.partial(gv.Digraph, format='svg')
+except ImportError as ie:
+    pass
 
 import xml.sax.saxutils
 
@@ -62,12 +72,7 @@ class SerializerXML(TransformVisitor):
     
     def decr(self):
         self.tab -= 1
-        
-    @staticmethod
-    def serializeParseTree(parsetree,debug=False,filename=None):
-        interp = make_mock_interpreter(parsetree)
-        SerializerXML(interp,debug,filename=filename)
-    
+
     def update_line(self,obj):
         pass
         return
@@ -202,7 +207,7 @@ class SerializerXML(TransformVisitor):
                         சமம்= சமம் + input[itr]*wts[itr]
             itr = itr + 1
                 முடி"""
-        tobj_while = Tag(self.file,self.file,name="WHILE",tab=self.tab)
+        tobj_while = Tag(self.file, name="WHILE", tab=self.tab)
         self.incr()
 
         # condition expression
