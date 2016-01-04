@@ -679,7 +679,9 @@ class Interpreter(DebugUtils):
         self.builtin_map["append"] = BuiltinFunction(list.append,"append",2)
         self.builtin_map["insert"] = BuiltinFunction(list.insert,"insert",3)
         self.builtin_map["index"] = BuiltinFunction(list.index,"index",2)
-        self.builtin_map["list"] = BuiltinFunction(list,"list",0)        
+        self.builtin_map["list"] = BuiltinFunction(list,"list",0)
+        self.builtin_map["pop"] = BuiltinFunction(list.pop,"pop",1)
+        
         #if PYTHON3:
         #    self.builtin_map["sort"] = BuiltinFunction(lambda x: sorted(x),"sort",1)
         #else:

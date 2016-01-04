@@ -22,6 +22,9 @@ extend( ப , ப  )
 append( ப , "பதிப்பி" )
 பதிப்பி "list can hold different types", ப
 
+# added new function pop
+assert( pop(ப ) == "பதிப்பி" )
+
 # insert into a list
 நுழைக்க( ப, 0, -5 )
 பதிப்பி ப
