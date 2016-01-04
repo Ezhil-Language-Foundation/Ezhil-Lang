@@ -27,6 +27,6 @@ setup(name='ezhil',
           'ezhili = ezhil.ezhil:main',
           ]
       },
-      long_description='Ezhil is a Tamil programming language for early education',#open('README.md','r','UTF-8').read()
-      download_url='https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip',#pip
+      long_description='Ezhil is a Tamil programming language for early education',
+      download_url='https://github.com/arcturusannamalai/Ezhil-Lang/archive/latest.zip',
       )

@@ -106,12 +106,13 @@ class Parser(DebugUtils):
     def warn_function_overrides( self, func_name ):
         ## used in defining user-functions to see
         ## if they shadow builtins.
-        val =  ( func_name in self.function_map \
-                     or func_name in self.builtin_map )
+        val =  ( func_name in self.function_map )
         if ( val ):
-            print(u"WARNING: function %s overrides builtin"%(func_name))
+            raise Exception(u"ERROR: function %s is multiply defined"%(func_name))
+        if func_name in self.builtin_map :
+            raise Exception(u"ERROR: function %s overrides builtin"%(func_name))
         return val
-
+    
     def parse(self):
         """ parser routine """
         self.ast = StmtList()
