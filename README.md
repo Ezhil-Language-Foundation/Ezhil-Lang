@@ -52,7 +52,7 @@ and then use one of the three modes,
 மொத்தமாக எழில் நிரல்களை இயக்க  | Batch Mode
 =================================================== 
 ```bash
-$ ./ez ./ezhil_tests/hello.n 
+$ ezhili ./ezhil_tests/hello.n 
 பதிப்பி "வணக்கம்!"
 பதிப்பி "எழில் அழைக்கிறது"
 
@@ -62,22 +62,29 @@ $ ./ez ./ezhil_tests/hello.n
 
 where you should see the output above. For usage, try,
 ```bash
-$ ./ez --help
-usage:  [-h] [-debug] [-stdin] [files [files ...]]
+$ ezhili --help
+usage: எழில் [-h] [-debug] [-tamilencoding TAMILENCODING] [-profile] [-stdin]
+             [-stacksize STACKSIZE]
+             [files [files ...]]
 
 positional arguments:
   files
 
 optional arguments:
-  -h, --help  show this help message and exit
-  -debug      enable debugging information on screen
-  -stdin      read input from the standard input
+  -h, --help            show this help message and exit
+  -debug                enable debugging information on screen
+  -tamilencoding TAMILENCODING
+                        option to specify other file encodings; supported
+                        encodings are TSCII, and UTF-8
+  -profile              profile the input file(s)
+  -stdin                read input from the standard input
+  -stacksize STACKSIZE  default stack size for the Interpreter
 ```
 
 உரையாடும் பானியில்  எழில் |Interactive Mode
 ================================================
 ```bash
-$ ./ez
+$ ezhili
 எழில் 1>> 1 + 5
 6
 எழில் 2>> பதிப்பி "வணக்கம்! எழில் அழைக்கிறது"
