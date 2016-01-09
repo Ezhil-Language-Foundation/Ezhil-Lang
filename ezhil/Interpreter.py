@@ -58,7 +58,7 @@ from ezhil_serializer import SerializerXML
 from ezhil_library import Load_URL_APIs
  
 def ezhil_version():
-        return 0.8
+        return 0.81
 
 def ezhil_copyright():
     return u"(C) 2007-2015 Muthiah Annamalai"

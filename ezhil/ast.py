@@ -964,8 +964,7 @@ class Function(Stmt):
     
     def evaluate(self,env):
         ## push stuff into the call-stack
-        env.call_function(self.name)
-        
+        env.call_function(u"%s at  %s"%(self.name,self.get_pos()))
         ## check arguments match, otherwise raise error
         args = env.get_args()#.get_list()
         fargs = self.arglist.get_list()
