@@ -150,13 +150,13 @@ class Environment:
         # we skip BOS since it is a __toplevel__
         if (self.debug): print("clearing locals")
         if len(self.call_stack) > 0:
-            if self.call_stack[-1] != "__toplevel__":
+            if self.call_stack[-1][0] != "__toplevel__":
                 self.clear_call()
         
         for i in range(1,len(self.call_stack)):
-            print(u"Error in function called from %s"%str(self.call_stack[i]))
+            print(u"%sError in function '%s'%s:"%(u" "*(i-1),self.call_stack[i][0],self.call_stack[i][1]))
         while len(self.call_stack) > 0:
-            tos = self.call_stack.pop()
+            tos,_ = self.call_stack.pop()
             #print(u"Error in location %s"%str(tos))
         return
     
@@ -302,19 +302,19 @@ class Environment:
         self.dbg_msg("get_id: val = "+unicode(val))
         return val
 
-    def call_function(self, fn):
+    def call_function(self, fn,callsite=u""):
         """ set call stack, used in function calls. Also check overflow"""
         if ( len(self.call_stack) >= self.max_recursion_depth ):
             raise RuntimeException( "Maximum recursion depth [ " + 
                                     unicode(self.max_recursion_depth) + 
                                     " ] exceeded; stack overflow." )
-        self.dbg_msg(u"calling function"+unicode(fn))
+        self.dbg_msg(u"calling function"+unicode(fn)+callsite)
         if ( self.is_profiling() ):
             self.profiler.add_function( fn )
-        self.call_stack.append( fn )
+        self.call_stack.append( (fn,callsite) ) 
     
     def return_function(self, fn):
-        va = self.call_stack.pop( )
+        va,_ = self.call_stack.pop( )
         if ( fn != va ):
             raise RuntimeException("function %s doesnt match Top-of-Stack"%fn)
         if ( self.is_profiling() ):
