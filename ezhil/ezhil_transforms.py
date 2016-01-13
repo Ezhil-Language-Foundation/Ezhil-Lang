@@ -98,7 +98,7 @@ class TransformSemanticAnalyzer(TransformVisitor):
         
         if binexpr.binop.kind != EzhilToken.PLUS:
             if lhs_is_string or rhs_is_string:
-                if binexpr.binop.kind in [EzhilToken.COMPARE,EzhilToken.PROD]:
+                if binexpr.binop.kind in EzhilToken.COMPARE or binexpr.binop.kind == EzhilToken.PROD:
                     pass
                 else:
                     raise SemanticException("Cannot use string with operators other than '+','>=','<=','!=','==','>','<' or '*' at expression %s %s"%(unicode(binexpr),binexpr.get_pos()))
