@@ -98,10 +98,10 @@ class TransformSemanticAnalyzer(TransformVisitor):
         
         if binexpr.binop.kind != EzhilToken.PLUS:
             if lhs_is_string or rhs_is_string:
-                if binexpr.binop.kind in EzhilToken.COMPARE:
+                if binexpr.binop.kind in [EzhilToken.COMPARE,EzhilToken.PROD]:
                     pass
                 else:
-                    raise SemanticException("Cannot use string with operators other than '+','>=','<=','!=','==','>','<' at expression %s"%unicode(binexpr))
+                    raise SemanticException("Cannot use string with operators other than '+','>=','<=','!=','==','>','<' or '*' at expression %s %s"%(unicode(binexpr),binexpr.get_pos()))
         else:
             if lhs_is_string or rhs_is_string:
                 if not ((lhs_is_string and rhs_is_string) or \

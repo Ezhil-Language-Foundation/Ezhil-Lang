@@ -100,9 +100,9 @@ do
     echo "ezhil" | python ./ezhil/ezhil.py ./tests/$i  >>  dump_file
     if [ $? -eq 0 ]
     then
-	echo "passed ezhil interactive test for  $i" >> success.txt
+        echo "passed ezhil interactive test for  $i" >> success.txt
     else
-	echo "failed ezhil interactive test for $i" >> failed.txt
+        echo "failed ezhil interactive test for $i" >> failed.txt
     fi
 done
 
