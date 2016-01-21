@@ -6,10 +6,7 @@
 ## ezhil parser & AST builder - ezhil frontend and  AST elements to build the parse tree.
 ## refactored left-recursion in the examples
 
-import copy
-import os
 import sys
-import inspect
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -34,7 +31,9 @@ from ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
 
 ## use exprs language parser
 from ExprsParser import Parser
-import codecs, traceback
+
+## Tamil messages
+from ezhil_messages import get_message, Messages
 
 ## Parser implementes the grammar for 'exprs' language.
 ## Entry point is parse(), after appropriate ctor-setup.
@@ -43,7 +42,8 @@ class EzhilParser(Parser):
     and its evaluate methods. Also add a parser method """
     def __init__(self,lexer,fcn_map, builtin_map, dbg = False):
         if ( not isinstance(lexer, EzhilLex) ):
-                raise RuntimeException(u"Cannot find Ezhil lexer class")
+                exception_msg = get_message(Messages.ClassNotFound)
+                raise RuntimeException(Messages.ClassNotFound,u"Ezhil lexer")
         Parser.__init__(self,lexer,fcn_map,builtin_map,dbg)
         self.open_if_stmts = 0
         self.backtrack_atexpr = None
@@ -644,8 +644,7 @@ class EzhilParser(Parser):
             assert( self.peek().kind == EzhilToken.RSQRBRACE )
             list_end = self.dequeue()
         else:
-            exception_msg = "Expected Number, found something "+unicode(tok)
-            print(exception_msg)
+            exception_msg = get_message(Messages.UnexpectedNumber,unicode(tok))
             raise ParseException(exception_msg)
         self.dbg_msg( u"factor-returning: "+unicode(val) )
         return val

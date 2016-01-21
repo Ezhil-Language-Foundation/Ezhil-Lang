@@ -20,6 +20,7 @@ from .ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFuncti
 from .ezhil_serializer import SerializerXML 
 from .ezhil_program_utils import get_ast, serializeParseTree, serializeSourceFile
 from .ezhil_visualizer import visualizeSourceFile
+from .ezhil_messages import get_message
 
 #from .exprs import exprslang
 from .prettify import Printer as PrettyPrint
@@ -31,4 +32,5 @@ __all__ = ['version','credits','copyright','Interpreter','REPL','Lex','get_prog_
            'start','ezhil_transforms','ezhil_serializer','get_ast','serializeSourceFile','serializeParseTree',\
            'visualizeSourceFile','PrettyPrint','XsyTheme','SerializerXML',\
            'TransformEntryExitProfile', 'TransformSafeModeFunctionCheck', 'TransformSemanticAnalyzer',\
-	   'main']
+	   'main',\
+           'get_message']
