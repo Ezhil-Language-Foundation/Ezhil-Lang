@@ -1,0 +1,47 @@
+./ezhil/runtime.py:        """ handy to print debug messages """
+./ezhil/runtime.py:            print(u"## ",msg)
+./ezhil/runtime.py:    """ a templatized way to invoke bulitin functions."""
+./ezhil/runtime.py:        return u"[BuiltinFunction[%s,nargs=%d]]"%(self.name,self.padic)
+./ezhil/runtime.py:            print(u"failed dispatching function ",unicode(self),u"with exception",unicode(excep))
+./ezhil/runtime.py:            raise RuntimeException("Too few args to bulitin function " + self.name)
+./ezhil/runtime.py:                #print u"catch exception", excep
+./ezhil/runtime.py:        env.clear_call(copyvars= self.name in ["execute","eval",u'இயக்கு',u'மதிப்பீடு'])
+./ezhil/runtime.py:    """ also blindly include all functions from the 
+./ezhil/runtime.py:        here.    """
+./ezhil/runtime.py:    """ used to manage the side-effects of an interpreter """
+./ezhil/runtime.py:        self.readonly_global_vars = {'True':True, 'False':False,u"மெய்":True, u"பொய்":False} #dict of global vars
+./ezhil/runtime.py:        if (self.debug): print(u"deleting environment")
+./ezhil/runtime.py:        if (self.debug): print("clearing locals")
+./ezhil/runtime.py:            if self.call_stack[-1][0] != "__toplevel__":
+./ezhil/runtime.py:            print(u"%sError in function '%s'%s:"%(u" "*(i-1),self.call_stack[i][0],self.call_stack[i][1]))
+./ezhil/runtime.py:            #print(u"Error in location %s"%str(tos))
+./ezhil/runtime.py:        """ get if break or return was set for use in loops """
+./ezhil/runtime.py:        """ reset after a break statement """
+./ezhil/runtime.py:        """ reset after a continue statement """
+./ezhil/runtime.py:        """ execute a continue statement """
+./ezhil/runtime.py:        """ execute a continue statement """
+./ezhil/runtime.py:        """ handy to print debug messages """
+./ezhil/runtime.py:        return u"<env>"
+./ezhil/runtime.py:        retval = u"CallStack =>"+unicode(self.call_stack) + u"\n" \
+./ezhil/runtime.py:            u"LocalVars =>"+ unicode(self.local_vars) + u"\n" \
+./ezhil/runtime.py:            u"ArgStack =>"+ unicode(self.arg_stack) + u"\n" 
+./ezhil/runtime.py:        """ utility to cleanup the stacks etc.. """
+./ezhil/runtime.py:        """ cleanup the stack """
+./ezhil/runtime.py:        """ manage a global argument stack """
+./ezhil/runtime.py:        """ manage a global argument stack """
+./ezhil/runtime.py:        self.dbg_msg( "setting args " + unicode( val ) )
+./ezhil/runtime.py:        self.dbg_msg( "setting locals " + unicode( vars ) )
+./ezhil/runtime.py:        """ check various 'scopes' for ID variable """
+./ezhil/runtime.py:        """ someday do global_id """
+./ezhil/runtime.py:            raise Exception(u"Error: Attempt to reassign constant %s"%idee)
+./ezhil/runtime.py:        self.dbg_msg("set_id: " + unicode(idee) +" = "+unicode(val))
+./ezhil/runtime.py:            raise RuntimeException("Identifier %s not found"%idee)
+./ezhil/runtime.py:        self.dbg_msg("get_id: val = "+unicode(val))
+./ezhil/runtime.py:    def call_function(self, fn,callsite=u""):
+./ezhil/runtime.py:        """ set call stack, used in function calls. Also check overflow"""
+./ezhil/runtime.py:            raise RuntimeException( "Maximum recursion depth [ " + 
+./ezhil/runtime.py:                                    " ] exceeded; stack overflow." )
+./ezhil/runtime.py:        self.dbg_msg(u"calling function"+unicode(fn)+callsite)
+./ezhil/runtime.py:            raise RuntimeException("function %s doesnt match Top-of-Stack"%fn)
+./ezhil/runtime.py:            raise RuntimeException("undefined function: "+fn)
+./ezhil/runtime.py:        raise RuntimeException("Environment error on fetching function "+fn)

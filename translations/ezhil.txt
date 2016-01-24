@@ -1,0 +1,96 @@
+./ezhil/exprs.py:if __name__ == "__main__":
+./ezhil/exprs.py:                print(u"parsing the code '%s' failed with exception:\n\t %s"%(files,str(e)))
+./ezhil/exprs.py:                if ( debug ):  print("*"*60);  print(str(parse_eval))
+./ezhil/exprs.py:                print(u"evaluating the code '%s' failed with exception:\n\t %s"%(files,str(e)))
+./ezhil/exprs.py:                if debug: print("*"*60);  print(str(e))
+./ezhil/ezhil.py:    print(u"Incomplete Ezhil interpreter installation;")
+./ezhil/ezhil.py:    print(u"\tFATAL ERROR: %s"%(no_open_tamil))
+./ezhil/ezhil.py:    print(u"Missing installation of open-tamil library.")
+./ezhil/ezhil.py:    print(u"Get latest version of open-tamil library using Python Package index as")
+./ezhil/ezhil.py:    print(u"\t$ pip install open-tamil")
+./ezhil/ezhil.py:        """ create a Ezhil Interpeter and initialize runtime builtins etc.. in a RAII fashion,
+./ezhil/ezhil.py:        """
+./ezhil/ezhil.py:        """ populate with the builtin functions, while adding our own flavors"""
+./ezhil/ezhil.py:        tamil_equiv = {u"சரம்_இடமாற்று":u"replace", u"சரம்_கண்டுபிடி":u"find",u"நீளம்":u"len",
+./ezhil/ezhil.py:                       u"சரம்_உள்ளீடு":u"raw_input", u"உள்ளீடு" : u"input" }
+./ezhil/ezhil.py:        tamil_equiv.update( { u"அச்சிடு":u"printf" } )        
+./ezhil/ezhil.py:        tamil_equiv.update( {u"பட்டியல்":u"list",u"பின்இணை":u"append",u"தலைகீழ்":u"reverse",
+./ezhil/ezhil.py:                             u"வரிசைப்படுத்து":u"sort",u"நீட்டிக்க":u"extend",u"நுழைக்க":u"insert",u"குறியீட்டெண்":u"index",
+./ezhil/ezhil.py:                             u"வெளியேஎடு":u"pop_list",u"பொருந்தியஎண்":u"count"} )
+./ezhil/ezhil.py:        tamil_equiv.update( { u"எடு":u"__getitem__", u"வை":u"__setitem__",u"சாவிகள்":u"keys"} )
+./ezhil/ezhil.py:        tamil_equiv.update({u"கோப்பை_திற":u"file_open", u"கோப்பை_மூடு":u"file_close",u"கோப்பை_படி":u"file_read",
+./ezhil/ezhil.py:                            u"கோப்பை_எழுது":u"file_write",u"கோப்பை_எழுது_வரிகள்":u"file_writelines",u"கோப்பை_படி_வரிகள்":u"file_readlines"})
+./ezhil/ezhil.py:        tamil_equiv.update({u"வகை":u"type"})
+./ezhil/ezhil.py:                print(u"ImportError => turtle ",unicode(ie))
+./ezhil/ezhil.py:        turtle_map = { u"முன்னாடி":u"forward", u"பின்னாடி" :u"backward",
+./ezhil/ezhil.py:                       u"வலது":u"lt", u"இடது":u"rt",
+./ezhil/ezhil.py:                       u"எழுதுகோல்மேலே":u"penup",  u"எழுதுகோல்கிழே":u"pendown"}
+./ezhil/ezhil.py:            vv = u"turtle_"+v;
+./ezhil/ezhil.py:    """ class provides the get_output method for reading from a temporary file, and deletes it after that.
+./ezhil/ezhil.py:    """
+./ezhil/ezhil.py:        """ file name with $PID decoration as IPC alt """
+./ezhil/ezhil.py:        name = "ezhil_"+str(pid)+".out";
+./ezhil/ezhil.py:            name = "/tmp/"+name
+./ezhil/ezhil.py:        """ useful routine to debug timeout issues from spawned off process"""
+./ezhil/ezhil.py:        """ read the output from tmpfile once and delete it. Use cached copy for later. Memoized. """ 
+./ezhil/ezhil.py:            self.op = ""
+./ezhil/ezhil.py:        self.stdin = codecs.open( input_file , "r", "utf-8" )
+./ezhil/ezhil.py:    """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files;
+./ezhil/ezhil.py:    """
+./ezhil/ezhil.py:        #print(u"Proc deletion method...")
+./ezhil/ezhil.py:            print(u".... terminate!!! ....")
+./ezhil/ezhil.py:        #print(u"exit code = %d"%self.exitcode)
+./ezhil/ezhil.py:    def __init__(self,file_input,debug=False,redirectop=False,TIMEOUT=None,encoding="utf-8",doprofile=False,safe_mode=False):
+./ezhil/ezhil.py:        self.dbg_msg(u"ezhil file executer\n")
+./ezhil/ezhil.py:        self.fProcName = ""
+./ezhil/ezhil.py:        self.data = ""
+./ezhil/ezhil.py:        self.tmpf_name = ""		
+./ezhil/ezhil.py:                self.dbg_msg(u"run in non-redirect mode")
+./ezhil/ezhil.py:                self.dbg_msg(u"finished... file parse eval")
+./ezhil/ezhil.py:                #print(u"raise exception herexxx")
+./ezhil/ezhil.py:            self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
+./ezhil/ezhil.py:        #print("done...")
+./ezhil/ezhil.py:                self.dbg_msg("begin redirect mode\n")
+./ezhil/ezhil.py:                    self.dbg_msg("timeout non-zero\n")
+./ezhil/ezhil.py:                        self.dbg_msg("in busy loop : %d , %d \n"%(time()-start,self.TIMEOUT))
+./ezhil/ezhil.py:                        self.dbg_msg("SLEEP\n")
+./ezhil/ezhil.py:                            self.dbg_msg("Reached timeout = %d\n"%self.TIMEOUT)
+./ezhil/ezhil.py:                    print(u"######### ------- dump output ------- ##############")
+./ezhil/ezhil.py:                print("exception ",unicode(e))
+./ezhil/ezhil.py:def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8",doprofile=False,safe_mode=False):
+./ezhil/ezhil.py:    """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
+./ezhil/ezhil.py:        the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to
+./ezhil/ezhil.py:        @doprofile : automatically attach profile("begin") to entry of a file and calls profile("results") to end of file.
+./ezhil/ezhil.py:    """
+./ezhil/ezhil.py:        print(u"redirect mode @ ezhil file parse eval")
+./ezhil/ezhil.py:        sys.stdout = codecs.open(EzhilRedirectOutput.pidFileName(current_process().pid),"w","utf-8")
+./ezhil/ezhil.py:        print(u"####### dump tokens ########")
+./ezhil/ezhil.py:        print(u"##########################")
+./ezhil/ezhil.py:    if ( debug ):  print(u"*"*60);  print(unicode(parse_eval))
+./ezhil/ezhil.py:        #print(u"xxception raised... %s"%str(redirectop))
+./ezhil/ezhil.py:    #print(u"returning back...")
+./ezhil/ezhil.py:    #lines = "\n".join([line.strip() for line in lines])
+./ezhil/ezhil.py:    totbuffer = ""
+./ezhil/ezhil.py:            curr_line_no = "%s %d> "%(lang,line_no)
+./ezhil/ezhil.py:            print("End of Input reached\n")
+./ezhil/ezhil.py:            print("evaluating buffer", Lbuffer)
+./ezhil/ezhil.py:                print("tot buffer %s"%totbuffer) #debugging aid
+./ezhil/ezhil.py:            print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******") 
+./ezhil/ezhil.py:                totbuffer += "\n"+ Lbuffer
+./ezhil/ezhil.py:                if ( debug ): print (u"parsing buffer item => ",totbuffer)
+./ezhil/ezhil.py:                    print (u"offending buffer item => ",totbuffer)
+./ezhil/ezhil.py:            totbuffer = ""
+./ezhil/ezhil.py:            if ( debug ):  print(u"*"*60);  print(unicode(parse_eval))
+./ezhil/ezhil.py:                print(u"\n")
+./ezhil/ezhil.py:    """ run on construction - build a Ezhil lexer/parser/runtime and execute the file pointed to by @files """
+./ezhil/ezhil.py:            lang = u"எழில்"
+./ezhil/ezhil.py:            lexer = EzhilLex(debug,encoding="utf-8")
+./ezhil/ezhil.py:            print(u"exception ",unicode(e))
+./ezhil/ezhil.py:def ezhil_interactive_interpreter(lang = u"எழில்",debug=False):
+./ezhil/ezhil.py:    """Execute a given file and return the exit code.
+./ezhil/ezhil.py:    """
+./ezhil/ezhil.py:        print(u"Failed executing file '{0}':\n{1}'".format(
+./ezhil/ezhil.py:    lang = u"எழில்"
+./ezhil/ezhil.py:        # print(u"mode with fnames")
+./ezhil/ezhil.py:                print(u" **** Executing file # {} named {} ".format(
+./ezhil/ezhil.py:if __name__ == u"__main__":

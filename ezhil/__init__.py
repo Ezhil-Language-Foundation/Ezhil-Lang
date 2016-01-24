@@ -32,5 +32,4 @@ __all__ = ['version','credits','copyright','Interpreter','REPL','Lex','get_prog_
            'start','ezhil_transforms','ezhil_serializer','get_ast','serializeSourceFile','serializeParseTree',\
            'visualizeSourceFile','PrettyPrint','XsyTheme','SerializerXML',\
            'TransformEntryExitProfile', 'TransformSafeModeFunctionCheck', 'TransformSemanticAnalyzer',\
-	   'main',\
-           'get_message']
+           'main','get_message','set_language']

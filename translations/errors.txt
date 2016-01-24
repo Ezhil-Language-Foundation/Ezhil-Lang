@@ -1,0 +1,7 @@
+./ezhil/errors.py:    LEXICAL_ERROR = "Lexical error:"
+./ezhil/errors.py:    RUNTIME_ERROR = "Run-time error:"
+./ezhil/errors.py:    PARSE_ERROR = "Parse error:"
+./ezhil/errors.py:    TIMEOUT_ERROR = "process exceeded timeout of  %s(seconds)"
+./ezhil/errors.py:        return str(self.args)+"\n"
+./ezhil/errors.py:        return u" ".join(self.args)
+./ezhil/errors.py:        return u"Semantic error in program: %s"%(ErrorException.__unicode__(self))

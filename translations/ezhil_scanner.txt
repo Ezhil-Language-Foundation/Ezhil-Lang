@@ -1,0 +1,84 @@
+./ezhil/ezhil_scanner.py:    """ Ezhil Lexeme - """ 
+./ezhil/ezhil_scanner.py:    def __init__(self,val,kind,fname=u""):
+./ezhil/ezhil_scanner.py:        return u"%s - %s"%(self.val,self.kind)
+./ezhil/ezhil_scanner.py:        return u" %s [%s] Line=%d, Col=%d in File %s "% \
+./ezhil/ezhil_scanner.py:    """ add '@' token in extending the Token type """
+./ezhil/ezhil_scanner.py:    FORBIDDEN_FOR_IDENTIFIERS = [ "]","["," ",",", "\t","\r","\n","/", "-","+","^","=","*",")","(",">","<","&","&&","|","||","!","%","{","}",";","'","\"","$","@","#","."]
+./ezhil/ezhil_scanner.py:    Token.token_types.append("@")
+./ezhil/ezhil_scanner.py:    Token.token_types.append(u"FOREACH|ஒவ்வொன்றாக")
+./ezhil/ezhil_scanner.py:    Token.token_types.append(u"IN|இல்")
+./ezhil/ezhil_scanner.py:    Token.token_types.append(u"DOWHILE|முடியேனில்")
+./ezhil/ezhil_scanner.py:    Token.token_types.append(u"IMPORT|உள்ளடக்கு")
+./ezhil/ezhil_scanner.py:        if Token.get_name(kind) in [u"FOREACH",u"DOWHILE",u"IN",u"IMPORT"]:
+./ezhil/ezhil_scanner.py:    """ Lex Tamil characters : RAII principle - lex on object construction"""
+./ezhil/ezhil_scanner.py:    def __init__(self,fname=None,dbg=False,encoding="utf-8"):
+./ezhil/ezhil_scanner.py:        if ( dbg ): print(u"init/EzhilLex")
+./ezhil/ezhil_scanner.py:            print(u"get_lexeme",chunks,pos)
+./ezhil/ezhil_scanner.py:        if chunks == u"பதிப்பி":
+./ezhil/ezhil_scanner.py:        elif chunks == u"தேர்ந்தெடு":
+./ezhil/ezhil_scanner.py:        elif chunks == u"தேர்வு":
+./ezhil/ezhil_scanner.py:        elif chunks == u"ஏதேனில்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"ஆனால்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"இல்லைஆனால்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"இல்லை":
+./ezhil/ezhil_scanner.py:        elif chunks == u"ஆக":
+./ezhil/ezhil_scanner.py:        elif chunks == u"ஒவ்வொன்றாக":
+./ezhil/ezhil_scanner.py:        elif chunks == u"இல்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"வரை":
+./ezhil/ezhil_scanner.py:        elif chunks == u"செய்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"முடியேனில்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"பின்கொடு":
+./ezhil/ezhil_scanner.py:        elif chunks == u"முடி":
+./ezhil/ezhil_scanner.py:        elif chunks == u"நிரல்பாகம்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"தொடர்":
+./ezhil/ezhil_scanner.py:        elif chunks == u"நிறுத்து":
+./ezhil/ezhil_scanner.py:        elif chunks == u"உள்ளடக்கு":
+./ezhil/ezhil_scanner.py:        elif chunks == u"@":
+./ezhil/ezhil_scanner.py:        elif chunks == u"=":
+./ezhil/ezhil_scanner.py:        elif chunks == u"-":
+./ezhil/ezhil_scanner.py:        elif chunks == u"+":
+./ezhil/ezhil_scanner.py:        elif chunks == u">":
+./ezhil/ezhil_scanner.py:        elif chunks == u"<":
+./ezhil/ezhil_scanner.py:        elif chunks == u">=":
+./ezhil/ezhil_scanner.py:        elif chunks == u"<=":
+./ezhil/ezhil_scanner.py:        elif chunks == u"==":
+./ezhil/ezhil_scanner.py:        elif chunks == u"!=":
+./ezhil/ezhil_scanner.py:        elif chunks == u"*":
+./ezhil/ezhil_scanner.py:        elif chunks == u"/":
+./ezhil/ezhil_scanner.py:        elif chunks == u",":
+./ezhil/ezhil_scanner.py:        elif chunks == u"(":
+./ezhil/ezhil_scanner.py:        elif chunks == u")":
+./ezhil/ezhil_scanner.py:        elif chunks == u"[":
+./ezhil/ezhil_scanner.py:        elif chunks == u"]":
+./ezhil/ezhil_scanner.py:        elif chunks == u"{":
+./ezhil/ezhil_scanner.py:        elif chunks == u"}":
+./ezhil/ezhil_scanner.py:        elif chunks == u":":
+./ezhil/ezhil_scanner.py:        elif chunks == u"%":
+./ezhil/ezhil_scanner.py:        elif chunks == u"^":
+./ezhil/ezhil_scanner.py:        elif chunks == u"&&":            
+./ezhil/ezhil_scanner.py:        elif chunks == u"&":
+./ezhil/ezhil_scanner.py:        elif chunks == u"||":
+./ezhil/ezhil_scanner.py:        elif chunks == u"|":
+./ezhil/ezhil_scanner.py:        elif chunks == u"<<":
+./ezhil/ezhil_scanner.py:        elif chunks == u">>":
+./ezhil/ezhil_scanner.py:        elif chunks == u"~":
+./ezhil/ezhil_scanner.py:        elif chunks == u"!":
+./ezhil/ezhil_scanner.py:        elif ( chunks[0] == u"\"" and chunks[-1] == u"\"" ):
+./ezhil/ezhil_scanner.py:                    raise ScannerException(u"Lexical error: Invalid identifier name '"+unicode(chunks) + u"' at Line , Col "+unicode(self.get_line_col( pos ))+u" in file "+self.fname)            
+./ezhil/ezhil_scanner.py:                raise ScannerException(u"Lexical error: " + unicode(chunks) + u" at Line , Col "+unicode(self.get_line_col( pos )) +u" in file "+self.fname )
+./ezhil/ezhil_scanner.py:        if ( self.debug ): print(u"Lexer token = ",tval)
+./ezhil/ezhil_scanner.py:        """ do hard-work of tokenizing and
+./ezhil/ezhil_scanner.py:        put EzhilLexemes into the tokens[] Q """
+./ezhil/ezhil_scanner.py:        if ( self.debug ): print(u"Start of Ezhil lexer - begin tokenize")
+./ezhil/ezhil_scanner.py:                raise ScannerException("Lexer: token Q has previous session tokens ")
+./ezhil/ezhil_scanner.py:            elif self.encoding == "utf-8":
+./ezhil/ezhil_scanner.py:            elif self.encoding == "tscii":
+./ezhil/ezhil_scanner.py:                if self.debug: print("Loading TSCII converted data -> ")
+./ezhil/ezhil_scanner.py:                    if  data[idx] in ['#','$','@','\'','"']:
+./ezhil/ezhil_scanner.py:                        raise ScannerException("Lexer: token %s is not valid for identifier, with prefix %s"%(data[idx],s))
+./ezhil/ezhil_scanner.py:            elif ( c == u"\"" ):
+./ezhil/ezhil_scanner.py:                         ( data[idx] != u'\"' ) ):
+./ezhil/ezhil_scanner.py:            elif c == u";":
+./ezhil/ezhil_scanner.py:        eof_tok = EzhilLexeme("",EzhilToken.EOF )
+./ezhil/ezhil_scanner.py:        if ( self.debug ):  print(u"before reverse"); self.dump_tokens()
+./ezhil/ezhil_scanner.py:        if ( self.debug ):  print(u"after reverse"); self.dump_tokens()

@@ -159,7 +159,8 @@ class EzhilParser(Parser):
                 break
             else:
                 self.inside_if = False
-                raise ParseException("SWITCH-CASE-OTHERWISE statement syntax is messed up")
+                exception_msg = get_message(Messages.CaseSyntaxError)
+                raise ParseException(exception_msg)
             ptok = self.peek()
             self.dbg_msg("parsing SWITCH-CASE next bits "+unicode(ptok))
         self.match( EzhilToken.END )
@@ -216,7 +217,8 @@ class EzhilParser(Parser):
                 break
             else:
                 self.inside_if = False
-                raise ParseException(u"If-Else-If statement syntax is messed up")
+                exception_msg = get_message(Messages.IfSyntaxError)
+                raise ParseException(exception_msg)
             ptok = self.peek()
             self.dbg_msg(u"parsing -IF next bits "+unicode(ptok))
         self.match( EzhilToken.END )

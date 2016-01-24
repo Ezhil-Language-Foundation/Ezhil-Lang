@@ -1,0 +1,6 @@
+1. /Ezhil-Lang/blob/master/ezhil/ezhil_parser.py
+2. /Ezhil-Lang/blob/master/ezhil/ezhil_scanner.py
+3. /Ezhil-Lang/blob/master/ezhil/scanner.py
+4. /Ezhil-Lang/blob/master/ezhil/runtime.py
+
+https://github.com/arcturusannamalai/Ezhil-Lang/issues/56

@@ -56,16 +56,16 @@ from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctio
 
 from ezhil_serializer import SerializerXML
 from ezhil_library import Load_URL_APIs
- 
+
 def ezhil_version():
         return 0.81
 
 def ezhil_copyright():
-    return u"(C) 2007-2015 Muthiah Annamalai"
+    return u"(C) 2007-2016 Muthiah Annamalai, and other contributors."
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-    return u"Ezhil language, version %g, was created by Muthiah Annamalai in 2007-2008, and actively maintained in 2015."%(ezhil_version())
+    return u"Ezhil language, version %g, was created by Muthiah Annamalai with several contributors."%(ezhil_version())
 
 def ezhil_license():
     return u"Licensed under GPL Version 3"
@@ -98,10 +98,10 @@ def ezhil_isnumber( x ):
 
 def ezhil_setitem(x,key,val):
     #print("dispatching ezhil setitem",type(x),type(idx),x,idx,x[idx])
-    if ( isinstance(x,dict) or isinstance(x,list) or hasattr( x, '__setitem__') ):
-        x.__setitem__(key,val)
-    else:    
-        x[key]=val
+    #if ( isinstance(x,dict) or isinstance(x,list) or hasattr( x, '__setitem__') ):
+    x.__setitem__(key,val)
+    #else:
+    #    x[key]=val
     return
 
 def ezhil_load(filename):
