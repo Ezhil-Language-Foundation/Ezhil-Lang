@@ -315,7 +315,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem5">
+                      <object class="GtkImageMenuItem" id="quitMenuItem">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -385,6 +385,36 @@
                 <property name="use_underline">True</property>
               </object>
             </child>
+ <!-- 
+
+           <child>
+              <object class="GtkMenuItem" id="RunMenu">
+                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Edit</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menuN">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+             
+                <child>
+                  <object class="GtkToolButton" id="RunMenuItem">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">run</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-media-play</property>
+                  </object>
+                </child>                
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Examples</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+
+-->            
             <child>
               <object class="GtkMenuItem" id="helpMenu">
                 <property name="visible">True</property>

@@ -6,7 +6,7 @@
 ##
 import codecs
 import sys
-
+import envoy
 import gi
 gi.require_version('Gtk','3.0')
 
@@ -47,18 +47,19 @@ class Editor(EditorState):
         ## construct the GUI from GLADE
         self.window = self.builder.get_object("ezhilEditorWindow")
         self.set_title()
-
+        
         self.console_textview = self.builder.get_object("codeExecutionTextView")
         self.console_textview.set_editable(False)
         self.console_textview.set_cursor_visible(False)
-
+        self.console_buffer = self.console_textview.get_buffer()
+        
         self.textview = self.builder.get_object("codeEditorTextView")
         self.StatusBar = self.builder.get_object("editorStatus")
-
+        
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
         self.abt_menu.connect("activate",Editor.show_about_status)
-
+        
         self.abt_btn = self.builder.get_object("AboutBtn")
         self.abt_btn.connect("clicked",Editor.show_about_status)
 
@@ -73,13 +74,25 @@ class Editor(EditorState):
         self.new_menu.connect("activate",Editor.reset_new)
         self.new_btn = self.builder.get_object("NewBtn")
         self.new_btn.connect("clicked",Editor.reset_new)
-
+        
+        # run : editor action
+        #self.run_menu = self.builder.get_object("runMenuItem")
+        #self.run_menu.connect("activate",Editor.run_ezhil_code)
+        self.run_btn = self.builder.get_object("RunBtn")
+        self.run_btn.connect("clicked",Editor.run_ezhil_code)
+        
+        # save : editor action save
+        self.save_btn = self.builder.get_object("SaveBtn")
+        self.save_btn.connect("clicked",Editor.save_file)
+        
         # hookup the exit
         self.exit_btn = self.builder.get_object("ExitBtn")
         self.exit_btn.connect("clicked",Editor.exit_editor)
+        self.exit_menu = self.builder.get_object("quitMenuItem")
+        self.exit_menu.connect("activate",Editor.exit_editor)
         # exit by 'x' btn
         self.window.connect("destroy",Editor.exit_editor)
-
+        
         self.window.show_all()
         Gtk.main()
 
@@ -95,7 +108,36 @@ class Editor(EditorState):
         ed.set_title()
         ed.textbuffer = ed.textview.get_buffer()
         ed.textbuffer.set_text("")
-
+        ed.console_buffer = ed.console_textview.get_buffer()
+    
+    @staticmethod
+    def alert_dialog(title,msg):
+        ed = Editor.get_instance()
+        dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.INFO,
+        Gtk.ButtonsType.OK, title) #"Output of Ezhil Code:"
+        dialog.format_secondary_text(msg) #res.std_out
+        dialog.run()
+        dialog.destroy() #OK or Cancel don't matter
+        return None
+    
+    @staticmethod
+    def run_ezhil_code(menuitem,arg1=None):
+        ed = Editor.get_instance()
+        filename = ed.filename
+        TIMEOUT=45
+        #print("Name => ",filename)
+        cmd = "ezhili {0}".format(filename.replace("\\","/"))
+        
+        # blocks upto TIMEOUT seconds
+        res = envoy.run(cmd, timeout=TIMEOUT)
+        is_success = True if res.status_code == 0 else False
+        #print {'result': res.std_out, 'is_success': is_success}
+        
+        ed.console_buffer.set_text( res.std_out )        
+        ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
+        
+        return None
+    
     @staticmethod
     def save_file(menuitem,arg1=None):
         ed = Editor.get_instance()
@@ -153,7 +195,7 @@ class Editor(EditorState):
         else:
             chooser.destroy()
         return
-
+    
     ## miscellaneous signal handlers
     @staticmethod
     def exit_editor(exit_btn):
