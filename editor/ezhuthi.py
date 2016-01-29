@@ -142,10 +142,25 @@ class Editor(EditorState):
     def save_file(menuitem,arg1=None):
         ed = Editor.get_instance()
         textbuffer = ed.textview.get_buffer()
+        
+        if ed.filename.find("untitled") >= 0:        
+            dialog = Gtk.FileChooserDialog("நிரலை சேமிக்கவும்:", ed.window,
+                Gtk.FileChooserAction.SAVE,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+            Editor.add_filters(dialog)
+            response = dialog.run()
+            if response == Gtk.ResponseType.CANCEL:
+                dialog.destroy()
+                print("Dismiss save dialog - not saved!")
+                return
+            if dialog.get_filename():
+                ed.filename = dialog.get_filename()
+            dialog.destroy()
         if ed.filename is not "":
             textbuffer = ed.textview.get_buffer()
         filename = ed.filename
-        #print "Saved File: " + filename
+        print "Saved File: " + filename
         ed.StatusBar.push(0,"Saved File: " + filename)
         index = filename.replace("\\","/").rfind("/") + 1
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)
@@ -170,7 +185,7 @@ class Editor(EditorState):
         StatusBar = Editor.get_instance().StatusBar
 
         textbuffer = textview.get_buffer()
-        chooser = Gtk.FileChooserDialog("Please choose a file", Window,
+        chooser = Gtk.FileChooserDialog("நிரலை திறக்கவும்:", Window,
         Gtk.FileChooserAction.OPEN,(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
         Editor.add_filters(chooser)
 
@@ -190,7 +205,7 @@ class Editor(EditorState):
             textview.set_buffer(textbuffer)
             file.close()
             chooser.destroy()
-        elif response == Gtk.RESPONSE_CANCEL:
+        elif response == Gtk.ResponseType.CANCEL:
             chooser.destroy()
         else:
             chooser.destroy()
