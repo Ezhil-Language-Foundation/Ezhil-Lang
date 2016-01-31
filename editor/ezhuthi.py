@@ -8,6 +8,9 @@ import codecs
 import sys
 import envoy
 import gi
+import ezhil
+import tempfile
+
 gi.require_version('Gtk','3.0')
 
 from gi.repository import Gtk
@@ -119,9 +122,10 @@ class Editor(EditorState):
         dialog.run()
         dialog.destroy() #OK or Cancel don't matter
         return None
-    
+
+    # process based function
     @staticmethod
-    def run_ezhil_code(menuitem,arg1=None):
+    def old_run_ezhil_code(menuitem,arg1=None):
         ed = Editor.get_instance()
         filename = ed.filename
         TIMEOUT=45
@@ -137,7 +141,47 @@ class Editor(EditorState):
         ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
         
         return None
-    
+
+    @staticmethod
+    def dummy_exit(*args):
+        print(u"Dummy exit function")
+        return 0
+
+    # method using the inline call stack
+    @staticmethod
+    def run_ezhil_code(menuitem,arg1=None):
+        ed = Editor.get_instance()
+        filename = ed.filename
+
+        old_stdout = sys.stdout
+        old_stderr = sys.stderr
+        is_success = False
+        tmpfilename = tempfile.mktemp()+".n"
+        res_std_out = u""
+        old_exit = sys.exit
+        sys.exit = Editor.dummy_exit
+        try:
+            sys.stdout = codecs.open(tmpfilename,"w","utf-8")
+            sys.stderr = sys.stdout;
+            executer = ezhil.EzhilFileExecuter(filename)
+            executer.run()
+            is_success = True
+        except Exception as e:
+            print(u"Failed executing file '{0}':\n{1}'".format(filename, unicode(e)))
+        finally:
+            sys.exit = old_exit
+            sys.stdout.flush()
+            sys.stdout.close()
+            with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
+                res_std_out = fp.read()
+            sys.stdout = old_stdout
+            sys.stderr = old_stderr
+
+        ed.console_buffer.set_text( res_std_out )
+        ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
+
+        return None
+
     @staticmethod
     def save_file(menuitem,arg1=None):
         ed = Editor.get_instance()
@@ -176,7 +220,7 @@ class Editor(EditorState):
                 file.close()
 
         return
-
+    
     ## open handler
     @staticmethod
     def open_file(menuitem, arg1=None):

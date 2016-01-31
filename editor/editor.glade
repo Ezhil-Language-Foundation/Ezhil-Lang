@@ -14,10 +14,13 @@
     <property name="has_resize_grip">True</property>
     <property name="program_name">எழில் - ஒரு தமிழ் நிரலாக்க மொழி</property>
     <property name="version">0.8</property>
-    <property name="copyright" translatable="yes">(C) 2008-2016 Muthiah Annamalai</property>
+    <property name="copyright" translatable="yes">(C) 2008-2016 Muthiah Annamalai, and contributors. (முத்தையா உட்பட கிரேஷ்குமார் ராமராஜ், நாக சொக்கநாதன், ஸ்ரீனிவாசன் அவர்களும் எழில் மொழியின் மேம்பாட்டிற்கும், முன்னேற்றத்திற்கும் பங்களித்துள்ளனர்.)</property>
     <property name="comments" translatable="yes">எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல் முறை கணிப்பொறி நிரல் எழுதுவதற்கு உதவும்.  (Ezhil, is a fun Tamil programming language for K-12). Tamil, is an Indian language spoken by over 60 million people.
 
-நிரலாக்க மொழி பற்றி மேலும் அறிய இந்த வலைவாசல் (Learn about the EzhilLanguage) http://ezhillang.org எழில் கணினி நிரல் மொழி வரவேற்கிறது.</property>
+நிரலாக்க மொழி பற்றி மேலும் அறிய இந்த வலைவாசல் (Learn about the EzhilLanguage) http://ezhillang.org எழில் கணினி நிரல் மொழி வரவேற்கிறது.
+
+முத்தையா உட்பட கிரேஷ்குமார் ராமராஜ், நாக சொக்கநாதன், ஸ்ரீனிவாசன் அவர்களும் எழில் மொழியின் மேம்பாட்டிற்கும், முன்னேற்றத்திற்கும் பங்களித்துள்ளனர்.
+</property>
     <property name="website">http://ezhillang.org</property>
     <property name="website_label" translatable="yes">Ezhil - A Tamil Programming Language</property>
     <property name="authors">Muthiah Annamalai, and other contributors.</property>
