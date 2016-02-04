@@ -10,10 +10,12 @@ import envoy
 import gi
 import ezhil
 import tempfile
+import threading
+import os
 
 gi.require_version('Gtk','3.0')
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject, GLib
 
 class EditorState:
     def __init__(self):
@@ -39,6 +41,83 @@ class EditorState:
 
         # cosmetics
         self.TitlePrefix = " - Suvadu/Ezhuthi"
+
+class DummyInputInterface(file):
+        def __init__(self):
+            self.fname = tempfile.mktemp()+".in"
+            fp = open(self.fname,"w")
+            fp.write("")
+            fp.close()
+            data = Editor.dummy_input()
+            file.__init__(self,name=self.fname,mode="r")
+            
+        def __del__(self):
+            self.close()
+            os.unlink(self.fname)
+            
+        def read_fcn(self):
+            return Editor.dummy_input()
+        
+        def xreadlines(self):
+            return self.read_fcn()
+            
+        def read(self):
+            return self.read_fcn()
+        
+        def readline(self):
+            return self.read_fcn()
+        
+        def readlines(self):
+            return self.read_fcn()
+            
+class ThreadedRunner(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    
+    @staticmethod
+    def update_fcn(args):
+        res_std_out,is_success=args
+        ed = Editor.get_instance()
+        ed.console_buffer.set_text( res_std_out )
+        ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
+        return
+        
+    def run(self,menuitem,arg1=None):
+        ezhil.EzhilCustomFunction.set(Editor.dummy_input)
+        
+        ed = Editor.get_instance()
+        filename = ed.filename
+        
+        old_stdin = sys.stdin
+        old_stdout = sys.stdout
+        old_stderr = sys.stderr
+        is_success = False
+        tmpfilename = tempfile.mktemp()+".n"
+        res_std_out = u""
+        old_exit = sys.exit
+        sys.stdin = DummyInputInterface()
+        sys.exit = Editor.dummy_exit
+        try:
+            sys.stdout = codecs.open(tmpfilename,"w","utf-8")
+            sys.stderr = sys.stdout;
+            executer = ezhil.EzhilFileExecuter(filename)
+            executer.run()
+            is_success = True
+        except Exception as e:
+            print(u"Failed executing file '{0}':\n{1}'".format(filename, unicode(e)))
+        finally:
+            sys.exit = old_exit
+            sys.stdout.flush()
+            sys.stdout.close()
+            with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
+                res_std_out = fp.read()
+            sys.stdout = old_stdout
+            sys.stderr = old_stderr
+            sys.stdin = old_stdin
+            ezhil.EzhilCustomFunction.reset()
+        GLib.idle_add( ThreadedRunner.update_fcn, [ res_std_out,is_success ])
+        
+        return None
 
 class Editor(EditorState):
     _instance = None
@@ -144,44 +223,41 @@ class Editor(EditorState):
 
     @staticmethod
     def dummy_exit(*args):
-        print(u"Dummy exit function")
+        #print(u"Dummy exit function")
         return 0
+    
+    @staticmethod
+    def dummy_input(*args):
+        message="Enter Input"
+        title = "Ezhil language IDE"
+        ed = Editor.get_instance()
+        dialogWindow = Gtk.MessageDialog(ed.window,
+                              Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                              Gtk.MessageType.QUESTION,
+                              Gtk.ButtonsType.OK_CANCEL,
+                              message)
 
-    # method using the inline call stack
+        dialogWindow.set_title(title)
+
+        dialogBox = dialogWindow.get_content_area()
+        userEntry = Gtk.Entry()
+        userEntry.set_size_request(257,0)
+        dialogBox.pack_end(userEntry, False, False, 0)
+        
+        dialogWindow.show_all()
+        response = dialogWindow.run()
+        text = userEntry.get_text() 
+        dialogWindow.destroy()
+        if (response == Gtk.ResponseType.OK) and (text != ''):
+            return text
+        return ""
+    
     @staticmethod
     def run_ezhil_code(menuitem,arg1=None):
-        ed = Editor.get_instance()
-        filename = ed.filename
-
-        old_stdout = sys.stdout
-        old_stderr = sys.stderr
-        is_success = False
-        tmpfilename = tempfile.mktemp()+".n"
-        res_std_out = u""
-        old_exit = sys.exit
-        sys.exit = Editor.dummy_exit
-        try:
-            sys.stdout = codecs.open(tmpfilename,"w","utf-8")
-            sys.stderr = sys.stdout;
-            executer = ezhil.EzhilFileExecuter(filename)
-            executer.run()
-            is_success = True
-        except Exception as e:
-            print(u"Failed executing file '{0}':\n{1}'".format(filename, unicode(e)))
-        finally:
-            sys.exit = old_exit
-            sys.stdout.flush()
-            sys.stdout.close()
-            with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
-                res_std_out = fp.read()
-            sys.stdout = old_stdout
-            sys.stderr = old_stderr
-
-        ed.console_buffer.set_text( res_std_out )
-        ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
-
-        return None
-
+        runner = ThreadedRunner();
+        runner.run(menuitem,arg1)
+        return
+    
     @staticmethod
     def save_file(menuitem,arg1=None):
         ed = Editor.get_instance()
@@ -305,4 +381,5 @@ class Editor(EditorState):
         return Editor._instance
 
 if __name__ == u"__main__":
+    GObject.threads_init()
     Editor()

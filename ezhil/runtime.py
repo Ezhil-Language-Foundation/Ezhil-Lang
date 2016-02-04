@@ -18,6 +18,32 @@ PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
     unicode = str
 
+# customize I/O like functions for external GUI
+class EzhilCustomFunction(object):
+    _instance = None
+    def __init__(self):
+        global raw_input
+        object.__init__(self)
+        self.raw_input_fcn = raw_input
+        
+    @staticmethod
+    def get_instance():
+        if not EzhilCustomFunction._instance:
+            EzhilCustomFunction._instance = EzhilCustomFunction()
+        return EzhilCustomFunction._instance
+    
+    @staticmethod
+    def raw_input(args):
+        return EzhilCustomFunction.get_instance().raw_input_fcn(args)
+    
+    @staticmethod
+    def reset():
+        EzhilCustomFunction.get_instance().raw_input_fcn = raw_input
+    
+    @staticmethod
+    def set(newfcn):
+        EzhilCustomFunction.get_instance().raw_input_fcn = newfcn
+    
 ## RUNTIME / LIBRARY etc
 class DebugUtils:
     def __init__(self,dbg):

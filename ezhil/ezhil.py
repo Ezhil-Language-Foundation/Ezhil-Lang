@@ -131,6 +131,7 @@ class EzhilRedirectOutput:
         if self.redirectop:
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
+            os.unlink(self.tmpf)
         pass
 	
     def get_output( self ):
@@ -267,7 +268,8 @@ def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8",doprofil
     """
     if ( redirectop ):
         print(u"redirect mode @ ezhil file parse eval")
-        sys.stdout = codecs.open(EzhilRedirectOutput.pidFileName(current_process().pid),"w","utf-8")
+        tmpfilename = EzhilRedirectOutput.pidFileName(current_process().pid)
+        sys.stdout = codecs.open(tmpfilename,"w","utf-8")
         sys.stderr = sys.stdout;
     lexer = EzhilLex(file_input,debug,encoding=encoding)
     if ( debug ): 

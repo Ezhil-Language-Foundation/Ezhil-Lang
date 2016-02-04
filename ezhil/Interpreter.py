@@ -39,7 +39,7 @@ from errors import RuntimeException, ParseException
 
 ## runtime elements
 from runtime import  Environment, BuiltinFunction, \
- BlindBuiltins, DebugUtils
+ BlindBuiltins, DebugUtils, EzhilCustomFunction
 
 ## AST elements
 from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
@@ -352,7 +352,7 @@ class Interpreter(DebugUtils):
     @staticmethod
     def RAWINPUT(args):
         try:
-            op = raw_input(args)
+            op = EzhilCustomFunction.raw_input(args)
         except KeyboardInterrupt as e :
             print(u"\nTo exit the program type : exit or press CTRL + D on your keyboard")
             return String("")
@@ -361,7 +361,7 @@ class Interpreter(DebugUtils):
     @staticmethod
     def INPUT(args):
         try:
-            op = (raw_input(args))
+            op = (EzhilCustomFunction.raw_input(args))
         except KeyboardInterrupt as e :
             print(u"\nTo exit the program type : exit or press CTRL + D on your keyboard")
             return Number(0)
