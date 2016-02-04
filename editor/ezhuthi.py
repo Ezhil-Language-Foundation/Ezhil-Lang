@@ -42,34 +42,6 @@ class EditorState:
         # cosmetics
         self.TitlePrefix = " - Suvadu/Ezhuthi"
 
-class DummyInputInterface(file):
-        def __init__(self):
-            self.fname = tempfile.mktemp()+".in"
-            fp = open(self.fname,"w")
-            fp.write("")
-            fp.close()
-            data = Editor.dummy_input()
-            file.__init__(self,name=self.fname,mode="r")
-            
-        def __del__(self):
-            self.close()
-            os.unlink(self.fname)
-            
-        def read_fcn(self):
-            return Editor.dummy_input()
-        
-        def xreadlines(self):
-            return self.read_fcn()
-            
-        def read(self):
-            return self.read_fcn()
-        
-        def readline(self):
-            return self.read_fcn()
-        
-        def readlines(self):
-            return self.read_fcn()
-            
 class ThreadedRunner(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -95,7 +67,6 @@ class ThreadedRunner(threading.Thread):
         tmpfilename = tempfile.mktemp()+".n"
         res_std_out = u""
         old_exit = sys.exit
-        sys.stdin = DummyInputInterface()
         sys.exit = Editor.dummy_exit
         try:
             sys.stdout = codecs.open(tmpfilename,"w","utf-8")
@@ -228,8 +199,12 @@ class Editor(EditorState):
     
     @staticmethod
     def dummy_input(*args):
-        message="Enter Input"
-        title = "Ezhil language IDE"
+        message= not args and "Enter Input" or args[0]
+        if not args or len(args) < 2:
+            title = "Ezhil language IDE"
+        else:
+            title = args[1]
+        
         ed = Editor.get_instance()
         dialogWindow = Gtk.MessageDialog(ed.window,
                               Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
