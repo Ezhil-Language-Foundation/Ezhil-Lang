@@ -12,11 +12,32 @@ import ezhil
 import tempfile
 import threading
 import os
+import time
 
 gi.require_version('Gtk','3.0')
 
 from gi.repository import Gtk, GObject, GLib
 
+class StopWatch(threading.Thread):
+    def __init__(self,limit):
+        threading.Thread.__init__(self,name="StopWatchThread")
+        self.start = -1
+        self.elapsed = -1
+        self.limit =  limit
+        self.stopped = False        
+                
+    def run(self):
+        self.start = time.time()
+        print("Startin ... stop watch")
+        while (self.time() < self.limit):
+            print("Count Down %d"%self.time())
+        raise Exception("Timeout - program taking too long to run")
+        return
+        
+    def time(self):
+        self.elapsed = time.time() - self.start
+        return self.elapsed
+        
 class EditorState:
     def __init__(self):
         # Gtk builder objects
@@ -42,9 +63,28 @@ class EditorState:
         # cosmetics
         self.TitlePrefix = " - Suvadu/Ezhuthi"
 
+class SentinelRunner(threading.Thread):
+    def __init__(self,*args):
+        self.args = args
+        threading.Thread.__init__(self,name="SentinelRunner")
+    
+    def run(self):
+        print("Kickstarting ...Sentinel")
+        try:
+            sw = StopWatch(15)
+            #sw.start()
+            runner = ThreadedRunner()
+            GLib.idle_add( lambda : runner.start() )
+            #sw.join(10)
+            if runner.isAlive(): 
+                runner.join(10)
+        except Exception as e:
+            print("Stopping thread due to %s"%e)
+        return
+    
 class ThreadedRunner(threading.Thread):
     def __init__(self):
-        threading.Thread.__init__(self)
+        threading.Thread.__init__(self,name="ThreadedEzhilEvaluator")
     
     @staticmethod
     def update_fcn(args):
@@ -54,7 +94,9 @@ class ThreadedRunner(threading.Thread):
         ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
         return
         
-    def run(self,menuitem,arg1=None):
+    def run(self):
+        print("Kickstarting ... ThreadedRunner")
+        
         ezhil.EzhilCustomFunction.set(Editor.dummy_input)
         
         ed = Editor.get_instance()
@@ -87,16 +129,20 @@ class ThreadedRunner(threading.Thread):
             sys.stdin = old_stdin
             ezhil.EzhilCustomFunction.reset()
         GLib.idle_add( ThreadedRunner.update_fcn, [ res_std_out,is_success ])
-        
+        print("All done")
         return None
 
 class Editor(EditorState):
     _instance = None
-    def __init__(self):
+    def __init__(self,filename=None):
         EditorState.__init__(self)
         Editor._instance = self
         self.builder.add_from_file("editor.glade")
 
+        
+        if filename:
+            self.filename = filename
+        
         ## construct the GUI from GLADE
         self.window = self.builder.get_object("ezhilEditorWindow")
         self.set_title()
@@ -147,6 +193,8 @@ class Editor(EditorState):
         self.window.connect("destroy",Editor.exit_editor)
         
         self.window.show_all()
+        
+        self.load_file()
         Gtk.main()
 
     # update title
@@ -230,7 +278,10 @@ class Editor(EditorState):
     @staticmethod
     def run_ezhil_code(menuitem,arg1=None):
         runner = ThreadedRunner();
-        runner.run(menuitem,arg1)
+        runner.run()
+        GLib.idle_add( lambda :  runner.is_alive() and runner.join() or None )
+        while runner.is_alive() and Gtk.events_pending():
+            Gtk.main_iteration()
         return
     
     @staticmethod
@@ -287,18 +338,9 @@ class Editor(EditorState):
         response = chooser.run()
         if response == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
-            Editor.get_instance().filename = filename
-            textbuffer = textview.get_buffer()
-            #print("Opened File: " + filename)
-            StatusBar.push(0,"Opened File: " + filename)
-            #print("file =>",filename)
-            Window.set_title(filename + " - Suvadu")
-            file = open(filename, "r")
-            text = file.read()
-            #print("Setting buffer to contents =>",text)
-            textbuffer.set_text(text)
-            textview.set_buffer(textbuffer)
-            file.close()
+            ed = Editor.get_instance()
+            ed.filename = filename
+            ed.load_file()
             chooser.destroy()
         elif response == Gtk.ResponseType.CANCEL:
             chooser.destroy()
@@ -306,6 +348,25 @@ class Editor(EditorState):
             chooser.destroy()
         return
     
+    def load_file(self):
+        ed = Editor.get_instance()
+        textview = Editor.get_instance().textview
+        Window = Editor.get_instance().window
+        StatusBar = Editor.get_instance().StatusBar
+        filename = ed.filename
+        textbuffer = textview.get_buffer()
+        #print("Opened File: " + filename)
+        StatusBar.push(0,"Opened File: " + filename)
+        #print("file =>",filename)
+        Window.set_title(filename + " - Suvadu")
+        file = open(filename, "r")
+        text = file.read()
+        #print("Setting buffer to contents =>",text)
+        textbuffer.set_text(text)
+        textview.set_buffer(textbuffer)
+        file.close()
+        return
+        
     ## miscellaneous signal handlers
     @staticmethod
     def exit_editor(exit_btn):
@@ -357,4 +418,4 @@ class Editor(EditorState):
 
 if __name__ == u"__main__":
     GObject.threads_init()
-    Editor()
+    Editor(len(sys.argv) > 1 and sys.argv[1] or None)

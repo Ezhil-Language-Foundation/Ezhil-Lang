@@ -361,7 +361,7 @@ class Interpreter(DebugUtils):
     @staticmethod
     def INPUT(args):
         try:
-            op = (EzhilCustomFunction.raw_input(args))
+            op = eval(EzhilCustomFunction.raw_input(args))
         except KeyboardInterrupt as e :
             print(u"\nTo exit the program type : exit or press CTRL + D on your keyboard")
             return Number(0)
