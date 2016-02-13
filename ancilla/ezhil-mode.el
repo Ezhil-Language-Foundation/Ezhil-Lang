@@ -63,7 +63,6 @@
     ;; would be highlighted.
 ))
 
-
 (defvar comment-char ?#
   "Character to start an Ezhil comment.")
 
@@ -105,6 +104,20 @@ See `comment-region'."
   (setq ezhil-events-regexp nil)
   (setq ezhil-functions-regexp nil)
 )
+
+(defun run-ezhil-file ()
+  "run a ezhil on the current file"
+  (interactive)
+  (shell-command
+   (format "ezhili %s" 
+       (shell-quote-argument (buffer-file-name))))
+  (revert-buffer t t t))
+
+(defun run-ezhil-region (&optional b e) 
+  (interactive "r")
+  (shell-command-on-region b e "ezhili"))
+
+(setq-default comment-start "# ")
 
 (add-to-list 'auto-mode-alist '("\\.n\\'" . ezhil-mode))
 (provide 'ezhil-mode)
