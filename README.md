@@ -1,7 +1,5 @@
-Ezhil-Lang [![Build Status](https://travis-ci.org/arcturusannamalai/Ezhil-Lang.png)](https://travis-ci.org/arcturusannamalai/Ezhil-Lang)
+Ezhil-Lang [![Build Status](https://travis-ci.org/Ezhil-Language-Foundation/Ezhil-Lang.png)](https://travis-ci.org/Ezhil-Language-Foundation/Ezhil-Lang)
 ==========
-
-[![Join the chat at https://gitter.im/arcturusannamalai/Ezhil-Lang](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/arcturusannamalai/Ezhil-Lang?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Introduction
 ============
