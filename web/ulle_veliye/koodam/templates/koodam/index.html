@@ -1,0 +1,141 @@
+<html>
+  <head>
+    <title>
+      எழில் - தமிழ நிரலாக்க மொழி
+    </title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'koodam/style.css' %}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav id="bs-navbar" class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div>
+          <ul class="nav nav-pills">
+            <li>
+              <a  href="http://ezhillang.org/">எழில்: தமிழ் நிரலாக்க மொழி</a>
+            </li>
+            <li class="dropdown" role="presentation">
+              <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Learn about Ezhil
+                <span class="caret"></span></a>
+              <ul class="dropdown-menu"">
+                <li>
+                  <a href="http://ezhillang.org/grammar.html">மொழி இலக்கணம்</a>
+                </li>
+                <li>
+                  <a href="http://ezhillang.org/example.html">உதாரண நிரல்கள்</a>
+                </li>
+                <li>
+                  <a href="http://ezhillang.org/#publications">Research Publications</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="http://ezhillang.org/download.html">எழில் தரவிறக்கம்</a></li>
+            <li><a href="http://ezhillang.org/#register4book">எழில் eBook chapter தரவிறக்கம்</a></li>
+            <li class="dropdown" role="presentation">
+              <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">மேலும் தொடர்பு கொள்ள
+                <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="http://ezhillang.org/#signup_for_mailinglist">Signup for mailing list</a></li>
+                    <li><a href="http://ezhillang.org/#survey">Take Ezhil Survey</a></li>
+                    <li class="divider"></li>
+                    <li><a href="http://ezhillang.org/#twitter">Twitter @ezhillang</a></li>
+                    <li><a href="http://ezhillang.org/#feedback">Contact us</a></li>
+                  </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="code-area">
+        <div class="code">
+          <div class="input-output">
+            <div class="input">
+              <div id="editor" class="ace_editor ace-github col-md-5">பதிப்பி "யாதும் ஊரே யாவரும் கேளிர்"
+              </div>
+            </div>
+            <div class="output col-md-5">
+              <div class="output-success">
+                வெளியீடு</div>
+            </div>
+          </div>
+        </div>
+        <div class="browse-examples">
+          <select id="browse-examples-name">
+            <option value="array_nd.n">array_nd.n</option>
+            <option value="strings.n">strings.n</option>
+            <option value="tower_of_hanoi.n">tower_of_hanoi.n</option>
+            <option value="reverse.n">reverse.n</option>
+            <option value="ranges.n">ranges.n</option>
+            <option value="palindromes.n">palindromes.n</option>
+            <option value="bubblesort.n">bubblesort.n</option>
+            <option value="select_case.n">select_case.n</option>
+            <option value="speed_of_light.n">speedoflight.n</option>
+            <option value="factorial.n">factorial.n</option>
+            <option value="beer_bottles_song.n">beer_bottles_song.n</option>
+          </select>
+          <button class="btn btn-primary" id="btn-browse"> உதாரணம் பார்க்க (Browse Examples) </button>
+          <button type="submit" id="execute" class="btn btn-run 7btn-default dropdown-toggle btn-success" value="Run">நிரலை இயக்குங்கள்
+          </button>
+        </div>
+      </div>
+          <div class="button-area">
+          </div>
+        </div>
+      </div>
+      <div class="input-helper"">
+      </div>
+      <div class="footer">
+      </div>
+    </div>
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="{% static 'koodam/examples.js' %}"></script>
+    <script>
+     var editor = ace.edit("editor");
+     editor.setTheme("ace/theme/chrome");
+     editor.getSession().setMode("ace/mode/python");
+     editor.setFontSize(14);
+
+     function makeRequest(code){
+         $.ajax({
+             url: '/api/',
+             type: 'post',
+             contentType: 'application/json',
+             success: function (data) {
+                 var result = data.result;
+                 // Make newline rendered
+                 console.log(result);
+                 result = result.replace("\n", "<br/>");
+                 if (data.is_success){
+                     $('.output-error').html("");
+                     $('.output-success').html(result);
+                 } else {
+                     $('.output-success').html("");
+                     $('.output-error').html(result);
+                 }
+             },
+             data: JSON.stringify({'code': code})
+         });
+     }
+
+     // Handle Run button click
+     $("#execute").on('click', function(){
+         var code = editor.getValue();
+         console.log(code);
+         $('.output-success').html('கோரப்படுகிறது ...');
+         $('.output-error').html("");
+         makeRequest(code);
+     });
+
+     // Handle Browse examples
+     $("#btn-browse").on('click', function(){
+         var example = $("#browse-examples-name").val();
+         console.log(example);
+         editor.setValue(examples[example]);
+     });
+    </script>
+  </body>
+</html>

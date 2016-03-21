@@ -3,6 +3,8 @@
 import json
 import tempfile
 
+import envoy
+
 from django.http import JsonResponse, HttpResponse
 from django.http.multipartparser import parse_header
 from django.views.decorators.csrf import csrf_exempt
@@ -10,7 +12,7 @@ from django.conf import settings
 
 from six import string_types
 
-import envoy
+from .models import Snippet
 
 
 def is_json_request(content_type):
@@ -37,7 +39,12 @@ def execute(code):
         cmd = "ezhili {0}".format(tmp_file.name)
         res = envoy.run(cmd, timeout=TIMEOUT)
         is_success = True if res.status_code == 0 else False
-        return {'result': res.std_out, 'is_success': is_success}
+        if is_success:
+            output = res.std_out
+        else:
+            output = res.std_err or res.std_out
+        Snippet.objects.create(code=code, output=output, is_success=is_success)
+        return {'result': output, 'is_success': is_success}
 
 
 def handle_request(data):

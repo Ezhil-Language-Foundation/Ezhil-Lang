@@ -31,7 +31,7 @@ DJANGO_APPS = (
     'django.contrib.staticfiles',
 )
 
-SITE_APPS = ("api",)
+SITE_APPS = ('api', 'koodam')
 
 INSTALLED_APPS = DJANGO_APPS + SITE_APPS
 

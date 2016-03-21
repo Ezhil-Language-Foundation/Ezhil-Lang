@@ -1,0 +1,68 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  /* overflow: hidden; */
+  margin: 0;
+  /* padding: 0; */
+  height: 100%;
+  width: 100%;
+}
+
+.code-area {
+    height: 800px;
+}
+
+.container{
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.code {
+    height: 500px;
+}
+.input-output {
+    position: absolute;
+    width: 100%;
+    padding-bottom: 10;
+}
+
+#editor {
+    height: 500px;
+    position: relative;
+    top: 50px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    float: left;
+}
+
+.output {
+    top: 50px;
+    background: black;
+    position: relative;
+    float: left;
+    height: 500px;
+}
+
+.output-success {
+    color: white;
+}
+
+.output-error {
+    color: red;
+}
+
+/* .btn-run { */
+/*     position: absolute; */
+/*     top: 55px; */
+/*     left: 480px; */
+/*     z-index: 5; */
+/*     padding: 15px 25px 11px; */
+/* } */
+
+.browse-examples {
+    position: relative;
+    top: 60;
+}
