@@ -14,4 +14,4 @@
 முடி
 
 பதிப்பி "APPA => ", rot13("APPA"), "NANI => ",rot13("NANI"),"NCCN =>",rot13("NCCN")
-
+assert( rot13(rot13("NANI") ) == "NANI")
