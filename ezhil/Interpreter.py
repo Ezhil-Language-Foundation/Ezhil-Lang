@@ -104,6 +104,9 @@ def ezhil_setitem(x,key,val):
     #    x[key]=val
     return
 
+def ezhil_substr(str_var,start,end):
+    return str_var[start:end]
+
 def ezhil_load(filename):
     # load the file into the interpreter
     # we have a symbol table and use it
@@ -506,6 +509,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['oct']=BlindBuiltins(oct,'oct',self.debug)
         #self.builtin_map['open']=BlindBuiltins(open,'open',self.debug)
         self.builtin_map['ord']=BlindBuiltins(ord,'ord',self.debug)
+        self.builtin_map['substr']=BlindBuiltins(ezhil_substr,'substr',self.debug)
         #self.builtin_map['pow']=BlindBuiltins(pow,'pow',self.debug)
         self.builtin_map['property']=BlindBuiltins(property,'property',self.debug)
         self.builtin_map['quit']=BlindBuiltins(quit,'quit',self.debug)
