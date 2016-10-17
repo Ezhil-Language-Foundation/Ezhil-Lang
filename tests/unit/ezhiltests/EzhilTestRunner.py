@@ -130,7 +130,7 @@ class TestEzhilException( TestEzhil ):
         """ this class expects to receive an exception on running the Ezhil interpreter,
             and when we match the exception message the test is supposed to pass
         """
-        print "\n"*3
+        print("\n"*3)
         try:
             self._tested = True
             ezhil.EzhilFileExecuter( file_input=self.filename , debug=self.debug, redirectop=False, TIMEOUT=None,safe_mode=self.safe_mode )
@@ -156,16 +156,16 @@ class TestEzhilException( TestEzhil ):
                     self.message = [self.message]
                 
                 for msg in self.message:
-                    if ( self.debug ): print self.success
-                    if ( self.debug ): print "### testing ",unicode(msg)
+                    if ( self.debug ): print(self.success)
+                    if ( self.debug ): print("### testing ",unicode(msg))
                     self.success = self.success and \
                         (( ex.message.find( msg ) >= 0 ) or \
                              len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 or unicode(ex).find( msg ) >= 0 )
-                    if ( self.debug ): print self.success
+                    if ( self.debug ): print(self.success)
             
             if not self.success and not self.partial:
-                print "######## TEST FAILED #############"
-                print self.success,self.partial
+                print("######## TEST FAILED #############")
+                print(self.success,self.partial)
                 print(u"ACTUAL == %s"%unicode(ex))
                 print(u"EXPECTED == %s"%unicode(self.message))
                 raise Exception(u"Expected message %s was not found. We found message %s"%(self.message,unicode(ex)))            

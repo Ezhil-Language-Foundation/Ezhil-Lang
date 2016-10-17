@@ -6,7 +6,7 @@
 
 if [ $# -lt 1 ]
 then
-    python ./ezhil/ezhil.py -stdin
+    python -m ezhil -stdin
 else
-    python ./ezhil/ezhil.py  $@
+    python -m ezhil  $@
 fi

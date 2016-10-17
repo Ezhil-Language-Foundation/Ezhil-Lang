@@ -7,12 +7,12 @@
 ## It contains classes 
 ## 
 
-from errors import RuntimeException
+from .errors import RuntimeException
 import keyword
 import sys
 import time
 import traceback
-from profile import Profiler
+from .profile import Profiler
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:

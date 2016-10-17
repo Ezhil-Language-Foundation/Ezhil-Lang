@@ -8,8 +8,8 @@
 ## It is used by profiling insertion, semantic checks among
 ## others
 
-from ezhil_scanner import EzhilLex, EzhilToken
-import Interpreter as EzhilInterpreter
+from .ezhil_scanner import EzhilLex, EzhilToken
+#from .Interpreter EzhilInterpreter
 
 ## Visitor template
 class Visitor:
@@ -187,9 +187,9 @@ class TransformVisitor(Visitor):
         return
     
     def visit_expr(self, expr):
-        expr.term.visit(self)
+        if expr.term: expr.term.visit(self)
         toktype = EzhilToken.token_types[expr.binop.kind]
-        expr.next_expr.visit(self)
+        if expr.next_expr: expr.next_expr.visit(self)
         return
     
     def visit_return_stmt(self, ret_stmt):
@@ -209,18 +209,18 @@ class TransformVisitor(Visitor):
     
     def visit_else_stmt(self,else_stmt):
         keyword = u"இல்லை"
-        else_stmt.stmt.visit( self )
+        if else_stmt.stmt: else_stmt.stmt.visit( self )
         return
     
     def visit_if_elseif_stmt(self,if_elseif_stmt):
         # condition expression
-        if_elseif_stmt.expr.visit(self)
+        if if_elseif_stmt.expr: if_elseif_stmt.expr.visit(self)
         
         # IF kw
         keyword_if = u"ஆனால்"
         
         # True-Body
-        if_elseif_stmt.body.visit( self )
+        if if_elseif_stmt.body: if_elseif_stmt.body.visit( self )
         
         # False-Body - optionally present
         if hasattr(if_elseif_stmt.next_stmt,'visit'):
@@ -239,13 +239,13 @@ class TransformVisitor(Visitor):
             itr = itr + 1
                 முடி"""        
         # condition expression
-        while_stmt.expr.visit(self)
+        if while_stmt.expr: while_stmt.expr.visit(self)
         
         # While kw
         keyword_while = u"வரை"
         
         # Body
-        while_stmt.body.visit( self )
+        if while_stmt.body: while_stmt.body.visit( self )
         
         self.visit_end_kw()
         return
@@ -260,30 +260,38 @@ class TransformVisitor(Visitor):
         """
         
         # condition expression
-        for_stmt.expr_init.visit(self)
-        for_stmt.expr_cond.visit(self)
-        for_stmt.expr_update.visit(self)
+        if for_stmt.expr_init:
+            for_stmt.expr_init.visit(self)
+        if for_stmt.expr_cond:
+            for_stmt.expr_cond.visit(self)
+        if for_stmt.expr_update:
+            for_stmt.expr_update.visit(self)
         
         # For kw
         keyword_for = u"ஆக"
         # Body
-        for_stmt.body.visit( self )
+        if for_stmt.body:
+            for_stmt.body.visit( self )
         self.visit_end_kw()
         return
 
     def visit_assign_stmt(self, assign_stmt):
-        assign_stmt.lvalue.visit( self )
-        assign_stmt.rvalue.visit( self )
+        if assign_stmt.lvalue:
+            assign_stmt.lvalue.visit( self )
+        if assign_stmt.rvalue:
+            assign_stmt.rvalue.visit( self )
         return
 
     def visit_print_stmt(self, print_stmt):
         keyword = u"பதிப்பி"
-        print_stmt.exprlst.visit(self)
+        if print_stmt.exprlst:
+            print_stmt.exprlst.visit(self)
         return
 
     def visit_eval_stmt(self, eval_stmt ):
         #print(u"==>%s/%s"%(eval_stmt.expr.__class__,unicode(eval_stmt)))
-        eval_stmt.expr.visit(self)
+        if eval_stmt.expr:
+            eval_stmt.expr.visit(self)
         return
     
     def visit_arg_list(self, arg_list):
@@ -316,10 +324,12 @@ class TransformVisitor(Visitor):
         # name of function
         
         # arglist expression
-        fndecl_stmt.arglist.visit(self)
+        if fndecl_stmt.arglist:
+            fndecl_stmt.arglist.visit(self)
         
         # Body expression
-        fndecl_stmt.body.visit(self)
+        if fndecl_stmt.body:
+            fndecl_stmt.body.visit(self)
         
         return
     

@@ -13,16 +13,16 @@ if PYTHON3:
     unicode = str
 
 ## Tx
-from transform import Visitor, TransformVisitor
-from ezhil_scanner import EzhilToken
+from .transform import Visitor, TransformVisitor
+from .ezhil_scanner import EzhilToken
 ## AST elements
-from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
+from .ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
  String, Boolean
 
-from errors import RuntimeException, SemanticException
+from .errors import RuntimeException, SemanticException
 
 class TransformEntryExitProfile(TransformVisitor):
     def __init__(self,**kwargs):
@@ -51,7 +51,8 @@ class TransformSafeModeFunctionCheck(TransformVisitor):
         callee = expr_call.func_id.id
         if callee in self.forbidden_fcn_names:
            raise RuntimeException(u"ERROR %s:\n\t %s may not be used in SAFE MODE ."%(self.interpreter.get_fname(),unicode(expr_call)))
-        expr_call.arglist.visit( self )
+        if expr_call.arglist:
+            expr_call.arglist.visit( self )
         return
 
 #  Type checker for ezhil - rules list #65
@@ -71,7 +72,8 @@ class TransformSemanticAnalyzer(TransformVisitor):
         if callee == u"__getitem__":
             # T.B.D
             pass
-        expr_call.arglist.visit( self )
+        if expr_call.arglist:
+            expr_call.arglist.visit( self )
         return
     
     # check if the constants are on lhs of assignment statements
@@ -80,8 +82,10 @@ class TransformSemanticAnalyzer(TransformVisitor):
     def visit_assign_stmt(self, assign_stmt):
         if any( map( lambda typename: isinstance( assign_stmt.lvalue, typename) , [Number,String,Boolean,Function]) ):
             raise SemanticException("Cannot use number, string, constant or functions on LHS of assignment %s"%unicode(assign_stmt))
-        assign_stmt.lvalue.visit( self )
-        assign_stmt.rvalue.visit( self )
+        if assign_stmt.lvalue:
+            assign_stmt.lvalue.visit( self )
+        if assign_stmt.rvalue:
+            assign_stmt.rvalue.visit( self )
         return
     
     def visit_binary_expr(self,binexpr):

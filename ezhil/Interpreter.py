@@ -31,31 +31,31 @@ ezhil_date_time = time.asctime
 
 ######### E Z H I L - I N T E R P R E T E R ##########################
 ## scanner for exprs language
-from scanner import Token, Lexeme, Lex
-from ezhil_scanner import EzhilLex
+from .scanner import Token, Lexeme, Lex
+from .ezhil_scanner import EzhilLex
 
 ## exceptions
-from errors import RuntimeException, ParseException
+from .errors import RuntimeException, ParseException
 
 ## runtime elements
-from runtime import  Environment, BuiltinFunction, \
+from .runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils, EzhilCustomFunction
 
 ## AST elements
-from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
+from .ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \
  String, Boolean
 
 ## Parser
-from ExprsParser import Parser
+from .ExprsParser import Parser
 ## Transforms
-from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck,\
+from .ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck,\
  TransformSemanticAnalyzer, TransformConstantFolder
 
-from ezhil_serializer import SerializerXML
-from ezhil_library import Load_URL_APIs
+from .ezhil_serializer import SerializerXML
+from .ezhil_library import Load_URL_APIs
 
 def ezhil_version():
         return 0.81

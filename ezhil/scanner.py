@@ -7,7 +7,7 @@
 ## It contains classes Token, Lexeme, and  Lex.
 ## 
 
-from errors import ScannerException
+from .errors import ScannerException
 import codecs
 import re
 import sys

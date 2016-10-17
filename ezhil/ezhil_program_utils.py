@@ -7,10 +7,10 @@
 ## class contains tools for mainpulating Ezhil source files
 
 import sys
-from ezhil import EzhilInterpreter
-from ezhil_scanner import EzhilLex
-from ezhil_serializer import SerializerXML
-from transform import make_mock_interpreter
+from .ezhil import EzhilInterpreter
+from .ezhil_scanner import EzhilLex
+from .ezhil_serializer import SerializerXML
+from .transform import make_mock_interpreter
 
 def get_ast(filename):
     debug = False

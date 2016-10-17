@@ -7,7 +7,6 @@
 from .Interpreter import ezhil_version as version
 from .Interpreter import ezhil_credits as credits
 from .Interpreter import ezhil_copyright as copyright
-
 from .Interpreter import Interpreter, REPL, Lex, get_prog_name
 from .ezhil_parser import EzhilParser
 from .ezhil_scanner import EzhilLex
@@ -21,8 +20,7 @@ from .ezhil_serializer import SerializerXML
 from .ezhil_program_utils import get_ast, serializeParseTree, serializeSourceFile
 from .ezhil_visualizer import visualizeSourceFile
 from .ezhil_messages import get_message
-
-#from .exprs import exprslang
+from .exprs import exprs_eval
 from .prettify import Printer as PrettyPrint
 from .theme import XsyTheme
 
@@ -32,4 +30,4 @@ __all__ = ['version','credits','copyright','Interpreter','REPL','Lex','get_prog_
            'start','ezhil_transforms','ezhil_serializer','get_ast','serializeSourceFile','serializeParseTree',\
            'visualizeSourceFile','PrettyPrint','XsyTheme','SerializerXML',\
            'TransformEntryExitProfile', 'TransformSafeModeFunctionCheck', 'TransformSemanticAnalyzer',\
-           'main','get_message','set_language','EzhilCustomFunction']
+           'main','get_message','set_language','EzhilCustomFunction','exprs_eval']

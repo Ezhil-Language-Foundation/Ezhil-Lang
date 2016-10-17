@@ -13,27 +13,27 @@ if PYTHON3:
     unicode = str
 
 ## scanner for Ezhil language
-from ezhil_scanner import EzhilToken, EzhilLex, EzhilLexeme
+from .ezhil_scanner import EzhilToken, EzhilLex, EzhilLexeme
 
 ## exceptions
-from errors import RuntimeException, ParseException
+from .errors import RuntimeException, ParseException
 
 ## runtime elements
-from runtime import  Environment, BuiltinFunction, \
+from .runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils
 
 ## AST elements
-from ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
+from .ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
  ForStmt, AssignStmt, PrintStmt, DeclarationStmt, EvalStmt, ArgList, \
  ImportStmt, ValueList, Function, StmtList, Identifier, Number, \
  String, Array, Dict
 
 ## use exprs language parser
-from ExprsParser import Parser
+from .ExprsParser import Parser
 
 ## Tamil messages
-from ezhil_messages import get_message, Messages
+from .ezhil_messages import get_message, Messages
 
 ## Parser implementes the grammar for 'exprs' language.
 ## Entry point is parse(), after appropriate ctor-setup.

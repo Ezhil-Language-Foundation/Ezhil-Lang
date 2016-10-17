@@ -10,8 +10,8 @@ import codecs
 import functools
 import sys
 
-from ezhil_scanner import EzhilToken, Token
-from transform import TransformVisitor
+from .ezhil_scanner import EzhilToken, Token
+from .transform import TransformVisitor
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:

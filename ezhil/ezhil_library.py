@@ -4,7 +4,7 @@
 ##
 from __future__ import print_function
 import sys
-from runtime import BuiltinFunction
+from .runtime import BuiltinFunction
 
 PYTHON3 = (sys.version[0] == '3')
 

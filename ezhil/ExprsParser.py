@@ -19,17 +19,17 @@ if PYTHON3:
     unicode = str
 
 ## scanner for exprs language
-from scanner import Token, Lexeme, Lex
+from .scanner import Token, Lexeme, Lex
 
 ## exceptions
-from errors import RuntimeException, ParseException
+from .errors import RuntimeException, ParseException
 
 ## runtime elements
-from runtime import  Environment, BuiltinFunction, \
+from .runtime import  Environment, BuiltinFunction, \
  BlindBuiltins, DebugUtils
 
 ## AST elements
-from ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
+from .ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
  BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
  ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
  ValueList, Function, StmtList, Identifier, Number, \

@@ -28,13 +28,13 @@ except ImportError as no_open_tamil:
     print(u"\t$ pip install open-tamil")
     sys.exit(255)
 
-from Interpreter import Interpreter, REPL, Lex, get_prog_name
-from ezhil_parser import EzhilParser
-from ezhil_scanner import EzhilLex
-from errors import RuntimeException, ParseException, TimeoutException
+from .Interpreter import Interpreter, REPL, Lex, get_prog_name
+from .ezhil_parser import EzhilParser
+from .ezhil_scanner import EzhilLex
+from .errors import RuntimeException, ParseException, TimeoutException
 from multiprocessing import Process, current_process
 from time import sleep,clock,time
-from ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck
+from .ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck
 
 class EzhilInterpreter( Interpreter ):
     def __init__(self, **kwargs ):
@@ -451,4 +451,5 @@ def main():
 
 
 if __name__ == u"__main__":
+    #print(  len(sys.argv) )
     main()

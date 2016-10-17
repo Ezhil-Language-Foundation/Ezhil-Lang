@@ -21,14 +21,14 @@ if PYTHON3:
     unicode = str
 
 ## scanner for exprs language
-from scanner import Token, Lexeme, Lex
+from .scanner import Token, Lexeme, Lex
 
 ## runtime elements
-from runtime import  Environment, BuiltinFunction, \
+from .runtime import  Environment, BuiltinFunction, \
  BlindBuiltins
 
 ## exceptions
-from errors import RuntimeException, ParseException
+from .errors import RuntimeException, ParseException
 
 ##
 ## ATOMS

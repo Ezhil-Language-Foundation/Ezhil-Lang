@@ -7,11 +7,11 @@
 ## This module is the pretty-printer for the Ezhil language.
 ## It contains classes @WikiStyle, @Printer
 ## 
-
-from theme import XsyTheme
-from ezhil_scanner import EzhilLex, EzhilToken
-from ezhil import EzhilInterpreter
-from transform import Visitor
+from __future__ import print_function
+from .theme import XsyTheme
+from .ezhil_scanner import EzhilLex, EzhilToken
+from .ezhil import EzhilInterpreter
+from .transform import Visitor
 
 class WikiStyle:
     @staticmethod
@@ -356,14 +356,14 @@ class Printer(Visitor):
         return u"".join(out)
 
 def pretty_print_file( filename ):
-    print u"working with ",filename
-    print Printer(filename).pretty_print()
+    print(u"working with ",filename)
+    print(Printer(filename).pretty_print())
     return True
 
 if __name__ == "__main__":
     from sys import argv,exit
     if len(argv) <= 1:
-        print u"usage: python ezhil/prettify.py <file1> <file2> ... "
+        print(u"usage: python ezhil/prettify.py <file1> <file2> ... ")
         exit(-1)
     map( pretty_print_file, argv[1:])
     

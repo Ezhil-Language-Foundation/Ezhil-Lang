@@ -9,9 +9,9 @@
 ## 
 
 import re
-from scanner import Token, Lexeme, Lex, PYTHON3
+from .scanner import Token, Lexeme, Lex, PYTHON3
 from tamil.utf8 import has_tamil, istamil, istamil_alnum
-from errors import ScannerException
+from .errors import ScannerException
 
 if PYTHON3:
     unicode = str

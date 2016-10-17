@@ -3,7 +3,7 @@
 # 
 # This file is part of Ezhil Language test suite
 # 
-
+from __future__ import print_function
 # setup the paths
 from ezhiltests import *
 
@@ -41,4 +41,4 @@ i = 0
         TestTimeoutEzhil.create_and_test(infinite_loop_code,timeout=4)
 
 if __name__ == '__main__':    
-    test_support.run_unittest(Ancilla,Interpreter,WebEzhil)
+    unittest.main()

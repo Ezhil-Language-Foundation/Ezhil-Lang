@@ -1,7 +1,7 @@
 #!/bin/bash
 # Tests for Ezhil language
-# (C) 2007, 2008, 2013-2015 முத்தையா அண்ணாமலை
-
+# (C) 2007, 2008, 2013-2016 முத்தையா அண்ணாமலை
+MODEZHIL=`pwd`
 if [ -e success.txt ];
 then
     rm success.txt
@@ -15,21 +15,24 @@ then
     rm dump_file
 fi
 
-touch success.txt
-touch failed.txt
-touch dump_file
+echo "" > success.txt
+echo "" > failed.txt
+echo "" > dump_file
 
 ## run all the success programs
 for i in `ls ./tests/exprs/*.prog | sort`;
 do
-    echo "########## Testing file $i" | tee -a dump_file
-    python ./ezhil/exprs.py $i $1 2>&1 >> dump_file
+    RVAL="NA"
+    python exprs.py $i 2>&1 >> dump_file
     if [ $? -eq 0 ]
     then
-	echo $i >> success.txt
+        RVAL="OK"
+        echo $i >> success.txt
     else
-	echo $i >> failed.txt
+        RVAL="FAIL"
+        echo $i >> failed.txt
     fi
+    echo "########## Testing file $i -> $RVAL" | tee -a dump_file
     sleep 0
 done
 
@@ -37,23 +40,26 @@ done
 export EZHIL_DATA_PATH=`pwd`/tests/data
 export EZHIL_TEST_PATH=`pwd`/tests/
 cd ./tests
-# last space important before the \
+echo $MODEZHIL is source location of EZHIL MODULE
 for i in `cat ../test_cases | sort`
 do
-    echo "########## Testing Ezhil script $i $1" | tee -a ../dump_file    
-    python ../ezhil/ezhil.py  $i $1 2>&1 >> ../dump_file
+    RESULT="NA"
+    PYTHONPATH=$MODEZHIL python -m ezhil  $i 2>&1
     if [ $? -eq 0 ]
     then
+       RESULT="OK"
        echo $i >> ../success.txt
     else
+       RESULT="FAIL"
        echo $i >> ../failed.txt
     fi
+    echo "########## Testing Ezhil script $i -> $RESULT"
     sleep 0
 done
 unset EZHIL_DATA_PATH
 
 echo "**********Special TSCII Test**********"
-    python ../ezhil/ezhil.py  -tamilencoding tscii  tscii_calc2.n |  tee -a ../dump_file
+    PYTHONPATH=$MODEZHIL python -m ezhil  -tamilencoding tscii  tscii_calc2.n |  tee -a ../dump_file
 	if [ $? -eq 0 ]
 	then
 	    echo "tscii_calc2.n" >> ../success.txt
@@ -97,7 +103,7 @@ echo "***************************************************"
 for i in `echo demos/ch2.n \
 `
 do
-    echo "ezhil" | python ./ezhil/ezhil.py ./tests/$i  >>  dump_file
+    echo "'ezhil'" | PYTHONPATH=$MODEZHIL python -m ezhil ./tests/$i  >>  dump_file
     if [ $? -eq 0 ]
     then
         echo "passed ezhil interactive test for  $i" >> success.txt
@@ -112,7 +118,7 @@ echo "**************************************************"
 for i in `ls ./tests/*.fprog ./tests/typecheck/semantic_error*.n`;
 do
     echo "Testing file $i" | tee -a dump_file
-    python ./ezhil/exprs.py $i $1 -stacksize 10 2>&1 >> dump_file
+    PYTHONPATH=$MODEZHIL python exprs.py $i -stacksize 10 2>&1 >> dump_file
     if [ $? -eq 0 ]
     then
 	echo $i >> failed.txt
