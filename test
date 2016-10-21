@@ -5,7 +5,7 @@ MODEZHIL=`pwd`
 PYV=`python -c 'from sys import version; print(version[0:3])'`
 if [[ $PYV == "2.6" ]]
 then
-    PYCMD="python $MODEZHIL/ezhil.py"
+    PYCMD="python $MODEZHIL/ezhil_py26.py"
 else
     PYCMD='python -m ezhil'
 fi
