@@ -2,6 +2,14 @@
 # Tests for Ezhil language
 # (C) 2007, 2008, 2013-2016 முத்தையா அண்ணாமலை
 MODEZHIL=`pwd`
+PYV=`python -c 'from sys import version; print(version[0:3])'`
+if [[ $PYV == "2.6" ]]
+then
+    PYCMD='python $MODEZHIL/ezhil.py'
+else
+    PYCMD='python -m ezhil'
+fi
+
 if [ -e success.txt ];
 then
     rm success.txt
@@ -44,7 +52,7 @@ echo $MODEZHIL is source location of EZHIL MODULE
 for i in `cat ../test_cases | sort`
 do
     RESULT="NA"
-    PYTHONPATH=$MODEZHIL python -m ezhil  $i 2>&1
+    PYTHONPATH=$MODEZHIL $PYCMD  $i 2>&1
     if [ $? -eq 0 ]
     then
        RESULT="OK"
@@ -59,7 +67,7 @@ done
 unset EZHIL_DATA_PATH
 
 echo "**********Special TSCII Test**********"
-    PYTHONPATH=$MODEZHIL python -m ezhil  -tamilencoding tscii  tscii_calc2.n |  tee -a ../dump_file
+    PYTHONPATH=$MODEZHIL $PYCMD  -tamilencoding tscii  tscii_calc2.n |  tee -a ../dump_file
 	if [ $? -eq 0 ]
 	then
 	    echo "tscii_calc2.n" >> ../success.txt
