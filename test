@@ -5,7 +5,7 @@ MODEZHIL=`pwd`
 PYV=`python -c 'from sys import version; print(version[0:3])'`
 if [[ $PYV == "2.6" ]]
 then
-    PYCMD='python $MODEZHIL/ezhil.py'
+    PYCMD="python $MODEZHIL/ezhil.py"
 else
     PYCMD='python -m ezhil'
 fi
@@ -81,29 +81,35 @@ then
     rm names.txt
 fi
 
-cd ../
 
-echo "**************************************************"
-echo " Running Web tests" | tee -a dump_file
-echo "**************************************************"
-# this test needs Ezhil to be installed via pip
-python ./web/ezhil_web.py 2>&1 >> dump_file
-if [ $? -eq 0 ]
+if [[ $PYV == "2.6" ]]
 then
-    echo "ezhil_web.py" >> success.txt
+   echo "********************************"
+   echo "Skipping Web tests in Python $PYV"
+   echo "********************************"
 else
-    echo "ezhil_web.py" >> failed.txt
+    cd ../
+    echo "**************************************************"
+    echo " Running Web tests" | tee -a dump_file
+    echo "**************************************************"
+    # this test needs Ezhil to be installed via pip
+    python ./web/ezhil_web.py 2>&1 >> dump_file
+    if [ $? -eq 0 ]
+    then
+        echo "ezhil_web.py" >> success.txt
+    else
+        echo "ezhil_web.py" >> failed.txt
+    fi
+    echo "**************************************************"
+    echo " Running API tests"
+    echo "**************************************************"
+
+    cd web/ulle_veliye/
+    pip install -r requirements.txt
+    python manage.py test
+
+    cd -
 fi
-
-echo "**************************************************"
-echo " Running API tests"
-echo "**************************************************"
-
-cd web/ulle_veliye/
-pip install -r requirements.txt
-python manage.py test
-
-cd -
 
 echo "**************************************************"
 echo " Running interactive tests " | tee -a dump_file
