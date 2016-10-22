@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # 
-# (C) 2008-2015 முத்தையா அண்ணாமலை 
+# (C) 2008-2016 முத்தையா அண்ணாமலை 
 # ezhil language project
 
 try:
@@ -13,7 +13,7 @@ except ImportError:
 from codecs import open
 
 setup(name='ezhil',
-      version='0.81',
+      version='0.82',
       description='Ezhil - Tamil programming language implemented in Python',
       author='Muthiah Annamalai',
       author_email='ezhillang@gmail.com',
