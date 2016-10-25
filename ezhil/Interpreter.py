@@ -57,8 +57,32 @@ from .ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFuncti
 from .ezhil_serializer import SerializerXML
 from .ezhil_library import Load_URL_APIs
 
+def ezhil_keywords():
+    keywords = {u"பதிப்பி":"PRINT",u"தேர்ந்தெடு":"SWITCH",
+      u"தேர்வு":"CASE",u"ஏதேனில்":"OTHERWISE",u"ஆனால்":"IF",u"இல்லைஆனால்":"ELSEIF",
+      u"இல்லை":"ELSE",u"ஆக":"FOR",u"ஒவ்வொன்றாக":"FOREACH",u"இல்":"COMMA",
+      u"வரை":"WHILE",u"செய்":"DO",u"முடியேனில்":"DOWHILE",u"பின்கொடு":"RETURN",u"முடி":"END",
+      u"நிரல்பாகம்":"DEF",u"தொடர்":"CONTINUE",u"நிறுத்து":"BREAK",u"உள்ளடக்கு":"IMPORT",
+    "@":"ATRATEOF","=":"EQUALS","-":"MINUS",
+    "+":"PLUS",">":"GT","<":"LT",">=":"GTEQ","<=":"LTEQ",
+    "==":"EQUALITY","!=":"NEQ","*":"PROD","/":"DIV",",":"COMMA",
+     "(":"LPAREN",")":"RPAREN","[":"LSQRBRACE","]":"RSQRBRACE",
+     "{":"LCURLBRACE","}":"RCURLBRACE",
+     ":":"COLON","%":"MOD","^":"EXP",
+     "&&":"LOGICAL_AND",
+     "&":"BITWISE_AND",
+     "||":"LOGICAL_OR",
+     "|":"BITWISE_OR",
+     "<<":"BITWISE_LSHIFT",
+     ">>":"BITWISE_RSHIFT",
+     "~":"BITWISE_COMPLEMENT",
+     "!":"LOGICAL_NOT"}
+    val = keywords.keys()
+    val.sort( tamil.utf8.compare_words_lexicographic )
+    return val,[keywords[ref] for ref in val]
+
 def ezhil_version():
-        return 0.81
+        return 0.82
 
 def ezhil_copyright():
     return u"(C) 2007-2016 Muthiah Annamalai, and other contributors."
@@ -552,7 +576,10 @@ class Interpreter(DebugUtils):
         # input statements
         self.builtin_map["input"]=BuiltinFunction(Interpreter.INPUT,"input")
         self.builtin_map["raw_input"]=BuiltinFunction(Interpreter.RAWINPUT,"raw_input")
-
+        
+        # keywords
+        self.add_builtin("keywords",lambda : ezhil_keywords()[0],nargin=0,ta_alias=u"குறிசொற்கள்")
+        
         # assert
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
         

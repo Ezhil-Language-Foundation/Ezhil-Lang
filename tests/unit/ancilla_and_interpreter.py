@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) 2013 Muthiah Annamalai
+# (C) 2013, 2016 Muthiah Annamalai
 # 
 # This file is part of Ezhil Language test suite
 # 
@@ -14,13 +14,17 @@ import ezhil
 
 class Ancilla(unittest.TestCase):
     def test_latest_version(self):     
-        assert( ezhil.version() > 0.8 )
+        assert( ezhil.version() >= 0.82 )
 
     def test_credits(self):
         assert( ezhil.credits().find("Annamalai") >= 0 )
 
     def test_start_method(self):
         assert( callable(ezhil.start) )
+    
+    # 40 keywords/tokens for Ezhil Language
+    def test_keywords(self):
+        self.assertEqual( len(zip(*ezhil.keywords())) , 49)
     
 class Interpreter(unittest.TestCase):
     def test_run_addition(self):

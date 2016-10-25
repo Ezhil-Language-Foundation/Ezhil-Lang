@@ -7,6 +7,7 @@
 from .Interpreter import ezhil_version as version
 from .Interpreter import ezhil_credits as credits
 from .Interpreter import ezhil_copyright as copyright
+from .Interpreter import ezhil_keywords as keywords
 from .Interpreter import Interpreter, REPL, Lex, get_prog_name
 from .ezhil_parser import EzhilParser
 from .ezhil_scanner import EzhilLex
