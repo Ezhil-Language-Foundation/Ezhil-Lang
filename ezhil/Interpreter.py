@@ -322,6 +322,9 @@ class Interpreter(DebugUtils):
     @staticmethod
     def ezhil_assert( x  ):
         # we raise Exception(u'Assertion failed!') further up stack
+        if not x:
+            # TBD: print the description of the AST x
+            pass
         assert x
         return True
     
