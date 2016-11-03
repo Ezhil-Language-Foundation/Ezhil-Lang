@@ -18,7 +18,7 @@ class InfiniteTimeoutTest(unittest.TestCase):
 
     def test_quiet_timeout(self):
         self.do_timeout_test("purinfi.n")
-    
+
     # utility function
     def do_timeout_test(self,fname):
         e = None

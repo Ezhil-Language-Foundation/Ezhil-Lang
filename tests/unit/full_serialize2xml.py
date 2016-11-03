@@ -47,14 +47,22 @@ class XMLValidator:
     def handleEndElement(self, name): pass
 
 class SerializeToXML(unittest.TestCase):
+    ref_path = ''
+    def setUp(self):
+        unittest.TestCase.setUp(self)
+        cwd_path = os.path.abspath('./')
+        _root1,_ = os.path.split(cwd_path)
+        SerializeToXML.ref_path,_ = os.path.split(_root1)
+
+
     def get_filename(self):
         return "temp_serialize2XML"
 
     def run_basic_hook(self,posthook=None):
-        relpath  = u"../../tests/"
+        relpath  = os.path.join( SerializeToXML.ref_path, "tests","")
         taboo = ["badlex.n","nonexistent_file.n","solo_return.n"]
         xml_taboo = []#["bf0.n","boolean_demorgan.n","globalvars.n","boolean_fcns.n"]
-        with codecs.open("../../test_cases","r","utf-8") as fp:
+        with codecs.open( os.path.join(SerializeToXML.ref_path,"test_cases"),"r","utf-8") as fp:
             files = []
             for f in fp.readlines():
                 f=f.strip()
