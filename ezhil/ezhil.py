@@ -450,6 +450,9 @@ def main():
     pass
 
 
+def ezhil_timeout_exec(filename):
+    return ezhil_file_parse_eval( file_input=filename,redirectop=False,debug=False,
+                                  encoding="utf-8",doprofile=False,safe_mode=True)
+
 if __name__ == u"__main__":
-    #print(  len(sys.argv) )
     main()

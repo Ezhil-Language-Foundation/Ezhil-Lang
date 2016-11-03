@@ -230,7 +230,7 @@ class Interpreter(DebugUtils):
         self.call_stack = list() #call stack
         if not env:
             self.env = Environment( self.call_stack, self.function_map, \
-                                        self.builtin_map, self.debug, self.stacksize )
+                                        self.builtin_map, self.debug, self.stacksize)
         else:
             self.env = env
         sys.setrecursionlimit( self.MAX_REC_DEPTH ) # have a large enough Python stack
@@ -247,7 +247,7 @@ class Interpreter(DebugUtils):
             ## update globals
             global global_interpreter
             global_interpreter = self
-        
+
     def get_fname(self):
         return self.lexer.fname
         
@@ -593,9 +593,9 @@ class Interpreter(DebugUtils):
         self.builtin_map["sys_platform"]=BuiltinFunction(lambda : sys.platform,"sys_platform",padic=0)
         
         # sleep/pause
-        self.builtin_map["sleep"]=BuiltinFunction(ezhil_sleep,"sleep")
+        self.add_builtin("sleep",ezhil_sleep,nargin=1,ta_alias=u"உரங்கு")
         self.builtin_map["pause"]=BlindBuiltins(Interpreter.ezhil_pause,"pause")
-    
+
         # date/time
         self.add_builtin("date_time",ezhil_date_time,nargin=0,ta_alias=u"தேதி_நேரம்")
         self.add_builtin("time",time.time,nargin=0,ta_alias=u"நேரம்")
@@ -604,8 +604,7 @@ class Interpreter(DebugUtils):
 
         # islist, isnumber predicates
         self.add_builtin("islist",ezhil_islist,nargin=1,ta_alias=u"பட்டியலா")
-        self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias=u"எண்ணா")    
-	
+        self.add_builtin("isnumber",ezhil_isnumber,nargin=1,ta_alias=u"எண்ணா")
         # random functions
         aslist = True;
         self.builtin_map["choice"]=BlindBuiltins(random.choice,"choice",self.debug,aslist)
@@ -644,11 +643,8 @@ class Interpreter(DebugUtils):
 
         self.builtin_map["max"]=BuiltinFunction(max,"max",2)
         self.builtin_map["min"]=BuiltinFunction(min,"min",2)
-        #self.builtin_map["exit"]=BuiltinFunction(min,"exit",1)
-
         # turtle functions - optional - 
         try:
-            # turtle graphics
             from EZTurtle import EZTurtle
 
             turtle_attrib = EZTurtle.functionAttributes();
@@ -780,7 +776,7 @@ class Interpreter(DebugUtils):
                          nargin=0,ta_alias=u"அகரம்எழுத்து") 
         self.add_builtin("tamil_uyirmei",lambda: tamil.utf8.uyirmei_letters,
                          nargin=0,ta_alias=u"உயிர்மெய்எழுத்து")
-        
+
         self.add_builtin("tamil_istamil_prefix",tamil.utf8.istamil_prefix,
                          nargin=1)
         self.add_builtin("tamil_all_tamil", tamil.utf8.all_tamil,
@@ -790,8 +786,10 @@ class Interpreter(DebugUtils):
         self.add_builtin("tamil_reverse_word",tamil.utf8.reverse_word,
                          nargin=1,ta_alias=u"அந்தாதிமாற்று")
         return True
+
     def __del__(self):
-        if (self.debug): print("deleting Interpreter...")
+        if self.debug:
+            print("deleting Interpreter...")
         
     def __repr__(self):
         rval =  u"[Interpreter: "
@@ -802,7 +800,8 @@ class Interpreter(DebugUtils):
         return rval
 
     def parse(self):
-        """ parser routine """
+        """
+        parser routine """
         self.ast = self.parser.parse()
         return self.ast
     
@@ -810,7 +809,10 @@ class Interpreter(DebugUtils):
         try:
             if self.SAFE_MODE:
                 TransformSafeModeFunctionCheck(interpreter=self,debug=self.debug)
-            
+
+            if self.SAFE_MODE:
+                self.env.record_start_time()
+
             # always verify semantics before running code
             #if ( self.debug ): print(self.ast )
             TransformSemanticAnalyzer(interpreter=self, debug=self.debug)
@@ -921,7 +923,7 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
                     if ( self.debug ): print("nota brace token",TKN.val)
             if len(nbraces) > 0:
                 if ( self.debug ): 
-                    print ("MIsmatched braces")
+                    print ("Mismatched braces")
                     for idx in nbraces:
                         print(idx)
                 self.prevlines += u'\n' + line
@@ -941,7 +943,8 @@ Type "help", "copyright", "credits" or "license" for more information."""%ezhil_
             #TransformConstantFolder( interpreter = self.parse_eval, debug=self.debug)
             
             [rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
-            if ( self.debug ): print( u"return value", unicode(rval) )
+            if self.debug:
+                print( u"return value", unicode(rval) )
             if hasattr( rval, 'evaluate' ):
                 pprint(rval.__str__())
             elif hasattr(rval,'__str__'): #print everything except a None object

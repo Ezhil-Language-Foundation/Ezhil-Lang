@@ -132,11 +132,40 @@ class BlindBuiltins(BuiltinFunction):
         
     def __unicode__(self):
         return BuiltinFunction.__str__(self)
-    
-## <<Side-Effects>>: computation is side-effect of programming.
-class Environment:
+
+class CountDownTimer(object):
+    def __init__(self):
+        object.__init__(self)
+        self._engaged = False
+        self._safeModeTimeout = 13  # seconds of wall clock timeout for Ezhil codes in SAFE MODE
+        self._startTime = 0
+
+    # all times are wall clock times
+    def is_timeout(self):
+        if not self._engaged:
+            return False
+        now = time.time()
+        rval = (now - self._startTime) > self._safeModeTimeout
+        if rval:
+            self._engaged = False
+        return rval
+
+    def record_start_time(self):
+        self._startTime = time.time()
+        self._engaged = True
+        return
+
+    # update safe mode timeout
+    def set_timeout(self, seconds):
+        assert seconds > 0
+        self._safeModeTimeout = seconds
+
+
+# <<Side-Effects>>: computation is side-effect of programming.
+class Environment(CountDownTimer):
     """ used to manage the side-effects of an interpreter """
-    def __init__(self,call_stack, function_map, builtin_map, dbg = False, MAX_REC_DEPTH  = 128 ):
+    def __init__(self, call_stack, function_map, builtin_map, dbg = False, MAX_REC_DEPTH  = 128 ):
+        CountDownTimer.__init__(self)
         self.do_profiling = False
         self.profiler = None
         self.max_recursion_depth = MAX_REC_DEPTH #keep it smaller than Python stack
@@ -150,29 +179,42 @@ class Environment:
         self.readonly_global_vars = {'True':True, 'False':False,u"மெய்":True, u"பொய்":False} #dict of global vars
         self.clear_break_return_continue()
 
-    def  __del__(self):
+    def validate_timer(self):
+        # time to be reset everytime the interpreter calls evaluate
+        if self.is_timeout():
+            raise RuntimeException("Evaluation of your program is taking too long!\n"
+                                   "\tTimeout exceeded %g (seconds)"%self._safeModeTimeout)
+        return
+
+    def __del__(self):
         if (self.debug): print(u"deleting environment")
         
     def enable_profiling(self):
+        self.validate_timer()
         self.do_profiling =True
         self.profiler = Profiler()
         return
     
     def is_profiling(self):
+        self.validate_timer()
         return self.do_profiling
     
     def disable_profiling(self):
+        self.validate_timer()
         self.do_profiling = False
         
     def report_profiling(self):
+        self.validate_timer()
         self.disable_profiling()
         self.profiler.report_stats()
         
     def reset_profiling(self):
+        self.validate_timer()
         self.disable_profiling()
         self.profiler = None
         
     def unroll_stack(self):
+        self.validate_timer()
         # we skip BOS since it is a __toplevel__
         if (self.debug): print("clearing locals")
         if len(self.call_stack) > 0:
@@ -187,31 +229,37 @@ class Environment:
         return
     
     def get_break_return(self):
+        self.validate_timer()
         """ get if break or return was set for use in loops """
         val = self.Break or self.Return
         return val
 
     def clear_break(self):
+        self.validate_timer()
         """ reset after a break statement """
         self.Break = False
         return False
 
     def clear_continue(self):
+        self.validate_timer()
         """ reset after a continue statement """
         self.Continue = False
         return False
 
     def set_break(self):
+        self.validate_timer()
         """ execute a continue statement """
         self.Break = True
         return True
 
     def set_continue(self):
+        self.validate_timer()
         """ execute a continue statement """
         self.Continue = True
         return True
     
     def break_return_continue(self):
+        self.validate_timer()
         val = ( self.Break or 
                  self.Return or 
                  self.Continue )
@@ -238,48 +286,57 @@ class Environment:
         return retval
 
     def set_retval( self, rval ):
+        self.validate_timer()
         self.ret_stack.append( rval )
         self.Return = True
         return
     
     def get_retval( self ):
+        self.validate_timer()
         rval = None
         if ( len(self.ret_stack ) >= 1  ):
             rval = self.ret_stack.pop()
         return rval
 
     def clear_break_return_continue(self):
+        self.validate_timer()
         self.Break = False
         self.Return = False
         self.Continue = False
 
     def clear_call(self,copyvars=False):
+        self.validate_timer()
         """ utility to cleanup the stacks etc.. """
         self.clear_local( copyvars ) 
         self.clear_args ( )
         self.clear_break_return_continue()
         
     def clear_args(self):
+        self.validate_timer()
         """ cleanup the stack """
         self.arg_stack.pop()
         return
 
     def get_args(self):
+        self.validate_timer()
         """ manage a global argument stack """
         return self.arg_stack[-1]
 
     def set_args(self,val):
+        self.validate_timer()
         """ manage a global argument stack """
         self.dbg_msg( "setting args " + unicode( val ) )
         return self.arg_stack.append(val)
     
     def set_local(self, vars):
+        self.validate_timer()
         self.local_vars.append(vars)
         self.dbg_msg( "setting locals " + unicode( vars ) )
         self.clear_break_return_continue()
         return
     
     def clear_local(self,copyvars=False):
+        self.validate_timer()
         prev_values = self.local_vars.pop()
         if copyvars:
             if len(self.local_vars) < 1:
@@ -289,6 +346,7 @@ class Environment:
     
     def has_id(self, idee):
         """ check various 'scopes' for ID variable """
+        self.validate_timer()
         rval = False
         if idee in self.readonly_global_vars:
             return True
@@ -300,6 +358,7 @@ class Environment:
 
     def set_id(self, idee, val, global_id = False):
         """ someday do global_id """
+        self.validate_timer()
         if idee in self.readonly_global_vars:
             raise Exception(u"Error: Attempt to reassign constant %s"%idee)
         if ( len(self.local_vars) > 0 ):
@@ -315,6 +374,7 @@ class Environment:
         return
 
     def get_id(self, idee):
+        self.validate_timer()
         val = None
         if idee in self.readonly_global_vars:
             return self.readonly_global_vars[idee]
@@ -330,6 +390,7 @@ class Environment:
 
     def call_function(self, fn,callsite=u""):
         """ set call stack, used in function calls. Also check overflow"""
+        self.validate_timer()
         if ( len(self.call_stack) >= self.max_recursion_depth ):
             raise RuntimeException( "Maximum recursion depth [ " + 
                                     unicode(self.max_recursion_depth) + 
@@ -340,6 +401,7 @@ class Environment:
         self.call_stack.append( (fn,callsite) ) 
     
     def return_function(self, fn):
+        self.validate_timer()
         va,_ = self.call_stack.pop( )
         if ( fn != va ):
             raise RuntimeException("function %s doesnt match Top-of-Stack"%fn)
@@ -348,6 +410,7 @@ class Environment:
         return va
     
     def has_function(self, fn):
+        self.validate_timer()
         if ( fn in self.builtin_map ):
             return True
         if ( fn in self.function_map ):
@@ -355,6 +418,7 @@ class Environment:
         return False
     
     def get_function(self, fn):
+        self.validate_timer()
         if not self.has_function(fn):
             raise RuntimeException("undefined function: "+fn)
 
