@@ -5,6 +5,7 @@
 from __future__ import print_function
 import sys
 from .runtime import BuiltinFunction
+import json
 
 PYTHON3 = (sys.version[0] == '3')
 
@@ -32,4 +33,8 @@ def Load_URL_APIs(interpreter):
     interpreter.add_builtin("urlopen",ezhil_urlopen,nargin=1,ta_alias="இணைய_இணைப்பு_திற")
     interpreter.add_builtin("urlread",ezhil_urlread,nargin=1,ta_alias="இணைய_இணைப்பு_படி")
     interpreter.add_builtin("urlclose",ezhil_urlclose,nargin=1,ta_alias="இணைய_இணைப்பு_மூடு")
-    
+    # JSON
+    interpreter.add_builtin("json_loads",json.loads,nargin=1)
+    interpreter.add_builtin("json_load",json.load,nargin=1)
+    interpreter.add_builtin("json_dump",json.dump,nargin=1)
+    interpreter.add_builtin("json_dumps",json.dumps,nargin=1)

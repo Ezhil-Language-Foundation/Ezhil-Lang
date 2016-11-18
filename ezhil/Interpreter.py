@@ -19,6 +19,8 @@ from cmd import Cmd
 from pprint import pprint
 import time
 import traceback
+import json
+import urllib
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
