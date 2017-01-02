@@ -25,3 +25,6 @@ n = 50
   முடி
   n = n - 1
 முடி
+
+பதிப்பி "2017 ?prime => ", isprime(2017)
+assert( isprime(2017) )
