@@ -587,6 +587,7 @@ class Interpreter(DebugUtils):
         
         # assert
         self.builtin_map["assert"]=BuiltinFunction(Interpreter.ezhil_assert,"assert")
+        self.builtin_map[u"உறுதிப்படுத்த"]=self.builtin_map["assert"]
         
         # str - used for simple serialization in Ezhil
         self.builtin_map["str"]=BuiltinFunction(str,"str")
@@ -722,7 +723,7 @@ class Interpreter(DebugUtils):
         self.builtin_map["extend"]= BuiltinFunction(list.extend,"extend",2)
         self.builtin_map["reverse"]= BuiltinFunction(Interpreter.ezhil_reverse,"reverse",1)
         self.builtin_map["pop_list"] = BuiltinFunction(list.pop,"pop",1)
-
+        self.builtin_map[u"மேல்அழி"] = self.builtin_map["pop_list"]
         # dictionary methods - first argument, when required, is always a dict obj
         self.builtin_map["clear"]= BuiltinFunction(dict.clear,"clear",1)
         self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
