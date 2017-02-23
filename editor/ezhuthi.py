@@ -4,9 +4,13 @@
 ## (C) 2016 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
+from __future__ import print_function
 import codecs
 import sys
-import envoy
+try:
+    import envoy
+except ImportError as ie:
+    pass
 import gi
 import ezhil
 import tempfile
@@ -306,7 +310,7 @@ class Editor(EditorState):
         if ed.filename is not "":
             textbuffer = ed.textview.get_buffer()
         filename = ed.filename
-        print "Saved File: " + filename
+        print("Saved File: " + filename)
         ed.StatusBar.push(0,"Saved File: " + filename)
         index = filename.replace("\\","/").rfind("/") + 1
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)

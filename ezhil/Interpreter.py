@@ -83,8 +83,11 @@ def ezhil_keywords():
     val.sort( tamil.utf8.compare_words_lexicographic )
     return val,[keywords[ref] for ref in val]
 
+def ezhil_quit():
+    sys.exit(0)
+
 def ezhil_version():
-        return 0.82
+    return 0.82
 
 def ezhil_copyright():
     return u"(C) 2007-2016 Muthiah Annamalai, and other contributors."
@@ -544,7 +547,7 @@ class Interpreter(DebugUtils):
         self.builtin_map['substr']=BlindBuiltins(ezhil_substr,'substr',self.debug)
         #self.builtin_map['pow']=BlindBuiltins(pow,'pow',self.debug)
         self.builtin_map['property']=BlindBuiltins(property,'property',self.debug)
-        #self.builtin_map['quit']=BlindBuiltins(quit,'quit',self.debug)
+        self.builtin_map['quit']=BlindBuiltins(ezhil_quit,'quit',self.debug)
         self.builtin_map['range']=BlindBuiltins(range,'range',self.debug)        
         if not PYTHON3:
             self.builtin_map['reduce']=BlindBuiltins(reduce,'reduce',self.debug)
