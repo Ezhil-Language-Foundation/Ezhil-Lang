@@ -7,6 +7,7 @@
 from __future__ import print_function
 import codecs
 import sys
+import os
 try:
     import envoy
 except ImportError as ie:
@@ -17,6 +18,7 @@ import tempfile
 import threading
 import os
 import time
+import locale
 
 gi.require_version('Gtk','3.0')
 
@@ -65,7 +67,7 @@ class EditorState:
         self.count = 0
 
         # cosmetics
-        self.TitlePrefix = " - Suvadu/Ezhuthi"
+        self.TitlePrefix = u" -சுவடு எழுதி"
 
 class SentinelRunner(threading.Thread):
     def __init__(self,*args):
@@ -73,7 +75,7 @@ class SentinelRunner(threading.Thread):
         threading.Thread.__init__(self,name="SentinelRunner")
     
     def run(self):
-        print("Kickstarting ...Sentinel")
+        #print("Kickstarting ...Sentinel")
         try:
             sw = StopWatch(15)
             #sw.start()
@@ -99,7 +101,7 @@ class ThreadedRunner(threading.Thread):
         return
         
     def run(self):
-        print("Kickstarting ... ThreadedRunner")
+        #print("Kickstarting ... ThreadedRunner")
         
         ezhil.EzhilCustomFunction.set(Editor.dummy_input)
         
@@ -133,7 +135,7 @@ class ThreadedRunner(threading.Thread):
             sys.stdin = old_stdin
             ezhil.EzhilCustomFunction.reset()
         GLib.idle_add( ThreadedRunner.update_fcn, [ res_std_out,is_success ])
-        print("All done")
+        #print("All done")
         return None
 
 class Editor(EditorState):
@@ -188,6 +190,10 @@ class Editor(EditorState):
         self.save_btn = self.builder.get_object("SaveBtn")
         self.save_btn.connect("clicked",Editor.save_file)
         
+        # clear buffer : clear run buffer
+        self.clear_btn = self.builder.get_object("clearbuffer")
+        self.clear_btn.connect("clicked",Editor.clear_buffer)
+        
         # hookup the exit
         self.exit_btn = self.builder.get_object("ExitBtn")
         self.exit_btn.connect("clicked",Editor.exit_editor)
@@ -205,6 +211,12 @@ class Editor(EditorState):
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
 
+    @staticmethod
+    def clear_buffer(menuitem,arg1=None):
+        ed = Editor.get_instance()
+        ed.console_buffer.set_text(u"")
+        ed.StatusBar.push(0,u"Evaluate buffer cleared")
+    
     @staticmethod
     def reset_new(menuitem,arg1=None):
         ed = Editor.get_instance()
@@ -421,5 +433,6 @@ class Editor(EditorState):
         return Editor._instance
 
 if __name__ == u"__main__":
+    os.putenv('LANG','ta_IN.utf8')
     GObject.threads_init()
     Editor(len(sys.argv) > 1 and sys.argv[1] or None)

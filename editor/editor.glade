@@ -24,7 +24,7 @@
     <property name="website">http://ezhillang.org</property>
     <property name="website_label" translatable="yes">Ezhil - A Tamil Programming Language</property>
     <property name="authors">Muthiah Annamalai, and other contributors.</property>
-    <property name="logo">ezhil_square_2015_128px.png</property>
+    <property name="logo">img/ezhil_square_2015_128px.png</property>
     <property name="license_type">gpl-3-0</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
@@ -112,7 +112,7 @@
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_bottom">24</property>
+            <property name="margin_bottom">5</property>
             <property name="hexpand">True</property>
             <property name="resize_mode">immediate</property>
             <property name="toolbar_style">both</property>
@@ -120,8 +120,7 @@
               <object class="GtkToolButton" id="NewBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">New file</property>
-                <property name="label" translatable="yes">_New</property>
+                <property name="tooltip_text">New file</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
               </object>
@@ -134,7 +133,6 @@
               <object class="GtkToolButton" id="OpenBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Open</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
               </object>
@@ -147,7 +145,6 @@
               <object class="GtkToolButton" id="SaveBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">save</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
               </object>
@@ -160,7 +157,7 @@
               <object class="GtkToolButton" id="RunBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">run</property>
+                <property name="label">இயக்கு</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
               </object>
@@ -187,7 +184,6 @@
               <object class="GtkToolButton" id="HelpBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">help</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-help</property>
               </object>
@@ -200,7 +196,6 @@
               <object class="GtkToolButton" id="AboutBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">about</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-about</property>
               </object>
@@ -213,9 +208,8 @@
               <object class="GtkToolButton" id="clearbuffer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Clear</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-strikethrough</property>
+                <property name="stock_id">gtk-delete</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -226,7 +220,6 @@
               <object class="GtkToolButton" id="ExitBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">exit</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-quit</property>
                 <signal name="clicked" handler="gtk_main_quit" swapped="no"/>
@@ -266,10 +259,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkMenuItem" id="fileMenu">
+              <object class="GtkImageMenuItem" id="fileMenu">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_File</property>
+                <property name="label">gtk-file</property>
+                <property name="use_stock">True</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
@@ -331,11 +325,12 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="editMenu">
+              <object class="GtkImageMenuItem" id="editMenu">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Edit</property>
+                <property name="label" translatable="yes">gtk-edit</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
@@ -419,11 +414,12 @@
 
 -->            
             <child>
-              <object class="GtkMenuItem" id="helpMenu">
+              <object class="GtkImageMenuItem" id="helpMenu">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Help</property>
+                <property name="label">gtk-help</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu3">
                     <property name="visible">True</property>
