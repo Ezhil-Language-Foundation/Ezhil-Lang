@@ -109,13 +109,13 @@ class EditorState:
         self.sw = None
 
         # pure editor state
-        self.filename = u'untitled.n'
+        self.filename = os.path.join(u'examples',u'untitled.n')
         self.file_modified = False
         self.count = 0
 
         # cosmetics
         self.TitlePrefix = u" -சுவடு எழுதி"
-    
+        
     # was editor code modified ?
     def is_edited(self):
         return self.textbuffer.get_modified()
@@ -214,7 +214,7 @@ class Editor(EditorState):
     def __init__(self,filename=None):
         EditorState.__init__(self)
         Editor._instance = self
-        self.builder.add_from_file("editor.glade")
+        self.builder.add_from_file("res/editor.glade")
 
         
         if filename:
@@ -223,7 +223,8 @@ class Editor(EditorState):
         ## construct the GUI from GLADE
         self.window = self.builder.get_object("ezhilEditorWindow")
         self.set_title()
-        
+        self.window.set_resizable(True)
+        self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
         self.console_textview.set_editable(False)
         self.console_textview.set_cursor_visible(False)
@@ -241,9 +242,17 @@ class Editor(EditorState):
         
         self.abt_btn = self.builder.get_object("AboutBtn")
         self.abt_btn.connect("clicked",Editor.show_about_status)
-    
+
+        paste_menu = self.builder.get_object("paste_item")
+        paste_menu.connect("activate",Editor.paste_action)
+
+        cp_menu = self.builder.get_object("copy_item")
+        cp_menu.connect("activate",Editor.copy_action)
+        
+        # search action in text buffer
         search_menu = self.builder.get_object("search_item")
-        search_menu.connect("activate",Editor.on_search_clicked) 
+        search_menu.connect("activate",Editor.on_search_clicked)
+        
         # open : editor action
         self.open_menu = self.builder.get_object("openMenuItem")
         self.open_menu.connect("activate",Editor.open_file)
@@ -316,26 +325,27 @@ class Editor(EditorState):
         response = dialog.run()
         dialog.destroy() #OK or Cancel don't matter
         return response
-    
-    # process based function
-    @staticmethod
-    def old_run_ezhil_code(menuitem,arg1=None):
-        ed = Editor.get_instance()
-        filename = ed.filename
-        TIMEOUT=45
-        #print("Name => ",filename)
-        cmd = "ezhili {0}".format(filename.replace("\\","/"))
-        
-        # blocks upto TIMEOUT seconds
-        res = envoy.run(cmd, timeout=TIMEOUT)
-        is_success = True if res.status_code == 0 else False
-        #print {'result': res.std_out, 'is_success': is_success}
-        
-        ed.console_buffer.set_text( res.std_out )        
-        ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
-        
-        return None
 
+    @staticmethod
+    def copy_action(*args_ign):
+        ed = Editor.get_instance()
+        bounds = ed.textbuffer.get_selection_bounds()
+        clipboard = Gtk.Clipboard.get_default( ed.window.get_display() )
+        text = ed.textbuffer.get_text(bounds[0],bounds[1],True)
+        print(text)
+        print(len(text))
+        clipboard.set_text(text,len(text))
+        
+    @staticmethod
+    def paste_action(*args_ign):
+        ed = Editor.get_instance()
+        clipboard = Gtk.Clipboard.get_default( ed.window.get_display() )
+        clipboard.request_text(ed.readclipboard, user_data=None)
+		
+    #callback for clipboard paste
+    def readclipboard(self, clipboard, text, data):
+        self.textbuffer.insert_at_cursor(text,len(text))
+    
     @staticmethod
     def dummy_exit(*args):
         #print(u"Dummy exit function")
@@ -455,18 +465,25 @@ class Editor(EditorState):
         StatusBar.push(0,"Opened File: " + filename)
         #print("file =>",filename)
         Window.set_title(filename + u" - சுவடு எழுதி")
-        file = open(filename, "r")
-        text = file.read()
+        try:
+            text = u""
+            with open(filename, "r") as file:
+                text = file.read()
+        except IOError as ioe:
+            Window.set_title(u"untitled.n - சுவடு எழுதி")
         #print("Setting buffer to contents =>",text)
         textbuffer.set_text(text)
         textview.set_buffer(textbuffer)
         textbuffer.set_modified(False)
-        file.close()
         return
         
     @staticmethod
     def on_search_clicked(*args_to_ignore):
         ed = Editor.get_instance()
+        # clear any previous tags in the space
+        ed.textbuffer.remove_tag(ed.tag_found, \
+                    ed.textbuffer.get_start_iter(), \
+                    ed.textbuffer.get_end_iter())
         dialog = SearchDialog(ed.window)
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -507,7 +524,7 @@ class Editor(EditorState):
     @staticmethod
     def show_about_status(*args):
         builder = Gtk.Builder()
-        builder.add_from_file("editor.glade")
+        builder.add_from_file("res/editor.glade")
         abt_menu = args[0]
         abt_dlg = builder.get_object("ezhilAboutDialog")
         #Parent = builder.get_object("ezhilEditorWindow"))

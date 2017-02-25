@@ -6,7 +6,6 @@
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="hide_titlebar_when_maximized">True</property>
     <property name="type_hint">dialog</property>
@@ -50,6 +49,7 @@
   </object>
   <object class="GtkApplicationWindow" id="ezhilEditorWindow">
     <property name="can_focus">False</property>
+    <property name="resizable">True</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
@@ -175,10 +175,6 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-dnd-multiple</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkToolButton" id="HelpBtn">
