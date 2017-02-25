@@ -22,7 +22,54 @@ import locale
 
 gi.require_version('Gtk','3.0')
 
-from gi.repository import Gtk, GObject, GLib
+from gi.repository import Gtk, GObject, GLib, Pango
+
+# Class from http://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html?highlight=textbuffer
+class SearchDialog(Gtk.Dialog):
+    def __init__(self, parent, text=u""):
+        Gtk.Dialog.__init__(self, u"தேடு", parent,
+            Gtk.DialogFlags.MODAL, buttons=(
+            Gtk.STOCK_FIND, Gtk.ResponseType.OK,
+            Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+        
+        box = self.get_content_area()
+        
+        label = Gtk.Label(u"உரையில் தேட வேண்டிய சொல்லை இங்கு இடுக:")
+        box.add(label)
+        
+        self.entry = Gtk.Entry()
+        self.entry.set_text(text)
+        box.add(self.entry)
+        self.show_all()
+        
+    def get_query(self):
+        return self.entry.get_text()
+
+class EditorTags:
+    def __init__(self,textbuffer):
+        self.keyword  = textbuffer.create_tag("keyword",
+            weight=Pango.Weight.BOLD,foreground="red")
+        self.literal  = textbuffer.create_tag("literal",
+            style=Pango.Style.ITALIC,foreground="green")
+        self.operator = textbuffer.create_tag("operator",
+            weight=Pango.Weight.SEMIBOLD,foreground="blue")
+        self.found = textbuffer.create_tag("xfound",
+            background="yellow",underline=Pango.Underline.SINGLE)
+
+class Tokenizer:
+    # given a piece of text figure out if it is a number, string-literal or
+    # a keyword or just plain old text
+    def __init__(self):
+        self.lexer = ezhil.EzhilLex()
+        
+    def get_token(self,chunk):
+        self.lexer.reset()
+        tok = self.lexer.tokenize(chunk)
+        return tok
+        
+    def is_number(self,tok):
+        return ezhil.EzhilToken.is_number(tok)
+        
 
 class StopWatch(threading.Thread):
     def __init__(self,limit):
@@ -68,7 +115,21 @@ class EditorState:
 
         # cosmetics
         self.TitlePrefix = u" -சுவடு எழுதி"
-
+    
+    # was editor code modified ?
+    def is_edited(self):
+        return self.textbuffer.get_modified()
+    
+    # editor code info
+    def get_doc_info(self):
+        r = {'line_count':0,'char_count':0,'modified':False}
+        #print(dir(self.textbuffer))
+        #print(self.textbuffer)
+        r['line_count'] = self.textbuffer.get_line_count()
+        r['char_count'] = self.textbuffer.get_char_count()
+        r['modified'] = self.is_edited()
+        return r
+    
 class SentinelRunner(threading.Thread):
     def __init__(self,*args):
         self.args = args
@@ -106,6 +167,16 @@ class ThreadedRunner(threading.Thread):
         ezhil.EzhilCustomFunction.set(Editor.dummy_input)
         
         ed = Editor.get_instance()
+        if ( ed.is_edited() ):
+            #document is edited but not saved;
+            msg = u"உங்கள் நிரல் சேமிக்க பட வேண்டும்! அதன் பின்னரே இயக்கலாம்"
+            title = u"இயக்குவதில் பிழை"
+            dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK, title) #"Output of Ezhil Code:"
+            dialog.format_secondary_text(msg) #res.std_out
+            dialog.run()
+            dialog.destroy() #OK or Cancel don't matter
+            return False
         filename = ed.filename
         
         old_stdin = sys.stdin
@@ -160,14 +231,19 @@ class Editor(EditorState):
         
         self.textview = self.builder.get_object("codeEditorTextView")
         self.StatusBar = self.builder.get_object("editorStatus")
-        
+        self.textbuffer = self.textview.get_buffer()
+        self.tags = EditorTags(self.textbuffer)
+        self.tag_found = self.textbuffer.create_tag("found",
+            background="yellow")
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
         self.abt_menu.connect("activate",Editor.show_about_status)
         
         self.abt_btn = self.builder.get_object("AboutBtn")
         self.abt_btn.connect("clicked",Editor.show_about_status)
-
+    
+        search_menu = self.builder.get_object("search_item")
+        search_menu.connect("activate",Editor.on_search_clicked) 
         # open : editor action
         self.open_menu = self.builder.get_object("openMenuItem")
         self.open_menu.connect("activate",Editor.open_file)
@@ -201,16 +277,15 @@ class Editor(EditorState):
         self.exit_menu.connect("activate",Editor.exit_editor)
         # exit by 'x' btn
         self.window.connect("destroy",Editor.exit_editor)
-        
         self.window.show_all()
         
         self.load_file()
         Gtk.main()
-
+    
     # update title
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
-
+    
     @staticmethod
     def clear_buffer(menuitem,arg1=None):
         ed = Editor.get_instance()
@@ -225,18 +300,23 @@ class Editor(EditorState):
         ed.set_title()
         ed.textbuffer = ed.textview.get_buffer()
         ed.textbuffer.set_text("")
+        ed.textbuffer.set_modified(False)
         ed.console_buffer = ed.console_textview.get_buffer()
     
     @staticmethod
-    def alert_dialog(title,msg):
+    def alert_dialog(title,msg,use_ok_cancel=False):
         ed = Editor.get_instance()
-        dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.INFO,
-        Gtk.ButtonsType.OK, title) #"Output of Ezhil Code:"
+        if use_ok_cancel:
+            dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.QUESTION,
+                              Gtk.ButtonsType.OK_CANCEL, title)
+        else:
+            dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK, title) #"Output of Ezhil Code:"
         dialog.format_secondary_text(msg) #res.std_out
-        dialog.run()
+        response = dialog.run()
         dialog.destroy() #OK or Cancel don't matter
-        return None
-
+        return response
+    
     # process based function
     @staticmethod
     def old_run_ezhil_code(menuitem,arg1=None):
@@ -336,7 +416,7 @@ class Editor(EditorState):
             with codecs.open(filename, "w","utf-8") as file:
                 file.write(text.decode("utf-8"))
                 file.close()
-
+        textbuffer.set_modified(False)
         return
     
     ## open handler
@@ -350,7 +430,7 @@ class Editor(EditorState):
         chooser = Gtk.FileChooserDialog("நிரலை திறக்கவும்:", Window,
         Gtk.FileChooserAction.OPEN,(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
         Editor.add_filters(chooser)
-
+        textbuffer.set_modified(False)
         response = chooser.run()
         if response == Gtk.ResponseType.OK:
             filename = chooser.get_filename()
@@ -374,20 +454,51 @@ class Editor(EditorState):
         #print("Opened File: " + filename)
         StatusBar.push(0,"Opened File: " + filename)
         #print("file =>",filename)
-        Window.set_title(filename + " - Suvadu")
+        Window.set_title(filename + u" - சுவடு எழுதி")
         file = open(filename, "r")
         text = file.read()
         #print("Setting buffer to contents =>",text)
         textbuffer.set_text(text)
         textview.set_buffer(textbuffer)
+        textbuffer.set_modified(False)
         file.close()
         return
         
+    @staticmethod
+    def on_search_clicked(*args_to_ignore):
+        ed = Editor.get_instance()
+        dialog = SearchDialog(ed.window)
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            cursor_mark = ed.textbuffer.get_insert()
+            start = ed.textbuffer.get_iter_at_mark(cursor_mark)
+            if start.get_offset() == ed.textbuffer.get_char_count():
+                start = ed.textbuffer.get_start_iter()
+
+            ed.search_and_mark(dialog.entry.get_text(), start)
+
+        dialog.destroy()
+
+    def search_and_mark(self, text, start):
+        end = self.textbuffer.get_end_iter()
+        match = start.forward_search(text, 0, end)
+
+        if match != None:
+            match_start, match_end = match
+            self.textbuffer.apply_tag(self.tag_found, match_start, match_end)
+            self.search_and_mark(text, match_end)
+
     ## miscellaneous signal handlers
     @staticmethod
     def exit_editor(exit_btn):
+        ed = Editor.get_instance()
+        if ed.is_edited():
+            okcancel=True
+            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
+            if respo == Gtk.ResponseType.OK:
+                Editor.save_file(None)
         Gtk.main_quit()
-
+    
     @staticmethod
     def abt_dlg_closer(abt_dlg,event):
         abt_dlg.destroy()
@@ -401,6 +512,8 @@ class Editor(EditorState):
         abt_dlg = builder.get_object("ezhilAboutDialog")
         #Parent = builder.get_object("ezhilEditorWindow"))
         abt_dlg.show_all()
+        ed = Editor.get_instance()
+        print(ed.get_doc_info())
         close_btn = builder.get_object("aboutdialog-action_area1")
         abt_dlg.connect("response",Editor.abt_dlg_closer)
         return True

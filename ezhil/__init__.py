@@ -10,7 +10,7 @@ from .Interpreter import ezhil_copyright as copyright
 from .Interpreter import ezhil_keywords as keywords
 from .Interpreter import Interpreter, REPL, Lex, get_prog_name
 from .ezhil_parser import EzhilParser
-from .ezhil_scanner import EzhilLex
+from .ezhil_scanner import EzhilLex, EzhilToken
 from .errors import RuntimeException, ParseException, TimeoutException
 from .runtime import EzhilCustomFunction
 from .ezhil import ezhil_file_REPL, main, ezhil_timeout_exec
