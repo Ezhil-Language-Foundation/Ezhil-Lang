@@ -45,31 +45,16 @@ class SearchDialog(Gtk.Dialog):
     def get_query(self):
         return self.entry.get_text()
 
-class EditorTags:
-    def __init__(self,textbuffer):
-        self.keyword  = textbuffer.create_tag("keyword",
-            weight=Pango.Weight.BOLD,foreground="red")
-        self.literal  = textbuffer.create_tag("literal",
-            style=Pango.Style.ITALIC,foreground="green")
-        self.operator = textbuffer.create_tag("operator",
-            weight=Pango.Weight.SEMIBOLD,foreground="blue")
-        self.found = textbuffer.create_tag("xfound",
-            background="yellow",underline=Pango.Underline.SINGLE)
-
 class Tokenizer:
     # given a piece of text figure out if it is a number, string-literal or
     # a keyword or just plain old text
     def __init__(self):
         self.lexer = ezhil.EzhilLex()
         
-    def get_token(self,chunk):
+    def tokenize(self,chunk):
         self.lexer.reset()
-        tok = self.lexer.tokenize(chunk)
-        return tok
-        
-    def is_number(self,tok):
-        return ezhil.EzhilToken.is_number(tok)
-        
+        self.lexer.tokenize(chunk)
+        return self.lexer.tokens
 
 class StopWatch(threading.Thread):
     def __init__(self,limit):
@@ -78,7 +63,7 @@ class StopWatch(threading.Thread):
         self.elapsed = -1
         self.limit =  limit
         self.stopped = False        
-                
+
     def run(self):
         self.start = time.time()
         print("Startin ... stop watch")
@@ -148,7 +133,7 @@ class SentinelRunner(threading.Thread):
         except Exception as e:
             print("Stopping thread due to %s"%e)
         return
-    
+
 class ThreadedRunner(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self,name="ThreadedEzhilEvaluator")
@@ -206,7 +191,6 @@ class ThreadedRunner(threading.Thread):
             sys.stdin = old_stdin
             ezhil.EzhilCustomFunction.reset()
         GLib.idle_add( ThreadedRunner.update_fcn, [ res_std_out,is_success ])
-        #print("All done")
         return None
 
 class Editor(EditorState):
@@ -233,9 +217,23 @@ class Editor(EditorState):
         self.textview = self.builder.get_object("codeEditorTextView")
         self.StatusBar = self.builder.get_object("editorStatus")
         self.textbuffer = self.textview.get_buffer()
-        self.tags = EditorTags(self.textbuffer)
+        
+        # comment purple
+        # keywords orange
+        # text black
+        # literal green
+        self.tag_comment  = self.textbuffer.create_tag("comment",
+            weight=Pango.Weight.SEMIBOLD,foreground="purple")
+        self.tag_keyword  = self.textbuffer.create_tag("keyword",
+            weight=Pango.Weight.BOLD,foreground="orange")
+        self.tag_literal  = self.textbuffer.create_tag("literal",
+            style=Pango.Style.ITALIC,foreground="green")
+        self.tag_operator = self.textbuffer.create_tag("operator",
+            weight=Pango.Weight.SEMIBOLD,foreground="blue")
+        self.tag_text = self.textbuffer.create_tag("text",foreground="black")
         self.tag_found = self.textbuffer.create_tag("found",
             background="yellow")
+        
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
         self.abt_menu.connect("activate",Editor.show_about_status)
@@ -295,6 +293,56 @@ class Editor(EditorState):
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
     
+    def run_syntax_highlighting(self,text):
+        EzhilToken = ezhil.EzhilToken
+        start,end = self.textbuffer.get_bounds()
+        self.textbuffer.delete(start,end)
+        lines = text.split(u"\n")
+        lexer = Tokenizer()
+        for line in lines:
+            c_line = line.strip()
+            if c_line.startswith(u"#"):
+                syntax_tag = self.tag_comment
+                self.textbuffer.insert_at_cursor( c_line )
+                self.textbuffer.insert_at_cursor("\n")
+                n_end = self.textbuffer.get_end_iter()
+                n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
+                self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
+                continue
+            lexemes = lexer.tokenize(line)
+            lexemes.reverse()
+            for lexeme in lexemes:
+                is_string = False
+                tok = lexeme.kind
+                is_keyword = False
+                if EzhilToken.is_keyword(tok) or lexeme.val in [u"பின்கொடு",u"பதிப்பி",u"ஒவ்வொன்றாக",u"@",u"இல்"]:
+                    is_keyword = True
+                    syntax_tag = self.tag_keyword
+                elif EzhilToken.is_id(tok):
+                    syntax_tag = self.tag_operator
+                elif EzhilToken.is_number(tok):
+                    syntax_tag = self.tag_literal
+                elif EzhilToken.is_string(tok):
+                    is_string = True
+                    syntax_tag = self.tag_literal
+                else:
+                    syntax_tag = self.tag_text
+                m_start = self.textbuffer.get_insert()
+                if EzhilToken.is_number(lexeme.kind):
+                    lexeme_val = unicode(lexeme.val)
+                elif is_string:
+                     lexeme_val = u"\""+lexeme.val.replace("\n","\\n")+u"\""
+                elif is_keyword:
+                     lexeme_val = lexeme.val + u" "
+                else:
+                     lexeme_val = lexeme.val
+                self.textbuffer.insert_at_cursor( lexeme_val )
+                n_end = self.textbuffer.get_end_iter()
+                n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-len(lexeme_val))
+                self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
+                #self.textbuffer.insert_at_cursor(u" ")
+            self.textbuffer.insert_at_cursor(u"\n")
+
     @staticmethod
     def clear_buffer(menuitem,arg1=None):
         ed = Editor.get_instance()
@@ -332,8 +380,6 @@ class Editor(EditorState):
         bounds = ed.textbuffer.get_selection_bounds()
         clipboard = Gtk.Clipboard.get_default( ed.window.get_display() )
         text = ed.textbuffer.get_text(bounds[0],bounds[1],True)
-        print(text)
-        print(len(text))
         clipboard.set_text(text,len(text))
         
     @staticmethod
@@ -348,7 +394,7 @@ class Editor(EditorState):
     
     @staticmethod
     def dummy_exit(*args):
-        #print(u"Dummy exit function")
+        #(u"Dummy exit function")
         return 0
     
     @staticmethod
@@ -467,13 +513,14 @@ class Editor(EditorState):
         Window.set_title(filename + u" - சுவடு எழுதி")
         try:
             text = u""
-            with open(filename, "r") as file:
+            with codecs.open(filename, "r","utf-8") as file:
                 text = file.read()
         except IOError as ioe:
             Window.set_title(u"untitled.n - சுவடு எழுதி")
-        #print("Setting buffer to contents =>",text)
+        #("Setting buffer to contents =>",text)
         textbuffer.set_text(text)
         textview.set_buffer(textbuffer)
+        ed.run_syntax_highlighting(text)
         textbuffer.set_modified(False)
         return
         
