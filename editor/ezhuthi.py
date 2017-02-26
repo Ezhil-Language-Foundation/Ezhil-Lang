@@ -8,17 +8,11 @@ from __future__ import print_function
 import codecs
 import sys
 import os
-try:
-    import envoy
-except ImportError as ie:
-    pass
 import gi
 import ezhil
 import tempfile
 import threading
-import os
 import time
-import locale
 
 gi.require_version('Gtk','3.0')
 
@@ -54,6 +48,7 @@ class Tokenizer:
     def tokenize(self,chunk):
         self.lexer.reset()
         self.lexer.tokenize(chunk)
+        self.lexer.tokens.reverse()
         return self.lexer.tokens
 
 class StopWatch(threading.Thread):
@@ -292,7 +287,16 @@ class Editor(EditorState):
     # update title
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
-    
+
+    def apply_comment_syntax_highlighting(self,c_line):
+        syntax_tag = self.tag_comment
+        self.textbuffer.insert_at_cursor( c_line )
+        self.textbuffer.insert_at_cursor("\n")
+        n_end = self.textbuffer.get_end_iter()
+        n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
+        self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
+
+    # todo - at every keystroke we need to run the syntax highlighting
     def run_syntax_highlighting(self,text):
         EzhilToken = ezhil.EzhilToken
         start,end = self.textbuffer.get_bounds()
@@ -300,22 +304,25 @@ class Editor(EditorState):
         lines = text.split(u"\n")
         lexer = Tokenizer()
         for line in lines:
-            c_line = line.strip()
-            if c_line.startswith(u"#"):
-                syntax_tag = self.tag_comment
-                self.textbuffer.insert_at_cursor( c_line )
-                self.textbuffer.insert_at_cursor("\n")
-                n_end = self.textbuffer.get_end_iter()
-                n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
-                self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
+            comment_line = line.strip()
+            if comment_line.startswith(u"#"):
+                self.apply_comment_syntax_highlighting(comment_line)
                 continue
+            idx_comment_part = comment_line.find("#")
+            if idx_comment_part != -1:
+                line_alt = comment_line[0:idx_comment_part]
+                comment_line = comment_line[idx_comment_part:]
+            else:
+                line_alt = line
+                comment_line = None
+            line = line_alt
             lexemes = lexer.tokenize(line)
-            lexemes.reverse()
             for lexeme in lexemes:
                 is_string = False
                 tok = lexeme.kind
                 is_keyword = False
-                if EzhilToken.is_keyword(tok) or lexeme.val in [u"பின்கொடு",u"பதிப்பி",u"ஒவ்வொன்றாக",u"@",u"இல்"]:
+                if unicode(lexeme.val) in [u"உள்ளடக்கு",u"பின்கொடு",u"பதிப்பி",u"ஒவ்வொன்றாக",u"@",u"இல்"] \
+                        or EzhilToken.is_keyword(tok):
                     is_keyword = True
                     syntax_tag = self.tag_keyword
                 elif EzhilToken.is_id(tok):
@@ -328,12 +335,13 @@ class Editor(EditorState):
                 else:
                     syntax_tag = self.tag_text
                 m_start = self.textbuffer.get_insert()
-                if EzhilToken.is_number(lexeme.kind):
+
+                if is_keyword:
+                     lexeme_val = lexeme.val + u" "
+                elif EzhilToken.is_number(lexeme.kind):
                     lexeme_val = unicode(lexeme.val)
                 elif is_string:
                      lexeme_val = u"\""+lexeme.val.replace("\n","\\n")+u"\""
-                elif is_keyword:
-                     lexeme_val = lexeme.val + u" "
                 else:
                      lexeme_val = lexeme.val
                 self.textbuffer.insert_at_cursor( lexeme_val )
@@ -341,6 +349,9 @@ class Editor(EditorState):
                 n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-len(lexeme_val))
                 self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
                 #self.textbuffer.insert_at_cursor(u" ")
+            if comment_line:
+                self.apply_comment_syntax_highlighting(u" "+comment_line)
+                continue
             self.textbuffer.insert_at_cursor(u"\n")
 
     @staticmethod
@@ -518,9 +529,12 @@ class Editor(EditorState):
         except IOError as ioe:
             Window.set_title(u"untitled.n - சுவடு எழுதி")
         #("Setting buffer to contents =>",text)
-        textbuffer.set_text(text)
         textview.set_buffer(textbuffer)
-        ed.run_syntax_highlighting(text)
+        try:
+            ed.run_syntax_highlighting(text)
+        except Exception as slxe:
+            StatusBar.push(0,u"இந்த நிரலை '%s', Syntax Highlighting செய்ய முடியவில்லை"%filename)
+            textbuffer.set_text(text)
         textbuffer.set_modified(False)
         return
         
