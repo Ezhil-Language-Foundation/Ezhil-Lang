@@ -138,6 +138,10 @@ class ThreadedRunner(threading.Thread):
         res_std_out,is_success=args
         ed = Editor.get_instance()
         ed.console_buffer.set_text( res_std_out )
+        tag = is_success and ed.tag_pass or ed.tag_fail
+        start = ed.console_buffer.get_start_iter()
+        end = ed.console_buffer.get_end_iter()
+        ed.console_buffer.apply_tag(tag,start,end)
         ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
         return
         
@@ -208,26 +212,32 @@ class Editor(EditorState):
         self.console_textview.set_editable(False)
         self.console_textview.set_cursor_visible(False)
         self.console_buffer = self.console_textview.get_buffer()
-        
+        self.scrolled_codeview = self.builder.get_object("scrolledwindow1")
         self.textview = self.builder.get_object("codeEditorTextView")
         self.StatusBar = self.builder.get_object("editorStatus")
         self.textbuffer = self.textview.get_buffer()
-        
+        self.scrolled_codeview.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.AUTOMATIC)
         # comment purple
         # keywords orange
         # text black
         # literal green
         self.tag_comment  = self.textbuffer.create_tag("comment",
-            weight=Pango.Weight.SEMIBOLD,foreground="purple")
+            weight=Pango.Weight.SEMIBOLD,foreground="red")
         self.tag_keyword  = self.textbuffer.create_tag("keyword",
-            weight=Pango.Weight.BOLD,foreground="orange")
+            weight=Pango.Weight.BOLD,foreground="blue")
         self.tag_literal  = self.textbuffer.create_tag("literal",
             style=Pango.Style.ITALIC,foreground="green")
         self.tag_operator = self.textbuffer.create_tag("operator",
-            weight=Pango.Weight.SEMIBOLD,foreground="blue")
+            weight=Pango.Weight.SEMIBOLD,foreground="olive")
         self.tag_text = self.textbuffer.create_tag("text",foreground="black")
         self.tag_found = self.textbuffer.create_tag("found",
             background="yellow")
+        
+        # for console buffer
+        self.tag_fail  = self.console_buffer.create_tag("fail",
+            weight=Pango.Weight.SEMIBOLD,foreground="red")
+        self.tag_pass  = self.console_buffer.create_tag("pass",
+            weight=Pango.Weight.SEMIBOLD,foreground="green")
         
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
