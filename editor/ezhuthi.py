@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ##This Python file uses the following encoding: utf-8
 ##
-## (C) 2016 Muthiah Annamalai,
+## (C) 2016-2017 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
 from __future__ import print_function
@@ -13,6 +13,10 @@ import ezhil
 import tempfile
 import threading
 import time
+
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
 
 gi.require_version('Gtk','3.0')
 
@@ -51,31 +55,15 @@ class Tokenizer:
         self.lexer.tokens.reverse()
         return self.lexer.tokens
 
-class StopWatch(threading.Thread):
-    def __init__(self,limit):
-        threading.Thread.__init__(self,name="StopWatchThread")
-        self.start = -1
-        self.elapsed = -1
-        self.limit =  limit
-        self.stopped = False        
-
-    def run(self):
-        self.start = time.time()
-        print("Startin ... stop watch")
-        while (self.time() < self.limit):
-            print("Count Down %d"%self.time())
-        raise Exception("Timeout - program taking too long to run")
-        return
-        
-    def time(self):
-        self.elapsed = time.time() - self.start
-        return self.elapsed
-        
 class EditorState:
     def __init__(self):
         # Gtk builder objects
         self.builder = Gtk.Builder()
 
+        # timing logger
+        self.tstart = 0.0
+        self.tend = 0.0
+        
         # editor Gtk widgets
         self.window = None
         self.abt_menu = None
@@ -110,25 +98,6 @@ class EditorState:
         r['modified'] = self.is_edited()
         return r
     
-class SentinelRunner(threading.Thread):
-    def __init__(self,*args):
-        self.args = args
-        threading.Thread.__init__(self,name="SentinelRunner")
-    
-    def run(self):
-        #print("Kickstarting ...Sentinel")
-        try:
-            sw = StopWatch(15)
-            #sw.start()
-            runner = ThreadedRunner()
-            GLib.idle_add( lambda : runner.start() )
-            #sw.join(10)
-            if runner.isAlive(): 
-                runner.join(10)
-        except Exception as e:
-            print("Stopping thread due to %s"%e)
-        return
-
 class ThreadedRunner(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self,name="ThreadedEzhilEvaluator")
@@ -137,12 +106,14 @@ class ThreadedRunner(threading.Thread):
     def update_fcn(args):
         res_std_out,is_success=args
         ed = Editor.get_instance()
+        ed.tend = time.time()
+        time_desc = u" %0.3g seconds"%(ed.tend - ed.tstart)
         ed.console_buffer.set_text( res_std_out )
         tag = is_success and ed.tag_pass or ed.tag_fail
         start = ed.console_buffer.get_start_iter()
         end = ed.console_buffer.get_end_iter()
         ed.console_buffer.apply_tag(tag,start,end)
-        ed.StatusBar.push(0,"File %s ran %s"%(ed.filename,["with errors","without errors"][is_success]))
+        ed.StatusBar.push(0,"File %s ran %s %s"%(ed.filename,["with errors ","without errors"][is_success],time_desc))
         return
         
     def run(self):
@@ -162,7 +133,7 @@ class ThreadedRunner(threading.Thread):
             dialog.destroy() #OK or Cancel don't matter
             return False
         filename = ed.filename
-        
+        ed.tstart = time.time()
         old_stdin = sys.stdin
         old_stdout = sys.stdout
         old_stderr = sys.stderr
@@ -269,8 +240,8 @@ class Editor(EditorState):
         self.new_btn.connect("clicked",Editor.reset_new)
         
         # run : editor action
-        #self.run_menu = self.builder.get_object("runMenuItem")
-        #self.run_menu.connect("activate",Editor.run_ezhil_code)
+        self.run_menu = self.builder.get_object("runMenuItem")
+        self.run_menu.connect("activate",Editor.run_ezhil_code)
         self.run_btn = self.builder.get_object("RunBtn")
         self.run_btn.connect("clicked",Editor.run_ezhil_code)
         
@@ -471,7 +442,7 @@ class Editor(EditorState):
             response = dialog.run()
             if response == Gtk.ResponseType.CANCEL:
                 dialog.destroy()
-                print("Dismiss save dialog - not saved!")
+                #print("Dismiss save dialog - not saved!")
                 return
             if dialog.get_filename():
                 ed.filename = dialog.get_filename()
@@ -479,19 +450,19 @@ class Editor(EditorState):
         if ed.filename is not "":
             textbuffer = ed.textview.get_buffer()
         filename = ed.filename
-        print("Saved File: " + filename)
+        #print("Saved File: " + filename)
         ed.StatusBar.push(0,"Saved File: " + filename)
         index = filename.replace("\\","/").rfind("/") + 1
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)
         ed.window.set_title(filename[index:] + ed.TitlePrefix)
         try:
             with codecs.open(filename, "r+","utf-8") as file:
-                file.write(text.decode("utf-8"))
+                file.write(PYTHON3 and text or text.decode("utf-8"))
                 file.close()
         except IOError as ioe:
             # new file:
             with codecs.open(filename, "w","utf-8") as file:
-                file.write(text.decode("utf-8"))
+                file.write(PYTHON3 and text or text.decode("utf-8"))
                 file.close()
         textbuffer.set_modified(False)
         return

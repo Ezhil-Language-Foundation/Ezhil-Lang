@@ -267,6 +267,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="newMenuItem">
+                        <accelerator key="n" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -276,6 +277,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="openMenuItem">
+			<accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-open</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -285,6 +287,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem3">
+			<accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-save</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -309,6 +312,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="quitMenuItem">
+			<accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -375,40 +379,34 @@
               <object class="GtkMenuItem" id="examplesMenu">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Examples</property>
+                <property name="label" translatable="yes">E_xamples</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
- <!-- 
-
-           <child>
-              <object class="GtkMenuItem" id="RunMenu">
-                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Edit</property>
-                <property name="use_underline">True</property>
-                <child type="submenu">
-                  <object class="GtkMenu" id="menuN">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-             
-                <child>
-                  <object class="GtkToolButton" id="RunMenuItem">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">run</property>
-                    <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-media-play</property>
-                  </object>
-                </child>                
+            <child>
+             <object class="GtkImageMenuItem" id="evaluateMenu">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Examples</property>
+                <property name="label">E_valuate</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="runMenuItem">
+                        <property name="label">gtk-media-play</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
-
--->            
             <child>
               <object class="GtkImageMenuItem" id="helpMenu">
                 <property name="visible">True</property>

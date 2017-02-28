@@ -22,10 +22,11 @@ if PYTHON3:
 class EzhilCustomFunction(object):
     _instance = None
     def __init__(self):
-        global raw_input
         object.__init__(self)
-        self.raw_input_fcn = raw_input
-        
+        if PYTHON3:
+            self.raw_input_fcn = input 
+        else:
+            self.raw_input_fcn = raw_input 
     @staticmethod
     def get_instance():
         if not EzhilCustomFunction._instance:
@@ -38,7 +39,10 @@ class EzhilCustomFunction(object):
     
     @staticmethod
     def reset():
-        EzhilCustomFunction.get_instance().raw_input_fcn = raw_input
+        if PYTHON3:
+            EzhilCustomFunction.get_instance().raw_input_fcn = input
+        else:
+            EzhilCustomFunction.get_instance().raw_input_fcn = raw_input
     
     @staticmethod
     def set(newfcn):
