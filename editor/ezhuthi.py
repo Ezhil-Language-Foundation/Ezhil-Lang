@@ -12,6 +12,7 @@ import gi
 import ezhil
 import tempfile
 import threading
+import multiprocessing
 import time
 
 PYTHON3 = (sys.version[0] == '3')
@@ -21,6 +22,7 @@ if PYTHON3:
 gi.require_version('Gtk','3.0')
 
 from gi.repository import Gtk, GObject, GLib, Pango
+from undobuffer import UndoableBuffer;
 
 # Class from http://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html?highlight=textbuffer
 class SearchDialog(Gtk.Dialog):
@@ -80,7 +82,7 @@ class EditorState:
         self.filename = os.path.join(u'examples',u'untitled.n')
         self.file_modified = False
         self.count = 0
-
+        
         # cosmetics
         self.TitlePrefix = u" -சுவடு எழுதி"
         
@@ -97,30 +99,57 @@ class EditorState:
         r['char_count'] = self.textbuffer.get_char_count()
         r['modified'] = self.is_edited()
         return r
-    
-class ThreadedRunner(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self,name="ThreadedEzhilEvaluator")
-    
+
+def MPRunner_actor(pipe,filename):
+    is_success = False
+    ezhil.EzhilCustomFunction.set(Editor.dummy_input)
+    old_stdin = sys.stdin
+    old_stdout = sys.stdout
+    old_stderr = sys.stderr
+    tmpfilename = tempfile.mktemp()+".n"
+    res_std_out = u""
+    old_exit = sys.exit
+    sys.exit = Editor.dummy_exit
+    try:
+        sys.stdout = codecs.open(tmpfilename,"w","utf-8")
+        sys.stderr = sys.stdout;
+        executer = ezhil.EzhilFileExecuter(filename)
+        executer.run()
+        is_success = True
+    except Exception as e:
+        print(u" '{0}':\n{1}'".format(filename, unicode(e)))
+    finally:
+        sys.exit = old_exit
+        sys.stdout.flush()
+        sys.stdout.close()
+        with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
+            res_std_out = fp.read()
+        sys.stdout = old_stdout
+        sys.stderr = old_stderr
+        sys.stdin = old_stdin
+    pipe.send([ res_std_out,is_success] )
+    pipe.close()
+
+class MPRunner:
+    is_success = False
+    def __init__(self,timeout=150):
+        self.timeout = timeout
+
     @staticmethod
     def update_fcn(args):
         res_std_out,is_success=args
         ed = Editor.get_instance()
         ed.tend = time.time()
-        time_desc = u" %0.3g seconds"%(ed.tend - ed.tstart)
+        time_desc = u" %0.3g வினாடி"%(ed.tend - ed.tstart)
         ed.console_buffer.set_text( res_std_out )
         tag = is_success and ed.tag_pass or ed.tag_fail
         start = ed.console_buffer.get_start_iter()
         end = ed.console_buffer.get_end_iter()
         ed.console_buffer.apply_tag(tag,start,end)
-        ed.StatusBar.push(0,"File %s ran %s %s"%(ed.filename,["with errors ","without errors"][is_success],time_desc))
+        ed.StatusBar.push(0,u"உங்கள் நிரல் '%s' %s %s நேரத்தில் இயங்கி முடிந்தது"%(ed.filename,[u"பிழை உடன்",u"பிழையில்லாமல்"][is_success],time_desc))
         return
-        
-    def run(self):
-        #print("Kickstarting ... ThreadedRunner")
-        
-        ezhil.EzhilCustomFunction.set(Editor.dummy_input)
-        
+
+    def run(self,filename):
         ed = Editor.get_instance()
         if ( ed.is_edited() ):
             #document is edited but not saved;
@@ -132,36 +161,47 @@ class ThreadedRunner(threading.Thread):
             dialog.run()
             dialog.destroy() #OK or Cancel don't matter
             return False
-        filename = ed.filename
+
+        # Start bar as a process
+        parent_conn, child_conn = multiprocessing.Pipe()
         ed.tstart = time.time()
-        old_stdin = sys.stdin
-        old_stdout = sys.stdout
-        old_stderr = sys.stderr
-        is_success = False
-        tmpfilename = tempfile.mktemp()+".n"
-        res_std_out = u""
-        old_exit = sys.exit
-        sys.exit = Editor.dummy_exit
-        try:
-            sys.stdout = codecs.open(tmpfilename,"w","utf-8")
-            sys.stderr = sys.stdout;
-            executer = ezhil.EzhilFileExecuter(filename)
-            executer.run()
-            is_success = True
-        except Exception as e:
-            print(u"Failed executing file '{0}':\n{1}'".format(filename, unicode(e)))
-        finally:
-            sys.exit = old_exit
-            sys.stdout.flush()
-            sys.stdout.close()
-            with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
-                res_std_out = fp.read()
-            sys.stdout = old_stdout
-            sys.stderr = old_stderr
-            sys.stdin = old_stdin
-            ezhil.EzhilCustomFunction.reset()
-        GLib.idle_add( ThreadedRunner.update_fcn, [ res_std_out,is_success ])
-        return None
+        p = multiprocessing.Process(target=MPRunner_actor,args=([child_conn,filename]))
+        p.start()
+        child_conn.close()
+        if parent_conn.poll(self.timeout):
+            res_std_out, is_success = parent_conn.recv()
+            p.join(0)
+            parent_conn.close()
+        elif p.is_alive():
+            #print("running... let's kill it...")
+            # Terminate
+            p.terminate()
+            p.join()
+            is_success = False
+            res_std_out = u"timeout %g(s) reached - program taking too long\n"%self.timeout
+        else:
+            is_success = False
+            res_std_out = u"unknown!"
+        GLib.idle_add( MPRunner.update_fcn, [ res_std_out,is_success ])
+        return
+
+class GtkStaticWindow:
+    _instance = None
+    @staticmethod
+    def get_instance():
+        if not GtkStaticWindow._instance:
+            GtkStaticWindow._instance = GtkStaticWindow()
+        return GtkStaticWindow._instance
+
+    def __init__(self):
+        self.gui = threading.Thread(target=lambda : Gtk.main_iteration())
+        self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
+        self.window.set_default_size(50,20) #vanishingly small size
+        self.window.connect("delete-event", Gtk.main_quit)
+        self.window.set_title(u"Child process window")
+        self.window.set_decorated(False)
+        self.window.show_all()
+        self.gui.start()
 
 class Editor(EditorState):
     _instance = None
@@ -169,23 +209,22 @@ class Editor(EditorState):
         EditorState.__init__(self)
         Editor._instance = self
         self.builder.add_from_file("res/editor.glade")
-
-        
         if filename:
             self.filename = filename
-        
         ## construct the GUI from GLADE
         self.window = self.builder.get_object("ezhilEditorWindow")
         self.set_title()
         self.window.set_resizable(True)
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
-        self.console_textview.set_editable(False)
+        #self.console_textview.set_editable(False)
         self.console_textview.set_cursor_visible(False)
+        self.console_textview.set_buffer(UndoableBuffer())
         self.console_buffer = self.console_textview.get_buffer()
         self.scrolled_codeview = self.builder.get_object("scrolledwindow1")
         self.textview = self.builder.get_object("codeEditorTextView")
         self.StatusBar = self.builder.get_object("editorStatus")
+        self.textview.set_buffer(UndoableBuffer())
         self.textbuffer = self.textview.get_buffer()
         self.scrolled_codeview.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.AUTOMATIC)
         # comment purple
@@ -203,7 +242,7 @@ class Editor(EditorState):
         self.tag_text = self.textbuffer.create_tag("text",foreground="black")
         self.tag_found = self.textbuffer.create_tag("found",
             background="yellow")
-        
+                
         # for console buffer
         self.tag_fail  = self.console_buffer.create_tag("fail",
             weight=Pango.Weight.SEMIBOLD,foreground="red")
@@ -222,6 +261,11 @@ class Editor(EditorState):
 
         cp_menu = self.builder.get_object("copy_item")
         cp_menu.connect("activate",Editor.copy_action)
+        
+        # for code textview
+        #self.textview.connect("backspace",Editor.on_codebuffer_edited)
+        #self.textview.connect("delete-from-cursor",Editor.on_codebuffer_edited)
+        #self.textview.connect("insert-at-cursor",Editor.on_codebuffer_edited)
         
         # search action in text buffer
         search_menu = self.builder.get_object("search_item")
@@ -278,9 +322,31 @@ class Editor(EditorState):
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
 
     # todo - at every keystroke we need to run the syntax highlighting
-    def run_syntax_highlighting(self,text):
+    @staticmethod
+    def on_codebuffer_edited(*args):
+        ed = Editor.get_instance()
+        mrk_start = ed.textbuffer.get_insert()
+        m_start = ed.textbuffer.get_iter_at_mark(mrk_start)
+        mrk_end = ed.textbuffer.get_insert()
+        m_end = ed.textbuffer.get_iter_at_mark(mrk_end)
+        m_end.forward_line()
+        while not m_start.starts_line():
+            m_start.backward_char()
+        text = ed.textbuffer.get_text(m_start,m_end,True)
+        try:
+            ed.run_syntax_highlighting(text,[m_start,m_end])
+        except Exception as e:
+            ed.textbuffer.set_text(m_start,m_end,text)
+            print(u"skip exception %s"%e)
+        return False #callback was not handled AFAIK
+
+    def run_syntax_highlighting(self,text,bounds=None):
         EzhilToken = ezhil.EzhilToken
-        start,end = self.textbuffer.get_bounds()
+        if not bounds:
+            start,end = self.textbuffer.get_bounds()
+        else:
+            start,end = bounds
+        
         self.textbuffer.delete(start,end)
         lines = text.split(u"\n")
         lexer = Tokenizer()
@@ -396,10 +462,10 @@ class Editor(EditorState):
             title = "Ezhil language IDE"
         else:
             title = args[1]
-        
-        ed = Editor.get_instance()
-        dialogWindow = Gtk.MessageDialog(ed.window,
-                              Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+        static_window = GtkStaticWindow.get_instance()
+        window = static_window.window
+        dialogWindow = Gtk.MessageDialog(window,
+                              Gtk.DialogFlags.MODAL,
                               Gtk.MessageType.QUESTION,
                               Gtk.ButtonsType.OK_CANCEL,
                               message)
@@ -410,7 +476,6 @@ class Editor(EditorState):
         userEntry = Gtk.Entry()
         userEntry.set_size_request(257,0)
         dialogBox.pack_end(userEntry, False, False, 0)
-        
         dialogWindow.show_all()
         response = dialogWindow.run()
         text = userEntry.get_text() 
@@ -421,11 +486,10 @@ class Editor(EditorState):
     
     @staticmethod
     def run_ezhil_code(menuitem,arg1=None):
-        runner = ThreadedRunner();
-        runner.run()
-        GLib.idle_add( lambda :  runner.is_alive() and runner.join() or None )
-        while runner.is_alive() and Gtk.events_pending():
-            Gtk.main_iteration()
+        ed = Editor.get_instance()
+        runner = MPRunner()
+        GLib.idle_add( lambda :  Gtk.main_iteration())
+        runner.run(ed.filename)
         return
     
     @staticmethod
@@ -456,7 +520,7 @@ class Editor(EditorState):
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)
         ed.window.set_title(filename[index:] + ed.TitlePrefix)
         try:
-            with codecs.open(filename, "r+","utf-8") as file:
+            with codecs.open(filename, "w","utf-8") as file:
                 file.write(PYTHON3 and text or text.decode("utf-8"))
                 file.close()
         except IOError as ioe:

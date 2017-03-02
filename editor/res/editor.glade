@@ -170,8 +170,7 @@
               <object class="GtkMenuToolButton" id="example">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">examples</property>
-                <property name="label" translatable="yes">examples</property>
+                <property name="label" translatable="yes">உதாரணங்கள்</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-dnd-multiple</property>
               </object>
@@ -287,7 +286,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem3">
-			<accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+			            <accelerator key="S" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-save</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -376,18 +375,34 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="examplesMenu">
+              <object class="GtkImageMenuItem" id="examplesMenu">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">E_xamples</property>
+                <property name="label" translatable="yes">உதாரணங்கள் (_M)</property>
                 <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menuExamples">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <!-- TBD -->
+                      <object class="GtkImageMenuItem" id="exItem0">
+                        <property name="label">gtk-media-play</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
              <object class="GtkImageMenuItem" id="evaluateMenu">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">E_valuate</property>
+                <property name="label">கணக்கிடு (_V)</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">False</property>
                 <child type="submenu">
