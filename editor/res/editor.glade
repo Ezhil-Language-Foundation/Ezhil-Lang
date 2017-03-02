@@ -154,6 +154,30 @@
               </packing>
             </child>
             <child>
+              <object class="GtkToolButton" id="UndoBtn">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-undo</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="RedoBtn">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-redo</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolButton" id="RunBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -311,7 +335,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="quitMenuItem">
-			<accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+			            <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>

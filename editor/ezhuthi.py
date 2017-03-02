@@ -198,7 +198,7 @@ class GtkStaticWindow:
         self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.set_default_size(50,20) #vanishingly small size
         self.window.connect("delete-event", Gtk.main_quit)
-        self.window.set_title(u"Child process window")
+        self.window.set_title(u"எழில் இயக்கி சாளரம்")
         self.window.set_decorated(False)
         self.window.show_all()
         self.gui.start()
@@ -231,23 +231,24 @@ class Editor(EditorState):
         # keywords orange
         # text black
         # literal green
+        self.default_font = u"Sans Italic 16"
         self.tag_comment  = self.textbuffer.create_tag("comment",
-            weight=Pango.Weight.SEMIBOLD,foreground="red")
+            weight=Pango.Weight.SEMIBOLD,foreground="red",font=self.default_font)
         self.tag_keyword  = self.textbuffer.create_tag("keyword",
-            weight=Pango.Weight.BOLD,foreground="blue")
+            weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font)
         self.tag_literal  = self.textbuffer.create_tag("literal",
-            style=Pango.Style.ITALIC,foreground="green")
+            style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
         self.tag_operator = self.textbuffer.create_tag("operator",
-            weight=Pango.Weight.SEMIBOLD,foreground="olive")
-        self.tag_text = self.textbuffer.create_tag("text",foreground="black")
-        self.tag_found = self.textbuffer.create_tag("found",
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="olive")
+        self.tag_text = self.textbuffer.create_tag("text",font=self.default_font,foreground="black")
+        self.tag_found = self.textbuffer.create_tag("found",font=self.default_font,
             background="yellow")
                 
         # for console buffer
         self.tag_fail  = self.console_buffer.create_tag("fail",
-            weight=Pango.Weight.SEMIBOLD,foreground="red")
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
         self.tag_pass  = self.console_buffer.create_tag("pass",
-            weight=Pango.Weight.SEMIBOLD,foreground="green")
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
         
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
@@ -261,7 +262,13 @@ class Editor(EditorState):
 
         cp_menu = self.builder.get_object("copy_item")
         cp_menu.connect("activate",Editor.copy_action)
-        
+
+        # for undo-redo buttons
+        self.undo_btn = self.builder.get_object("UndoBtn")
+        self.redo_btn = self.builder.get_object("RedoBtn")
+        self.undo_btn.connect("clicked",Editor.undo_action)
+        self.redo_btn.connect("clicked",Editor.redo_action)
+
         # for code textview
         #self.textview.connect("backspace",Editor.on_codebuffer_edited)
         #self.textview.connect("delete-from-cursor",Editor.on_codebuffer_edited)
@@ -320,6 +327,22 @@ class Editor(EditorState):
         n_end = self.textbuffer.get_end_iter()
         n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
+
+    @staticmethod
+    def redo_action(*args):
+        ed = Editor.get_instance()
+        if not ed.textbuffer.can_redo:
+            ed.StatusBar.push(0,u"திருத்தியில் மீட்க்க எதுவும் இல்லை")
+            return
+        ed.textbuffer.redo()
+
+    @staticmethod
+    def undo_action(*args):
+        ed = Editor.get_instance()
+        if not ed.textbuffer.can_undo:
+            ed.StatusBar.push(0,u"திருத்தியில் மாற்ற எதுவும் இல்லை")
+            return
+        ed.textbuffer.undo()
 
     # todo - at every keystroke we need to run the syntax highlighting
     @staticmethod
@@ -405,7 +428,7 @@ class Editor(EditorState):
     def clear_buffer(menuitem,arg1=None):
         ed = Editor.get_instance()
         ed.console_buffer.set_text(u"")
-        ed.StatusBar.push(0,u"Evaluate buffer cleared")
+        ed.StatusBar.push(0,u"நிரல் வெளிப்பாடு அழிக்கப்பட்டது")
     
     @staticmethod
     def reset_new(menuitem,arg1=None):
@@ -459,7 +482,7 @@ class Editor(EditorState):
     def dummy_input(*args):
         message= not args and "Enter Input" or args[0]
         if not args or len(args) < 2:
-            title = "Ezhil language IDE"
+            title = u"எழுதி - எழில் மொழி செயலி" #Ezhil language IDE
         else:
             title = args[1]
         static_window = GtkStaticWindow.get_instance()
@@ -515,7 +538,7 @@ class Editor(EditorState):
             textbuffer = ed.textview.get_buffer()
         filename = ed.filename
         #print("Saved File: " + filename)
-        ed.StatusBar.push(0,"Saved File: " + filename)
+        ed.StatusBar.push(0,u"உங்களது நிரல் சேமிக்க பட்டது: " + filename)
         index = filename.replace("\\","/").rfind("/") + 1
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)
         ed.window.set_title(filename[index:] + ed.TitlePrefix)
@@ -564,7 +587,7 @@ class Editor(EditorState):
         filename = ed.filename
         textbuffer = textview.get_buffer()
         #print("Opened File: " + filename)
-        StatusBar.push(0,"Opened File: " + filename)
+        StatusBar.push(0, filename+u" - நிரல் திறந்தாச்சு")
         #print("file =>",filename)
         Window.set_title(filename + u" - சுவடு எழுதி")
         try:
@@ -668,6 +691,7 @@ class Editor(EditorState):
         Editor._instance = newinst
         return Editor._instance
 
+# TODO - options for 'debug', 'LANG', 'encoding' etc..
 if __name__ == u"__main__":
     os.putenv('LANG','ta_IN.utf8')
     GObject.threads_init()
