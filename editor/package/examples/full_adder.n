@@ -1,0 +1,33 @@
+# Ref: https://en.wikipedia.org/wiki/Adder_(electronics)#Full_adder
+
+# (C) முத்தையா அண்ணாமலை 2015
+# எழில் தமிழ் நிரலாக்க மொழி நிரல் உதாரணம்
+
+# 11 Std  lesson on logic operations
+
+எண்_1 = [True,True,False,False]
+எண்_2 = [True,False,True,False]
+எண்_3 = [True,False]
+
+பதிப்பி "# i1  i2    ci    sum    c_out"
+itr2 = 0
+
+@( itr2 < 2 ) வரை
+    எண்_மதிப்பு3 = எண்_3[itr2] ; #carry
+    itr = 0
+    @( itr < 4 ) வரை
+        எண்_மதிப்பு1 = எண்_1[itr] #in1
+        எண்_மதிப்பு2 = எண்_2[itr] #in2
+        
+        # full-adder equations
+        கூட்டு = xor( எண்_மதிப்பு1 , எண்_மதிப்பு2 , எண்_மதிப்பு3)
+        கேரி  =  (எண்_மதிப்பு1 & எண்_மதிப்பு2) | (எண்_மதிப்பு3 & ( xor(எண்_மதிப்பு2, எண்_மதிப்பு1) )) 
+        
+        அச்சிடு("%d) in1=%d in2=%d cin=%d => s = %d, c = %d", itr2*4 + 1 + itr, எண்_மதிப்பு1, எண்_மதிப்பு2, எண்_மதிப்பு3, கூட்டு, கேரி ) 
+        itr = itr + 1
+    முடி
+   
+   itr2 = itr2 + 1
+முடி
+
+exit(0)

@@ -1,0 +1,47 @@
+# (C) முத்தையா அண்ணாமலை 2015
+# உரிமம் : போது
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Ref: https://en.wikibooks.org/wiki/A_Beginner%27s_Python_Tutorial/Functions
+
+
+printf ("Welcome to calc3.n")
+printf ("your options are:")
+
+@(எண் = 1, எண் > 0, எண் = எண் + 1) ஆக
+
+    printf (" ")
+    printf ("1) Addition")
+    printf ("2) Subtraction")
+
+    printf ("3) Multiplication")
+
+    printf ("4) Division")
+    printf ("5) Quit calculator.py")
+    printf (" ")
+    
+	choice =  int( உள்ளீடு ( "உள்ளீடு >>" ) )
+
+    @( choice == 1 ) ஆனால்
+        a = int( உள்ளீடு ( "number 1 >>" ) )
+        b = int( உள்ளீடு ( "number 2 >>" ) )
+        printf("sum => %d",a+b)
+    @( choice == 2 ) இல்லைஆனால்
+        a = int( உள்ளீடு ( "number 1 >>" ) )
+        b = int( உள்ளீடு ( "number 2 >>" ) )
+        printf("diff => %d",a-b)        
+    @( choice == 3 ) இல்லைஆனால்
+        a = int( உள்ளீடு ( "number 1 >>" ) )
+        b = int( உள்ளீடு ( "number 2 >>" ) )
+        printf("mul => %d",a*b)
+    @( choice == 4 ) இல்லைஆனால்
+        a = int( உள்ளீடு ( "number 1 >>" ) )
+        b = int( உள்ளீடு ( "number 2 >>" ) )
+        printf("div => %d",a/float(b))       
+      இல்லை #5
+          பதிப்பி "exit"
+          எண் = -1   
+      முடி
+  
+      #பதிப்பி எண்
+முடி

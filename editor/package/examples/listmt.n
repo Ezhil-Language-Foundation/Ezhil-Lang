@@ -1,0 +1,2 @@
+# empty list is valid/parser test
+சில்லரை = []

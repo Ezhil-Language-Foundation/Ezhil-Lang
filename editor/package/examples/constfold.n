@@ -1,0 +1,8 @@
+# constant folding example
+x = 3*4
+y = 2 + 4
+printf("x=%d, y=%d",x,y);
+# constant folding is different from constant
+# propagation, which reduces this code
+# x = 3
+# y = x + 4

@@ -1,0 +1,32 @@
+# (C) முத்தையா அண்ணாமலை 2013, 2015
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+## sort descending 
+நிரல்பாகம்  bubble_sort ( n )
+  i = 0;
+  @( i < len(n) ) வரை
+     j = i;
+     @( j < len(n) ) வரை
+              @( n[j] > n[i] ) ஆனால்
+              	  tmp = n[j];
+               	  n[j] = n[i];
+		  n[i] = tmp;
+              முடி 
+              j = j + 1 
+    முடி
+    i = i + 1
+  முடி
+  # comment .1
+  # அணிகள் குறிப்புகளால் பறிமாரப்படுகின்றன 
+  # (arrays are passed by pointers)
+  பின்கொடு  n; # not necessary
+முடி
+
+x = [1,2,4,2,5,0,6]
+பதிப்பி "un-sorted => ",x
+y = bubble_sort( x )
+
+# comment .2
+# both x and y are same object! see comment #1
+பதிப்பி "sorted descending=> ",y
+பதிப்பி "sorted descending=> ",x

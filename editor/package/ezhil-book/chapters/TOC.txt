@@ -1,0 +1,61 @@
+Reference: "Ezhil : A Tamil Programming Language" http://arxiv.org/abs/0907.4960 
+PDF ref: http://arxiv.org/pdf/0907.4960v1
+
+Github : Source code : https://github.com/arcturusannamalai/Ezhil-Lang
+Download code: https://github.com/arcturusannamalai/Ezhil-Lang/archive/master.zip
+Follow us on Twitter: @ezhillang
+
+Language Keywords, Statements : http://ezhillang.org/grammar.html
+
+Ezhil - TOC
+1. Introduction to programming language;
+   1.1. What you can do with programming languages
+   1.2. Features of Ezhil (review - based on PDF document "Ezhil : A Tamil Programming Language")
+   1.3. Graphics, Functions, Files
+
+2. Introduce print,  arithmetic calculation etc.       
+    2.1 Hello World program (See: program - hello.n, vannakm.n)
+        2.1.1 How to start ezhil in interpreter mode; $ ez 
+        2.1.2 Exit ezhil interpreter ; exit()
+    2.2 Use Ezhil as calculator (See: program - calc_asmd.n )
+        2.2.1 Add, Sub, Mul, Divide, Power
+        2.2.2 Special constants pi(), e()
+        2.2.3 Math functions - Sin, Cos, Tan, Log, Log10
+    2.3 Reading input from user : உள்ளீடு - input(), சரம்_உள்ளீடு - raw_input() (See program: age.n )
+    2.4 Small program to find bill of sale for fireworks using input() and output.
+
+3. Strings
+    3.1 String properties - length (See program: string_demo.n )
+    3.2 Joining strings 
+    3.3 Sorting strings - use lists
+    3.4 Find, Replace strings 
+    3.5 Working with characters
+
+4. Conditionals    
+    4.1 Explain Logical operators, if-then-else to use logical thinking
+    4.2 Voting game (see: program - age.n )    
+    4.3 Quiz program / 20 questions; (Reference: http://en.wikipedia.org/wiki/20_questions )
+
+5. Loops
+    5.1 Repetition - While loop  (see: program - guess.n, square_loop.n )
+    5.2 Break, Continue
+    5.3 Guessing game    (see: program - guess.n )
+    5.4 Develop nested loops - multiplication tables (see: program - tables.n)
+
+6. Working w/ Turtles,
+    6.1 Forward, Backward, Right, Left (see: program - square.n )
+    6.2 Colors, Text, (see: , yinyang.n )
+    6.3 Pen Up, Pen Down, Clear screen (see: chaos.n )
+    6.4 Complex shapes with recursion (see:  fern.n)
+
+7. Functions,
+   7.1 Recursion to calculate GCD; ( gcd.n - program for gcd as a recursive function )
+   7.2 Recursion - in context of Turtle graphics  
+   7.3 Factorial : ( fact.n - program for factorial as recursive function )
+   7.4 Prime number calculation : (see: program primes.n )
+
+8. What next
+   8.1 File IO. File processing, read, write, etc. (See: program - filerw.n, filedemo.n )
+   8.2 Learning Ezhil, advanced tasks
+   8.3 Learning Python for general purpose powerful language
+   8.4 Conclusion

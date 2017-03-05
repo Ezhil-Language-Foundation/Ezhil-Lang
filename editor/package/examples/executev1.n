@@ -1,0 +1,11 @@
+# (C) முத்தையா அண்ணாமலை 2015
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+SRCDIR = getenv("EZHIL_TEST_PATH")
+@( !SRCDIR )ஆனால்
+    SRCDIR = "tests/"
+	பதிப்பி "using default ", SRCDIR	
+முடி
+
+execute(SRCDIR+"hola.n") #initiates varible x to value 5
+exit(x-5)

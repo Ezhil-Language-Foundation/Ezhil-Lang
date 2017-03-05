@@ -1,0 +1,15 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# sum / கூட்டு  all values of x.
+நிரல்பாகம்  கூட்டு ( x )
+    மு = 0
+    @( டி = 0, டி < len(x), டி = டி+1 )  ஆக
+               மு  =  மு  + x[டி] #';' is optional, not preferred unless you want to squeeze many statements on one line
+    முடி
+
+    பின்கொடு மு
+முடி
+
+பதிப்பி  "sum =>", கூட்டு ( range(1,5+1) ) #15 
+பதிப்பி  "sum =>", கூட்டு ( range(1,10+1) ) #55

@@ -1,0 +1,17 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# examples from Python source code
+# Licensed under Python 2.7x terms
+
+# TO randomcolor
+#   setcolor pick [ red orange yellow green blue violet ]
+# END
+# clearscreen
+# repeat 36 [ randomcolor square random 200 rt 10 ]
+
+# randomcolor செய்ய
+#    setcolor தேர்வு [சிவப்பு ஆரஞ்சு, மஞ்சள், பச்சை நீலம் ஊதா]
+# END
+# clearscreen
+# மீண்டும் 36 [randomcolor சதுர சீரற்ற 200 RT 10]

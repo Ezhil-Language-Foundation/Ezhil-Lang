@@ -1,0 +1,9 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# unsupported constructs in Ezhil
+hexsum = 0xC0ffee - 0x55 + 0xff 
+0xdeadBeeF
+
+பதிப்பி   hexsum
+பதிப்பி   0xdeadBeeF

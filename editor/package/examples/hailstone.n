@@ -1,0 +1,31 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Ref: http://rosettacode.org/wiki/Hailstone_sequence
+# The Hailstone sequence of numbers can be generated from a starting positive integer, எண் by:
+#
+#    If எண் is 1 then the sequence ends.
+#    If எண் is even then the next எண் of the sequence = n/2
+#    If எண் is odd then the next எண் of the sequence = (3 * n) + 1 
+
+நிரல்பாகம்  hailstone ( எண் )
+           பதிப்பி "=> ",எண் #hailstone seq
+	    @( எண் == 1 )   ஆனால் 	        
+	        பின்கொடு எண்
+	    முடி
+
+	      @( (எண்%2) == 1 )  ஆனால்
+	      	   பின்கொடு hailstone( 3*எண் + 1)
+              இல்லை
+	           பின்கொடு hailstone( எண்/2 )
+              முடி
+முடி
+
+
+எண்கள் = [5,17,19,23,37]
+@(எண்கள் இல் இவ்வெண்) ஒவ்வொன்றாக
+   பதிப்பி "****** calculating hailstone seq for ",இவ்வெண்," *********"
+   val = hailstone( இவ்வெண் )
+   assert (val == 1)
+   பதிப்பி "**********************************************"
+முடி

@@ -1,0 +1,52 @@
+# (C) முத்தையா அண்ணாமலை 2015
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+பதிப்பி "வணக்கம் உலகம்!"
+
+பதிப்பி "ALL TAMIL LETTERS"
+idx = 0
+@( tamil_letters() இல் இ) ஒவ்வொன்றாக
+    idx = idx + 1
+பதிப்பி  "தமிழ்எழுத்து ", idx,"=>",இ
+முடி
+பதிப்பி "xxxxxxxxxxxxxxxxxxxxxxx"
+பதிப்பி "ALL UYIR LETTERS"
+பதிப்பி "xxxxxxxxxxxxxxxxxxxxxxx"
+idx = 0
+@( tamil_uyir() இல் இ) ஒவ்வொன்றாக
+    idx = idx + 1
+பதிப்பி  "தமிழ்எழுத்து ", idx,"=>",இ
+முடி
+பதிப்பி "xxxxxxxxxxxxxxxxxxxxxxx"
+
+tamil_uyir()
+உயிர்எழுத்து()
+tamil_mei()
+மெய்எழுத்து()
+tamil_kuril()
+குரில்எழுத்து()
+tamil_nedil()
+நேடில்எழுத்து()
+tamil_vallinam()
+வல்லினம்எழுத்து()
+tamil_mellinam()
+மெல்லினம்()
+tamil_idayinam()
+இடைனம்எழுத்து()
+tamil_agaram()
+அகரம்எழுத்து()
+tamil_uyirmei()
+உயிர்மெய்எழுத்து()
+assert( tamil_istamil_prefix("தனிthanglis") )
+tamil_all_tamil("கலத்தால்அழியாதகாதல்")
+assert( தனித்தமிழா("தனித்தமிழா") )
+assert( !தனித்தமிழா("தனிthanglis") )
+
+tamil_hastamil("தனி124")
+தமிழ்கொண்டதா(" தனித்தமிழா")
+
+tamil_reverse_word(" தனித்தமிழா")
+பதிப்பி அந்தாதிமாற்று(" தனித்தமிழா")
+        
+ "******* வணக்கம்! மீண்டும் சந்திப்போம் *******"
+exit()

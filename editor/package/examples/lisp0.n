@@ -1,0 +1,55 @@
+நிரல்பாகம் process( oper, tok, next_tok )
+            @( oper == "+" ) ஆனால்
+               res = tok +  next_tok;
+                முடி
+            
+            @( oper == "-" )  ஆனால்
+               res = tok - next_tok
+                முடி
+    பின்கொடு    res;
+முடி
+
+exprStr = "( (+ 1 -1) + 1 2 3 (- 5 6) (- 1 1) 0)"
+exprTokens = ["(","(","+",1,-1,")","+",1,2,3,"(","-",5,6,")","(","-",1,1,")",")"]
+
+oper_stack = []
+val_stack = []
+depth = 0
+i = 0
+L = len(exprTokens)
+@( i < L ) வரை
+    tok = exprTokens[i]
+     பதிப்பி tok, val_stack, oper_stack
+    
+    @( tok == "(" ) ஆனால்
+        append( val_stack, tok )
+        depth = depth + 1
+    @( tok == ")" ) இல்லைஆனால்
+        depth = depth - 1
+        oper = pop_list( oper_stack )
+        tok = pop_list( val_stack )
+        @( val_stack[-1] != "(" ) வரை
+            next_tok = pop_list( val_stack )
+            res = process( oper, tok, next_tok )
+            append( val_stack, res )
+            tok = pop_list( val_stack )
+           முடி
+        pop_list(val_stack) #pop out the "("
+        append( val_stack, tok )
+    இல்லை
+        @( tok == "+" ) ஆனால்
+           append( oper_stack, tok ) 
+        @( tok == "-" ) இல்லைஆனால்
+           append( oper_stack, tok )
+           இல்லை
+           append( val_stack, tok )
+           முடி     
+    முடி
+   
+    i = i  + 1
+முடி
+பதிப்பி val_stack,oper_stack
+பதிப்பி depth, i
+
+assert( pop_list(val_stack) == 7 )
+assert( len(oper_stack) == 0 )
