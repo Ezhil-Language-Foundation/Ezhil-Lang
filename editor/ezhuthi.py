@@ -3,7 +3,8 @@
 ##
 ## (C) 2016-2017 Muthiah Annamalai,
 ## Licensed under GPL Version 3
-##
+## Certain sections of code are borrowed from public sources and are attributed accordingly.
+
 from __future__ import print_function
 import codecs
 import sys
@@ -23,6 +24,41 @@ gi.require_version('Gtk','3.0')
 
 from gi.repository import Gtk, GObject, GLib, Pango
 from undobuffer import UndoableBuffer;
+
+# This section of code is borrowed from https://github.com/pyinstaller/pyinstaller/wiki/Recipe-Multiprocessing
+# override multiprocessing pipe in Windows for packaging purposes.
+try:
+    # Python 3.4+
+    if sys.platform.startswith('win'):
+        import multiprocessing.popen_spawn_win32 as forking
+    else:
+        import multiprocessing.popen_fork as forking
+except ImportError:
+    import multiprocessing.forking as forking
+
+if sys.platform.startswith('win'):
+    # First define a modified version of Popen.
+    class _Popen(forking.Popen):
+        def __init__(self, *args, **kw):
+            if hasattr(sys, 'frozen'):
+                # We have to set original _MEIPASS2 value from sys._MEIPASS
+                # to get --onefile mode working.
+                os.putenv('_MEIPASS2', sys._MEIPASS)
+            try:
+                super(_Popen, self).__init__(*args, **kw)
+            finally:
+                if hasattr(sys, 'frozen'):
+                    # On some platforms (e.g. AIX) 'os.unsetenv()' is not
+                    # available. In those cases we cannot delete the variable
+                    # but only set it to the empty string. The bootloader
+                    # can handle this case.
+                    if hasattr(os, 'unsetenv'):
+                        os.unsetenv('_MEIPASS2')
+                    else:
+                        os.putenv('_MEIPASS2', '')
+
+    # Second override 'Popen' class with our modified version.
+    forking.Popen = _Popen
 
 # Class from http://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html?highlight=textbuffer
 class SearchDialog(Gtk.Dialog):
@@ -243,7 +279,6 @@ class Editor(EditorState):
         self.tag_text = self.textbuffer.create_tag("text",font=self.default_font,foreground="black")
         self.tag_found = self.textbuffer.create_tag("found",font=self.default_font,
             background="yellow")
-                
         # for console buffer
         self.tag_fail  = self.console_buffer.create_tag("fail",
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
@@ -694,5 +729,6 @@ class Editor(EditorState):
 # TODO - options for 'debug', 'LANG', 'encoding' etc..
 if __name__ == u"__main__":
     os.putenv('LANG','ta_IN.utf8')
+    multiprocessing.freeze_support()
     GObject.threads_init()
     Editor(len(sys.argv) > 1 and sys.argv[1] or None)
