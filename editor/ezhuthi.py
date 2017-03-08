@@ -284,7 +284,25 @@ class Editor(EditorState):
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
         self.tag_pass  = self.console_buffer.create_tag("pass",
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
-        
+
+        # add keywords bar
+        keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
+        operators16 = [u"@",u"+",u"-",u"*",u"/",u"==",u">",u"<",u">=",u"<=",u"!="]
+        self.widget_keywords = self.builder.get_object("hbox_keywords8")
+        self.widget_operators = self.builder.get_object("hbox_operators16")
+
+        for kw in keywords8:
+            btn = Gtk.Button(kw)
+            self.widget_keywords.pack_start( btn,True, True, 0)
+            btn.connect("clicked",Editor.insert_at_cursor,kw)
+            btn.show()
+
+        for kw in operators16:
+            btn = Gtk.Button(kw)
+            self.widget_operators.pack_start( btn,True, True, 0)
+            btn.connect("clicked",Editor.insert_at_cursor,kw)
+            btn.show()
+
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
         self.abt_menu.connect("activate",Editor.show_about_status)
@@ -349,6 +367,9 @@ class Editor(EditorState):
         self.window.show_all()
         
         self.load_file()
+        #self.textbuffer.connect_after('insert-text', Editor.keep_syntax_highlighting_on)
+        #self.textbuffer.connect_after('delete-range', Editor.keep_syntax_highlighting_on)
+        #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
         Gtk.main()
     
     # update title
@@ -362,6 +383,12 @@ class Editor(EditorState):
         n_end = self.textbuffer.get_end_iter()
         n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
+
+    @staticmethod
+    def insert_at_cursor(widget,value):
+        ed = Editor.get_instance()
+        ed.textbuffer.insert_at_cursor(value)
+        return True
 
     @staticmethod
     def redo_action(*args):
@@ -398,6 +425,18 @@ class Editor(EditorState):
             print(u"skip exception %s"%e)
         return False #callback was not handled AFAIK
 
+    @staticmethod
+    def keep_syntax_highlighting_on(*args):
+        ed = Editor.get_instance()
+        if not ed.is_edited():
+            return
+
+        start,end = ed.textbuffer.get_bounds()
+        text = ed.textbuffer.get_text(start,end,True)
+        ed.run_syntax_highlighting(text,[start,end])
+
+        return
+
     def run_syntax_highlighting(self,text,bounds=None):
         EzhilToken = ezhil.EzhilToken
         if not bounds:
@@ -426,8 +465,7 @@ class Editor(EditorState):
                 is_string = False
                 tok = lexeme.kind
                 is_keyword = False
-                if unicode(lexeme.val) in [u"உள்ளடக்கு",u"பின்கொடு",u"பதிப்பி",u"ஒவ்வொன்றாக",u"@",u"இல்"] \
-                        or EzhilToken.is_keyword(tok):
+                if unicode(lexeme.val) in [u"உள்ளடக்கு",u"பின்கொடு",u"பதிப்பி",u"ஒவ்வொன்றாக",u"@",u"இல்",u"நிறுத்து"] or EzhilToken.is_keyword(tok):
                     is_keyword = True
                     syntax_tag = self.tag_keyword
                 elif EzhilToken.is_id(tok):

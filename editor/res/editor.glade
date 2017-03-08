@@ -49,7 +49,6 @@
   </object>
   <object class="GtkApplicationWindow" id="ezhilEditorWindow">
     <property name="can_focus">False</property>
-    <property name="resizable">True</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
@@ -79,7 +78,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="top_attach">3</property>
             <property name="width">2</property>
             <property name="height">2</property>
           </packing>
@@ -104,7 +103,7 @@
           </object>
           <packing>
             <property name="left_attach">2</property>
-            <property name="top_attach">2</property>
+            <property name="top_attach">3</property>
             <property name="height">2</property>
           </packing>
         </child>
@@ -198,6 +197,10 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-dnd-multiple</property>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
             </child>
             <child>
               <object class="GtkToolButton" id="HelpBtn">
@@ -279,43 +282,43 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkImageMenuItem" id="fileMenu">
+                <property name="label">gtk-file</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">gtk-file</property>
-                <property name="use_stock">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="newMenuItem">
-                        <accelerator key="n" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <accelerator key="n" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="openMenuItem">
-			<accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-open</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem3">
-			            <accelerator key="S" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-save</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <accelerator key="S" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -335,12 +338,12 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="quitMenuItem">
-			            <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
@@ -349,9 +352,9 @@
             </child>
             <child>
               <object class="GtkImageMenuItem" id="editMenu">
+                <property name="label">gtk-edit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">gtk-edit</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
                 <child type="submenu">
@@ -400,16 +403,16 @@
             </child>
             <child>
               <object class="GtkImageMenuItem" id="examplesMenu">
+                <property name="label" translatable="yes">உதாரணங்கள் (_M)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">உதாரணங்கள் (_M)</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menuExamples">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <!-- TBD -->
                       <object class="GtkImageMenuItem" id="exItem0">
                         <property name="label">gtk-media-play</property>
                         <property name="visible">True</property>
@@ -423,10 +426,10 @@
               </object>
             </child>
             <child>
-             <object class="GtkImageMenuItem" id="evaluateMenu">
+              <object class="GtkImageMenuItem" id="evaluateMenu">
+                <property name="label">கணக்கிடு (_V)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">கணக்கிடு (_V)</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">False</property>
                 <child type="submenu">
@@ -448,9 +451,9 @@
             </child>
             <child>
               <object class="GtkImageMenuItem" id="helpMenu">
+                <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">gtk-help</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
                 <child type="submenu">
@@ -476,6 +479,121 @@
             <property name="top_attach">0</property>
             <property name="width">3</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="boxbtns">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox" id="hbox_keywords8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="hbox_operators16">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">3</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
