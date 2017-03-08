@@ -15,6 +15,7 @@ import tempfile
 import threading
 import multiprocessing
 import time
+import re
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -287,9 +288,12 @@ class Editor(EditorState):
 
         # add keywords bar
         keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
-        operators16 = [u"@",u"+",u"-",u"*",u"/",u"==",u">",u"<",u">=",u"<=",u"!="]
+        operators16 = [u"@",u"+",u"-",u"*",u"/",u"%",u"^",u"==",u">",u"<",u">=",u"<=",u"!=",u"!=",u"!",u",",u"(",u")",u"{",u"}",u"()",u"[]"]
+        forms = [u"@(  )\t ஆனால் \n இல்லை  \n முடி",u" @(  )\t வரை \n முடி",u"நிரல்பாகம்\t உதாரணம் () \n முடி"]
+
         self.widget_keywords = self.builder.get_object("hbox_keywords8")
         self.widget_operators = self.builder.get_object("hbox_operators16")
+        self.widget_forms = self.builder.get_object("hbox_forms")
 
         for kw in keywords8:
             btn = Gtk.Button(kw)
@@ -300,6 +304,12 @@ class Editor(EditorState):
         for kw in operators16:
             btn = Gtk.Button(kw)
             self.widget_operators.pack_start( btn,True, True, 0)
+            btn.connect("clicked",Editor.insert_at_cursor,kw)
+            btn.show()
+
+        for kw in forms:
+            btn = Gtk.Button(u" ".join(re.split("\s+",kw)))
+            self.widget_forms.pack_start( btn, True, True, 0)
             btn.connect("clicked",Editor.insert_at_cursor,kw)
             btn.show()
 
