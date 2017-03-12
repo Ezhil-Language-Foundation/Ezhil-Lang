@@ -98,7 +98,7 @@ class EditorState:
     def __init__(self):
         # Gtk builder objects
         self.builder = Gtk.Builder()
-
+        
         # timing logger
         self.tstart = 0.0
         self.tend = 0.0
@@ -114,7 +114,7 @@ class EditorState:
         self.console_textview = None
         self.console_textbuffer = None
         self.sw = None
-
+        self.autorun = False
         # pure editor state
         self.filename = os.path.join(u'examples',u'untitled.n')
         self.file_modified = False
@@ -149,7 +149,7 @@ def MPRunner_actor(pipe,filename):
     sys.exit = Editor.dummy_exit
     try:
         sys.stdout = codecs.open(tmpfilename,"w","utf-8")
-        sys.stderr = sys.stdout;
+        sys.stderr = sys.stdout
         executer = ezhil.EzhilFileExecuter(filename)
         executer.run()
         is_success = True
@@ -169,9 +169,10 @@ def MPRunner_actor(pipe,filename):
 
 class MPRunner:
     is_success = False
-    def __init__(self,timeout=150):
-        self.timeout = timeout
-
+    def __init__(self,timeout=60):
+        ed = Editor.get_instance()
+        self.timeout = min(timeout,ed.autorun and 5)
+    
     @staticmethod
     def update_fcn(args):
         res_std_out,is_success=args
@@ -184,6 +185,8 @@ class MPRunner:
         end = ed.console_buffer.get_end_iter()
         ed.console_buffer.apply_tag(tag,start,end)
         ed.StatusBar.push(0,u"உங்கள் நிரல் '%s' %s %s நேரத்தில் இயங்கி முடிந்தது"%(ed.filename,[u"பிழை உடன்",u"பிழையில்லாமல்"][is_success],time_desc))
+        if ed.autorun:
+            sys.exit(not is_success)
         return
 
     def run(self,filename):
@@ -210,8 +213,6 @@ class MPRunner:
             p.join(0)
             parent_conn.close()
         elif p.is_alive():
-            #print("running... let's kill it...")
-            # Terminate
             p.terminate()
             p.join()
             is_success = False
@@ -242,9 +243,10 @@ class GtkStaticWindow:
 
 class Editor(EditorState):
     _instance = None
-    def __init__(self,filename=None):
+    def __init__(self,filename=None,autorun=False):
         EditorState.__init__(self)
         Editor._instance = self
+        self.autorun = autorun
         self.builder.add_from_file("res/editor.glade")
         if filename:
             self.filename = filename
@@ -254,7 +256,7 @@ class Editor(EditorState):
         self.window.set_resizable(True)
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
-        #self.console_textview.set_editable(False)
+        ## self.console_textview.set_editable(False)
         self.console_textview.set_cursor_visible(False)
         self.console_textview.set_buffer(UndoableBuffer())
         self.console_buffer = self.console_textview.get_buffer()
@@ -285,7 +287,6 @@ class Editor(EditorState):
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
         self.tag_pass  = self.console_buffer.create_tag("pass",
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
-
         # add keywords bar
         keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
         operators16 = [u"@",u"+",u"-",u"*",u"/",u"%",u"^",u"==",u">",u"<",u">=",u"<=",u"!=",u"!=",u"!",u",",u"(",u")",u"{",u"}",u"()",u"[]"]
@@ -346,7 +347,7 @@ class Editor(EditorState):
         self.open_menu.connect("activate",Editor.open_file)
         self.open_btn = self.builder.get_object("OpenBtn")
         self.open_btn.connect("clicked",Editor.open_file)
-
+        
         # new : editor action
         self.new_menu = self.builder.get_object("newMenuItem")
         self.new_menu.connect("activate",Editor.reset_new)
@@ -357,7 +358,7 @@ class Editor(EditorState):
         self.run_menu = self.builder.get_object("runMenuItem")
         self.run_menu.connect("activate",Editor.run_ezhil_code)
         self.run_btn = self.builder.get_object("RunBtn")
-        self.run_btn.connect("clicked",Editor.run_ezhil_code)
+        run_signal = self.run_btn.connect("clicked",Editor.run_ezhil_code)
         
         # save : editor action save
         self.save_btn = self.builder.get_object("SaveBtn")
@@ -377,6 +378,8 @@ class Editor(EditorState):
         self.window.show_all()
         
         self.load_file()
+        if autorun:
+            GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
         #self.textbuffer.connect_after('insert-text', Editor.keep_syntax_highlighting_on)
         #self.textbuffer.connect_after('delete-range', Editor.keep_syntax_highlighting_on)
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
@@ -385,7 +388,7 @@ class Editor(EditorState):
     # update title
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
-
+    
     def apply_comment_syntax_highlighting(self,c_line):
         syntax_tag = self.tag_comment
         self.textbuffer.insert_at_cursor( c_line )
@@ -393,13 +396,13 @@ class Editor(EditorState):
         n_end = self.textbuffer.get_end_iter()
         n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
-
+    
     @staticmethod
     def insert_at_cursor(widget,value):
         ed = Editor.get_instance()
         ed.textbuffer.insert_at_cursor(value)
         return True
-
+    
     @staticmethod
     def redo_action(*args):
         ed = Editor.get_instance()
@@ -407,7 +410,7 @@ class Editor(EditorState):
             ed.StatusBar.push(0,u"திருத்தியில் மீட்க்க எதுவும் இல்லை")
             return
         ed.textbuffer.redo()
-
+    
     @staticmethod
     def undo_action(*args):
         ed = Editor.get_instance()
@@ -415,7 +418,7 @@ class Editor(EditorState):
             ed.StatusBar.push(0,u"திருத்தியில் மாற்ற எதுவும் இல்லை")
             return
         ed.textbuffer.undo()
-
+    
     # todo - at every keystroke we need to run the syntax highlighting
     @staticmethod
     def on_codebuffer_edited(*args):
@@ -434,7 +437,7 @@ class Editor(EditorState):
             ed.textbuffer.set_text(m_start,m_end,text)
             print(u"skip exception %s"%e)
         return False #callback was not handled AFAIK
-
+    
     @staticmethod
     def keep_syntax_highlighting_on(*args):
         ed = Editor.get_instance()
@@ -602,7 +605,6 @@ class Editor(EditorState):
     def save_file(menuitem,arg1=None):
         ed = Editor.get_instance()
         textbuffer = ed.textview.get_buffer()
-        
         if ed.filename.find("untitled") >= 0:        
             dialog = Gtk.FileChooserDialog("நிரலை சேமிக்கவும்:", ed.window,
                 Gtk.FileChooserAction.SAVE,
@@ -779,4 +781,9 @@ if __name__ == u"__main__":
     os.putenv('LANG','ta_IN.utf8')
     multiprocessing.freeze_support()
     GObject.threads_init()
-    Editor(len(sys.argv) > 1 and sys.argv[1] or None)
+    #debug mode: autorun and quit on the file
+    if len(sys.argv) > 2:
+        arg_autorun = (sys.argv[2].lower() in [u"-autorun",u"--autorun"])
+    else:
+        arg_autorun = False
+    Editor(len(sys.argv) > 1 and sys.argv[1] or None,autorun=arg_autorun)

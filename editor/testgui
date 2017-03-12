@@ -1,0 +1,81 @@
+#!/bin/bash
+# Tests for Ezhil language
+# (C) 2007, 2008, 2013-2016 முத்தையா அண்ணாமலை
+MODEZHIL=`pwd`
+PYV=`python -c 'from sys import version; print(version[0:3])'`
+if [[ $PYV == "2.6" ]]
+then
+    PYCMD="python $MODEZHIL/ezhil_py26.py"
+else
+    PYCMD='python -m ezhil'
+fi
+
+if [ -e success.txt ];
+then
+    rm success.txt
+fi
+if [ -e failed.txt ];
+then
+    rm failed.txt
+fi
+if [ -e dump_file ];
+then
+    rm dump_file
+fi
+
+echo "" > success.txt
+echo "" > failed.txt
+echo "" > dump_file
+
+## run all the success programs
+for i in `ls package/examples/*.n | sort`;
+do
+    RVAL="NA"
+    python ezhuthi.py $i -autorun 2>&1 >> dump_file
+    if [ $? -eq 0 ]
+    then
+        RVAL="OK"
+        echo $i >> success.txt
+    else
+        RVAL="FAIL"
+        echo $i >> failed.txt
+    fi
+    echo "########## Testing file $i -> $RVAL" | tee -a dump_file
+    sleep 0
+done
+
+# TODO: add ezhuthi.py tests maybe to be run interactively atleast
+echo "**********Successful Tests**********" 
+cat success.txt
+echo "*************************************"
+echo "***********Failed Tests**************" 
+cat failed.txt
+
+echo "***********Summary******************"
+echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
+
+# number of failures is always limited, and when you add
+# failed tests you have to bump this up.
+
+NFAIL=0 #03/02/17 - Travis CI is console only
+TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
+echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
+if [ $?  -eq 0 ]
+then
+   echo "########## Expected failures" | tee -a dump_file
+   exitcode=0 # success
+else
+   echo "Expecting $NFAIL failures, but found $TOTFAIL failures" | tee -a dump_file
+   echo "Too few/many failures; some negative tests may have failed" | tee -a dump_file
+   echo "" | tee -a dump_file
+   echo "######### LIST OF FAILED FILES ##############" | tee -a dump_file
+   cat failed.txt | tee -a dump_file
+   echo " " | tee -a dump_file
+   exitcode=255 #failed failures != $NFAIL
+   exit $exitcode
+fi
+
+# cleanup
+rm failed.txt
+rm success.txt
+exit $exitcode
