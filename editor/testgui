@@ -57,7 +57,7 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # number of failures is always limited, and when you add
 # failed tests you have to bump this up.
 
-NFAIL=0 #03/02/17 - Travis CI is console only
+NFAIL=45 #03/12/17 - Travis CI is console only
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]
