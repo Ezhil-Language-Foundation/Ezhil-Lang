@@ -171,7 +171,7 @@ class MPRunner:
     is_success = False
     def __init__(self,timeout=60):
         ed = Editor.get_instance()
-        self.timeout = min(timeout,ed.autorun and 5)
+        self.timeout = min(timeout,ed.autorun and 5 or timeout)
     
     @staticmethod
     def update_fcn(args):
@@ -186,6 +186,9 @@ class MPRunner:
         ed.console_buffer.apply_tag(tag,start,end)
         ed.StatusBar.push(0,u"உங்கள் நிரல் '%s' %s %s நேரத்தில் இயங்கி முடிந்தது"%(ed.filename,[u"பிழை உடன்",u"பிழையில்லாமல்"][is_success],time_desc))
         if ed.autorun:
+            for i in range(1):
+                time.sleep(1)
+                Gtk.main_iteration()
             sys.exit(not is_success)
         return
 
@@ -379,12 +382,16 @@ class Editor(EditorState):
         
         self.load_file()
         if autorun:
-            GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
+            self.do_autorun()
         #self.textbuffer.connect_after('insert-text', Editor.keep_syntax_highlighting_on)
         #self.textbuffer.connect_after('delete-range', Editor.keep_syntax_highlighting_on)
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
-        Gtk.main()
+        #Gtk.main()
     
+    def do_autorun(self):
+        GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
+        return
+        
     # update title
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
@@ -787,3 +794,4 @@ if __name__ == u"__main__":
     else:
         arg_autorun = False
     Editor(len(sys.argv) > 1 and sys.argv[1] or None,autorun=arg_autorun)
+    Gtk.main()
