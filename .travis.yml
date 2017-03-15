@@ -4,6 +4,11 @@ before_script:
   - sleep 3 # give xvfb some time to start
 before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+addons:
+  apt:
+    packages:
+    - python3-gi
+    - python-gi
 sudo: false
 language: python
 python:
@@ -16,10 +21,9 @@ install:
   - python setup.py install && pip install argparse
   - pip install .
   - pip install nose-cov
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]]; then pip install python3-gi; fi
 script:
   - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]];  then ./test3; fi
   - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]];  then ./unittest && ./test;  fi
   - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]];  then ./unittest && ./test;  fi
   - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]];  then cd editor && python testdriver.py; fi
- 
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]];  then cd editor && python testdriver.py; fi
