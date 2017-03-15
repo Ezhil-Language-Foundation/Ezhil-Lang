@@ -7,7 +7,7 @@
 ## Ezhil language Interpreter via Web
 
 ## Ref: http://wiki.python.org/moin/BaseHttpServer
-
+from __future__ import print_function
 import time
 from ezhil import EzhilFileExecuter, EzhilInterpExecuter
 import BaseHTTPServer, tempfile, threading
@@ -31,9 +31,9 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
     
     def do_POST(self):
         query_string = self.rfile.read(int(self.headers['Content-Length']))
-        print query_string
+        print(query_string)
         POSTvars = cgi.parse_qs( query_string )
-        print str(POSTvars)
+        print(str(POSTvars))
         
         if POSTvars.has_key('prog'):
             program ="\n".join(POSTvars['prog'])
@@ -97,26 +97,25 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
             # it from ASCII format I/O since we are in CGI mode.
             progout = progout.decode('utf-8')
             if DEBUG:
-                print u"output = "
-                print progout
+                print(u"output = ")
+                print(progout)
             
             #SUCCESS_STRING = "<H2> Your program executed correctly! Congratulations. </H2>"
             FAILED_STRING = "Traceback (most recent call last)"
             if obj.exitcode != 0 and progout.find(FAILED_STRING) > -1:
-                print u"Exitcode => ",obj.exitcode
+                print(u"Exitcode => ",obj.exitcode)
                 op = u"%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,progout)
             else:
                 failed = False
                 obj.exitcode = 0
                 op = u"%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>"%(program_fmt,progout)
         except Exception as e:
-            print u"FAILED EXECUTION"
-            print str(e)
+            print(u"FAILED EXECUTION",str(e))
             traceback.print_tb(sys.exc_info()[2])
             failed = True
             op = u"%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>"%(program_fmt,str(e))
         else:
-            print u"Output file"
+            print(u"Output file")
             obj.get_output()
         
         prev_page = u"""<script>
@@ -144,10 +143,10 @@ PORT_NUMBER = 8080
 
 if __name__ == "__main__":
     httpd = BaseHTTPServer.HTTPServer((HOST_NAME, PORT_NUMBER), EzhilWeb)
-    print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print(time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER))
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print(time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER))
