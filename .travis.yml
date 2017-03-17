@@ -27,5 +27,6 @@ script:
   - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]];  then ./test3; fi
   - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]];  then ./unittest && ./test;  fi
   - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]];  then ./unittest && ./test;  fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]];  then cd editor && python testdriver.py; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]];  then cd editor && python testdriver.py; fi
+# TBD: based on Travis' support; until them summa keda
+#  - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]];  then cd editor && python testdriver.py; fi
+#  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]];  then cd editor && python testdriver.py; fi
