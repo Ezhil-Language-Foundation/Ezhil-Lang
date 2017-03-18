@@ -16,6 +16,8 @@ import threading
 import multiprocessing
 import time
 import re
+import tamil
+import OSKeyboardWidget
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -317,6 +319,11 @@ class Editor(EditorState):
             btn.connect("clicked",Editor.insert_at_cursor,kw)
             btn.show()
 
+        # on screen keyboard
+        self.editorBox = self.builder.get_object("editorBox")
+        self.oskeyboard = OSKeyboardWidget.TamilKeyboard()
+        self.oskeyboard.build_widget(self.editorBox, self)
+
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
         self.abt_menu.connect("activate",Editor.show_about_status)
@@ -409,7 +416,30 @@ class Editor(EditorState):
         ed = Editor.get_instance()
         ed.textbuffer.insert_at_cursor(value)
         return True
-    
+
+    # Implements Tamil-99 keyboard
+    @staticmethod
+    def insert_tamil99_at_cursor(widget,value):
+        ed = Editor.get_instance()
+        m_start = ed.textbuffer.get_iter_at_mark(ed.textbuffer.get_insert())
+        if not m_start.starts_line():
+            offset = m_start.get_offset()
+            m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
+            old_value = ed.textbuffer.get_text(m_prev,m_start,True)
+            #print(u"%s"%old_value.decode("UTF-8"))
+            #print(u"%s"%value)
+            try:
+                #value = tamil.utf8.joinMeiUyir(value,old_value.decode("UTF-8"))
+                uyir_idx = tamil.utf8.uyir_letters.index(value)
+                mei_idx = tamil.utf8.agaram_letters.index(old_value.decode("UTF-8"))
+                value = tamil.utf8.uyirmei_constructed(mei_idx, uyir_idx)
+                ed.textbuffer.backspace(m_start,False,True)
+                #value = value.decode("UTF-8")
+            except Exception as e:
+                pass #print(str(e).decode("UTF-8"))
+        ed.textbuffer.insert_at_cursor(value)
+        return True
+
     @staticmethod
     def redo_action(*args):
         ed = Editor.get_instance()

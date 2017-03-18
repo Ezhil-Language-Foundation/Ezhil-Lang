@@ -54,41 +54,11 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
-            <property name="min_content_width">450</property>
-            <property name="min_content_height">450</property>
-            <child>
-              <object class="GtkTextView" id="codeEditorTextView">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="pixels_above_lines">5</property>
-                <property name="pixels_below_lines">5</property>
-                <property name="wrap_mode">word</property>
-                <property name="left_margin">5</property>
-                <property name="right_margin">5</property>
-                <property name="top_margin">5</property>
-                <property name="bottom_margin">5</property>
-                <property name="input_hints">GTK_INPUT_HINT_WORD_COMPLETION | GTK_INPUT_HINT_NONE</property>
-                <property name="monospace">True</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-            <property name="width">2</property>
-            <property name="height">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkScrolledWindow" id="scrolledwindow2">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="shadow_type">in</property>
-            <property name="min_content_width">250</property>
+            <property name="min_content_width">470</property>
             <property name="min_content_height">450</property>
             <child>
               <object class="GtkTextView" id="codeExecutionTextView">
@@ -200,6 +170,19 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="KbdBtn">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="label" translatable="no">திரை வழி உள்ளீடு</property>
+                <property name="stock_id">gtk-edit</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -601,13 +584,49 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
+          <object class="GtkBox" id="editorBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <property name="min_content_width">450</property>
+                <property name="min_content_height">380</property>
+                <child>
+                  <object class="GtkTextView" id="codeEditorTextView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="pixels_above_lines">5</property>
+                    <property name="pixels_below_lines">5</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="left_margin">5</property>
+                    <property name="right_margin">5</property>
+                    <property name="top_margin">5</property>
+                    <property name="bottom_margin">5</property>
+                    <property name="input_hints">GTK_INPUT_HINT_WORD_COMPLETION | GTK_INPUT_HINT_NONE</property>
+                    <property name="monospace">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">2</property>
+            <property name="height">2</property>
+          </packing>
         </child>
       </object>
     </child>
