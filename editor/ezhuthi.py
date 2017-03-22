@@ -426,17 +426,17 @@ class Editor(EditorState):
             offset = m_start.get_offset()
             m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
             old_value = ed.textbuffer.get_text(m_prev,m_start,True)
-            #print(u"%s"%old_value.decode("UTF-8"))
+            if not PYTHON3: old_value = old_value.decode("UTF-8")
+            #print(u"%s"%old_value)
             #print(u"%s"%value)
             try:
-                #value = tamil.utf8.joinMeiUyir(value,old_value.decode("UTF-8"))
                 uyir_idx = tamil.utf8.uyir_letters.index(value)
-                mei_idx = tamil.utf8.agaram_letters.index(old_value.decode("UTF-8"))
+                mei_idx = tamil.utf8.agaram_letters.index(old_value)
                 value = tamil.utf8.uyirmei_constructed(mei_idx, uyir_idx)
                 ed.textbuffer.backspace(m_start,False,True)
-                #value = value.decode("UTF-8")
             except Exception as e:
-                pass #print(str(e).decode("UTF-8"))
+                pass
+                #print(PYTHON3 and str(e) or str(e).decode("UTF-8")
         ed.textbuffer.insert_at_cursor(value)
         return True
 
