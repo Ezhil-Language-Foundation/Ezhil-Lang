@@ -373,6 +373,11 @@ class Editor(EditorState):
         # save : editor action save
         self.save_btn = self.builder.get_object("SaveBtn")
         self.save_btn.connect("clicked",Editor.save_file)
+        self.save_menu = self.builder.get_object("menuItemSave")
+        self.save_menu.connect("activate",Editor.save_file)
+        self.saveas_menu = self.builder.get_object("menuItemSaveAs")
+        self.saveas_menu.connect("activate",Editor.saveas_file)
+        
         
         # clear buffer : clear run buffer
         self.clear_btn = self.builder.get_object("clearbuffer")
@@ -638,6 +643,18 @@ class Editor(EditorState):
         runner.run(ed.filename)
         return
     
+    @staticmethod
+    def saveas_file(args):
+        try:
+            ed = Editor.get_instance()
+            old_fn = ed.filename
+            ed.filename = u"untitled"
+            Editor.save_file(*args)
+        except Exception as e:
+            ed.filename = old_fn
+        finally:
+            pass
+        
     @staticmethod
     def save_file(menuitem,arg1=None):
         ed = Editor.get_instance()
