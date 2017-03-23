@@ -42,11 +42,11 @@ class OSKeyboard(object):
         if self.lang.find("English") >= 0:
             rows2[-1].insert(0,u"Shift")
             rows2[-1].insert(len(rows2[-1]),u"<-")
-            rows2.append([u"0-9",u"தமிழ்",u"Space",u"Enter"])
+            rows2.append([u"0-9",u"தமிழ்",u"    Space    ",u"Enter"])
         else:
             rows2[-1].insert(0,u"பிர")
-            rows2[-1].insert(len(rows2[-1]),u"<- அழி")
-            rows2.append([u"0-9",u"ஆங்கிலம்",u"வெளி ",u"் ",u"இடு"])
+            rows2[-1].insert(len(rows2[-1]),u"&lt;- அழி")
+            rows2.append([u"0-9",u"ஆங்கிலம்",u"    வெளி     ",u"் ",u"இடு"])
         return rows2
 
     def build_widget(self,parent_box,edobj):
@@ -58,17 +58,20 @@ class OSKeyboard(object):
             full = False
             for key in keys:
                 btn = Gtk.Button(label=key)
+                for child in btn.get_children():
+                    child.set_label(u"<b>%s</b>"%key)
+                    child.set_use_markup(True)
+                    break
                 if self.lang.find("English") >= 0:
                     btn.connect("clicked",edobj.insert_at_cursor,key)
                 else:
                     btn.connect("clicked",edobj.insert_tamil99_at_cursor,key)
-                if key in self.full_space:
+                if True: #key in self.full_space:
                     curr_row.pack_start(btn,True,True,2)
-                    full = True
                 else:
                     curr_row.pack_start(btn,False,False,2)
             curr_row.show_all()
-            if full:
+            if True: #full:
                 parent_box.pack_start(curr_row,True,True,2)
             else:
                 parent_box.pack_start(curr_row,False,False,2)
@@ -79,6 +82,7 @@ class EnglishKeyboard(OSKeyboard):
     shift_keys3rows = [toList(u"QWERTYUIOP"),toList(u"ASDFGHJKL"),toList(u"ZXCVBNM")]
     def __init__(self):
         OSKeyboard.__init__(self,u"English",EnglishKeyboard.keys3rows,EnglishKeyboard.shift_keys3rows)
+        self.full_space.append(u"    Space   ")
 
 class TamilKeyboard(OSKeyboard):
     special = u"புள்ளி"
@@ -90,7 +94,7 @@ class TamilKeyboard(OSKeyboard):
                        [u"௳",u"௴",u"௵",u"௶",u"௷",u"௸",u"௹",u"௺"]]
     def __init__(self):
         OSKeyboard.__init__(self,u"Tamil",TamilKeyboard.keys3rows,TamilKeyboard.shift_keys3rows)
-        self.full_space.append(u"வெளி")
+        self.full_space.append(u"    வெளி    ")
 
 if __name__ == u"__main__":
     xk = EnglishKeyboard()
