@@ -27,7 +27,8 @@ class OSKeyboard(object):
         self.numeric3rows = [ toList(u"1234567890"),toList(u"-/:;()$&@"),toList(u".,?!'") ] 
         self.keys3rows = keys3rows
         self.shift_keys3rows = shift_keys3rows
-    
+        self.spc = u" "*48
+
     def __str__(self):
         sval = self.lang + u"\n"
         sval += u"\n".join([ u",".join(row) for row in self.keys3rows])
@@ -41,13 +42,23 @@ class OSKeyboard(object):
         rows2 = key_rows #copy.copy(key_rows)
         if self.lang.find("English") >= 0:
             rows2[-1].insert(0,u"Shift")
-            rows2[-1].insert(len(rows2[-1]),u"<-")
-            rows2.append([u"0-9",u"தமிழ்",u"    Space    ",u"Enter"])
+            rows2[-1].insert(len(rows2[-1]),u"&lt- backspace")
+            rows2.append([u"0-9",u"தமிழ்",self.spc+u"Space"+self.spc,u"Enter"])
         else:
             rows2[-1].insert(0,u"பிர")
             rows2[-1].insert(len(rows2[-1]),u"&lt;- அழி")
-            rows2.append([u"0-9",u"ஆங்கிலம்",u"    வெளி     ",u"் ",u"இடு"])
+            rows2.append([u"0-9",u"ஆங்",self.spc+u"வெளி"+self.spc,u"் ",u"இடு"])
         return rows2
+
+    def get_key_modifier(self,key):
+        # backspace hook
+        if key.find(u"&lt;-") >= 0:
+            key = u"\b"
+        elif key.find(u"வெளி") >= 0 or key.find(u"Space") >= 0:
+            key = u" "
+        elif key.find(u"இடு") >= 0 or key.find(u"Enter") >= 0:
+            key = u"\n"
+        return key
 
     def build_widget(self,parent_box,edobj):
         rows = list()
@@ -62,6 +73,7 @@ class OSKeyboard(object):
                     child.set_label(u"<b>%s</b>"%key)
                     child.set_use_markup(True)
                     break
+                key = self.get_key_modifier(key)
                 if self.lang.find("English") >= 0:
                     btn.connect("clicked",edobj.insert_at_cursor,key)
                 else:
@@ -82,7 +94,7 @@ class EnglishKeyboard(OSKeyboard):
     shift_keys3rows = [toList(u"QWERTYUIOP"),toList(u"ASDFGHJKL"),toList(u"ZXCVBNM")]
     def __init__(self):
         OSKeyboard.__init__(self,u"English",EnglishKeyboard.keys3rows,EnglishKeyboard.shift_keys3rows)
-        self.full_space.append(u"    Space   ")
+        self.full_space.append(u"|    Space   |")
 
 class TamilKeyboard(OSKeyboard):
     special = u"புள்ளி"

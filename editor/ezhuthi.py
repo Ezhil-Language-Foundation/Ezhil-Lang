@@ -331,11 +331,14 @@ class Editor(EditorState):
         self.abt_btn = self.builder.get_object("AboutBtn")
         self.abt_btn.connect("clicked",Editor.show_about_status)
 
-        paste_menu = self.builder.get_object("paste_item")
-        paste_menu.connect("activate",Editor.paste_action)
+        self.cut_menu = self.builder.get_object("cut_item")
+        self.cut_menu.connect("activate",Editor.cut_action)
 
-        cp_menu = self.builder.get_object("copy_item")
-        cp_menu.connect("activate",Editor.copy_action)
+        self.paste_menu = self.builder.get_object("paste_item")
+        self.paste_menu.connect("activate",Editor.paste_action)
+
+        self.cp_menu = self.builder.get_object("copy_item")
+        self.cp_menu.connect("activate",Editor.copy_action)
 
         # for undo-redo buttons
         self.undo_btn = self.builder.get_object("UndoBtn")
@@ -419,7 +422,7 @@ class Editor(EditorState):
     @staticmethod
     def insert_at_cursor(widget,value):
         ed = Editor.get_instance()
-        ed.textbuffer.insert_at_cursor(value)
+        ed.textbuffer.insert_at_cursor(value,True)
         return True
 
     # Implements Tamil-99 keyboard
@@ -427,6 +430,9 @@ class Editor(EditorState):
     def insert_tamil99_at_cursor(widget,value):
         ed = Editor.get_instance()
         m_start = ed.textbuffer.get_iter_at_mark(ed.textbuffer.get_insert())
+        if value == u"\b":
+            ed.textbuffer.backspace(m_start,False,True)
+            return
         if not m_start.starts_line():
             offset = m_start.get_offset()
             m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
@@ -582,6 +588,13 @@ class Editor(EditorState):
         response = dialog.run()
         dialog.destroy() #OK or Cancel don't matter
         return response
+
+    @staticmethod
+    def cut_action(*args_ign):
+        ed = Editor.get_instance()
+        bounds = ed.textbuffer.get_selection_bounds()
+        clipboard = Gtk.Clipboard.get_default( ed.window.get_display() )
+        ed.textbuffer.cut_clipboard(clipboard,ed.textview.get_editable())
 
     @staticmethod
     def copy_action(*args_ign):
