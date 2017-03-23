@@ -845,7 +845,9 @@ class Editor(EditorState):
 
 # TODO - options for 'debug', 'LANG', 'encoding' etc..
 if __name__ == u"__main__":
-    os.putenv('LANG','ta_IN.utf8')
+    # show preference for user locale.
+    if ( os.getenv('LANG','en_US.utf8').lower().find("ta") == -1 ):
+        os.putenv('LANG','ta_IN.utf8')
     multiprocessing.freeze_support()
     GObject.threads_init()
     #debug mode: autorun and quit on the file
