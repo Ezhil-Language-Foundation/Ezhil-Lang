@@ -194,7 +194,7 @@ def start_tests():
         except Exception as e:
             print("Test case %s failed with error %s"%(test,str(e)))
     sys.exit = actual_exit
-    sys.exit( passed == total_files )
+    sys.exit( passed != total_files ) #exit 0 is success
 
 if __name__ == u"__main__":
     os.putenv('LANG','ta_IN.utf8')

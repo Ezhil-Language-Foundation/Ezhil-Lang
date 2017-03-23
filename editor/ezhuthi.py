@@ -414,7 +414,7 @@ class Editor(EditorState):
     def apply_comment_syntax_highlighting(self,c_line):
         syntax_tag = self.tag_comment
         self.textbuffer.insert_at_cursor( c_line )
-        self.textbuffer.insert_at_cursor("\n")
+        self.textbuffer.insert_at_cursor(u"\n")
         n_end = self.textbuffer.get_end_iter()
         n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
@@ -545,7 +545,7 @@ class Editor(EditorState):
                 elif EzhilToken.is_number(lexeme.kind):
                     lexeme_val = unicode(lexeme.val)
                 elif is_string:
-                     lexeme_val = u"\""+lexeme.val.replace("\n","\\n")+u"\""
+                     lexeme_val = u"\""+lexeme.val.replace(u"\n",u"\\n")+u"\""
                 else:
                      lexeme_val = lexeme.val
                 self.textbuffer.insert_at_cursor( lexeme_val )
