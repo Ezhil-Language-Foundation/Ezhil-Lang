@@ -28,6 +28,7 @@ class OSKeyboard(object):
         self.keys3rows = copy.copy(keys3rows)
         self.shift_keys3rows = copy.copy(shift_keys3rows)
         self.keys3rows_btns = []
+        self.mode = u"non-numeric"
         self.spc = u" "*48
 
     def __str__(self):
@@ -39,16 +40,23 @@ class OSKeyboard(object):
         sval += u"\n".join([ u",".join(row) for row in self.numeric3rows])
         return sval
 
-    def padded(self,key_rows):
+    def numericmode(self):
+        return self.mode.find(u"non-numeric") == -1
+
+    def padded(self,key_rows,numerickdb=False):
         rows2 = key_rows #copy.copy(key_rows)
         if self.lang.find("English") >= 0:
             rows2[-1].insert(0,u"Shift")
             rows2[-1].insert(len(rows2[-1]),u"&lt;- back")
             rows2.append([u"0-9",u"தமிழ்",self.spc+u"Space"+self.spc,u"Enter"])
+            if numerickdb:
+                rows2[-1][1] = u"ஆங்"
         else:
             rows2[-1].insert(0,u"பிர")
             rows2[-1].insert(len(rows2[-1]),u"&lt;- அழி")
             rows2.append([u"0-9",u"ஆங்",self.spc+u"வெளி"+self.spc,u"் ",u"இடு"])
+            if numerickdb:
+                rows2[-1][1] = u"தமிழ்"
         return rows2
 
     def get_key_modifier(self,key):
@@ -59,15 +67,28 @@ class OSKeyboard(object):
             key = u" "
         elif key.find(u"இடு") >= 0 or key.find(u"Enter") >= 0:
             key = u"\n"
+        elif key == u"&amp;":
+            key = u"&"
         return key
 
-    def build_widget(self,parent_box,edobj):
+    def build_widget(self,parent_box,edobj,numerickbd=False):
+        if numerickbd:
+            self.mode = u"numeric"
+        else:
+            self.mode = u"non-numeric"
         rows = list()
         toggle_keys = [u"ஆங்",u"0-9",u"தமிழ்"]
-        if ( len(self.keys3rows) < 4 ):
-            padded_keys = self.padded(self.keys3rows)
+        if numerickbd:
+            ref_keys3rows = self.numeric3rows
+            ref_keys3rows[1][7] = u"&amp;"
         else:
-            padded_keys = self.keys3rows
+            ref_keys3rows = self.keys3rows
+
+        if ( len(ref_keys3rows) < 4 ):
+            padded_keys = self.padded(ref_keys3rows,numerickbd)
+        else:
+            padded_keys = ref_keys3rows
+
         del self.keys3rows_btns
         self.keys3rows_btns = list()
         for keys in padded_keys:
@@ -133,11 +154,18 @@ class JointKeyboard:
     def is_english_active(self):
         return self.activekbd == self.enkbd
 
-    def build_kbd(self):
+    def build_kbd(self,numerickbd=False):
         self.clear_parent()
-        self.activekbd.build_widget(self.parent_box,self.ed)
+        self.activekbd.build_widget(self.parent_box,self.ed,numerickbd)
+        self.setup_toggle_hooks()
+
+    ############ logic functions ###########
+    def setup_toggle_hooks(self):
         switch_btn = self.activekbd.keys3rows_btns[-1][1]
         switch_btn.connect("clicked", JointKeyboard.callback,self)
+
+        num_btn = self.activekbd.keys3rows_btns[-1][0]
+        num_btn.connect("clicked", JointKeyboard.numerickbd_callback,self)
 
     def clear_parent(self):
         kids = self.parent_box.get_children()
@@ -145,6 +173,9 @@ class JointKeyboard:
             key_rows.destroy()
 
     def switch_kbd(self):
+        if self.activekbd.numericmode():
+            return
+
         if self.is_english_active():
             self.activekbd = self.takbd
         else:
@@ -156,6 +187,13 @@ class JointKeyboard:
         instance = args[1]
         instance.switch_kbd()
         instance.build_kbd()
+        return
+
+    @staticmethod
+    def numerickbd_callback(*args):
+        widget = args[0]
+        instance = args[1]
+        instance.build_kbd(numerickbd=True)
         return
 
 if __name__ == u"__main__":
