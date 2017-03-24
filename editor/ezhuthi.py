@@ -321,8 +321,10 @@ class Editor(EditorState):
 
         # on screen keyboard
         self.editorBox = self.builder.get_object("editorBox")
-        self.oskeyboard = OSKeyboardWidget.TamilKeyboard()
-        self.oskeyboard.build_widget(self.editorBox, self)
+        #self.oskeyboard = OSKeyboardWidget.TamilKeyboard()
+        #self.oskeyboard.build_widget(self.editorBox, self)
+        self.oskeyboard = OSKeyboardWidget.JointKeyboard(self.editorBox,self)
+        self.oskeyboard.build_kbd()
 
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
@@ -427,13 +429,17 @@ class Editor(EditorState):
 
     # Implements Tamil-99 keyboard
     @staticmethod
-    def insert_tamil99_at_cursor(widget,value):
+    def insert_tamil99_at_cursor(widget,value,lang=u"Tamil"):
         ed = Editor.get_instance()
         m_start = ed.textbuffer.get_iter_at_mark(ed.textbuffer.get_insert())
         if value == u"\b":
             ed.textbuffer.backspace(m_start,False,True)
             return
-        if not m_start.starts_line():
+        elif value == u"் ":
+            ed.textbuffer.insert_at_cursor(value)
+            return
+
+        if not m_start.starts_line() and lang.lower().find("tamil") >= 0:
             offset = m_start.get_offset()
             m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
             old_value = ed.textbuffer.get_text(m_prev,m_start,True)

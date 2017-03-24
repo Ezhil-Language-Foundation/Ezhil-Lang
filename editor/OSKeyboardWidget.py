@@ -25,8 +25,9 @@ class OSKeyboard(object):
         self.lang = lang
         self.full_space = []
         self.numeric3rows = [ toList(u"1234567890"),toList(u"-/:;()$&@"),toList(u".,?!'") ] 
-        self.keys3rows = keys3rows
-        self.shift_keys3rows = shift_keys3rows
+        self.keys3rows = copy.copy(keys3rows)
+        self.shift_keys3rows = copy.copy(shift_keys3rows)
+        self.keys3rows_btns = []
         self.spc = u" "*48
 
     def __str__(self):
@@ -42,7 +43,7 @@ class OSKeyboard(object):
         rows2 = key_rows #copy.copy(key_rows)
         if self.lang.find("English") >= 0:
             rows2[-1].insert(0,u"Shift")
-            rows2[-1].insert(len(rows2[-1]),u"&lt- backspace")
+            rows2[-1].insert(len(rows2[-1]),u"&lt;- back")
             rows2.append([u"0-9",u"தமிழ்",self.spc+u"Space"+self.spc,u"Enter"])
         else:
             rows2[-1].insert(0,u"பிர")
@@ -62,22 +63,28 @@ class OSKeyboard(object):
 
     def build_widget(self,parent_box,edobj):
         rows = list()
-        padded_keys = self.padded(self.keys3rows)
+        toggle_keys = [u"ஆங்",u"0-9",u"தமிழ்"]
+        if ( len(self.keys3rows) < 4 ):
+            padded_keys = self.padded(self.keys3rows)
+        else:
+            padded_keys = self.keys3rows
+        del self.keys3rows_btns
+        self.keys3rows_btns = list()
         for keys in padded_keys:
+            btns = []
             curr_row = Gtk.Box()
             rows.append( curr_row )
             full = False
-            for key in keys:
+            for pos,key in enumerate(keys):
                 btn = Gtk.Button(label=key)
+                btns.append(btn)
                 for child in btn.get_children():
                     child.set_label(u"<b>%s</b>"%key)
                     child.set_use_markup(True)
                     break
                 key = self.get_key_modifier(key)
-                if self.lang.find("English") >= 0:
-                    btn.connect("clicked",edobj.insert_at_cursor,key)
-                else:
-                    btn.connect("clicked",edobj.insert_tamil99_at_cursor,key)
+                if not key in toggle_keys:
+                    btn.connect("clicked",edobj.insert_tamil99_at_cursor,key,self.lang)
                 if True: #key in self.full_space:
                     curr_row.pack_start(btn,True,True,2)
                 else:
@@ -87,6 +94,7 @@ class OSKeyboard(object):
                 parent_box.pack_start(curr_row,True,True,2)
             else:
                 parent_box.pack_start(curr_row,False,False,2)
+            self.keys3rows_btns.append(btns)
         return rows
 
 class EnglishKeyboard(OSKeyboard):
@@ -107,6 +115,45 @@ class TamilKeyboard(OSKeyboard):
     def __init__(self):
         OSKeyboard.__init__(self,u"Tamil",TamilKeyboard.keys3rows,TamilKeyboard.shift_keys3rows)
         self.full_space.append(u"    வெளி    ")
+
+class JointKeyboard:
+    def __init__(self,parent_box,ed):
+        self.parent_box = parent_box
+        self.takbd = TamilKeyboard()
+        self.enkbd = EnglishKeyboard()
+        self.activekbd = self.takbd
+        self.ed = ed
+
+    def is_tamil_active(self):
+        return self.activekbd == self.takbd
+
+    def is_english_active(self):
+        return self.activekbd == self.enkbd
+
+    def build_kbd(self):
+        self.clear_parent()
+        self.activekbd.build_widget(self.parent_box,self.ed)
+        switch_btn = self.activekbd.keys3rows_btns[-1][1]
+        switch_btn.connect("clicked", JointKeyboard.callback,self)
+
+    def clear_parent(self):
+        kids = self.parent_box.get_children()
+        for key_rows in kids[1:]:
+            key_rows.destroy()
+
+    def switch_kbd(self):
+        if self.is_english_active():
+            self.activekbd = self.takbd
+        else:
+            self.activekbd = self.enkbd
+
+    @staticmethod
+    def callback(*args):
+        widget = args[0]
+        instance = args[1]
+        instance.switch_kbd()
+        instance.build_kbd()
+        return
 
 if __name__ == u"__main__":
     xk = EnglishKeyboard()
