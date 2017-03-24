@@ -432,18 +432,60 @@ class Editor(EditorState):
     def insert_tamil99_at_cursor(widget,value,lang=u"Tamil"):
         ed = Editor.get_instance()
         m_start = ed.textbuffer.get_iter_at_mark(ed.textbuffer.get_insert())
+
+
+        # handle special characters
         if value == u"\b":
             ed.textbuffer.backspace(m_start,False,True)
+            ed.textview.place_cursor_onscreen()
             return
         elif value == u"் ":
             ed.textbuffer.insert_at_cursor(value)
+            ed.textview.place_cursor_onscreen()
             return
 
-        if not m_start.starts_line() and lang.lower().find("tamil") >= 0:
+        # dispose of English language stuff
+        if lang.lower().find("eng") >= 0:
+            Editor.insert_at_cursor(widget,value)
+            return
+
+        if not m_start.starts_line():
             offset = m_start.get_offset()
             m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
             old_value = ed.textbuffer.get_text(m_prev,m_start,True)
-            if not PYTHON3: old_value = old_value.decode("UTF-8")
+            # encoding conversion
+            if not PYTHON3:
+                try:
+                    old_value = old_value.decode("UTF-8")
+                except Exception as e:
+                    pass
+
+            if old_value.find(u"் ") >= 0:
+                ed.textbuffer.insert_at_cursor(value)
+                return
+
+            # Odd GTK bug - where pulli as previous char before cursor
+            # will not be retrieved in the offset-1 position so we need to do some
+            # sleuthing.
+            if old_value == " " and tamil.utf8.is_tamil_unicode(value):
+                try:
+                    m_prev = ed.textbuffer.get_iter_at_offset(offset-2)
+                    old_value = ed.textbuffer.get_text(m_prev,m_start,True)
+                    if not PYTHON3:
+                        try:
+                            old_value = old_value.decode("UTF-8")
+                        except Exception as decodeerror:
+                            pass
+
+                    if old_value.find(u"் ") >= 0:
+                        ed.textbuffer.backspace(m_start,False,True)
+                        ed.textbuffer.insert_at_cursor(value)
+                        return
+
+                except Exception as decodeerror:
+                    pass
+
+
             #print(u"%s"%old_value)
             #print(u"%s"%value)
             try:
@@ -454,7 +496,9 @@ class Editor(EditorState):
             except Exception as e:
                 pass
                 #print(PYTHON3 and str(e) or str(e).decode("UTF-8")
+
         ed.textbuffer.insert_at_cursor(value)
+        ed.textview.place_cursor_onscreen()
         return True
 
     @staticmethod

@@ -79,7 +79,10 @@ class OSKeyboard(object):
                 btn = Gtk.Button(label=key)
                 btns.append(btn)
                 for child in btn.get_children():
-                    child.set_label(u"<b>%s</b>"%key)
+                    if self.lang.find("English") >= 0:
+                        child.set_label(u"<span weight=\"heavy\" size=\"large\" fallback=\"true\">%s</span>"%key)
+                    else:
+                        child.set_label(u"<span weight=\"heavy\" size=\"x-large\" fallback=\"true\" stretch=\"extraexpanded\">%s</span>"%key)
                     child.set_use_markup(True)
                     break
                 key = self.get_key_modifier(key)
