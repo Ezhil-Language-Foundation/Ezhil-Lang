@@ -14,7 +14,7 @@ if PYTHON3:
     unicode = str
 
 gi.require_version('Gtk','3.0')
-from gi.repository import Gtk, GObject, GLib, Pango
+from gi.repository import Gtk
 
 # row 3 extras: 'shift', 'backspace'
 # row 4 extras: 'num keypad','escape to language','space','return'

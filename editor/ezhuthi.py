@@ -6,18 +6,22 @@
 ## Certain sections of code are borrowed from public sources and are attributed accordingly.
 
 from __future__ import print_function
+
 import codecs
-import sys
+import multiprocessing
 import os
-import gi
-import ezhil
+import re
+import sys
 import tempfile
 import threading
-import multiprocessing
 import time
-import re
+
+import gi
 import tamil
+
 import OSKeyboardWidget
+import ezhil
+from SplashActivity import SplashActivity
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -893,6 +897,10 @@ class Editor(EditorState):
         Editor._instance = newinst
         return Editor._instance
 
+def mainfn(arg_autorun):
+        Editor(len(sys.argv) > 1 and sys.argv[1] or None,autorun=arg_autorun)
+        Gtk.main()
+
 # TODO - options for 'debug', 'LANG', 'encoding' etc..
 if __name__ == u"__main__":
     # show preference for user locale.
@@ -905,5 +913,7 @@ if __name__ == u"__main__":
         arg_autorun = (sys.argv[2].lower() in [u"-autorun",u"--autorun"])
     else:
         arg_autorun = False
-    Editor(len(sys.argv) > 1 and sys.argv[1] or None,autorun=arg_autorun)
-    Gtk.main()
+    if not arg_autorun:
+        SplashActivity(lambda : mainfn(arg_autorun))
+    else:
+        mainfn(arg_autorun)

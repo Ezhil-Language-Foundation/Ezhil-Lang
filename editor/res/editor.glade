@@ -176,8 +176,8 @@
               <object class="GtkToolButton" id="KbdBtn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label">திரை வழி உள்ளீடு</property>
                 <property name="use_underline">True</property>
-                <property name="label" translatable="no">திரை வழி உள்ளீடு</property>
                 <property name="stock_id">gtk-edit</property>
               </object>
               <packing>
@@ -628,6 +628,16 @@
             <property name="height">2</property>
           </packing>
         </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="splashWindow">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkImage" id="splashImage">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="pixbuf">img/small-ezhil-splash-5.png</property>
       </object>
     </child>
   </object>
