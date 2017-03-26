@@ -314,7 +314,7 @@ class Editor(EditorState):
         self.widget_operators = self.builder.get_object("hbox_operators16")
         self.widget_forms = self.builder.get_object("hbox_forms")
         self.build_keyword_btns()
-        
+
         # on screen keyboard
         self.editorBox = self.builder.get_object("editorBox")
         self.oskeyboard = None

@@ -28,7 +28,7 @@ class OSKeyboard(object):
         self.shift_keys3rows = copy.copy(shift_keys3rows)
         self.keys3rows_btns = []
         self.mode = u"non-numeric"
-        self.spc = u" "*48
+        self.spc = u" "*16
         self.shift_words = [u"பிர", u"Shift"]
         self.shiftmode = False
 
@@ -117,7 +117,7 @@ class OSKeyboard(object):
                     if self.lang.find("English") >= 0:
                         child.set_label(u"<span weight=\"heavy\" size=\"large\" fallback=\"true\">%s</span>"%key)
                     else:
-                        child.set_label(u"<span weight=\"heavy\" size=\"x-large\" fallback=\"true\" stretch=\"extraexpanded\">%s</span>"%key)
+                        child.set_label(u"<span weight=\"heavy\" size=\"large\" fallback=\"true\">%s</span>"%key)
                     child.set_use_markup(True)
                     break
                 key = self.get_key_modifier(key)
