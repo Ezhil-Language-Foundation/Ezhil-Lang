@@ -1,0 +1,39 @@
+# (C) 2013 Ezhil programming language example
+
+# Ref: http://github.com/thamizha/ekalappai
+text = "ஆங்கிலமல்லாத மொழிகளின் எழுத்துக்களை தட்டச்சுவதற்காக எ-கலப்பை மென்பொருள் உருவாக்கப்படுகிறது. இதன் முந்தைய பதிப்புகள் கீமேன் என்ற மென்பொருளினை அடிப்படையாகக் கொண்டு உருவாக்கப்பட்டது. தற்போதைய 3.0 பதிப்பு முழுவதும் கட்டற்ற மென்பொருளாக புதியதாக உருவாக்கப்பட்டுள்ளது.
+
+இதை லினக்ஸ், விண்டோஸ், மேக் மற்றும் சிம்பியன் இயங்குதளங்களுக்கு ஏற்ப வடிவமைக்கத் திட்டமிட்டுள்ளோம். ஆர்வமுள்ள நண்பர்கள் இத்திட்டத்தில் கலந்துகொள்ள அழைக்கிறோம். 
+
+Aim of this project is to create an opensource keyboard manager to type non-english languages.
+
+eKalappai uses popular scim-table format for handling the keyboards.
+As of now ekalappai supports only tamil typing, we plan to support other languages soon.
+
+If you are a C++ programmer and want to join this project, please email one of the team members.
+
+- Thamizha Team"
+
+no_words = 0
+hist = dict()
+inword = False
+
+chars = 0
+@( text இல் letter ) ஒவ்வொன்றாக
+
+@( (letter == " ") && inword ) ஆனால்
+   inword = False
+   no_words = no_words + 1
+   
+   பதிப்பி     "Words = ", no_words, " with # chars = ",chars
+   chars = 0
+இல்லை
+   @( letter != " " && (!inword) )  ஆனால்
+      inword = True
+   முடி
+   chars = chars + 1
+முடி
+முடி
+
+
+பதிப்பி    no_words

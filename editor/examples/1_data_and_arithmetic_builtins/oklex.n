@@ -1,0 +1,5 @@
+L = 5
+printf("L = %d",L)
+Lஃ = 5
+printf("Lஃ = %d",Lஃ)
+printf("%d",Lஃ + L)

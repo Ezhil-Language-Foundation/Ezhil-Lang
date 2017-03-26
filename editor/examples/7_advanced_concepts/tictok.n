@@ -1,0 +1,17 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# yesterday
+start = time()
+பதிப்பி "வணக்கம் உலகம்!", ctime(time()-84600)
+
+# today
+பதிப்பி "Today = ", ctime(time())
+
+# calculation CPU task
+@(எண் = 1, எண் <= 100, எண் = எண் + 1) ஆக
+ எண்_pow2 = எண்^2   
+முடி
+
+# clock
+பதிப்பி "Total time elapsed ", clock() - start

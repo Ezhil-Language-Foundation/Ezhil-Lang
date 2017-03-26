@@ -1,0 +1,6 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+pypath = getenv("HOME")
+assert( find(pypath,"python") == -1 )
+பதிப்பி "வணக்கம்! getenv returned ->", pypath

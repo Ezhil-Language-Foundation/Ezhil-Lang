@@ -1,0 +1,97 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# parse S-expressions
+# CFG:
+# -- non terminals-- 
+# PROG =  [ SEXP ]
+# SEXP  = | BINOP TERM TERM
+#             | TERM
+# TERM = NUM 
+#            | PROG
+# -- terminals --
+# NUMBERS = [0-9]+
+# BINOP = + | - | * | / 
+
+நிரல்பாகம்  seval ( expr )
+
+   ஸீ = நீளம்(expr)
+   assert(  ஸீ >= 1 ) #0-length expressions are parse error
+   
+   first = எடு( expr, 0 )   
+
+   #பட்டியலா 
+   @( islist( first ) ) ஆனால்
+      rval =  seval( first )
+   முடி
+
+   #எண்ணா
+   @( isnumber( first ) ) ஆனால்
+      rval = first
+   முடி
+
+   @( ஸீ == 2 ) ஆனால்  # parse error
+      பதிப்பி "parse error"
+      assert( False )
+   முடி
+   
+   assert(  (ஸீ == 3) ||  (ஸீ == 1) )
+   
+   @( ஸீ == 3 ) ஆனால் #binary op     
+     binop = first
+
+     # 1st numeric arg
+     rval =  எடு( expr, 1 ) 
+     @( islist(rval) )  ஆனால்
+         rval = seval(rval)
+     முடி
+     
+     # 2nd arg
+     second =  எடு( expr, 2 ) 
+     @( islist(second) )  ஆனால்
+        second = seval(second)
+     முடி
+
+     பதிப்பி  " operator => ", binop, second, rval
+     @( first ) தேர்ந்தெடு
+         @("+") தேர்வு
+   	 	பதிப்பி "addition"
+                rval = rval + second
+         @("-") தேர்வு
+   	    	பதிப்பி "subtraction"
+		rval = rval - second
+         @("/") தேர்வு 
+   	     	பதிப்பி "divide"
+		rval = rval / second	
+         @("*") தேர்வு 
+	 	பதிப்பி "product"
+		rval = rval * second	       
+         ஏதேனில்
+	 	assert( False )
+     முடி #end select
+
+   முடி # end-if  =3
+   பதிப்பி "result ", rval
+   பின்கொடு rval
+முடி
+
+
+# ex. 1
+# sexp (- (/ 22.0 7.0) (/ 355.0  (+ 5.0 113))) = 0.134382566585956
+sexp = ["-",["/",22.0,7.0], ["/", 355.0, ["+", 5, 113.0] ]]
+val = seval( sexp )
+பதிப்பி  val
+assert( abs(val - 0.134382566585956) < 1e-3 )
+
+# ex. 2
+# sexp (- 3.14159 (/ 355.0 (- (+ 5.0 1.13e2) (* 1.0 2.0)))) 0.081245172413793
+sexp = ["-", 3.14159, ["/", 355.0, ["-", ["+", 5.0, 1.13e2 ], ["*", 1.0, 2.0]]]]
+val = seval( sexp )
+பதிப்பி val
+assert( abs(val - 0.081245172413793) < 1e-3 )
+
+# ex. 3
+assert( seval([1]) == 1 )
+
+# ex. 4
+assert( seval(["+",4,["-",5,["/",6,3]]]) == 7 )

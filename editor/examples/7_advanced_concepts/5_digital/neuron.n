@@ -1,0 +1,29 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# Ref : Perceptron https://en.wikipedia.org/wiki/Perceptron
+நிரல்பாகம் செயற்கை_neuron( input, wts, t)
+    
+    L = நீளம்(input)
+    @( L != நீளம்(wts)) ஆனால்
+           பதிப்பி "different sizes"
+           பின்கொடு False
+    முடி
+    
+    சமம்= 0.0
+    itr = 0
+    @( itr < L ) வரை
+        சமம்= சமம் + input[itr]*wts[itr]
+        itr = itr + 1 #don't introduce an infinite loop!
+    முடி
+    
+    @( சமம் >= t ) ஆனால்
+       பின்கொடு True
+    முடி
+    பின்கொடு False
+முடி
+
+
+பதிப்பி செயற்கை_neuron( [1,2,3], [0,0,1], 4 ) 
+பதிப்பி  செயற்கை_neuron( [1,2,3], [0,0,1],2.99 ) 
+பதிப்பி செயற்கை_neuron( [3], [-1],0 ) 

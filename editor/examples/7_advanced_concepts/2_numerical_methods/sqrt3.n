@@ -1,0 +1,23 @@
+# Ref: http://www.sosmath.com/calculus/diff/der07/der07.html, accessed Mar, 2015.
+# use Bisection method for calculating sqrt[n]
+x = float(raw_input("Enter a number "))
+iterations = 0
+tol = 1e-3
+low = 0.0;
+high = max(1.0, x);
+mid = x/2.0 #initial guess
+பதிப்பி "starting ==> ",abs( (mid*mid) )
+@( abs( (mid*mid) - x) > tol )  வரை
+   பதிப்பி "counts => ",iterations,"result =>",mid
+   @( (mid*mid) > x ) ஆனால்
+           high = mid;           
+    இல்லை
+           low = mid;
+    முடி
+   mid = (high+low)/2.0
+   iterations = iterations + 1
+முடி
+
+பதிப்பி "counts => ",iterations
+பதிப்பி "sqrt[ ",x,"] => ",mid
+பதிப்பி "error => ",mid-sqrt(x)
