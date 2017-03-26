@@ -58,8 +58,8 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="shadow_type">in</property>
-            <property name="min_content_width">470</property>
-            <property name="min_content_height">450</property>
+            <property name="min_content_width">370</property>
+            <property name="min_content_height">400</property>
             <child>
               <object class="GtkTextView" id="codeExecutionTextView">
                 <property name="visible">True</property>
@@ -260,7 +260,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkMenuBar" id="menubar1">
+          <object class="GtkMenuBar" id="ezhilMenubar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -378,6 +378,39 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="viewMenu">
+                <property name="label" translatable="yes">திரை (_V)</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menuView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="toggleKeyboard">
+                        <property name="label">திரை விசை</property>
+                        <property name="visible">True</property>
+                        <property name="active">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="toggleKeyword">
+                        <property name="label">திரை குறிச்சொல்</property>
+                        <property name="visible">True</property>
+                        <property name="active">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
                       </object>
                     </child>
                   </object>
@@ -593,8 +626,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
-                <property name="min_content_width">450</property>
-                <property name="min_content_height">380</property>
+                <property name="min_content_width">350</property>
+                <property name="min_content_height">280</property>
                 <child>
                   <object class="GtkTextView" id="codeEditorTextView">
                     <property name="visible">True</property>

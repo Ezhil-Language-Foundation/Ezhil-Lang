@@ -51,14 +51,16 @@ class OSKeyboard(object):
     def padded(self,key_rows,numerickdb=False):
         rows2 = key_rows #copy.copy(key_rows)
         if self.lang.find("English") >= 0:
-            rows2[-1].insert(0,u"Shift")
-            rows2[-1].insert(len(rows2[-1]),u"&lt;- back")
+            if rows2[-1][0].find(u"Shift") == -1:
+                rows2[-1].insert(0,u"Shift")
+                rows2[-1].insert(len(rows2[-1]),u"&lt;- back")
             rows2.append([u"0-9",u"தமிழ்",self.spc+u"Space"+self.spc,u"Enter"])
             if numerickdb:
                 rows2[-1][1] = u"ஆங்"
         else:
-            rows2[-1].insert(0,u"பிர")
-            rows2[-1].insert(len(rows2[-1]),u"&lt;- அழி")
+            if rows2[-1][0].find(u"பிர") == -1:
+                rows2[-1].insert(0,u"பிர")
+                rows2[-1].insert(len(rows2[-1]),u"&lt;- அழி")
             rows2.append([u"0-9",u"ஆங்",self.spc+u"வெளி"+self.spc,u"் ",u"இடு"])
             if numerickdb:
                 rows2[-1][1] = u"தமிழ்"
@@ -123,7 +125,7 @@ class OSKeyboard(object):
                     btn.connect("clicked",edobj.insert_tamil99_at_cursor,key,self.lang)
                 curr_row.pack_start(btn,True,True,2)
             curr_row.show_all()
-            parent_box.pack_start(curr_row,True,True,2)
+            parent_box.pack_start(curr_row,False,not True,2)
             self.keys3rows_btns.append(btns)
         return rows
 

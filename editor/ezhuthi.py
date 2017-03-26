@@ -30,7 +30,7 @@ if PYTHON3:
 gi.require_version('Gtk','3.0')
 
 from gi.repository import Gtk, GObject, GLib, Pango
-from undobuffer import UndoableBuffer;
+from undobuffer import UndoableBuffer
 
 # This section of code is borrowed from https://github.com/pyinstaller/pyinstaller/wiki/Recipe-Multiprocessing
 # override multiprocessing pipe in Windows for packaging purposes.
@@ -265,6 +265,15 @@ class Editor(EditorState):
         self.window.set_resizable(True)
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
+
+        self.menuKbd = self.builder.get_object("toggleKeyboard")
+        self.menuKbd.connect("activate",lambda wid: self.toggleKeyboard(wid))
+        self.toolitemKbd = self.builder.get_object("KbdBtn")
+        self.toolitemKbd.connect("clicked",lambda wid: self.toggleKeyboard(wid))
+
+        self.menuKeyword = self.builder.get_object("toggleKeyword")
+        self.menuKeyword.connect("activate",lambda wid: self.toggleKeyword(wid))
+
         ## self.console_textview.set_editable(False)
         self.console_textview.set_cursor_visible(False)
         self.console_textview.set_buffer(UndoableBuffer())
@@ -297,38 +306,19 @@ class Editor(EditorState):
         self.tag_pass  = self.console_buffer.create_tag("pass",
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
         # add keywords bar
-        keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
-        operators16 = [u"@",u"+",u"-",u"*",u"/",u"%",u"^",u"==",u">",u"<",u">=",u"<=",u"!=",u"!=",u"!",u",",u"(",u")",u"{",u"}",u"()",u"[]"]
-        forms = [u"@(  )\t ஆனால் \n இல்லை  \n முடி",u" @(  )\t வரை \n முடி",u"நிரல்பாகம்\t உதாரணம் () \n முடி"]
+        self.keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
+        self.operators16 = [u"@",u"+",u"-",u"*",u"/",u"%",u"^",u"==",u">",u"<",u">=",u"<=",u"!=",u"!=",u"!",u",",u"(",u")",u"{",u"}",u"()",u"[]"]
+        self.forms = [u"@(  )\t ஆனால் \n இல்லை  \n முடி",u" @(  )\t வரை \n முடி",u"நிரல்பாகம்\t உதாரணம் () \n முடி"]
 
         self.widget_keywords = self.builder.get_object("hbox_keywords8")
         self.widget_operators = self.builder.get_object("hbox_operators16")
         self.widget_forms = self.builder.get_object("hbox_forms")
-
-        for kw in keywords8:
-            btn = Gtk.Button(kw)
-            self.widget_keywords.pack_start( btn,True, True, 0)
-            btn.connect("clicked",Editor.insert_at_cursor,kw)
-            btn.show()
-
-        for kw in operators16:
-            btn = Gtk.Button(kw)
-            self.widget_operators.pack_start( btn,True, True, 0)
-            btn.connect("clicked",Editor.insert_at_cursor,kw)
-            btn.show()
-
-        for kw in forms:
-            btn = Gtk.Button(u" ".join(re.split("\s+",kw)))
-            self.widget_forms.pack_start( btn, True, True, 0)
-            btn.connect("clicked",Editor.insert_at_cursor,kw)
-            btn.show()
-
+        self.build_keyword_btns()
+        
         # on screen keyboard
         self.editorBox = self.builder.get_object("editorBox")
-        #self.oskeyboard = OSKeyboardWidget.TamilKeyboard()
-        #self.oskeyboard.build_widget(self.editorBox, self)
-        self.oskeyboard = OSKeyboardWidget.JointKeyboard(self.editorBox,self)
-        self.oskeyboard.build_kbd()
+        self.oskeyboard = None
+        self.toggleKeyboard()
 
         # connect abt menu and toolbar item
         self.abt_menu = self.builder.get_object("aboutMenuItem")
@@ -424,7 +414,50 @@ class Editor(EditorState):
         n_end = self.textbuffer.get_end_iter()
         n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
-    
+
+    # callback for toggle keyboard
+    def toggleKeyboard(self,*args):
+        if self.oskeyboard != None:
+            self.oskeyboard.clear_parent()
+            del self.oskeyboard
+            self.oskeyboard = None
+            self.editorBox.set_child_packing(self.scrolled_codeview,True,True,0,0)
+        else:
+            self.oskeyboard = OSKeyboardWidget.JointKeyboard(self.editorBox,self)
+            self.oskeyboard.build_kbd()
+        return True
+
+    # callback for toggle keyboard
+    def toggleKeyword(self,*args):
+        if self.widget_keywords.get_visible():
+            self.widget_keywords.hide()
+            self.widget_forms.hide()
+            self.widget_operators.hide()
+        else:
+            self.widget_keywords.show()
+            self.widget_forms.show()
+            self.widget_operators.show()
+        return True
+
+    def build_keyword_btns(self):
+        for kw in self.keywords8:
+            btn = Gtk.Button(kw)
+            self.widget_keywords.pack_start( btn,True, True, 0)
+            btn.connect("clicked",Editor.insert_at_cursor,kw)
+            btn.show()
+
+        for kw in self.operators16:
+            btn = Gtk.Button(kw)
+            self.widget_operators.pack_start( btn,True, True, 0)
+            btn.connect("clicked",Editor.insert_at_cursor,kw)
+            btn.show()
+
+        for kw in self.forms:
+            btn = Gtk.Button(u" ".join(re.split("\s+",kw)))
+            self.widget_forms.pack_start( btn, True, True, 0)
+            btn.connect("clicked",Editor.insert_at_cursor,kw)
+            btn.show()
+
     @staticmethod
     def insert_at_cursor(widget,value):
         ed = Editor.get_instance()
@@ -436,7 +469,6 @@ class Editor(EditorState):
     def insert_tamil99_at_cursor(widget,value,lang=u"Tamil"):
         ed = Editor.get_instance()
         m_start = ed.textbuffer.get_iter_at_mark(ed.textbuffer.get_insert())
-
 
         # handle special characters
         if value == u"\b":
@@ -913,7 +945,10 @@ if __name__ == u"__main__":
         arg_autorun = (sys.argv[2].lower() in [u"-autorun",u"--autorun"])
     else:
         arg_autorun = False
-    if not arg_autorun:
+
+    if os.getenv("TEST_EZHIL_DEVELOPMENT",None):
+        mainfn(arg_autorun)
+    elif not arg_autorun:
         SplashActivity(lambda : mainfn(arg_autorun))
     else:
         mainfn(arg_autorun)
