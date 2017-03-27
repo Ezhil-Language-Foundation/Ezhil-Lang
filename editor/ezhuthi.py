@@ -22,6 +22,7 @@ import tamil
 import OSKeyboardWidget
 import ezhil
 from SplashActivity import SplashActivity
+from iyakki import MPRunner
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -142,113 +143,6 @@ class EditorState:
         r['char_count'] = self.textbuffer.get_char_count()
         r['modified'] = self.is_edited()
         return r
-
-def MPRunner_actor(pipe,filename):
-    is_success = False
-    ezhil.EzhilCustomFunction.set(Editor.dummy_input)
-    old_stdin = sys.stdin
-    old_stdout = sys.stdout
-    old_stderr = sys.stderr
-    tmpfilename = tempfile.mktemp()+".n"
-    res_std_out = u""
-    old_exit = sys.exit
-    sys.exit = Editor.dummy_exit
-    try:
-        sys.stdout = codecs.open(tmpfilename,"w","utf-8")
-        sys.stderr = sys.stdout
-        executer = ezhil.EzhilFileExecuter(filename)
-        executer.run()
-        is_success = True
-    except Exception as e:
-        print(u" '{0}':\n{1}'".format(filename, unicode(e)))
-    finally:
-        sys.exit = old_exit
-        sys.stdout.flush()
-        sys.stdout.close()
-        with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
-            res_std_out = fp.read()
-        sys.stdout = old_stdout
-        sys.stderr = old_stderr
-        sys.stdin = old_stdin
-    pipe.send([ res_std_out,is_success] )
-    pipe.close()
-
-class MPRunner:
-    is_success = False
-    def __init__(self,timeout=60):
-        ed = Editor.get_instance()
-        self.timeout = min(timeout,ed.autorun and 5 or timeout)
-    
-    @staticmethod
-    def update_fcn(args):
-        res_std_out,is_success=args
-        ed = Editor.get_instance()
-        ed.tend = time.time()
-        time_desc = u" %0.3g வினாடி"%(ed.tend - ed.tstart)
-        ed.console_buffer.set_text( res_std_out )
-        tag = is_success and ed.tag_pass or ed.tag_fail
-        start = ed.console_buffer.get_start_iter()
-        end = ed.console_buffer.get_end_iter()
-        ed.console_buffer.apply_tag(tag,start,end)
-        ed.StatusBar.push(0,u"உங்கள் நிரல் '%s' %s %s நேரத்தில் இயங்கி முடிந்தது"%(ed.filename,[u"பிழை உடன்",u"பிழையில்லாமல்"][is_success],time_desc))
-        if ed.autorun:
-            for i in range(1):
-                time.sleep(1)
-                Gtk.main_iteration()
-            sys.exit(not is_success)
-        return
-
-    def run(self,filename):
-        ed = Editor.get_instance()
-        if ( ed.is_edited() ):
-            #document is edited but not saved;
-            msg = u"உங்கள் நிரல் சேமிக்க பட வேண்டும்! அதன் பின்னரே இயக்கலாம்"
-            title = u"இயக்குவதில் பிழை"
-            dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.INFO,
-            Gtk.ButtonsType.OK, title) #"Output of Ezhil Code:"
-            dialog.format_secondary_text(msg) #res.std_out
-            dialog.run()
-            dialog.destroy() #OK or Cancel don't matter
-            return False
-
-        # Start bar as a process
-        parent_conn, child_conn = multiprocessing.Pipe()
-        ed.tstart = time.time()
-        p = multiprocessing.Process(target=MPRunner_actor,args=([child_conn,filename]))
-        p.start()
-        child_conn.close()
-        if parent_conn.poll(self.timeout):
-            res_std_out, is_success = parent_conn.recv()
-            p.join(0)
-            parent_conn.close()
-        elif p.is_alive():
-            p.terminate()
-            p.join()
-            is_success = False
-            res_std_out = u"timeout %g(s) reached - program taking too long\n"%self.timeout
-        else:
-            is_success = False
-            res_std_out = u"unknown!"
-        GLib.idle_add( MPRunner.update_fcn, [ res_std_out,is_success ])
-        return
-
-class GtkStaticWindow:
-    _instance = None
-    @staticmethod
-    def get_instance():
-        if not GtkStaticWindow._instance:
-            GtkStaticWindow._instance = GtkStaticWindow()
-        return GtkStaticWindow._instance
-
-    def __init__(self):
-        self.gui = threading.Thread(target=lambda : Gtk.main_iteration())
-        self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
-        self.window.set_default_size(50,20) #vanishingly small size
-        self.window.connect("delete-event", Gtk.main_quit)
-        self.window.set_title(u"எழில் இயக்கி சாளரம்")
-        self.window.set_decorated(False)
-        self.window.show_all()
-        self.gui.start()
 
 class Editor(EditorState):
     _instance = None
@@ -457,6 +351,26 @@ class Editor(EditorState):
             self.widget_forms.pack_start( btn, True, True, 0)
             btn.connect("clicked",Editor.insert_at_cursor,kw)
             btn.show()
+            
+    @staticmethod
+    def update_fcn(args):
+        print(u"update fcn")
+        res_std_out,is_success=args
+        ed = Editor.get_instance()
+        ed.tend = time.time()
+        time_desc = u" %0.3g வினாடி"%(ed.tend - ed.tstart)
+        ed.console_buffer.set_text( res_std_out )
+        tag = is_success and ed.tag_pass or ed.tag_fail
+        start = ed.console_buffer.get_start_iter()
+        end = ed.console_buffer.get_end_iter()
+        ed.console_buffer.apply_tag(tag,start,end)
+        ed.StatusBar.push(0,u"உங்கள் நிரல் '%s' %s %s நேரத்தில் இயங்கி முடிந்தது"%(ed.filename,[u"பிழை உடன்",u"பிழையில்லாமல்"][is_success],time_desc))
+        if ed.autorun:
+            for i in range(1):
+                time.sleep(1)
+                Gtk.main_iteration()
+            sys.exit(not is_success)
+        return
 
     @staticmethod
     def insert_at_cursor(widget,value):
@@ -704,42 +618,25 @@ class Editor(EditorState):
     def dummy_exit(*args):
         #(u"Dummy exit function")
         return 0
-    
-    @staticmethod
-    def dummy_input(*args):
-        message= not args and "Enter Input" or args[0]
-        if not args or len(args) < 2:
-            title = u"எழுதி - எழில் மொழி செயலி" #Ezhil language IDE
-        else:
-            title = args[1]
-        static_window = GtkStaticWindow.get_instance()
-        window = static_window.window
-        dialogWindow = Gtk.MessageDialog(window,
-                              Gtk.DialogFlags.MODAL,
-                              Gtk.MessageType.QUESTION,
-                              Gtk.ButtonsType.OK_CANCEL,
-                              message)
-
-        dialogWindow.set_title(title)
-
-        dialogBox = dialogWindow.get_content_area()
-        userEntry = Gtk.Entry()
-        userEntry.set_size_request(257,0)
-        dialogBox.pack_end(userEntry, False, False, 0)
-        dialogWindow.show_all()
-        response = dialogWindow.run()
-        text = userEntry.get_text() 
-        dialogWindow.destroy()
-        if (response == Gtk.ResponseType.OK) and (text != ''):
-            return text
-        return ""
-    
+        
     @staticmethod
     def run_ezhil_code(menuitem,arg1=None):
         ed = Editor.get_instance()
+        if ( ed.is_edited() ):
+            #document is edited but not saved;
+            msg = u"உங்கள் நிரல் சேமிக்க பட வேண்டும்! அதன் பின்னரே இயக்கலாம்"
+            title = u"இயக்குவதில் பிழை"
+            dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK, title) #"Output of Ezhil Code:"
+            dialog.format_secondary_text(msg) #res.std_out
+            dialog.run()
+            dialog.destroy() #OK or Cancel don't matter
+            return False
         runner = MPRunner()
-        GLib.idle_add( lambda :  Gtk.main_iteration())
+        GLib.idle_add( lambda : Gtk.events_pending() and Gtk.main_iteration() )
+        ed.tstart = time.time()
         runner.run(ed.filename)
+        Editor.update_fcn([runner.res_std_out,runner.is_success])
         return
     
     @staticmethod
