@@ -87,6 +87,7 @@
             <property name="toolbar_style">both</property>
             <child>
               <object class="GtkToolButton" id="NewBtn">
+                <property name="label">புதிய</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text">New file</property>
@@ -100,6 +101,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="OpenBtn">
+                <property name="label">திர</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -112,6 +114,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="SaveBtn">
+                <property name="label">சேமி</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -124,6 +127,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="UndoBtn">
+                <property name="label">மறை</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -136,6 +140,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="RedoBtn">
+		<property name="label">மீள்</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -148,6 +153,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="RunBtn">
+		<property name="label">இயக்கு</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">இயக்கு</property>
@@ -186,6 +192,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="AboutBtn">
+                <property name="label">பற்றி</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -198,6 +205,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="clearbuffer">
+                <property name="label">அழி</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -210,6 +218,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="ExitBtn">
+                <property name="label">வெளியேறு</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -252,7 +261,7 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkImageMenuItem" id="fileMenu">
-                <property name="label">gtk-file</property>
+                <property name="label">கோப்பு (_F)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -263,7 +272,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="newMenuItem">
-                        <property name="label">gtk-new</property>
+                        <property name="label">புதிய (_N)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -273,7 +282,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="openMenuItem">
-                        <property name="label">gtk-open</property>
+                        <property name="label">திர (_O)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -283,7 +292,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="menuItemSave">
-                        <property name="label">gtk-save</property>
+                        <property name="label">சேமி (_S)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -293,7 +302,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="menuItemSaveAs">
-                        <property name="label">gtk-save-as</property>
+                        <property name="label">என் சேமி (_A)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -308,7 +317,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="quitMenuItem">
-                        <property name="label">gtk-quit</property>
+                        <property name="label">வெளியேறு (_Q)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -322,7 +331,7 @@
             </child>
             <child>
               <object class="GtkImageMenuItem" id="editMenu">
-                <property name="label">gtk-edit</property>
+                <property name="label">திருத்து (_E)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -333,7 +342,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="cut_item">
-                        <property name="label">gtk-cut</property>
+                        <property name="label">வெட்டு (_X)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -342,7 +351,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="copy_item">
-                        <property name="label">gtk-copy</property>
+                        <property name="label">நகல்(_C)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -351,7 +360,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="paste_item">
-                        <property name="label">gtk-paste</property>
+                        <property name="label">ஒட்டு (_V)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -360,7 +369,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="search_item">
-                        <property name="label">gtk-find</property>
+                        <property name="label">தேடு (_F)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -484,7 +493,7 @@
             </child>
             <child>
               <object class="GtkImageMenuItem" id="evaluateMenu">
-                <property name="label">கணக்கிடு (_V)</property>
+                <property name="label">கணக்கிடு (_X)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -494,12 +503,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="runMenuItem">
-                        <property name="label">gtk-media-play</property>
+                      <object class="GtkMenuItem" id="runMenuItem">
+                        <property name="label">இயக்கு (_R)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                   </object>
@@ -508,7 +516,7 @@
             </child>
             <child>
               <object class="GtkImageMenuItem" id="helpMenu">
-                <property name="label">gtk-help</property>
+                <property name="label">உதவி (_H)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -519,7 +527,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="aboutMenuItem">
-                        <property name="label">gtk-about</property>
+                        <property name="label">பற்றி (_A)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
