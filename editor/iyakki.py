@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+##This Python file uses the following encoding: utf-8
+##
+## (C) 2016-2017 Muthiah Annamalai,
+## Licensed under GPL Version 3
+## Certain sections of code are borrowed from public sources and are attributed accordingly.
+
 from __future__ import print_function
 
 import codecs
