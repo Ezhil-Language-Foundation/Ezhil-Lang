@@ -167,7 +167,7 @@ class Editor(EditorState):
         self.menuKbd = self.builder.get_object("toggleKeyboard")
         self.menuKbd.connect("activate", lambda wid: self.toggleKeyboard(wid))
         self.toolitemKbd = self.builder.get_object("KbdBtn")
-        self.toolitemKbd.connect("clicked",lambda wid: self.toggleKeyboard(wid))
+        self.toolitemKbd.connect("clicked",lambda wid: self.toggleKeyboardAndKeyword(wid))
 
         self.toolitemFont = self.builder.get_object("FontBtn")
         self.toolitemFont.connect("clicked", lambda wid: self.chooseFont(wid))
@@ -264,8 +264,7 @@ class Editor(EditorState):
         self.save_menu.connect("activate",Editor.save_file)
         self.saveas_menu = self.builder.get_object("menuItemSaveAs")
         self.saveas_menu.connect("activate",Editor.saveas_file)
-        
-        
+
         # clear buffer : clear run buffer
         self.clear_btn = self.builder.get_object("clearbuffer")
         self.clear_btn.connect("clicked",Editor.clear_buffer)
@@ -351,7 +350,18 @@ class Editor(EditorState):
 
         fontDlg.destroy()
         return True
-    
+
+    def toggleKeyboardAndKeyword(self,*arg):
+        try:
+            self.toggleKeyboard(*arg)
+        except Exception as ie:
+            pass
+        try:
+            self.toggleKeyword(*arg)
+        except Exception as ie:
+            pass
+        return True
+
     # callback for toggle keyboard
     def toggleKeyboard(self,*args):
         if self.oskeyboard != None:
