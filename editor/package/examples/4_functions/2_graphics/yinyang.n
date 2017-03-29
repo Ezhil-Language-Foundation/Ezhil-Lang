@@ -1,0 +1,51 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# inspired from Python source demo 'tdemo_yinyang.py'
+#"""       turtle-example-suite:
+#
+#
+#
+#Another drawing suitable as a beginner's
+#programming example.
+#
+#The small circles are drawn by the circle
+#command.
+#
+#"""
+
+
+நிரல்பாகம் yin(radius, color1, color2)
+    #turtle_width(3)
+    turtle_color("black")
+    turtle_fill(True)
+    turtle_circle(radius/2., 180)
+    turtle_circle(radius, 180)
+    turtle_left(180)
+    turtle_circle( -1*radius/2.0 , 180 )
+    turtle_color(color1)
+    turtle_fill(True)
+    turtle_color(color2)
+    turtle_left(90)
+    turtle_up()
+    turtle_forward(radius*0.375)
+    turtle_right(90)
+    turtle_down()
+    turtle_circle(radius*0.125)
+    turtle_left(90)
+    turtle_fill(False)
+    turtle_up()
+    turtle_backward(radius*0.375)
+    turtle_down()
+    turtle_left(90)
+முடி
+
+நிரல்பாகம் main()
+    #turtle_reset()
+    yin(200, "white", "black")
+    yin(200, "black", "white")
+    turtle_ht()
+    #pause( "Done! Hit enter to quit", 5)
+முடி
+
+main()

@@ -1,0 +1,16 @@
+# Ref: http://www.sosmath.com/calculus/diff/der07/der07.html, accessed Mar, 2015.
+# use Netwon-Raphson method for sqrt
+x = float(raw_input("Enter a number "))
+iterations = 0
+step = 0.01
+result = x/2.0 #initial guess
+பதிப்பி "starting ==> ",abs( (result*result)
+@( abs( (result*result) - x) > step )  வரை
+   பதிப்பி "counts => ",iterations,"result =>",result
+   result = (result - 0.5*(result^2-x)/result)
+   iterations = iterations + 1
+முடி
+
+பதிப்பி "counts => ",iterations
+பதிப்பி "sqrt[ ",x,"] => ",result
+பதிப்பி "error => ",result-sqrt(x)

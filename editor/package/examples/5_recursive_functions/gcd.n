@@ -1,0 +1,40 @@
+# (C) முத்தையா அண்ணாமலை 2013, 2015
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+## add test - பயன்படுத்தும் பரிசோதனை 
+## gcd as a recursive function
+நிரல்பாகம்  gcd ( x, y )
+     மு = max(x,y)
+    q = min(x,y)
+
+    @( q == 0 ) ஆனால்
+           பின்கொடு  மு
+     முடி
+    பின்கொடு  gcd( மு - q , q )
+முடி
+
+நிரல்பாகம்  gcd_iter ( x, y )
+    p = max(x,y)
+    q = min(x,y)
+
+    @( q != 0 ) வரை
+        rem = int(p%q)
+        p = q
+        q = rem
+    முடி
+    பின்கொடு  p
+முடி
+
+profile("begin")
+பதிப்பி "GCD(5,9) = ", gcd(5,9), gcd_iter(5,9)
+assert( gcd(5,9) == 1 )
+assert( gcd_iter(5,9) == 1 )
+
+பதிப்பி "GCD(25,20) = ", gcd(25,20)
+assert( gcd(25,20) == 5 )
+assert( gcd_iter(25,20) == 5 )
+
+பதிப்பி "GCD(44,121) = ", gcd(44,121)
+assert( gcd(44,121) == 11 )
+assert( gcd_iter(44,121) == 11 )
+profile("end")
+profile("results")

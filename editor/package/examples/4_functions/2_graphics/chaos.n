@@ -1,0 +1,113 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# inspired from Python source demo 
+# File: tdemo_chaos.py
+# Author: Gregor Lingl
+# Date: 2009-06-24
+
+# A demonstration of chaos
+
+# Ezhil does not have first-class function handle variables (yet). 
+# So some code duplication is necessary.
+
+நிரல்பாகம் f(x)
+    பின்கொடு 3.9*x*(1 - x)
+முடி
+
+நிரல்பாகம் g(x)
+    பின்கொடு 3.9*(x - x^2)
+முடி
+
+நிரல்பாகம் h(x)
+    பின்கொடு 3.9*x - 3.9*x*x
+முடி
+
+நிரல்பாகம் jumpto(x, y)
+    turtle_penup()
+    turtle_goto(x,y)
+முடி
+
+நிரல்பாகம் line(x1, y1, x2, y2)
+    jumpto(x1, y1)
+    turtle_pendown()
+    turtle_goto(x2, y2)
+முடி
+
+நிரல்பாகம் coosys( )
+    N = 80
+    line( -1 , 0 , N + 1 , 0 )
+    line( 0, -0.1, 0, 1.1)
+முடி
+
+நிரல்பாகம் plot_h( start, colour)
+    N = 80
+    turtle_pencolor(colour)
+    x = start
+    jumpto(0, x)
+    turtle_pendown()
+    turtle_dot(5)
+    i = 0
+    @( i <= N ) வரை
+        x = h(x)
+        turtle_goto( i + 1 , x )
+        turtle_dot(5)
+        i = i  + 1
+   முடி
+முடி
+
+நிரல்பாகம் plot_g( start, colour)
+    N = 80
+    turtle_pencolor(colour)
+    x = start
+    jumpto(0, x)
+    turtle_pendown()
+    turtle_dot(5)
+    i = 0
+    @( i <= N ) வரை
+        x = g(x)
+        turtle_goto( i + 1 , x )
+        turtle_dot(5)
+        i = i  + 1
+   முடி
+முடி
+
+நிரல்பாகம் plot_f( start, colour)
+    N = 80
+    turtle_pencolor(colour)
+    x = start
+    jumpto(0, x)
+    turtle_pendown()
+    turtle_dot(5)
+    i = 0
+    @( i <= N ) வரை
+        x = f(x)
+        turtle_goto( i + 1 , x )
+        turtle_dot(5)
+        i = i  + 1
+   முடி
+முடி
+
+நிரல்பாகம் main()
+    N = 80
+    turtle_reset()
+    turtle_setworldcoordinates( -1.0, -0.1, N + 1, 1.1)
+    turtle_speed(0)
+    turtle_hideturtle()
+    coosys()
+    plot_f( 0.35, "blue")
+    plot_g( 0.35, "green")
+    plot_h( 0.35, "red")
+    # Now zoom in:
+    s = 0
+    @( s < 100 ) வரை
+         printf( "iteration %d \n",s)
+         turtle_setworldcoordinates( 0.5*s ,  -0.1 , N + 1, 1.1 )
+	 s = s + 1
+    முடி
+    printf( "Done!\n" )
+முடி
+
+main()
+sleep(4)
+pause("Enter to quit!",1)

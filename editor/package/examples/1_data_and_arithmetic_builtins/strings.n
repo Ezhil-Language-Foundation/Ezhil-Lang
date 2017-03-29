@@ -1,0 +1,16 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+   பெயர் = "உங்கள் பெயர் பெயர்"
+   பதிப்பி "வணக்கம் திரு",  பெயர்
+   age = log10( 10^3  ) * 3
+    printf( "பெயர் %s. Age = %d",பெயர்,age)
+    full = sprintf( "பெயர் %s. Age = %d, %%d   ",பெயர்,age)
+    printf( full ,len( full ))
+    printf( "%s %d = %s - %f", capitalize("tamil"),atoi("5"),"5.5",atof("0.5"))
+    full_str = strip( full )
+    printf( "full = %d, strip = %d", len(full), len( full_str ) )
+    @( rfind( full, "பெயர்") >= 0 ) ஆனால்
+      பதிப்பி "வாழ்த்துக்கள்! பெயர்கள் உள்ளன"
+   முடி
+    

@@ -1,0 +1,31 @@
+# (C) முத்தையா அண்ணாமலை 2015
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# binomial coefficients எண்களை கணக்கிடு
+நிரல்பாகம்  fact ( n )
+  @( n == 0 ) ஆனால்
+            பின்கொடு  1.0
+     இல்லை
+            பின்கொடு    n*fact( n - 1 )
+    முடி
+முடி
+
+நிரல்பாகம் binomial_coeff( n , k )
+    பின்கொடு fact(n)/(fact(k)*fact(n-k))
+முடி
+
+C50 = binomial_coeff(5,0)
+பதிப்பி "C(5,0)", C50
+
+C51 = binomial_coeff(5,1)
+பதிப்பி "C(5,1)", C51
+
+C52 = binomial_coeff(5,2)
+பதிப்பி "C(5,2)", C52
+பதிப்பி "C(5,3)", binomial_coeff(5,3)
+பதிப்பி "C(5,4)", binomial_coeff(5,4)
+பதிப்பி "C(5,5)", binomial_coeff(5,5)
+
+assert( C50 == 1 )
+assert( C51 == 5 )
+assert( C52 = 10 )

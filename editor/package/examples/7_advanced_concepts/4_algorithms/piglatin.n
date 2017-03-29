@@ -1,0 +1,17 @@
+# (C) முத்தையா அண்ணாமலை 2016
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+# PIGLATIN - encoding :
+# I LIKE CHENNAI -> I IKEL HENNAIC
+நிரல்பாகம்  piglatin( word )
+    வ0 = []
+    வ0_str = ""
+    @(word இல் வ) ஒவ்வொன்றாக
+        வ = substr(வ,1,len(வ))+ வ[0]
+        append(வ0,வ)
+        வ0_str = வ0_str + " " + வ
+    முடி
+    பின்கொடு வ0_str #join(" ",வ0)
+முடி
+
+பதிப்பி piglatin(["I", "LIKE","CHENNAI"])

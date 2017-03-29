@@ -1,0 +1,37 @@
+# http://interactivepython.org/courselib/static/pythonds/BasicDS/stacks.html
+# Balanced Parantheses
+நிரல்பாகம் சரிவிகிதம்( exp_str )
+
+  ஸ்டேக் = []
+  முடிவு = False
+  
+  @( exp_str இல் அ  )  ஒவ்வொன்றாக
+      @( அ  ==  "("  )  ஆனால்
+            பின்இணை( ஸ்டேக்,  அ)
+      @( அ  == ")" )  இல்லைஆனால்    
+           @( நீளம்(ஸ்டேக்) >= 1 )  ஆனால்
+             வெளியேஎடு(ஸ்டேக்)
+           இல்லை
+              #நிறுத்து #unbalanced paranthesis found. stop.
+              அச்சிடு("unbalanced")
+              பின்கொடு முடிவு              
+           முடி 
+      முடி
+  முடி
+  அச்சிடு( "remaining stack = %d",நீளம்(ஸ்டேக்))
+  #for a balanced expression  
+  முடிவு = ( நீளம்(ஸ்டேக்) == 0 ) #there should be no more stuff on stack
+  பின்கொடு முடிவு
+முடி
+
+test_cases = { "(()()()())" : True,
+               "(((())))" : True,
+               "(()((())()))(()((())()))" : True,
+               "((((((())" : False,
+               "(()()(()":False,
+               "()))":False } #last case doesn't come out right due to Ezhil parser; but algorithm is correct.
+
+@( keys(test_cases) இல்  expr ) ஒவ்வொன்றாக
+   val = சரிவிகிதம்(expr)
+   பதிப்பி expr, test_cases[expr] , val
+முடி

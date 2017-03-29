@@ -1,0 +1,12 @@
+# (C) முத்தையா அண்ணாமலை 2013
+# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
+
+பதிப்பி "10+15 = ",10 + 15,"17/3.0=", 17/3.0
+பதிப்பி "17%3 = ", 17%3,"50 - 6*5= ", 50 - 6*5
+பதிப்பி "(50-5*6)/4 = ", ( 50 - 5*6 )/4
+
+# scientific notation, pi = π
+பதிப்பி "pi()-3.14159 =",pi()-3.14159,2/1000000.00
+
+# 1. Pi - https://en.wikipedia.org/wiki/Pihttps://en.wikipedia.org/wiki/Pi
+# 2. Scientific notation -https://en.wikipedia.org/wiki/Scientific_notation
