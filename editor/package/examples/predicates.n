@@ -1,9 +1,0 @@
-# (C) முத்தையா அண்ணாமலை 2013
-# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
-
-பதிப்பி "வணக்கம் உலகம்! isnumber - islist predicates tested "
-
-assert( isnumber( 5 ) &&  isnumber( pi())  && islist( [5,5] ) )
-assert( !islist( 5 ) && (!isnumber ( [5, 6, 7] )) )
-
-பதிப்பி "success"

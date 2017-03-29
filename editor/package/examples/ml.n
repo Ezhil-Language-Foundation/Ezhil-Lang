@@ -1,5 +1,0 @@
-# * should have more precedence over -
-q2 = 2*2 - 3
-q = (2*2) - 3
-
-assert( q ==  q2)

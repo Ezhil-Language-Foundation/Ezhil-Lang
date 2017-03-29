@@ -1,9 +1,0 @@
-# (C) முத்தையா அண்ணாமலை 2015
-# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
-    
-# Example from CLJ-Thamil by Elango Cheran
-# Ref: https://github.com/echeran/clj-thamil/blob/master/test/cljx/clj_thamil/format/analysis_test.cljx
-குஷி = ["ஜோடி","குஷி"]
-assert(   len( த("ஜிமிக்கி") ) ==  len(["ஜி", "மி", "க்", "கி"] ) )
-assert( len( த(குஷி[0]) ) == 2 )
-assert( len( த(குஷி[1]) ) == 2 )
