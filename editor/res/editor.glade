@@ -2,53 +2,11 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <object class="GtkAboutDialog" id="ezhilAboutDialog">
-    <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
-    <property name="modal">True</property>
-    <property name="hide_titlebar_when_maximized">True</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="has_resize_grip">True</property>
-    <property name="program_name">எழில் - ஒரு தமிழ் நிரலாக்க மொழி</property>
-    <property name="version">0.8</property>
-    <property name="copyright" translatable="yes">(C) 2008-2016 Muthiah Annamalai, and contributors. (முத்தையா உட்பட கிரேஷ்குமார் ராமராஜ், நாக சொக்கநாதன், ஸ்ரீனிவாசன் அவர்களும் எழில் மொழியின் மேம்பாட்டிற்கும், முன்னேற்றத்திற்கும் பங்களித்துள்ளனர்.)</property>
-    <property name="comments" translatable="yes">எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல் முறை கணிப்பொறி நிரல் எழுதுவதற்கு உதவும்.  (Ezhil, is a fun Tamil programming language for K-12). Tamil, is an Indian language spoken by over 60 million people.
-
-நிரலாக்க மொழி பற்றி மேலும் அறிய இந்த வலைவாசல் (Learn about the EzhilLanguage) http://ezhillang.org எழில் கணினி நிரல் மொழி வரவேற்கிறது.
-
-முத்தையா உட்பட கிரேஷ்குமார் ராமராஜ், நாக சொக்கநாதன், ஸ்ரீனிவாசன் அவர்களும் எழில் மொழியின் மேம்பாட்டிற்கும், முன்னேற்றத்திற்கும் பங்களித்துள்ளனர்.
-</property>
-    <property name="website">http://ezhillang.org</property>
-    <property name="website_label" translatable="yes">Ezhil - A Tamil Programming Language</property>
-    <property name="authors">Muthiah Annamalai, and other contributors.</property>
-    <property name="logo">img/ezhil_square_2015_128px.png</property>
-    <property name="license_type">gpl-3-0</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="aboutdialog-vbox1">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="aboutdialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-  </object>
   <object class="GtkApplicationWindow" id="ezhilEditorWindow">
     <property name="can_focus">False</property>
+    <property name="window_position">mouse</property>
+    <property name="icon_name">accessories-text-editor</property>
+    <property name="gravity">center</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
@@ -166,6 +124,18 @@
                 <property name="label">திரை வழி உள்ளீடு</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-edit</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="FontBtn">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-select-font</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -384,20 +354,20 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckMenuItem" id="toggleKeyboard">
-                        <property name="label">திரை விசை</property>
                         <property name="visible">True</property>
-                        <property name="active">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label">திரை விசை</property>
                         <property name="use_underline">True</property>
+                        <property name="active">True</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkCheckMenuItem" id="toggleKeyword">
-                        <property name="label">திரை குறிச்சொல்</property>
                         <property name="visible">True</property>
-                        <property name="active">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label">திரை குறிச்சொல்</property>
                         <property name="use_underline">True</property>
+                        <property name="active">True</property>
                       </object>
                     </child>
                   </object>
@@ -417,7 +387,6 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="exItem1">
-                        <property name="label"></property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -426,7 +395,6 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="exItem2">
-                        <property name="label"></property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -435,7 +403,6 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="exItem3">
-                        <property name="label"></property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -444,7 +411,6 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="exItem4">
-                        <property name="label"></property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -453,7 +419,6 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="exItem5">
-                        <property name="label"></property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -462,7 +427,6 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="exItem6">
-                        <property name="label"></property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -471,7 +435,6 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="exItem7">
-                        <property name="label"></property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -666,6 +629,7 @@
               <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="vscrollbar_policy">always</property>
                 <property name="shadow_type">in</property>
                 <property name="min_content_width">350</property>
                 <property name="min_content_height">280</property>
@@ -673,6 +637,7 @@
                   <object class="GtkTextView" id="codeEditorTextView">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="is_focus">True</property>
                     <property name="pixels_above_lines">5</property>
                     <property name="pixels_below_lines">5</property>
                     <property name="wrap_mode">word</property>
@@ -681,12 +646,11 @@
                     <property name="top_margin">5</property>
                     <property name="bottom_margin">5</property>
                     <property name="input_hints">GTK_INPUT_HINT_WORD_COMPLETION | GTK_INPUT_HINT_NONE</property>
-                    <property name="monospace">True</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
@@ -701,6 +665,54 @@
             <property name="width">2</property>
             <property name="height">2</property>
           </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAboutDialog" id="ezhilAboutDialog">
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="hide_titlebar_when_maximized">True</property>
+    <property name="icon_name">help-about</property>
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="transient_for">ezhilEditorWindow</property>
+    <property name="has_resize_grip">True</property>
+    <property name="program_name">எழில் - ஒரு தமிழ் நிரலாக்க மொழி</property>
+    <property name="version">0.9</property>
+    <property name="copyright" translatable="yes">(C) 2008-2017 Muthiah Annamalai, and contributors. (முத்தையா உட்பட கிரேஷ்குமார் ராமராஜ், நாக சொக்கநாதன், ஸ்ரீனிவாசன் அவர்களும் எழில் மொழியின் மேம்பாட்டிற்கும், முன்னேற்றத்திற்கும் பங்களித்துள்ளனர்.)</property>
+    <property name="comments" translatable="yes">எழில் - ஒரு தமிழ் நிரலாக்க மொழி; தமிழ் மாணவர்களுக்கு இது முதல் முறை கணிப்பொறி நிரல் எழுதுவதற்கு உதவும்.  (Ezhil, is a fun Tamil programming language for K-12). Tamil, is an Indian language spoken by over 60 million people.
+
+நிரலாக்க மொழி பற்றி மேலும் அறிய இந்த வலைவாசல் (Learn about the EzhilLanguage) http://ezhillang.org எழில் கணினி நிரல் மொழி வரவேற்கிறது.
+
+முத்தையா உட்பட கிரேஷ்குமார் ராமராஜ், நாக சொக்கநாதன், ஸ்ரீனிவாசன் அவர்களும் எழில் மொழியின் மேம்பாட்டிற்கும், முன்னேற்றத்திற்கும் பங்களித்துள்ளனர்.
+</property>
+    <property name="website">http://ezhillang.org</property>
+    <property name="website_label" translatable="yes">Ezhil - A Tamil Programming Language</property>
+    <property name="authors">Muthiah Annamalai, and other contributors.</property>
+    <property name="logo">img/ezhil_square_2015_128px.png</property>
+    <property name="license_type">gpl-3-0</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="aboutdialog-vbox1">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="aboutdialog-action_area1">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>

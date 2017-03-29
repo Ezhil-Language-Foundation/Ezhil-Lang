@@ -109,7 +109,11 @@ class EditorState:
         # timing logger
         self.tstart = 0.0
         self.tend = 0.0
-        
+
+        # font settings
+        self.default_font = u"Sans Italic 16"
+        self.fontsel = None
+
         # editor Gtk widgets
         self.window = None
         self.abt_menu = None
@@ -161,9 +165,12 @@ class Editor(EditorState):
         self.console_textview = self.builder.get_object("codeExecutionTextView")
 
         self.menuKbd = self.builder.get_object("toggleKeyboard")
-        self.menuKbd.connect("activate",lambda wid: self.toggleKeyboard(wid))
+        self.menuKbd.connect("activate", lambda wid: self.toggleKeyboard(wid))
         self.toolitemKbd = self.builder.get_object("KbdBtn")
         self.toolitemKbd.connect("clicked",lambda wid: self.toggleKeyboard(wid))
+
+        self.toolitemFont = self.builder.get_object("FontBtn")
+        self.toolitemFont.connect("clicked", lambda wid: self.chooseFont(wid))
 
         self.menuKeyword = self.builder.get_object("toggleKeyword")
         self.menuKeyword.connect("activate",lambda wid: self.toggleKeyword(wid))
@@ -178,27 +185,14 @@ class Editor(EditorState):
         self.textview.set_buffer(UndoableBuffer())
         self.textbuffer = self.textview.get_buffer()
         self.scrolled_codeview.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.AUTOMATIC)
-        # comment purple
-        # keywords orange
-        # text black
-        # literal green
-        self.default_font = u"Sans Italic 16"
-        self.tag_comment  = self.textbuffer.create_tag("comment",
-            weight=Pango.Weight.SEMIBOLD,foreground="red",font=self.default_font)
-        self.tag_keyword  = self.textbuffer.create_tag("keyword",
-            weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font)
-        self.tag_literal  = self.textbuffer.create_tag("literal",
-            style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
-        self.tag_operator = self.textbuffer.create_tag("operator",
-            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="olive")
-        self.tag_text = self.textbuffer.create_tag("text",font=self.default_font,foreground="black")
-        self.tag_found = self.textbuffer.create_tag("found",font=self.default_font,
-            background="yellow")
-        # for console buffer
-        self.tag_fail  = self.console_buffer.create_tag("fail",
-            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
-        self.tag_pass  = self.console_buffer.create_tag("pass",
-            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
+        self.tag_text = None
+        self.tag_literal = None
+        self.tag_comment = None
+        self.tag_fail = None
+        self.tag_found = None
+        self.tag_operator = None
+        self.tag_pass = None
+        self.refresh_tags()
         # add keywords bar
         self.keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
         self.operators16 = [u"@",u"+",u"-",u"*",u"/",u"%",u"^",u"==",u">",u"<",u">=",u"<=",u"!=",u"!=",u"!",u",",u"(",u")",u"{",u"}",u"()",u"[]"]
@@ -292,11 +286,45 @@ class Editor(EditorState):
         #self.textbuffer.connect_after('delete-range', Editor.keep_syntax_highlighting_on)
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
         #Gtk.main()
-    
+
+    def refresh_tags(self):
+        if self.tag_text:
+            for tags in [self.tag_comment, self.tag_keyword, self.tag_literal, self.tag_operator, self.tag_text, self.tag_found, self.tag_fail, self.tag_pass]:
+                tags.set_property("font",self.default_font)
+            return
+
+        # comment purple
+        # keywords orange
+        # text black
+        # literal green
+        self.tag_comment  = self.textbuffer.create_tag("comment",
+            weight=Pango.Weight.SEMIBOLD,foreground="red",font=self.default_font)
+        self.tag_keyword  = self.textbuffer.create_tag("keyword",
+            weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font)
+        self.tag_literal  = self.textbuffer.create_tag("literal",
+            style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
+        self.tag_operator = self.textbuffer.create_tag("operator",
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="olive")
+        self.tag_text = self.textbuffer.create_tag("text",font=self.default_font,foreground="black")
+        self.tag_found = self.textbuffer.create_tag("found",font=self.default_font,
+            background="yellow")
+        # for console buffer
+        self.tag_fail  = self.console_buffer.create_tag("fail",
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
+        self.tag_pass  = self.console_buffer.create_tag("pass",
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
+
     def do_autorun(self):
         GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
         return
-        
+
+    def update_font(self):
+        if not self.fontsel:
+            return
+        self.default_font = self.fontsel.get_font_name()
+        self.refresh_tags()
+
+
     # update title
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
@@ -309,6 +337,21 @@ class Editor(EditorState):
         n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
 
+    # callback for font button:
+    def chooseFont(self,widget):
+        fontDlg = Gtk.FontSelectionDialog(parent=self.window,title="choose a font please")
+        fontDlg.set_size_request(550,400)
+        fontDlg.set_font_name(self.default_font)
+        fontDlg.set_preview_text(u"The quick brown fox jumped over the lazy dog. தமிழில் நிரல் எழுது – Write code in தமிழ் எழில் : தமிழ் நிரலாக்க மொழி")
+        res = fontDlg.run()
+        if res == Gtk.ResponseType.OK:
+            self.fontsel = fontDlg.get_font_selection()
+            #print(self.fontsel.get_font_name())
+            self.update_font()
+
+        fontDlg.destroy()
+        return True
+    
     # callback for toggle keyboard
     def toggleKeyboard(self,*args):
         if self.oskeyboard != None:
@@ -354,7 +397,6 @@ class Editor(EditorState):
             
     @staticmethod
     def update_fcn(args):
-        print(u"update fcn")
         res_std_out,is_success=args
         ed = Editor.get_instance()
         ed.tend = time.time()
@@ -738,6 +780,8 @@ class Editor(EditorState):
         except Exception as slxe:
             StatusBar.push(0,u"இந்த நிரலை '%s', Syntax Highlighting செய்ய முடியவில்லை"%filename)
             textbuffer.set_text(text)
+        textview.scroll_to_iter(textbuffer.get_start_iter(),0.0,not True,0.0,0.0)
+        textview.grab_focus()
         textbuffer.set_modified(False)
         return
         
@@ -792,8 +836,8 @@ class Editor(EditorState):
         abt_menu = args[0]
         abt_dlg = builder.get_object("ezhilAboutDialog")
         #Parent = builder.get_object("ezhilEditorWindow"))
-        abt_dlg.show_all()
         ed = Editor.get_instance()
+        abt_dlg.show_all()
         print(ed.get_doc_info())
         close_btn = builder.get_object("aboutdialog-action_area1")
         abt_dlg.connect("response",Editor.abt_dlg_closer)

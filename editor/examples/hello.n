@@ -2,4 +2,5 @@
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 
 printf("This is ezhuthi. the Ezhil Editor!\n")
-input("hello world!")
+y=raw_input("hello world!")
+printf(y)
