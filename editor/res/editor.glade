@@ -138,6 +138,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="FontBtn">
+		<property name="label">எழுத்துரு விருப்பங்கள்</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
