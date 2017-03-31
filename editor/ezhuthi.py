@@ -19,6 +19,7 @@ import time
 import gi
 import tamil
 
+from ExampleHelper import ExampleBrowserWindow
 import OSKeyboardWidget
 import ezhil
 from SplashActivity import SplashActivity
@@ -164,11 +165,15 @@ class Editor(EditorState):
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
 
+        self.example_browser = None
         self.menuKbd = self.builder.get_object("toggleKeyboard")
         self.menuKbd.connect("activate", lambda wid: self.toggleKeyboard(wid))
         self.toolitemKbd = self.builder.get_object("KbdBtn")
         self.toolitemKbd.connect("clicked",lambda wid: self.toggleKeyboardAndKeyword(wid))
-
+        
+        self.exampleMenu = self.builder.get_object("exampleBrowserItem")
+        self.exampleMenu.connect("activate",lambda wid: self.exampleBrowser(wid) )
+        
         self.toolitemFont = self.builder.get_object("FontBtn")
         self.toolitemFont.connect("clicked", lambda wid: self.chooseFont(wid))
 
@@ -347,10 +352,20 @@ class Editor(EditorState):
             self.fontsel = fontDlg.get_font_selection()
             #print(self.fontsel.get_font_name())
             self.update_font()
-
+        
         fontDlg.destroy()
         return True
 
+    def drop_ref_to_exampleBrowser(self,*args):
+        self.example_browser.destroy()
+        self.example_browser = None
+        return True
+    
+    def exampleBrowser(self,*arg):
+        if not self.example_browser:
+            self.example_browser = ExampleBrowserWindow(self)
+        self.example_browser.connect("delete_event",lambda *wid: self.drop_ref_to_exampleBrowser(*wid))
+        
     def toggleKeyboardAndKeyword(self,*arg):
         try:
             self.toggleKeyboard(*arg)
@@ -766,11 +781,14 @@ class Editor(EditorState):
             chooser.destroy()
         return
     
-    def load_file(self):
+    def load_file(self,specific_file=None):
+        # at this routine all the pre-validations are completed
         ed = Editor.get_instance()
         textview = Editor.get_instance().textview
         Window = Editor.get_instance().window
         StatusBar = Editor.get_instance().StatusBar
+        if specific_file:
+            ed.filename = specific_file
         filename = ed.filename
         textbuffer = textview.get_buffer()
         #print("Opened File: " + filename)
@@ -823,6 +841,15 @@ class Editor(EditorState):
             self.textbuffer.apply_tag(self.tag_found, match_start, match_end)
             self.search_and_mark(text, match_end)
 
+    def show_example(self,filename):
+        if self.is_edited():
+            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்! அதன் பின்னரே உதாரணங்களை காமிக்க முடியும்",okcancel)
+            if respo == Gtk.ResponseType.OK:
+                self.load_file(filename)
+        else:
+            self.load_file(filename)
+        return True
+    
     ## miscellaneous signal handlers
     @staticmethod
     def exit_editor(exit_btn):
