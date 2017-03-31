@@ -72,6 +72,8 @@ class ExampleBrowserWindow(Gtk.Window):
         for direxample in self.example_collector.examples:
             if not ( type(direxample) is list ):
                 continue
+            if len(direxample) < 1:
+                continue
             dirname = direxample[0].split(os.path.sep)    
             dirname = dirname[-2]
             self.examplestore.append([ExampleDescription.data.get(dirname,dirname).strip(),u'<folder/desc>'])
