@@ -19,6 +19,7 @@ import time
 import gi
 import tamil
 
+from DocView import DocBrowserWindow
 from ExampleHelper import ExampleBrowserWindow
 import OSKeyboardWidget
 import ezhil
@@ -166,6 +167,7 @@ class Editor(EditorState):
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
 
+        self.help_browser = None
         self.example_browser = None
         self.menuKbd = self.builder.get_object("toggleKeyboard")
         self.menuKbd.connect("activate", lambda wid: self.toggleKeyboard(wid))
@@ -173,8 +175,11 @@ class Editor(EditorState):
         self.toolitemKbd.connect("clicked",lambda wid: self.toggleKeyboardAndKeyword(wid))
         
         self.exampleMenu = self.builder.get_object("exampleBrowserItem")
-        self.exampleMenu.connect("activate",lambda wid: self.exampleBrowser(wid) )
-        
+        self.exampleMenu.connect("activate",lambda wid: self.exampleBrowser(wid))
+
+        self.helpItem = self.builder.get_object("HelpBtn")
+        self.helpItem.connect("clicked",lambda wid: self.helpBrowser(wid))
+
         self.toolitemFont = self.builder.get_object("FontBtn")
         self.toolitemFont.connect("clicked", lambda wid: self.chooseFont(wid))
 
@@ -366,7 +371,17 @@ class Editor(EditorState):
         if not self.example_browser:
             self.example_browser = ExampleBrowserWindow(self)
         self.example_browser.connect("delete_event",lambda *wid: self.drop_ref_to_exampleBrowser(*wid))
-        
+
+    def drop_ref_to_helpBrowser(self,*args):
+        self.help_browser.window.destroy()
+        self.help_browser = None
+        return True
+
+    def helpBrowser(self,*arg):
+        if not self.help_browser:
+            self.help_browser = DocBrowserWindow(self)
+        self.help_browser.window.connect("delete_event",lambda *wid: self.drop_ref_to_helpBrowser(*wid))
+
     def toggleKeyboardAndKeyword(self,*arg):
         try:
             self.toggleKeyboard(*arg)

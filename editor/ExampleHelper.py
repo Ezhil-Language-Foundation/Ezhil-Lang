@@ -93,7 +93,10 @@ class ExampleBrowserWindow(Gtk.Window):
         button = Gtk.Button(prog_language)
         self.buttons.append(button)
         button.connect("clicked", self.on_selection_button_clicked)
-        
+
+        if not ref_editor:
+            self.window.connect("delete-event", Gtk.main_quit)
+
         #setting up the layout, putting the treeview in a scrollwindow, and the buttons in a row
         self.scrollable_treelist = Gtk.ScrolledWindow()
         self.scrollable_treelist.set_vexpand(False)
