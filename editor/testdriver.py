@@ -13,6 +13,7 @@ import gi
 gi.require_version('Gtk','3.0')
 
 from gi.repository import Gtk, GObject, GLib, Pango
+from ExampleHelper import ExampleDiscovery
 
 def custom_exit(*x):
     Gtk.main_quit()
@@ -20,8 +21,24 @@ def custom_exit(*x):
     #ed.window.destroy()
     return None
 
+def test_find_location(request_files):
+    test_file_flat = []
+    for x in ExampleDiscovery().examples:
+        test_file_flat.extend(x)
+    assert( len(test_file_flat) > 170 )
+    test_actual_locations = []
+    for filename in request_files:
+        filepart = filename.split('/')[-1]
+        for reffile in test_file_flat:
+            if reffile.find(filepart) >= 0:
+                test_actual_locations.append(reffile)
+                break
+    import pprint
+    pprint.pprint(test_actual_locations)
+    return test_actual_locations
+
 def start_tests():
-    test_files = re.split("\s+","""package/examples/armstrong.n
+    test_files_raw = re.split("\s+","""package/examples/armstrong.n
     package/examples/array0.n
     package/examples/array1.n
     package/examples/array2.n
@@ -175,7 +192,8 @@ def start_tests():
     package/examples/vannakm.n
     package/examples/varavu_selavu.n
     package/examples/windoze.n""")
-    assert(len(test_files) > 150)
+    assert(len(test_files_raw) > 150)
+    test_files = test_find_location( test_files_raw )
     total_files = len(test_files)
     passed = 0
     actual_exit = sys.exit

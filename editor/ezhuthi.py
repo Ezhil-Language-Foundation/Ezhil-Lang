@@ -442,7 +442,7 @@ class Editor(EditorState):
     @staticmethod
     def insert_at_cursor(widget,value):
         ed = Editor.get_instance()
-        ed.textbuffer.insert_at_cursor(value,True)
+        ed.textbuffer.insert_at_cursor(value)
         return True
 
     # Implements Tamil-99 keyboard
