@@ -112,6 +112,7 @@ class EditorState:
         self.tend = 0.0
 
         # font settings
+        self.default_timeout = 60
         self.default_font = u"Sans Italic 16"
         self.fontsel = None
 
