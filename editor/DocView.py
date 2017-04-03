@@ -8,7 +8,6 @@ from __future__ import print_function
 from xml.dom.minidom import parse
 import sys
 import os
-import glob
 import tamil
 import codecs
 import re
@@ -17,19 +16,154 @@ from xml.dom.minidom import parse as xml_parse
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject, GLib, Pango
+
+# represents DTD of our XML
+class XMLtoDocVisitor:
+    def __init__(self):
+        self.dom = None
+        pass
+
+    def visit(self,dom_in):
+        for child in dom_in.childNodes:
+            #print(dir(child))
+            name = child.nodeName
+            if name == "chapter":
+                self.visit_chapter(child)
+                self.visit(child)
+            elif name == "section":
+                self.visit_section(child)
+                self.visit(child)
+            elif name == "list": #terminal node
+                self.visit_list(child)
+            elif name == "code": #terminal node
+                self.visit_code(child)
+            else: #child.name == "text": #terminal node
+                self.visit_text(child)
+
+    def visit_chapter(self,*args):
+        raise NotImplementedError()
+
+    def visit_section(self,*args):
+        raise NotImplementedError()
+
+    def visit_code(self,*args):
+        raise NotImplementedError()
+
+    def visit_text(self,text):
+        raise NotImplementedError()
+
+    def visit_list(self,*args):
+        raise NotImplementedError()
 
 # class worries about the layouts and Gtk ops
-class DocLayoutWidgetActions(object):
+class DocLayoutWidgetActions(object,XMLtoDocVisitor):
     def __init__(self):
         object.__init__(self)
+        XMLtoDocVisitor.__init__(self)
         self.chapters = {}
+        self.tag = {}
+        self.default_font = "Sans 12"
+        self.default_font_title = "Sans 20"
+        self.textbuffer = None
+        self.layoutpos = {"title":u"","section":0}
+
+    def build_tags(self,textbuffer):
+        self.tag["comment"]  = textbuffer.create_tag("comment",
+            weight=Pango.Weight.SEMIBOLD,foreground="red",font=self.default_font)
+        self.tag["code"]  = textbuffer.create_tag("code",
+            style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
+        # use for chapter title
+        self.tag["title"]  = textbuffer.create_tag("keyword",
+            weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font_title)
+        # use for text/section tags
+        self.tag["text"] = textbuffer.create_tag("text",font=self.default_font,foreground="black")
+        self.tag["literal"]  = textbuffer.create_tag("literal",
+            style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
+        self.tag["operator"] = textbuffer.create_tag("operator",
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="olive")
+        self.tag["found"] = textbuffer.create_tag("found",font=self.default_font,
+            background="yellow")
+        self.tag["list"]  = textbuffer.create_tag("list",
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
+        self.tag["pass"]  = textbuffer.create_tag("pass",
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
+
+    def visit_chapter(self,*args):
+        child = args[0]
+        title = child.getAttribute("title")+u"\n"
+        self.layoutpos["title"]=title
+        print("Chapter => %s"%title)
+        self.append_text_with_tag(title,self.tag["title"])
+
+    def visit_section(self,*args):
+        child = args[0]
+        self.layoutpos["section"] += 1
+        print("Section => %s"%str(child))
+        self.append_text_with_tag(u"Section %d\n"%self.layoutpos["section"],self.tag["found"])
+
+    def visit_code(self,*args):
+        child = args[0]
+        print("Code => %s"%str(child))
+        ref_text = None
+        for node in child.childNodes:
+            if node.nodeType == node.TEXT_NODE:
+                ref_text = node
+                break
+        if ref_text:
+            for idx,line in enumerate(re.split("\n+",ref_text.data)):
+                self.append_text_with_tag(line+u"\n",self.tag["code"])
+        pass
+
+    def visit_text(self,text):
+        child = text
+        print("Text => %s"%str(child))
+        self.append_text_with_tag(child.data,self.tag["text"])
+
+    def visit_list(self,*args):
+        child = args[0]
+        print("List => %s"%str(child))
+        ref_text = None
+        for node in child.childNodes:
+            if node.nodeType == node.TEXT_NODE:
+                ref_text = node
+                break
+        if ref_text:
+            for idx,line in enumerate(re.split("\n+",ref_text.data)):
+                self.append_text_with_tag(u"%d) "%idx+line+u"\n",self.tag["list"])
+        pass
+
+    def append_text_with_tag(self,text,tag):
+        textbuffer = self.textbuffer
+        textbuffer.insert_at_cursor( text )
+        n_end = textbuffer.get_end_iter()
+        n_start = textbuffer.get_iter_at_offset(textbuffer.get_char_count()-len(text))
+        textbuffer.apply_tag(tag,n_start,n_end)
+        return
 
     def render_page(self,pageno,textview,textbuffer):
+        if len(self.tag.keys()) == 0:
+            self.build_tags(textbuffer)
+
+        self.textbuffer = textbuffer
+
+        # reset
+        self.layoutpos = {"title":u"","section":0}
+        self.textbuffer.set_text(u"")
+
         dom = self.chapters[pageno]['dom']
+        self.visit(dom)
+        print("==========END VISITOR=======")
         with codecs.open(self.chapters[pageno]['file'],'r','utf-8') as fp:
             data = fp.read()
-        textbuffer.set_text( data )
+
+        # str_val = dom.getElementsByTagName("chapter")[0].getAttribute("title")
+        # print("Title => %s"%str_val)
+        # textbuffer.set_text( str_val )
+        # n_end = textbuffer.get_end_iter()
+        # n_start = textbuffer.get_iter_at_offset(textbuffer.get_char_count()-len(str_val))
+        # textbuffer.apply_tag(self.tag["title"],n_start,n_end)
+
         return True
 
     def update_toc(self,box,parent):
