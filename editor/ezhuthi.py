@@ -179,6 +179,8 @@ class Editor(EditorState):
 
         self.helpItem = self.builder.get_object("HelpBtn")
         self.helpItem.connect("clicked",lambda wid: self.helpBrowser(wid))
+        self.helpMenuItem = self.builder.get_object("helpMenuItem")
+        self.helpMenuItem.connect("activate",lambda wid: self.helpBrowser(wid))
 
         self.toolitemFont = self.builder.get_object("FontBtn")
         self.toolitemFont.connect("clicked", lambda wid: self.chooseFont(wid))

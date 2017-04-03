@@ -151,6 +151,7 @@
             </child>
             <child>
               <object class="GtkToolButton" id="HelpBtn">
+                <property name="label">உதவி</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
@@ -445,6 +446,15 @@
                     <child>
                       <object class="GtkImageMenuItem" id="aboutMenuItem">
                         <property name="label">பற்றி (_A)</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="helpMenuItem">
+                        <property name="label">உதவி "தமிழில் நிரல்படுத்து" புத்தகம்</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
