@@ -95,29 +95,53 @@ class ExampleBrowserWindow(Gtk.Window):
         button.connect("clicked", self.on_selection_button_clicked)
 
         if not ref_editor:
-            self.window.connect("delete-event", Gtk.main_quit)
+            self.connect("delete-event", Gtk.main_quit)
 
         #setting up the layout, putting the treeview in a scrollwindow, and the buttons in a row
         self.scrollable_treelist = Gtk.ScrolledWindow()
+        self.scrollable_treelist.set_property("vscrollbar-policy",Gtk.PolicyType.ALWAYS)
         self.scrollable_treelist.set_vexpand(False)
-        self.grid.attach(self.scrollable_treelist, 0, 0, 4,8)
-        self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 4, 1)
+        self.treeview.set_property( 'enable-grid-lines', True)
+        self.treeview.set_property('enable-tree-lines', True)
+        self.treeview.set_property('enable-search', True)
+        self.treeview.set_property('search-column', 0)
+        self.treeview.set_enable_search(True)
+        self.treeview.set_activate_on_single_click(True)
+        self.treeview.set_rules_hint(True)
+        self.treeview.connect("row-activated",lambda arg,b,c: self.on_selection_button_clicked(arg))
+        self.treeview.connect("start-interactive-search",lambda arg: self.treeview_search(arg))
+        self.grid.attach(self.scrollable_treelist, 0, 0, 7,8)
+        self.grid.attach_next_to(self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 7, 1)
         self.scrollable_treelist.add(self.treeview)
         self.show_all()
 
     def language_filter_func(self, model, iter, data):
-        """Tests if the language in the row is the one in the filter"""        
+        """Tests if the language in the row is the one in the filter"""
         if self.current_filter_language is None or self.current_filter_language == "None":
             return True
         else:
             return model[iter][2] == self.current_filter_language
+
+    def treeview_search(self,treeview):
+        entry = self.treeview.get_search_entry()
+        if entry:
+            example_name = entry.get_text()
+        else:
+            return False
+        print(example_name)
+        return False
 
     def on_selection_button_clicked(self, widget):
         """Called on any of the button clicks"""
         tree_sel = self.treeview.get_selection()
         (tm, ti) = tree_sel.get_selected()
         example_name = tm.get_value(ti, 1)
-        self.ref_editor.show_example(example_name)
+        if example_name.find("<folder/desc>") >= 0:
+            return True
+        if self.ref_editor:
+            self.ref_editor.show_example(example_name)
+        else:
+            print("example name => %s"%example_name)
         return True
 
 if __name__ == u"__main__":
