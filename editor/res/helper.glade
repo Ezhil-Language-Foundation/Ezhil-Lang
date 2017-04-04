@@ -55,7 +55,7 @@
             <property name="can_focus">True</property>
             <property name="vscrollbar_policy">always</property>
             <property name="shadow_type">in</property>
-            <property name="min_content_width">600</property>
+            <property name="min_content_width">700</property>
             <property name="min_content_height">500</property>
             <child>
               <object class="GtkTextView" id="textview1">

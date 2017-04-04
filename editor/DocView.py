@@ -17,6 +17,7 @@ from xml.dom.minidom import parse as xml_parse
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GLib, Pango
+from syntaxhighlighing import EzhilSyntaxHighlightingEditor
 
 # represents DTD of our XML
 class XMLtoDocVisitor:
@@ -61,10 +62,13 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
     def __init__(self):
         object.__init__(self)
         XMLtoDocVisitor.__init__(self)
+        self.highlighter = EzhilSyntaxHighlightingEditor()
+        self.highlighter.append_mode = True
         self.chapters = {}
         self.tag = {}
-        self.default_font = "Sans 12"
-        self.default_font_title = "Sans 20"
+        self.pageno = 0
+        self.default_font = "Sans 18"
+        self.default_font_title = "Sans 24"
         self.textbuffer = None
         self.layoutpos = {"title":u"","section":0}
 
@@ -89,9 +93,19 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         self.tag["pass"]  = textbuffer.create_tag("pass",
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
 
+        self.highlighter.tag_comment = self.tag["comment"]
+        self.highlighter.tag_keyword  = self.tag["title"]
+        self.highlighter.tag_literal = self.tag["literal"]
+        self.highlighter.tag_operator = self.tag["operator"]
+        self.highlighter.tag_found = self.tag["found"]
+        self.highlighter.tag_text = self.tag["text"]
+        self.highlighter.tag_fail = self.tag["list"]
+        self.highlighter.tag_pass = self.tag["pass"]
+
+
     def visit_chapter(self,*args):
         child = args[0]
-        title = child.getAttribute("title")+u"\n"
+        title = u"%d) "%self.pageno + child.getAttribute("title")+u"\n"
         self.layoutpos["title"]=title
         print("Chapter => %s"%title)
         self.append_text_with_tag(title,self.tag["title"])
@@ -100,7 +114,8 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         child = args[0]
         self.layoutpos["section"] += 1
         print("Section => %s"%str(child))
-        self.append_text_with_tag(u"Section %d\n"%self.layoutpos["section"],self.tag["found"])
+        self.append_text_with_tag(u"_"*100+u"\n",self.tag["text"])
+        self.append_text_with_tag(u"பிரிவு %d\n"%self.layoutpos["section"],self.tag["found"])
 
     def visit_code(self,*args):
         child = args[0]
@@ -111,8 +126,7 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
                 ref_text = node
                 break
         if ref_text:
-            for idx,line in enumerate(re.split("\n+",ref_text.data)):
-                self.append_text_with_tag(line+u"\n",self.tag["code"])
+            self.highlighter.run_syntax_highlighting(ref_text.data)
         pass
 
     def visit_text(self,text):
@@ -129,27 +143,40 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
                 ref_text = node
                 break
         if ref_text:
-            for idx,line in enumerate(re.split("\n+",ref_text.data)):
-                self.append_text_with_tag(u"%d) "%idx+line+u"\n",self.tag["list"])
+            idx = 0
+            for _,line in enumerate(re.split("\n+",ref_text.data.strip())):
+                line = line.strip()
+                line = re.sub("^\*","    ",line)
+                if len(line) < 1:
+                    continue
+                idx = idx + 1
+                self.append_text_with_tag(u"    %d)"%idx+line+u"\n",self.tag["list"])
         pass
 
     def append_text_with_tag(self,text,tag):
         textbuffer = self.textbuffer
+        self.highlighter.textbuffer = self.textbuffer
         textbuffer.insert_at_cursor( text )
         n_end = textbuffer.get_end_iter()
         n_start = textbuffer.get_iter_at_offset(textbuffer.get_char_count()-len(text))
         textbuffer.apply_tag(tag,n_start,n_end)
         return
 
-    def render_page(self,pageno,textview,textbuffer):
+    def render_toc_page(self):
+        pass
+
+    def render_page(self,pageno,textbuffer):
         if len(self.tag.keys()) == 0:
             self.build_tags(textbuffer)
-
+        self.pageno = pageno
         self.textbuffer = textbuffer
 
         # reset
         self.layoutpos = {"title":u"","section":0}
         self.textbuffer.set_text(u"")
+
+        if pageno == 0:
+            return self.render_toc_page()
 
         dom = self.chapters[pageno]['dom']
         self.visit(dom)
@@ -214,6 +241,8 @@ class DocBrowserWindow(object):
 
         self.textview = self.builder.get_object("textview1")
         self.textbuffer = self.textview.get_buffer()
+        self.textview.set_editable(False)
+        self.textview.set_cursor_visible(True)
 
         self.btn_next = self.builder.get_object("btnNext")
         self.btn_next.connect("clicked",lambda arg: self.on_navigate(arg,'->'))
@@ -248,7 +277,7 @@ class DocBrowserWindow(object):
         return True
 
     def render_page(self):
-        self.book.render_page(self.page,self.textview,self.textbuffer)
+        self.book.render_page(self.page,self.textbuffer)
         return True
 
     def on_selection_button_clicked(self, widget):

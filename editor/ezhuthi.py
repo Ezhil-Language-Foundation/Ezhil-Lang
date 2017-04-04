@@ -12,18 +12,17 @@ import multiprocessing
 import os
 import re
 import sys
-import tempfile
-import threading
 import time
 
 import gi
 import tamil
 
-from DocView import DocBrowserWindow
-from ExampleHelper import ExampleBrowserWindow
 import OSKeyboardWidget
 import ezhil
+from DocView import DocBrowserWindow
+from ExampleHelper import ExampleBrowserWindow
 from SplashActivity import SplashActivity
+from syntaxhighlighing import EzhilSyntaxHighlightingEditor
 from iyakki import MPRunner
 
 PYTHON3 = (sys.version[0] == '3')
@@ -91,18 +90,6 @@ class SearchDialog(Gtk.Dialog):
     def get_query(self):
         return self.entry.get_text()
 
-class Tokenizer:
-    # given a piece of text figure out if it is a number, string-literal or
-    # a keyword or just plain old text
-    def __init__(self):
-        self.lexer = ezhil.EzhilLex()
-        
-    def tokenize(self,chunk):
-        self.lexer.reset()
-        self.lexer.tokenize(chunk)
-        self.lexer.tokens.reverse()
-        return self.lexer.tokens
-
 class EditorState:
     def __init__(self):
         # Gtk builder objects
@@ -151,10 +138,11 @@ class EditorState:
         r['modified'] = self.is_edited()
         return r
 
-class Editor(EditorState):
+class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     _instance = None
     def __init__(self,filename=None,autorun=False):
         EditorState.__init__(self)
+        EzhilSyntaxHighlightingEditor.__init__(self)
         Editor._instance = self
         self.autorun = autorun
         self.builder.add_from_file("res/editor.glade")
@@ -299,36 +287,20 @@ class Editor(EditorState):
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
         #Gtk.main()
 
-    def refresh_tags(self):
-        if self.tag_text:
-            for tags in [self.tag_comment, self.tag_keyword, self.tag_literal, self.tag_operator, self.tag_text, self.tag_found, self.tag_fail, self.tag_pass]:
-                tags.set_property("font",self.default_font)
-            return
-
-        # comment purple
-        # keywords orange
-        # text black
-        # literal green
-        self.tag_comment  = self.textbuffer.create_tag("comment",
-            weight=Pango.Weight.SEMIBOLD,foreground="red",font=self.default_font)
-        self.tag_keyword  = self.textbuffer.create_tag("keyword",
-            weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font)
-        self.tag_literal  = self.textbuffer.create_tag("literal",
-            style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
-        self.tag_operator = self.textbuffer.create_tag("operator",
-            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="olive")
-        self.tag_text = self.textbuffer.create_tag("text",font=self.default_font,foreground="black")
-        self.tag_found = self.textbuffer.create_tag("found",font=self.default_font,
-            background="yellow")
-        # for console buffer
-        self.tag_fail  = self.console_buffer.create_tag("fail",
-            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
-        self.tag_pass  = self.console_buffer.create_tag("pass",
-            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
-
     def do_autorun(self):
         GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
         return
+
+    def refresh_tags(self):
+        if not self.tag_text:
+            # for console buffer
+            self.tag_fail  = self.console_buffer.create_tag("fail",
+                weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
+            self.tag_pass  = self.console_buffer.create_tag("pass",
+                weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
+
+        EzhilSyntaxHighlightingEditor.refresh_tags(self)
+
 
     def update_font(self):
         if not self.fontsel:
@@ -340,14 +312,6 @@ class Editor(EditorState):
     # update title
     def set_title(self):
         self.window.set_title(self.filename + self.TitlePrefix)
-    
-    def apply_comment_syntax_highlighting(self,c_line):
-        syntax_tag = self.tag_comment
-        self.textbuffer.insert_at_cursor( c_line )
-        self.textbuffer.insert_at_cursor(u"\n")
-        n_end = self.textbuffer.get_end_iter()
-        n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
-        self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
 
     # callback for font button:
     def chooseFont(self,widget):
@@ -582,66 +546,6 @@ class Editor(EditorState):
         ed.run_syntax_highlighting(text,[start,end])
 
         return
-
-    def run_syntax_highlighting(self,text,bounds=None):
-        EzhilToken = ezhil.EzhilToken
-        if not bounds:
-            start,end = self.textbuffer.get_bounds()
-        else:
-            start,end = bounds
-        
-        self.textbuffer.delete(start,end)
-        lines = text.split(u"\n")
-        lexer = Tokenizer()
-        for line in lines:
-            comment_line = line.strip()
-            if comment_line.startswith(u"#"):
-                self.apply_comment_syntax_highlighting(comment_line)
-                continue
-            idx_comment_part = comment_line.find("#")
-            if idx_comment_part != -1:
-                line_alt = comment_line[0:idx_comment_part]
-                comment_line = comment_line[idx_comment_part:]
-            else:
-                line_alt = line
-                comment_line = None
-            line = line_alt
-            lexemes = lexer.tokenize(line)
-            for lexeme in lexemes:
-                is_string = False
-                tok = lexeme.kind
-                is_keyword = False
-                if unicode(lexeme.val) in [u"உள்ளடக்கு",u"பின்கொடு",u"பதிப்பி",u"ஒவ்வொன்றாக",u"@",u"இல்",u"நிறுத்து"] or EzhilToken.is_keyword(tok):
-                    is_keyword = True
-                    syntax_tag = self.tag_keyword
-                elif EzhilToken.is_id(tok):
-                    syntax_tag = self.tag_operator
-                elif EzhilToken.is_number(tok):
-                    syntax_tag = self.tag_literal
-                elif EzhilToken.is_string(tok):
-                    is_string = True
-                    syntax_tag = self.tag_literal
-                else:
-                    syntax_tag = self.tag_text
-                m_start = self.textbuffer.get_insert()
-
-                if is_keyword:
-                     lexeme_val = lexeme.val + u" "
-                elif EzhilToken.is_number(lexeme.kind):
-                    lexeme_val = unicode(lexeme.val)
-                elif is_string:
-                     lexeme_val = u"\""+lexeme.val.replace(u"\n",u"\\n")+u"\""
-                else:
-                     lexeme_val = lexeme.val
-                self.textbuffer.insert_at_cursor( lexeme_val )
-                n_end = self.textbuffer.get_end_iter()
-                n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-len(lexeme_val))
-                self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
-                #self.textbuffer.insert_at_cursor(u" ")
-            if comment_line:
-                self.apply_comment_syntax_highlighting(u" "+comment_line)
-                continue
-            self.textbuffer.insert_at_cursor(u"\n")
 
     @staticmethod
     def clear_buffer(menuitem,arg1=None):
