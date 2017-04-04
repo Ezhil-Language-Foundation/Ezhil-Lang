@@ -107,19 +107,19 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         child = args[0]
         title = u"%d) "%self.pageno + child.getAttribute("title")+u"\n"
         self.layoutpos["title"]=title
-        print("Chapter => %s"%title)
+        #print("Chapter => %s"%title)
         self.append_text_with_tag(title,self.tag["title"])
 
     def visit_section(self,*args):
         child = args[0]
         self.layoutpos["section"] += 1
-        print("Section => %s"%str(child))
+        #print("Section => %s"%str(child))
         self.append_text_with_tag(u"_"*100+u"\n",self.tag["text"])
         self.append_text_with_tag(u"பிரிவு %d\n"%self.layoutpos["section"],self.tag["found"])
 
     def visit_code(self,*args):
         child = args[0]
-        print("Code => %s"%str(child))
+        #print("Code => %s"%str(child))
         ref_text = None
         for node in child.childNodes:
             if node.nodeType == node.TEXT_NODE:
@@ -131,17 +131,18 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
 
     def visit_text(self,text):
         child = text
-        print("Text => %s"%str(child))
+        #print("Text => %s"%str(child))
         self.append_text_with_tag(child.data,self.tag["text"])
 
     def visit_list(self,*args):
         child = args[0]
-        print("List => %s"%str(child))
+        #print("List => %s"%str(child))
         ref_text = None
         for node in child.childNodes:
             if node.nodeType == node.TEXT_NODE:
                 ref_text = node
                 break
+        self.append_text_with_tag(u"\n",self.tag["list"])
         if ref_text:
             idx = 0
             for _,line in enumerate(re.split("\n+",ref_text.data.strip())):
@@ -180,10 +181,9 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
 
         dom = self.chapters[pageno]['dom']
         self.visit(dom)
-        print("==========END VISITOR=======")
-        with codecs.open(self.chapters[pageno]['file'],'r','utf-8') as fp:
-            data = fp.read()
-
+        #print("==========END VISITOR=======")
+        #with codecs.open(self.chapters[pageno]['file'],'r','utf-8') as fp:
+        #    data = fp.read()
         # str_val = dom.getElementsByTagName("chapter")[0].getAttribute("title")
         # print("Title => %s"%str_val)
         # textbuffer.set_text( str_val )
@@ -271,7 +271,7 @@ class DocBrowserWindow(object):
         return True
 
     def on_navigate_to(self,widget,chapter_name,pos):
-        print(u'Navigating to -> %s @ pos = %d'%(chapter_name,pos))
+        #print(u'Navigating to -> %s @ pos = %d'%(chapter_name,pos))
         self.page = pos
         self.render_page()
         return True
