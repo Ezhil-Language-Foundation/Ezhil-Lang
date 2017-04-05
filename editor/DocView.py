@@ -247,7 +247,8 @@ class XMLtoDoc(DocLayoutWidgetActions):
         self.build_toc()
 
     def pages(self):
-        return len(self.chapters)+1
+        return len(self.chapters)
+
     def build_index(self):
         pass
 
@@ -269,7 +270,8 @@ class DocBrowserWindow(object):
 
         self.window = self.builder.get_object("appEzhilHelpBook")
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
-
+        self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+        self.window.set_title(u"தமிழில் நிரல் எழுது - எழில் கணினி மொழி")
         self.tocbox = self.builder.get_object("boxToc")
         self.book.update_toc(self.tocbox,self)
 
@@ -290,18 +292,32 @@ class DocBrowserWindow(object):
         self.window.show_all()
 
     def on_navigate(self,widget,direction):
+        error = False
+        errormsg = u""
         if direction == '->':
             #print(u"forward ")
-            if self.page < self.book.pages():
+            if (self.page+1) < self.book.pages():
                 self.page += 1
+            else:
+                error = True
+                errormsg = u"இதுவே கடைசி பக்கம்"
         elif direction == '<-':
             #print(u"backward ")
             if self.page >= 1:
                 self.page -= 1
+            else:
+                error = True
+                errormsg = u"இதுவே முதல் பக்கம்"
         elif direction == 'x':
             #print(u"home")
             self.page = 0
         #print("current page -> %d"%self.page)
+        if error:
+            dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, errormsg)
+            dialog.format_secondary_text(u"உதவி பக்கத்திற்கு செல்ல முடியாது.")
+            response = dialog.run()
+            dialog.destroy() #OK or Cancel don't matter
+            return True
         self.render_page()
         return True
 
