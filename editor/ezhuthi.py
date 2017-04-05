@@ -336,7 +336,8 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     def exampleBrowser(self,*arg):
         if not self.example_browser:
             self.example_browser = ExampleBrowserWindow(self)
-        self.example_browser.connect("delete_event",lambda *wid: self.drop_ref_to_exampleBrowser(*wid))
+            self.example_browser.connect("delete_event",lambda *wid: self.drop_ref_to_exampleBrowser(*wid))
+        self.example_browser.present()
 
     def drop_ref_to_helpBrowser(self,*args):
         self.help_browser.window.destroy()
@@ -345,8 +346,9 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     def helpBrowser(self,*arg):
         if not self.help_browser:
-            self.help_browser = DocBrowserWindow(self)
-        self.help_browser.window.connect("delete_event",lambda *wid: self.drop_ref_to_helpBrowser(*wid))
+            self.help_browser = DocBrowserWindow(self,self.default_font)
+            self.help_browser.window.connect("delete_event",lambda *wid: self.drop_ref_to_helpBrowser(*wid))
+        self.help_browser.window.present()
 
     def toggleKeyboardAndKeyword(self,*arg):
         try:

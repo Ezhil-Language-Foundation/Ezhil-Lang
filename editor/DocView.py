@@ -13,6 +13,11 @@ import codecs
 import re
 import pprint
 from xml.dom.minidom import parse as xml_parse
+from xml.dom.minidom import parseString as xml_parse_string
+
+PYTHON3 = (sys.version[0] == '3')
+if PYTHON3:
+    unicode = str
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -20,6 +25,10 @@ from gi.repository import Gtk, GObject, GLib, Pango
 from syntaxhighlighing import EzhilSyntaxHighlightingEditor
 
 # represents DTD of our XML
+# Rules:
+# 1) root <chapter> has 'title' attr
+# 2) <section> placeholder in <chapter>; all useful tags are within <section>
+# 3) atomic tags <list>, <code>, <b>, <i> and <u>
 class XMLtoDocVisitor:
     def __init__(self):
         self.dom = None
@@ -39,8 +48,13 @@ class XMLtoDocVisitor:
                 self.visit_list(child)
             elif name == "code": #terminal node
                 self.visit_code(child)
+            elif name in ["b","i","u"]:
+                self.visit_fmt(child,name)
             else: #child.name == "text": #terminal node
                 self.visit_text(child)
+
+    def visit_fmt(self,*args):
+        raise NotImplementedError()
 
     def visit_chapter(self,*args):
         raise NotImplementedError()
@@ -73,8 +87,15 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         self.layoutpos = {"title":u"","section":0}
 
     def build_tags(self,textbuffer):
-        self.tag["comment"]  = textbuffer.create_tag("comment",
+        self.tag["comment"] = textbuffer.create_tag("comment",
             weight=Pango.Weight.SEMIBOLD,foreground="red",font=self.default_font)
+        self.tag["bold"] = textbuffer.create_tag("bold",
+            weight=Pango.Weight.BOLD,font=self.default_font,foreground="black")
+        self.tag["italic"] = textbuffer.create_tag("italic",
+            style=Pango.Style.ITALIC,font=self.default_font,foreground="black")
+        self.tag["underline"]  = textbuffer.create_tag("underline",
+            underline=Pango.Underline.SINGLE,font=self.default_font,foreground="black")
+
         self.tag["code"]  = textbuffer.create_tag("code",
             style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
         # use for chapter title
@@ -89,7 +110,7 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         self.tag["found"] = textbuffer.create_tag("found",font=self.default_font,
             background="yellow")
         self.tag["list"]  = textbuffer.create_tag("list",
-            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="red")
+            weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="purple")
         self.tag["pass"]  = textbuffer.create_tag("pass",
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
 
@@ -102,6 +123,19 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         self.highlighter.tag_fail = self.tag["list"]
         self.highlighter.tag_pass = self.tag["pass"]
 
+    def visit_fmt(self,*args):
+        #pprint.pprint(args)
+        child = args[0]
+        fmt = args[1]
+        if fmt.startswith("i"):
+            tag = self.tag["italic"]
+        elif fmt.startswith("b"):
+            tag = self.tag["italic"]
+        elif fmt.startswith("u"):
+            tag = self.tag["underline"]
+        else:
+            raise Exception("Tag %s not implemented"%fmt)
+        self.append_text_with_tag(child.childNodes[0].data,tag)
 
     def visit_chapter(self,*args):
         child = args[0]
@@ -163,9 +197,6 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         textbuffer.apply_tag(tag,n_start,n_end)
         return
 
-    def render_toc_page(self):
-        pass
-
     def render_page(self,pageno,textbuffer):
         if len(self.tag.keys()) == 0:
             self.build_tags(textbuffer)
@@ -175,9 +206,6 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         # reset
         self.layoutpos = {"title":u"","section":0}
         self.textbuffer.set_text(u"")
-
-        if pageno == 0:
-            return self.render_toc_page()
 
         dom = self.chapters[pageno]['dom']
         self.visit(dom)
@@ -194,12 +222,17 @@ class DocLayoutWidgetActions(object,XMLtoDocVisitor):
         return True
 
     def update_toc(self,box,parent):
+        toc_list = [u"<chapter title=\"தமிழில் நிரல் எழுது - புத்தக உள்ளீடு\">",]
         for pos,chapter in self.chapters.items():
             btn = Gtk.Button(u"%d. %s"%(pos,chapter['title']))
             btn.connect('clicked',parent.on_navigate_to,chapter['title'],pos)
             box.pack_start(btn,True,True,0)
+            toc_list.append(u"<section>%s</section>"%chapter['title'])
+        toc_list.append(u"</chapter>")
+        toc_str = u"\n".join(toc_list)
+        toc_dom = xml_parse_string(PYTHON3 and toc_str or u'{0}'.format(toc_str).encode('utf-8'))
+        self.chapters[0] = {'dom':toc_dom,'title':u'தமிழில் நிரல் எழுது - புத்தக உள்ளீடு','file':u':auto:'}
         return True
-
 
 # class contains the books
 class XMLtoDoc(DocLayoutWidgetActions):
@@ -222,10 +255,11 @@ class XMLtoDoc(DocLayoutWidgetActions):
         pass
 
 class DocBrowserWindow(object):
-    def __init__(self,ref_editor=None):
+    def __init__(self,ref_editor=None,default_font=None):
         object.__init__(self)
         self.builder = Gtk.Builder()
         title="Ezhil Help Browser"
+        self.default_font = default_font
 
         book_chapters = ['ch1.xml', 'ch2.xml', 'ch3.xml', 'ch4.xml', 'ch5.xml', 'ch6.xml', 'ch7.xml', 'ch8.xml','appendix.xml']
         self.book = XMLtoDoc( map(lambda x: os.path.join('xmlbook',x),book_chapters) )
@@ -252,21 +286,22 @@ class DocBrowserWindow(object):
         self.btn_home.connect("clicked",lambda arg: self.on_navigate(arg,'x'))
         if not ref_editor:
             self.window.connect("delete-event", Gtk.main_quit)
+        self.render_page()
         self.window.show_all()
 
     def on_navigate(self,widget,direction):
         if direction == '->':
-            print(u"forward ")
+            #print(u"forward ")
             if self.page < self.book.pages():
                 self.page += 1
         elif direction == '<-':
-            print(u"backward ")
+            #print(u"backward ")
             if self.page >= 1:
                 self.page -= 1
         elif direction == 'x':
-            print(u"home")
+            #print(u"home")
             self.page = 0
-        print("current page -> %d"%self.page)
+        #print("current page -> %d"%self.page)
         self.render_page()
         return True
 
@@ -277,6 +312,7 @@ class DocBrowserWindow(object):
         return True
 
     def render_page(self):
+        self.book.default_font = self.default_font
         self.book.render_page(self.page,self.textbuffer)
         return True
 
