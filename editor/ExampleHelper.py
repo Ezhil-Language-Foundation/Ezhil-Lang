@@ -54,7 +54,10 @@ class ExampleBrowserWindow(Gtk.Window):
     def __init__(self,ref_editor=None):
         Gtk.Window.__init__(self, title="Ezhil Example Browser")
         self.set_size_request(300,350)
-        self.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+        try:
+            self.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+        except Exception as ie:
+            pass
         self.set_title(u"எழில் : தமிழ் நிரலாக்க மொழி - உதாரணங்கள்")
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         #self.set_border_width(10)

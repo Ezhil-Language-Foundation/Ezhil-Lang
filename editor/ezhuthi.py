@@ -150,7 +150,10 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             self.filename = filename
         ## construct the GUI from GLADE
         self.window = self.builder.get_object("ezhilEditorWindow")
-        self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+        try:
+            self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+        except Exception as ie:
+            pass
         self.window.set_resizable(True)
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")

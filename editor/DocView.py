@@ -270,7 +270,10 @@ class DocBrowserWindow(object):
 
         self.window = self.builder.get_object("appEzhilHelpBook")
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
-        self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+        try:
+            self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+        except Exception as ie:
+            pass
         self.window.set_title(u"தமிழில் நிரல் எழுது - எழில் கணினி மொழி")
         self.tocbox = self.builder.get_object("boxToc")
         self.book.update_toc(self.tocbox,self)
