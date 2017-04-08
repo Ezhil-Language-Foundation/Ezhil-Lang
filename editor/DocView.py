@@ -29,8 +29,9 @@ from syntaxhighlighing import EzhilSyntaxHighlightingEditor
 # 1) root <chapter> has 'title' attr
 # 2) <section> placeholder in <chapter>; all useful tags are within <section>
 # 3) atomic tags <list>, <code>, <b>, <i> and <u>
-class XMLtoDocVisitor:
+class XMLtoDocVisitor(object):
     def __init__(self):
+        object.__init__(self)
         self.dom = None
         pass
 
@@ -72,9 +73,8 @@ class XMLtoDocVisitor:
         raise NotImplementedError()
 
 # class worries about the layouts and Gtk ops
-class DocLayoutWidgetActions(object,XMLtoDocVisitor):
+class DocLayoutWidgetActions(XMLtoDocVisitor):
     def __init__(self):
-        object.__init__(self)
         XMLtoDocVisitor.__init__(self)
         self.highlighter = EzhilSyntaxHighlightingEditor()
         self.highlighter.append_mode = True
