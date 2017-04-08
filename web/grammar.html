@@ -1,0 +1,149 @@
+<!-- thanks to ta.wikipedia for the template -->
+<!-- AUTHOR:  முத்தையா அண்ணாமலை , Modified 01/28/08 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" encoding="UTF-8" xml:lang="ta" lang="ta" dir="ltr">
+
+<head  profile="http://www.w3.org/2005/10/profile"> 
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<meta name="keywords" content=" தமிழ்,  எழில், தமிழ் நிரல் மொழி " />
+		<link rel="copyright" href="http://www.gnu.org/copyleft/fdl.html" />
+		<title>எழில்: தமிழ் நிரலாக்க மொழி (Ezhil: The Tamil Programming Language)</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-43234778-1', '54.214.234.20');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+<h1>எழில்: தமிழ் நிரலாக்க மொழி : இலக்கணம்</h1>
+<pre>
+(C) 2008-2013  முத்தையா அண்ணாமலை
+</pre>
+<hr />
+<center>
+<a href="./index.html">முதல் பக்கம் [home page]</a> 
+<a href="./example.html">உதாரண நிரல்கள் [examples]</a> |
+<a href="./download.html">எழில்  தரவிறக்கம் [download]</a> 
+</center>
+
+
+<hr />
+
+<pre>
+இங்கே எழில் நிரல் மொழிக்கான இலக்கணம்
+மற்றும் தொழில்நுட்ப விவரங்களைப்பற்றித் தெரிந்துகொள்வோம்
+
+What follows is a technical description of 
+the programming language system.
+
+
+எழில் மொழியில் உள்ள நிரல் வாக்கியங்கள்
+Ezhil keywords and statements
+
+நிபந்தனை வாக்கியங்கள்
+Conditional Statements
+----------------------
+IF-ELSEIF-ELSE statement
+
+@( X != Y ) ஆனால்
+
+    ## ஒன்று அல்லது பல கட்டளைகளைச் செய்க
+    
+@( அ + ஆ )  இல்லைஆனால்
+
+  ## வேறு ஒன்று அல்லது பல கட்டளைகளைச் செய்க
+
+இல்லை
+
+  ## மற்ற நிபந்தனைகள் எவற்றுக்கும் பொருந்தாத ஒன்று அல்லது பல கட்டளைகளைச் செய்க
+  
+முடி
+
+
+SELECT-CASE statement
+@( அ + ஆ ) தேர்ந்தெடு
+
+தேர்வு @(   ஆ )
+
+ஏதேனில்
+  ## மற்ற நிபந்தனைகள் எவற்றுக்கும் பொருந்தாத ஒன்று அல்லது பல கட்டளைகளைச் செய்க
+முடி
+
+
+பன்முறைச்செயல்  வாக்கியங்கள்
+Iteration Statements
+--------------------
+FOR - statement
+@( X = 0, X < 10, X = X + 1  ) ஆக 
+## பல விஷயம் செய்க
+முடி
+
+WHILE-statement
+
+@( X < 0 ) வரை
+    ## ஒன்று அல்லது பல கட்டளைகளைச் செய்க
+முடி
+
+DO-UNTIL-statement
+
+செய்
+    ## ஒன்று அல்லது பல கட்டளைகளைச் செய்க
+முடியேனில் @( X < 0 )
+
+
+மற்ற  வாக்கியங்கள்
+Others
+----------------
+PRINT statement
+பதிப்பி
+
+BREAK-statement
+நேருத்து
+
+CONTINUE-statement
+தொடர்
+
+RETURN-statement
+பின்கொடு
+
+
+நிரல்பாகங்களை வரையறுக்கும் வாக்கியங்கள்
+Function declaration Statements
+-------------------------------
+நிரல்பாகம்  [பெயர்] @( )
+
+முடி
+
+முக்கியமான வார்த்தைகள் அனைத்தும்,
+So in all keywords are,
+
+ஆக : for
+நேருத்து : break
+தொடர் : continue
+பின்கொடு : return
+ஆனால் : if
+இல்லைஆனால் : elseif
+இல்லை : else
+தேர்ந்தெடு : select
+தேர்வு : case
+ஏதேனில் : otherwise
+வரை: while
+செய் : do
+முடியேனில் : until
+பதிப்பி : print
+நிரல்பாகம்  : function
+முடி : end
+</pre>
+<pre>
+(C) 2008-2013  Muthiah Annamalai 
+(C) 2008-2013  முத்தையா அண்ணாமலை
+</pre>
+</body>
+</html>
