@@ -506,6 +506,16 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         return True
 
     @staticmethod
+    def get_license_text():
+        txt = u"GPL v-3"
+        try:
+            with codecs.open(u"res/LICENSE_notes.txt","r","UTF-8") as fp:
+                txt = fp.read()
+        except IOError as ioe:
+            pass
+        return txt
+
+    @staticmethod
     def redo_action(*args):
         ed = Editor.get_instance()
         if not ed.textbuffer.can_redo:
@@ -801,6 +811,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         abt_dlg = builder.get_object("ezhilAboutDialog")
         #Parent = builder.get_object("ezhilEditorWindow"))
         ed = Editor.get_instance()
+        abt_dlg.set_property("license",Editor.get_license_text())
         abt_dlg.show_all()
         print(ed.get_doc_info())
         close_btn = builder.get_object("aboutdialog-action_area1")

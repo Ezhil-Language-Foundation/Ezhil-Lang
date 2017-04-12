@@ -666,7 +666,8 @@
     <property name="website_label" translatable="yes">Ezhil - A Tamil Programming Language</property>
     <property name="authors">Muthiah Annamalai, and other contributors.</property>
     <property name="logo">img/ezhil_square_2015_128px.png</property>
-    <property name="license_type">gpl-3-0</property>
+    <property name="license">GPL v-3</property>
+    <property name="license_type">custom</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
         <property name="can_focus">False</property>

@@ -1,16 +1,6 @@
 Ezhil Language Software is made up of several pieces of code all of which are available under 
-open-source licenses.
+the following open-source licenses.
 ==============================================================================================
-                                                 //###\\                    ##
-                                                ||     \\                  #  #
-                 ##############     ##         ####     ##       #######    ##
-                ###############     ##         #   ##    ##     ##   ## \\      ## 
-                ##   #      ##      ##         #   ##    ##    ##    ##  ##     ##
-                ##   #      ##      ##         #   ##         #      ##  ##     ##
-                ##   #      ##      ###############           ##     ##   ##    ##
-                ##   #      ##                 #               ##    ##    ##   ##
-                 #####      ##              //#####             #####         ####
-                                     ####### 
                  E Z H I L : A  Tamil Programming Language
                  (c) 2012-2017, Ezhil Language Foundation
 ==============================================================================================
