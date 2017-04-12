@@ -812,8 +812,9 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         #Parent = builder.get_object("ezhilEditorWindow"))
         ed = Editor.get_instance()
         abt_dlg.set_property("license",Editor.get_license_text())
+        abt_dlg.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         abt_dlg.show_all()
-        print(ed.get_doc_info())
+        #print(ed.get_doc_info())
         close_btn = builder.get_object("aboutdialog-action_area1")
         abt_dlg.connect("response",Editor.abt_dlg_closer)
         return True
