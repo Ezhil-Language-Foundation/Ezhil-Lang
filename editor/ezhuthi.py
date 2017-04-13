@@ -318,9 +318,10 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     # callback for font button:
     def chooseFont(self,widget):
-        fontDlg = Gtk.FontSelectionDialog(parent=self.window,title="choose a font please")
+        fontDlg = Gtk.FontSelectionDialog(parent=self.window,title=u"ஒரு எழுத்துருவை தேர்வு செய்யவும்")
         fontDlg.set_size_request(550,400)
         fontDlg.set_font_name(self.default_font)
+        # Question: what is a proper Tamil pangram ?
         fontDlg.set_preview_text(u"The quick brown fox jumped over the lazy dog. தமிழில் நிரல் எழுது – Write code in தமிழ் எழில் : தமிழ் நிரலாக்க மொழி")
         res = fontDlg.run()
         if res == Gtk.ResponseType.OK:
@@ -613,7 +614,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         ed = Editor.get_instance()
         clipboard = Gtk.Clipboard.get_default( ed.window.get_display() )
         clipboard.request_text(ed.readclipboard, user_data=None)
-		
+
     #callback for clipboard paste
     def readclipboard(self, clipboard, text, data):
         self.textbuffer.insert_at_cursor(text,len(text))

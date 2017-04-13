@@ -49,7 +49,7 @@ def MPRunner_actor(pipe,filename):
     except Exception as e:
         print(u" '{0}':\n{1}'".format(filename, unicode(e)))
     finally:
-        print("end of file exec")
+        print(u"######- நிரல் இயக்கி முடிந்தது-######")
         sys.exit = old_exit
         sys.stdout.flush()
         sys.stdout.close()
@@ -84,10 +84,10 @@ class MPRunner:
             p.terminate()
             p.join()
             is_success = False
-            res_std_out = u"timeout %g(s) reached - program taking too long\n"%self.timeout
+            res_std_out = u"இயக்கும் நேரம் %g(s) வினாடிகள் முடிந்தது காலாவதி ஆகியது\n"%self.timeout
         else:
             is_success = False
-            res_std_out = u"unknown!"
+            res_std_out = u"தெரியாத பிழை நேர்ந்தது!"
         self.res_std_out,self.is_success = res_std_out,is_success
         return
 
@@ -134,7 +134,7 @@ class GtkStaticWindow:
         dialogWindow.show_all()
         response = dialogWindow.run()
         text = userEntry.get_text() 
-        print("end of dummy input fcn")
+        print(u"#####- உள்ளீடு நிரல்பாகம் இயங்கி முடிந்தது -####")
         if (response == Gtk.ResponseType.OK) and (text != ''):
             return text
         return ""
