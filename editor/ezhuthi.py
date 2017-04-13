@@ -17,8 +17,19 @@ import time
 import gi
 import tamil
 
+gi.require_version('Gtk','3.0')
+try:
+    from gi.repository import Gtk, GObject, GLib, Pango
+except ImportError as ie:
+    print(u"Your system cannot run Ezhil on this Linux system; please install additional libraries")
+    print(u"called any of python-gi, python-gobject or pygobject3 using rpm or apt-get methods for your Linux distribution.")
+    print(u"\te.g. $sudo apt-get install python-gi")
+    print(u"\t may resolve your dependencies and install the Gtk libraries for you.")
+    print(u"Report this problem to Ezhil Language team at ezhillang@gmail.com and attach extra stack trace like:")
+    print(u"strace ./ezhuthi.sh > strace.output")
+    sys.exit(-1)
+
 import OSKeyboardWidget
-import ezhil
 from DocView import DocBrowserWindow
 from ExampleHelper import ExampleBrowserWindow
 from SplashActivity import SplashActivity
@@ -29,9 +40,6 @@ PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
     unicode = str
 
-gi.require_version('Gtk','3.0')
-
-from gi.repository import Gtk, GObject, GLib, Pango
 from undobuffer import UndoableBuffer
 
 # This section of code is borrowed from https://github.com/pyinstaller/pyinstaller/wiki/Recipe-Multiprocessing
