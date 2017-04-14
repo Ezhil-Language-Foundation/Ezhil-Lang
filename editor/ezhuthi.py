@@ -99,6 +99,31 @@ class SearchDialog(Gtk.Dialog):
         return self.entry.get_text()
 
 class EditorState:
+    LICENSE_NOTE = u"""
+
+    எழில் - தமிழ் கணினி மொழி
+    தமிழில் நிரல்படுத்தி கணிமை பழகுவோம்!
+    (c) 2009 - 2017 எழில் மொழி அறக்கட்டளை
+    =========================================================
+    The code for Ezhil Language software is distributed under the following GPLv3 license
+    The associated packages with Ezhil are distributed under respective open-source licenses
+    documented under 'உதவி > பற்றி' menu.
+
+    Copyright (C) 2007-2017, Muthiah Annamalai and other contributors
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
     def __init__(self):
         # Gtk builder objects
         self.builder = Gtk.Builder()
@@ -293,10 +318,25 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         self.load_file()
         if autorun:
             self.do_autorun()
+        GLib.timeout_add(500,self.display_tinylicense)
         #self.textbuffer.connect_after('insert-text', Editor.keep_syntax_highlighting_on)
         #self.textbuffer.connect_after('delete-range', Editor.keep_syntax_highlighting_on)
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
         #Gtk.main()
+
+    def display_tinylicense(self):
+        #window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
+        #window.set_default_size(100,150) #vanishingly small size
+        #window.connect("delete-event",Gtk.main_quit)
+        dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK_CANCEL,u"எழில் - தமிழ் கணினி மொழி")
+        dialog.format_secondary_text(EditorState.LICENSE_NOTE)
+        dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+        response = dialog.run()
+        dialog.destroy() #OK or Cancel don't matter
+        if response == Gtk.ResponseType.CANCEL:
+            self.window.emit("destroy")
+        return False
 
     def do_autorun(self):
         GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
@@ -782,7 +822,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         end = self.textbuffer.get_end_iter()
         match = start.forward_search(text, 0, end)
 
-        if match != None:
+        if match:
             match_start, match_end = match
             self.textbuffer.apply_tag(self.tag_found, match_start, match_end)
             self.search_and_mark(text, match_end)
