@@ -13,6 +13,7 @@ import os
 import re
 import sys
 import time
+import json
 
 import gi
 import tamil
@@ -98,8 +99,53 @@ class SearchDialog(Gtk.Dialog):
     def get_query(self):
         return self.entry.get_text()
 
+# automatically bootstrap the JSON file
+class EzhuthiSettings(object):
+    FILENAME = "ezhuthi.json"
+    @staticmethod
+    def load():
+        return EzhuthiSettings(EzhuthiSettings.FILENAME)
+
+    def save(self):
+        with codecs.open(EzhuthiSettings.FILENAME,"w","UTF-8") as fp:
+            json.dump(self.data,fp)
+        return True
+
+    def get_timeout(self):
+        return self.data['timeout']
+    def update_timeout(self,timeout):
+        self.data['timeout'] = timeout
+
+    def get_font(self):
+        return u"%s %s"%(self.data['font-face'],self.data['font-size'])
+    def update_font(self,font):
+        parts = font.split(u" ")
+        self.data['font-face'] = u"".join(parts[:-1])
+        self.data['font-size'] = parts[-1]
+
+    def get_license_accepted(self):
+        return self.data['accept_license']
+    def set_license_accepted(self):
+        self.data['accept_license'] = True
+
+    def __init__(self,filename):
+        object.__init__(self)
+        self.data = {'font-face':u'Sans Italic','font-size':u'16','text-color':u'black',
+                     'keyword-color':u'blue','home-directory':os.getcwd(),'timeout':60,
+                     'accept_license':False}
+        try:
+            print( os.path.join(os.getcwd(),EzhuthiSettings.FILENAME) )
+            with codecs.open(os.path.join(os.getcwd(),EzhuthiSettings.FILENAME),"r","UTF-8") as fp:
+                for key,val in json.load(fp,encoding="UTF-8").items():
+                    self.data[key] = val
+        except IOError as ioe:
+            print(ioe)
+
 class EditorState:
     LICENSE_NOTE = u"""
+
+    == !!! இந்த உரிமம் ஒப்புக்கொண்டால் மட்டுமே நீங்கள்==
+    == இந்த செயலியை பயன்படுத்தலாம்!!!==
 
     எழில் - தமிழ் கணினி மொழி
     தமிழில் நிரல்படுத்தி கணிமை பழகுவோம்!
@@ -127,14 +173,15 @@ class EditorState:
     def __init__(self):
         # Gtk builder objects
         self.builder = Gtk.Builder()
-        
+        self.settings = EzhuthiSettings.load()
+
         # timing logger
         self.tstart = 0.0
         self.tend = 0.0
 
         # font settings
-        self.default_timeout = 60
-        self.default_font = u"Sans Italic 16"
+        self.default_timeout = self.settings.get_timeout()
+        self.default_font = self.settings.get_font()
         self.fontsel = None
 
         # editor Gtk widgets
@@ -153,10 +200,14 @@ class EditorState:
         self.filename = os.path.join(u'examples',u'untitled.n')
         self.file_modified = False
         self.count = 0
-        
         # cosmetics
         self.TitlePrefix = u" -சுவடு எழுதி"
-        
+
+    def save_settings(self):
+        self.settings.update_font(self.default_font)
+        self.settings.update_timeout(self.default_timeout)
+        self.settings.save()
+
     # was editor code modified ?
     def is_edited(self):
         return self.textbuffer.get_modified()
@@ -170,6 +221,23 @@ class EditorState:
         r['char_count'] = self.textbuffer.get_char_count()
         r['modified'] = self.is_edited()
         return r
+
+    def display_tinylicense(self):
+        if self.settings.get_license_accepted():
+            return False
+
+        dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK_CANCEL,u"எழில் - தமிழ் கணினி மொழி உரிமம்")
+        dialog.format_secondary_text(EditorState.LICENSE_NOTE)
+        dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+        response = dialog.run()
+        dialog.destroy() #OK or Cancel don't matter
+        if response == Gtk.ResponseType.CANCEL:
+            self.window.emit("destroy")
+        elif response == Gtk.ResponseType.OK:
+            self.settings.set_license_accepted()
+        return False
+
 
 class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     _instance = None
@@ -323,20 +391,6 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         #self.textbuffer.connect_after('delete-range', Editor.keep_syntax_highlighting_on)
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
         #Gtk.main()
-
-    def display_tinylicense(self):
-        #window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
-        #window.set_default_size(100,150) #vanishingly small size
-        #window.connect("delete-event",Gtk.main_quit)
-        dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.INFO,
-            Gtk.ButtonsType.OK_CANCEL,u"எழில் - தமிழ் கணினி மொழி")
-        dialog.format_secondary_text(EditorState.LICENSE_NOTE)
-        dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
-        response = dialog.run()
-        dialog.destroy() #OK or Cancel don't matter
-        if response == Gtk.ResponseType.CANCEL:
-            self.window.emit("destroy")
-        return False
 
     def do_autorun(self):
         GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
@@ -840,6 +894,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     @staticmethod
     def exit_editor(exit_btn):
         ed = Editor.get_instance()
+        ed.save_settings()
         if ed.is_edited():
             okcancel=True
             respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)

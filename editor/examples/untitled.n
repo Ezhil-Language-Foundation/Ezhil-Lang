@@ -22,3 +22,4 @@
 பதிப்பி "5 படிகள் / பொன்_விகிதம் =>",விடை,விடை-பொன்வி_எண்
 # Ref: https://en.wikipedia.org/wiki/Golden_ratio
 # Ref: https://www.mathsisfun.com/numbers/golden-ratio.html
+
