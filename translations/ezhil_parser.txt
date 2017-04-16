@@ -1,112 +1,16 @@
-./ezhil/ezhil_parser.py:    """ when you add new language feature, add a AST class
-./ezhil/ezhil_parser.py:    and its evaluate methods. Also add a parser method """
 ./ezhil/ezhil_parser.py:                raise RuntimeException(Messages.ClassNotFound,u"Ezhil lexer")
-./ezhil/ezhil_parser.py:        """ Factory method """
 ./ezhil/ezhil_parser.py:            raise ParseException(u"cannot find token "+ \
 ./ezhil/ezhil_parser.py:                                 EzhilToken.get_name(kind) + u" got " \
 ./ezhil/ezhil_parser.py:                                + u" instead!")
-./ezhil/ezhil_parser.py:        """ parser routine """
-./ezhil/ezhil_parser.py:        self.dbg_msg(u" entering parser " )
-./ezhil/ezhil_parser.py:            self.dbg_msg( u"AST length = %d"%len(self.ast) )
-./ezhil/ezhil_parser.py:                self.dbg_msg ( u"parsing for function" )
-./ezhil/ezhil_parser.py:                self.dbg_msg( u"parsing for stmt" )
-./ezhil/ezhil_parser.py:        """ parse a bunch of statements """
-./ezhil/ezhil_parser.py:        self.dbg_msg(u" STMTLIST ")
-./ezhil/ezhil_parser.py:            self.dbg_msg(u"STMTLIST => STMT")
-./ezhil/ezhil_parser.py:            self.dbg_msg(u"STMTLIST "+unicode(ptok))
-./ezhil/ezhil_parser.py:            if ( self.debug ): print(u"peek @ ",unicode(ptok))
-./ezhil/ezhil_parser.py:                self.dbg_msg(u"End token found");
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("DOWHILE token found")
-./ezhil/ezhil_parser.py:        self.dbg_msg("parsing SWITCH statement")
-./ezhil/ezhil_parser.py:        self.dbg_msg("parsing SWITCH-body") #self.dbg_msg        
 ./ezhil/ezhil_parser.py:        equality_token = EzhilLexeme("=",EzhilToken.EQUALITY)
-./ezhil/ezhil_parser.py:                self.dbg_msg("parsing CASE")
-./ezhil/ezhil_parser.py:                self.dbg_msg("parsing CASE EXPR")
-./ezhil/ezhil_parser.py:                self.dbg_msg("building an Expr "+unicode(expr))                
-./ezhil/ezhil_parser.py:                self.dbg_msg("parsing OTHERWISE: ")
-./ezhil/ezhil_parser.py:                self.dbg_msg("parsing OTHERWISE-Body")
-./ezhil/ezhil_parser.py:            self.dbg_msg("parsing SWITCH-CASE next bits "+unicode(ptok))
-./ezhil/ezhil_parser.py:        self.dbg_msg("parsing -SWITCH-CASE- complete")
-./ezhil/ezhil_parser.py:        self.dbg_msg(u"parsing IF statement")
-./ezhil/ezhil_parser.py:        self.dbg_msg(u"parsing IF-body")
-./ezhil/ezhil_parser.py:                self.dbg_msg(u"parsing ELSE-IF")                
-./ezhil/ezhil_parser.py:                self.dbg_msg(u"parsing ELSE-IF EXPR")
-./ezhil/ezhil_parser.py:                    self.dbg_msg(u"parsing ELSE-IF-body")
-./ezhil/ezhil_parser.py:                    self.dbg_msg(u"ELSEIF parsed correctly => "+unicode(next_stmt))
-./ezhil/ezhil_parser.py:                self.dbg_msg(u"parsing stmt else: ")
-./ezhil/ezhil_parser.py:                self.dbg_msg(u"parsing ELSE-Body")
-./ezhil/ezhil_parser.py:            self.dbg_msg(u"parsing -IF next bits "+unicode(ptok))
-./ezhil/ezhil_parser.py:        self.dbg_msg(u"parsing -IF-complete")
-./ezhil/ezhil_parser.py:        """ try an assign, print, return, if or eval statement """
-./ezhil/ezhil_parser.py:        self.dbg_msg(u" STMT ")
-./ezhil/ezhil_parser.py:        self.dbg_msg(u"stmt: peeking at "+unicode(ptok))
 ./ezhil/ezhil_parser.py:                raise ParseException( u"return statement outside of function body "+unicode(ret_tok))
-./ezhil/ezhil_parser.py:            self.dbg_msg(u"return statement parsed")
-./ezhil/ezhil_parser.py:            self.dbg_msg(u"stmt : print ")
-./ezhil/ezhil_parser.py:            if( self.debug ): print ("return from valuelist ",unicode(exp))
-./ezhil/ezhil_parser.py:               self.dbg_msg(u"while-statement")
-./ezhil/ezhil_parser.py:                if ( self.debug ): print(u"parsing FOREACH stmt")
-./ezhil/ezhil_parser.py:                self.dbg_msg(u"foreach-statement")
 ./ezhil/ezhil_parser.py:                    raise ParseException(u" FOR-EACH statement "+unicode(foreach_tok) )
-./ezhil/ezhil_parser.py:                iter = Identifier("__"+foreach_iter.id,l=0,c=-1);
-./ezhil/ezhil_parser.py:                eq_token = EzhilLexeme(u"=",EzhilToken.EQUALS)
-./ezhil/ezhil_parser.py:                plus_token = EzhilLexeme(u"+",EzhilToken.PLUS)
-./ezhil/ezhil_parser.py:                lt_token = EzhilLexeme(u"<",EzhilToken.LT)
-./ezhil/ezhil_parser.py:                if ( self.debug ): print(u"build init assign stmt")
-./ezhil/ezhil_parser.py:                if ( self.debug ): print(u"build cond expr")
-./ezhil/ezhil_parser.py:                cond = Expr( iter, lt_token, ExprCall( Identifier("len",l,c), VL1, l, c, self.debug ), l, c, self.debug )
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("build plus1 stmt")
-./ezhil/ezhil_parser.py:                if ( self.debug ): print(u"build equals stmt")
-./ezhil/ezhil_parser.py:                extract_foreach_iter_from_list = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug);
-./ezhil/ezhil_parser.py:                if ( self.debug ): print(u"completed parsing FOR-EACH loop",unicode(foreach_stmt))
-./ezhil/ezhil_parser.py:                """ For ( exp1 , exp2 , exp3 ) stmtlist  end"""
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("parsing FOR stmt")
-./ezhil/ezhil_parser.py:                self.dbg_msg("for-statement")                
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("matching for STMT",unicode(self.peek()))
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("matched for STMT",unicode(self.peek()))
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("extract 3 parts",unicode(init),unicode(cond),unicode(update))
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("body of loop",unicode(body))
-./ezhil/ezhil_parser.py:                if ( self.debug ): print("completed parsing FOR loop",unicode(forstmt))
-./ezhil/ezhil_parser.py:            if ( self.debug ): print("parsing DO-WHILE statement")
-./ezhil/ezhil_parser.py:            if ( self.debug ): print("parsed body")
-./ezhil/ezhil_parser.py:            if ( self.debug ): print("parsed EXP",exp[0])
-./ezhil/ezhil_parser.py:            self.dbg_msg("break-statement");
-./ezhil/ezhil_parser.py:            self.dbg_msg("continue-statement");
-./ezhil/ezhil_parser.py:            self.dbg_msg("import-statement")
-./ezhil/ezhil_parser.py:            self.dbg_msg("parsing expr: "+unicode(lhs))
 ./ezhil/ezhil_parser.py:        raise ParseException("parsing Statement, unknown operators" + unicode(ptok))
-./ezhil/ezhil_parser.py:        """ def[kw] fname[id] (arglist) {body} end[kw] """
 ./ezhil/ezhil_parser.py:            raise ParseException(u" Nested functions not allowed! "+unicode(self.last_token()))
 ./ezhil/ezhil_parser.py:            raise ParseException(u"unmatched 'def'  in function " +unicode(def_tok))
 ./ezhil/ezhil_parser.py:            raise ParseException(u"expected identifier in function"+unicode(id_tok))
-./ezhil/ezhil_parser.py:        self.dbg_msg( u"finished parsing arglist" )
-./ezhil/ezhil_parser.py:        self.dbg_msg( u"finished parsing function" ) 
-./ezhil/ezhil_parser.py:        """parse: ( expr_1 , expr_2, ... ) """
-./ezhil/ezhil_parser.py:        self.dbg_msg(u"valuelist: ")
-./ezhil/ezhil_parser.py:            if ( self.debug ): print(u"val = ",unicode(val))
-./ezhil/ezhil_parser.py:            if ( self.debug ) : print(u"ptok = ",unicode(ptok),unicode(ptok.kind),unicode(EzhilToken.ASSIGNOP))
-./ezhil/ezhil_parser.py:                if ( self.debug ): print(u"AssignStmt = ",unicode(val))
-./ezhil/ezhil_parser.py:                if ( self.debug ): print(u"No-Assign // Expr =",unicode(val))
-./ezhil/ezhil_parser.py:            self.dbg_msg(u"valuelist-expr: "+unicode(val))
 ./ezhil/ezhil_parser.py:                raise ParseException(u" function call argument list "+unicode(ptok))
-./ezhil/ezhil_parser.py:        """parse: ( arg_1, arg_2, ... ) """
-./ezhil/ezhil_parser.py:        self.dbg_msg( u" ARGLIST " )
 ./ezhil/ezhil_parser.py:                raise ParseException(u" function definition argument list "
-./ezhil/ezhil_parser.py:        """   EXPRLIST : EXPR, EXPRLIST        
-./ezhil/ezhil_parser.py:        ##  EXPRLIST : EXPR """
-./ezhil/ezhil_parser.py:        self.dbg_msg( u" EXPRLIST " )
-./ezhil/ezhil_parser.py:        self.dbg_msg(u"finished expression list")
-./ezhil/ezhil_parser.py:        self.dbg_msg( u" EXPR " )
 ./ezhil/ezhil_parser.py:                raise ParseException(u"invalid function call"+unicode(ptok))
-./ezhil/ezhil_parser.py:        """ this is a grammar abstraction; 
-./ezhil/ezhil_parser.py:        but AST only has Expr elements"""
-./ezhil/ezhil_parser.py:        self.dbg_msg( "term" )
-./ezhil/ezhil_parser.py:        self.dbg_msg( "factor" )
 ./ezhil/ezhil_parser.py:                raise SyntaxError("Missing Parens "+unicode(self.last_token()))
-./ezhil/ezhil_parser.py:            self.dbg_msg("completed parsing unary logical-not expression"+unicode(val))
-./ezhil/ezhil_parser.py:            self.dbg_msg("completed parsing unary bitwise-complement expression"+unicode(val))
-./ezhil/ezhil_parser.py:            self.dbg_msg(u"factor: "+unicode(ptok) + u" / "+ unicode(tok) )
-./ezhil/ezhil_parser.py:                val = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug)
-./ezhil/ezhil_parser.py:                    val = ExprCall( Identifier("__getitem__",l,c), VL2,l,c,self.debug)
 ./ezhil/ezhil_parser.py:                raise ParseException("dictionary indexing uses square brackets '[' only ']'"+unicode(ptok));
-./ezhil/ezhil_parser.py:        self.dbg_msg( u"factor-returning: "+unicode(val) )

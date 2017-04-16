@@ -1,169 +1,16 @@
-./ezhil/ast.py:        return u"" + self.id
-./ezhil/ast.py:        """ handy to print debug messages """
-./ezhil/ast.py:            print(u"## "+msg)
-./ezhil/ast.py:        return u"\n\t [Identifier [" + unicode(self.id) +u"]]"
-./ezhil/ast.py:            self.dbg_msg( unicode(self) + " = val ["+unicode(val) + "]" )
 ./ezhil/ast.py:        note = "Cannot Find Identifier %s at Line %d, col %d."%( self.id, self.line,self.col ) + ' ' + note
-./ezhil/ast.py:        """ visitor - do something with a identifier """
-./ezhil/ast.py:        return u" [String [" + unicode(self.string) + u"]] "
-./ezhil/ast.py:        return u" [Number [" + unicode(self.num) + u"]]"
-./ezhil/ast.py:            return u"மெய் (T)"
-./ezhil/ast.py:        return u"பொய் (F)"
-./ezhil/ast.py:        fmt = u"{"
-./ezhil/ast.py:            fmt = fmt + unicode(k) + u" : " + unicode(v) + u",\n"
-./ezhil/ast.py:        fmt = fmt + u"}"
-./ezhil/ast.py:        """ how do you evaluate dictionaries? just return the favor """
-./ezhil/ast.py:        return u", ".join( [unicode(item) for item in self] )
-./ezhil/ast.py:    """handle function call statement etc."""
-./ezhil/ast.py:            print("## ",msg)
 ./ezhil/ast.py:        return u"Line %d, Column %d : Function call [%s] with [%d] args"%(self.line,self.col,unicode(self.fname),len(self.arglist))
-./ezhil/ast.py:        return u"\n\t [ExprCall[ "+unicode(self.fname)+u" (" \
-./ezhil/ast.py:            +unicode(self.arglist)+u")]]"
-./ezhil/ast.py:            print(u"\n".join( env.builtin_map.keys() ))
-./ezhil/ast.py:            print("*"*60)
-./ezhil/ast.py:            print(u"\t".join(env.function_map.keys() ))
-./ezhil/ast.py:            print( self.fname, " ==?== ",env.builtin_map.get(self.fname,None))
-./ezhil/ast.py:            self.dbg_msg("calling function "+ self.fname)
-./ezhil/ast.py:            self.dbg_msg( u"function retval ="+unicode(rval)+unicode(type(rval)))
 ./ezhil/ast.py:            raise RuntimeException(u"undefined function: %s near ( %d, %d )"%(self.fname, self.line, self.col) )
-./ezhil/ast.py:        return u"\n\t [ExprList[ "+ u", ".join(map(unicode,self.exprs)) + u"]]"
-./ezhil/ast.py:        """evaluate  a, b, c ... z to a string w/o commas"""
-./ezhil/ast.py:        return u" ".join(map(unicode,z))
-./ezhil/ast.py:        """ implements an empty statement"""
-./ezhil/ast.py:        self.class_name = u"Stmt"
-./ezhil/ast.py:        self.dbg_msg( u" ".join([ u"stmt => ", unicode(self.__class__)]) ) #we're headed toward assertion
-./ezhil/ast.py:        print("//#//"*50)
-./ezhil/ast.py:        print(u"stmt => ", unicode(self.__class__)) #we're headed toward assertion
-./ezhil/ast.py:        self.dbg_msg(u"stmt => "+ unicode(self.__class__) )
-./ezhil/ast.py:        raise Exception(u"FATAL : Class %s did not implement the __repr__ method, nor inherits a concrete implementation."%unicode(self.__class__))
-./ezhil/ast.py:        """ handy to print debug messages """
-./ezhil/ast.py:        return u"line %d, col %d"%(self.line,self.col)
-./ezhil/ast.py:        """ empty statement """
-./ezhil/ast.py:        """ Decide if the val is agreeable to True.
-./ezhil/ast.py:        Right now keep it simple however."""
-./ezhil/ast.py:        self.dbg_msg(u"is_true_value? "+ unicode(val.__class__))
 ./ezhil/ast.py:                raise  Exception(u"Unknown case, cannot identify truth @ "+self.get_pos()+u" for value "+unicode(val))
-./ezhil/ast.py:            """ objects where is_true_value() is not supported """
-./ezhil/ast.py:        self.dbg_msg(u"Is True Value? " + unicode(rval) + unicode(val.__class__) )
-./ezhil/ast.py:    """ hold function declaration statements; have visit option, 
-./ezhil/ast.py:        but no evaluation options. """
-./ezhil/ast.py:            self.class_name = u"Declaration_Statement"
 ./ezhil/ast.py:            raise Exception(u"declaration statement can only hold FunctionStmt objects")
-./ezhil/ast.py:        """ delegate visitor to holding function """
-./ezhil/ast.py:    """ hold function declaration statements; have visit option, 
-./ezhil/ast.py:        but no evaluation options. """
-./ezhil/ast.py:        self.class_name = u"Import_Statement"
-./ezhil/ast.py:        #self.dbg_msg(" add call : execute(\"begin\")")
-./ezhil/ast.py:        import_via_execute = ExprCall( Identifier("execute",l,c), fname, l, c, self.debug )
-./ezhil/ast.py:        """ delegate visitor to holding function """
-./ezhil/ast.py:        return u"ImportStmt @ %s"%unicode(self.filename)
-./ezhil/ast.py:        return u"[UnaryExpr["+unicode(self.unaryop)+ ","+unicode(self.term)+"]]"
-./ezhil/ast.py:        """ delegate visitor to transformer/walker"""
-./ezhil/ast.py:            raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")
-./ezhil/ast.py:        self.dbg_msg(u"unaryop=> "+unicode(term) +u" "+ unicode(term.__class__))
 ./ezhil/ast.py:            raise RuntimeException(" unknown Unary Operation - "+unicode(self.unaryop)+" not supported")        
 ./ezhil/ast.py:        self.dbg_msg(u"unaryop=> "+u"term = "+unicode(term)+u" "+unicode(term.__class__))
 ./ezhil/ast.py:        """ expr is unit length always, as opposed to ExprList which is a n-len thing """
-./ezhil/ast.py:        return u"\n\t [Expr[ "+ unicode(self.term)+ u"] " + \
-./ezhil/ast.py:               u"\t NextExpr [" + unicode(self.next_expr) + u"]]"
-./ezhil/ast.py:        self.dbg_msg(u" Doing binary operator " + Token.token_types[binop])
-./ezhil/ast.py:            self.dbg_msg("addition")
-./ezhil/ast.py:            self.dbg_msg("subtraction")
-./ezhil/ast.py:            self.dbg_msg("multiplication")
-./ezhil/ast.py:            self.dbg_msg("division")
-./ezhil/ast.py:            self.dbg_msg("modulo")
-./ezhil/ast.py:            self.dbg_msg("exponent")
-./ezhil/ast.py:            self.dbg_msg("GT > ")
-./ezhil/ast.py:            self.dbg_msg("GTEQ >= ")
-./ezhil/ast.py:            self.dbg_msg("LT < ")
-./ezhil/ast.py:            self.dbg_msg("LT <= ")
-./ezhil/ast.py:            self.dbg_msg("NEQ != ")
-./ezhil/ast.py:            self.dbg_msg("EQUALITY ==  ")
-./ezhil/ast.py:            self.dbg_msg("LOGICAL AND")
-./ezhil/ast.py:            self.dbg_msg("LOGICAL OR")
 ./ezhil/ast.py:            raise SyntaxError("Binary operator syntax not OK @ "+self.get_pos())
-./ezhil/ast.py:        self.dbg_msg("value = "+unicode(val))
 ./ezhil/ast.py:                raise RuntimeException( " cannot normalize token; unknown clause,"+unicode(term)+", to evaluate @ "+obj.get_pos());
-./ezhil/ast.py:        self.dbg_msg(u" "+unicode(term)+u" "+ unicode(term.__class__))
-./ezhil/ast.py:            self.dbg_msg(u" "+unicode( tval)+ " "+unicode(tval2)+ u" " + unicode(tval2.__class__))
 ./ezhil/ast.py:                raise RuntimeException(u"binary operation "+unicode(self.term)+unicode(self.binop)+unicode(self.next_expr)+u" failed with exception "+unicode(binOp_Except))
 ./ezhil/ast.py:            raise RuntimeException(u" unknown Binary Operation - Binary operation "+unicode(self.binop)+u" not supported")
-./ezhil/ast.py:        self.dbg_msg(u"term = "+unicode(term)+u" "+unicode(term.__class__))
-./ezhil/ast.py:    """ return expr """
-./ezhil/ast.py:        return u"\n\t [ReturnStmt[ "+ unicode(self.rvalue)+ u"]]\n"
-./ezhil/ast.py:        self.dbg_msg(u"return statement evaluated to "+unicode(rhs))
-./ezhil/ast.py:    """ return expr """
-./ezhil/ast.py:        return u"\n\t [BreakStmt]\n"
-./ezhil/ast.py:        self.dbg_msg(u"break statement")
-./ezhil/ast.py:    """ return expr """
-./ezhil/ast.py:        return u"\n\t [ContinueStmt]\n"
-./ezhil/ast.py:        self.dbg_msg(u"continue statement")
-./ezhil/ast.py:        self.class_name = u"ElseStmt"
-./ezhil/ast.py:        return u"\t [ElseStmt ["+unicode(self.stmt) + u"]]\n"
-./ezhil/ast.py:    """ if ( op ) stmtlist {else | elseif ( op )| stmt } end"""
-./ezhil/ast.py:        self.class_name = "IfStmt"
-./ezhil/ast.py:        rval = u"\t\n [IfStmt[["+unicode(self.expr)+ u"]] "+unicode(self.body)
-./ezhil/ast.py:                self.dbg_msg( u" ".join([unicode(self.next_stmt),unicode(self.next_stmt.__class__),u"***"]) )
-./ezhil/ast.py:                rval = rval + u"<<Nxt>>" + unicode(self.next_stmt)
-./ezhil/ast.py:        rval = rval + u"]"
-./ezhil/ast.py:        self.dbg_msg( u"Eval-if-stmt" + unicode(self.expr) )
-./ezhil/ast.py:        self.dbg_msg(u"eval-if stmt")
-./ezhil/ast.py:            self.dbg_msg(u"ifstmt: true condition")
-./ezhil/ast.py:        self.dbg_msg(u"ifstmt: false condition")
 ./ezhil/ast.py:                raise RuntimeException("IF-ELSEIF-ELSE was parsed wrongly, unknown construct found")
-./ezhil/ast.py:    """ while ( exp ) stmtlist  end"""
-./ezhil/ast.py:        self.class_name = "WhileStmt"
-./ezhil/ast.py:        rval = u"\t\n [%s[["%unicode('WhileStmt')+unicode(self.expr)+ u"]] "+unicode(self.body) +u"]"
-./ezhil/ast.py:        self.dbg_msg("eval-While stmt")
-./ezhil/ast.py:            self.dbg_msg("ifstmt: true condition")
-./ezhil/ast.py:        self.dbg_msg("exiting While-stmt with rval="+unicode(rval))
-./ezhil/ast.py:    """ do stmtlist  while ( exp )"""
-./ezhil/ast.py:        return u"[DoWhileStmt[expr="+unicode(self.expr)+u",body="+unicode(self.body)+"]]"
-./ezhil/ast.py:        """ first run is on the house, but then we keep count. Dog bites American style """
-./ezhil/ast.py:        self.dbg_msg("eval-Do-While stmt")
-./ezhil/ast.py:            self.dbg_msg("ifstmt: true condition")
-./ezhil/ast.py:        self.dbg_msg("exiting Do-While-stmt with rval="+unicode(rval))
-./ezhil/ast.py:    """ For ( exp1 ; exp2 ; exp3 ) stmtlist  end"""
-./ezhil/ast.py:        self.class_name = "ForStmt"
-./ezhil/ast.py:        rval = u"\t\n [ForStmt[[ ("+unicode(self.expr_init)+"; "+\
-./ezhil/ast.py:            unicode(self.expr_cond) + "; " +\
-./ezhil/ast.py:            unicode(self.expr_update)+") ]] " + unicode(self.body) +"]"
-./ezhil/ast.py:        self.dbg_msg( "Eval-For-stmt: ")
-./ezhil/ast.py:        self.dbg_msg("eval-For-stmt")
-./ezhil/ast.py:        self.dbg_msg(u"exiting For-stmt with rval="+unicode(rval))
-./ezhil/ast.py:    """ lhs = rhs """
-./ezhil/ast.py:        self.class_name = "AssignStmt"
-./ezhil/ast.py:        return u"\n\t [AssignStmt[ "+ unicode(self.lvalue)+u"] " + \
-./ezhil/ast.py:               u"\t Expr [" + unicode(self.rvalue) + u"]]"
-./ezhil/ast.py:            raise Exception("Unknown assign operator @ "+self.get_pos())
-./ezhil/ast.py:            self.dbg_msg(u"assignop: rhs = "+unicode(self.rvalue) )
-./ezhil/ast.py:            self.dbg_msg(u"assignop lvalue ["+unicode(self.lvalue) \
-./ezhil/ast.py:                             +u"] = ["+unicode(rhs) + \
-./ezhil/ast.py:                             u"( saved as ) " + \
 ./ezhil/ast.py:        raise Exception("Unknown assign operator @ "+self.get_pos())
-./ezhil/ast.py:    """ print EXPR """
-./ezhil/ast.py:        return u"\n\t [PrintStmt[ "+ unicode(self.exprlst)+u"]]"
-./ezhil/ast.py:    """ EXPR """
-./ezhil/ast.py:        return u"\n\t [EvalStmt[ "+ unicode(self.expr)+u"/"+unicode((self.expr.__class__))+u"]]"
-./ezhil/ast.py:            print(u"evaluating EvalStmt")
-./ezhil/ast.py:    """ defines argument list in a function definition """
-./ezhil/ast.py:        """ to get self.args, use get_list() method """
-./ezhil/ast.py:        return "\n\t [ArgList["+ ",".join(map(unicode,self.args))+"]]"
-./ezhil/ast.py:    """ defines value list in a function definition """
-./ezhil/ast.py:        """ to get self.args, use get_list() method """
-./ezhil/ast.py:        """ index into the object like a list : @idx - caveat emptor """
-./ezhil/ast.py:        return "\n\t [ValueList["+ ",".join(map(unicode,self.args))+"]]"
-./ezhil/ast.py:        self.dbg_msg(u"==>"+unicode(stmt_x.__class__))
-./ezhil/ast.py:        self.dbg_msg(u"adding new statement " + unicode(stmt_x.__class__) )
-./ezhil/ast.py:        rval = u"\t [StmtList[ "+ u"\n ".join(map(unicode,self.List)) + u"]]\n"
-./ezhil/ast.py:            self.dbg_msg(  u"STMTLIST => STMT" )
-./ezhil/ast.py:        """ visit stmt list method """
-./ezhil/ast.py:    """ function definition itself """
-./ezhil/ast.py:        self.dbg_msg( u"function "+fname+u" was defined" )
-./ezhil/ast.py:            print(u"## ",msg)
-./ezhil/ast.py:        return u"\n\t [Function[ "+ unicode(self.name)+u"( " + \
-./ezhil/ast.py:            unicode(self.arglist) + u")]\n" + \
-./ezhil/ast.py:            u"\t Body [" + unicode(self.body) + u"]]\n"
-./ezhil/ast.py:        env.call_function(u"%s"%(self.name),u" at  %s"%(self.get_pos()))
 ./ezhil/ast.py:            raise Exception("Call Arguments donot match with" + \
 ./ezhil/ast.py:                                "function definition @ "+self.get_pos())

@@ -1,9 +1,5 @@
-./ezhil/profile.py:        self.add_function("profile")
 ./ezhil/profile.py:        print(u"############# Ezhil Code Profile Report ##################")
 ./ezhil/profile.py:        print(u"######## program completed in %g (s) ##############"%frecs[0].total_time)
 ./ezhil/profile.py:        print(u" Function  | N  | Avg(Self)| Avg (Cum)| Total ")
-./ezhil/profile.py:        print(u"----------------------------------------------------------")
-./ezhil/profile.py:                padded_name = rec.name + " "*(10-len(rec.name)-1)
-./ezhil/profile.py:            print(u"%10s | %3d| %5f | %3f | %5f"%(padded_name,rec.ncalls,\
 ./ezhil/profile.py:        print(u"##########################################################")
 ./ezhil/profile.py:if __name__ == u"__main__":

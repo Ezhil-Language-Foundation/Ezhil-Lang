@@ -144,16 +144,13 @@ class EzhuthiSettings(object):
 class EditorState:
     LICENSE_NOTE = u"""
 
-    == !!! இந்த உரிமம் ஒப்புக்கொண்டால் மட்டுமே நீங்கள்==
-    == இந்த செயலியை பயன்படுத்தலாம்!!!==
+!!! இந்த உரிமம் ஒப்புக்கொண்டால் மட்டுமே நீங்கள  இந்த செயலியை பயன்படுத்தலாம்!!!
 
     எழில் - தமிழ் கணினி மொழி
     தமிழில் நிரல்படுத்தி கணிமை பழகுவோம்!
     (c) 2009 - 2017 எழில் மொழி அறக்கட்டளை
     =========================================================
-    The code for Ezhil Language software is distributed under the following GPLv3 license
-    The associated packages with Ezhil are distributed under respective open-source licenses
-    documented under 'உதவி > பற்றி' menu.
+    The code for Ezhil Language software is distributed under the following GPLv3 license. The associated packages with Ezhil are distributed under respective open-source licenses documented under 'உதவி > பற்றி' menu.
 
     Copyright (C) 2007-2017, Muthiah Annamalai and other contributors
 
