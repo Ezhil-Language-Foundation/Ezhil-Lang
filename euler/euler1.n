@@ -1,0 +1,15 @@
+# Project Euler: https://projecteuler.net/problem=1
+# If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
+# Find the sum of all the multiples of 3 or 5 below 1000.
+கூட்டு=0
+@ (range(0,1000)இல் எ)ஒவ்வொன்றாக 
+rem=எ%3
+rem5=எ%5
+@ (rem==0)ஆனால் 
+கூட்டு=கூட்டு+எ
+@ (rem5==0)இல்லைஆனால் 
+கூட்டு=கூட்டு+எ
+முடி 
+முடி 
+பதிப்பி "கூட்டு = ",கூட்டு
+assert(கூட்டு==233168)
