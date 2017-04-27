@@ -18,7 +18,7 @@ def get_ast(filename):
     lexer = EzhilLex(filename, debug, encoding="UTF-8")
     parse_eval = EzhilInterpreter(lexer=lexer, debug=debug, safe_mode=safe_mode)
     parse_tree = parse_eval.parse()
-    return parse_tree
+    return parse_tree,parse_eval
 
 
 def serializeSourceFile(srcfilename, debug=False, tgtfile=None):

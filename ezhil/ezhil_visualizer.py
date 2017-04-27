@@ -11,7 +11,7 @@
 import codecs
 import functools
 import sys
-
+import xml
 from .ezhil_scanner import EzhilToken, Token
 from .transform import TransformVisitor
 from .ezhil_program_utils import get_ast;

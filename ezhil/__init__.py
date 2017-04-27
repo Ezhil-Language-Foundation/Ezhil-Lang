@@ -31,4 +31,4 @@ __all__ = ['version','credits','copyright','Interpreter','REPL','Lex','get_prog_
            'start','ezhil_transforms','ezhil_serializer','get_ast','serializeSourceFile','serializeParseTree',\
            'visualizeSourceFile','PrettyPrint','XsyTheme','SerializerXML',\
            'TransformEntryExitProfile', 'TransformSafeModeFunctionCheck', 'TransformSemanticAnalyzer',\
-           'main','get_message','set_language','EzhilCustomFunction','exprs_eval','ezhil_timeout_exec']
+           'main','get_message','EzhilCustomFunction','exprs_eval','ezhil_timeout_exec']
