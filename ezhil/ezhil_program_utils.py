@@ -22,7 +22,7 @@ def get_ast(filename):
 
 
 def serializeSourceFile(srcfilename, debug=False, tgtfile=None):
-    parse_tree = get_ast(filename=srcfilename)
+    parse_tree,_ = get_ast(filename=srcfilename)
     serializeParseTree(parse_tree, debug=False, filename=tgtfile)
 
 
