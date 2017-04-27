@@ -249,9 +249,14 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         ## construct the GUI from GLADE
         self.window = self.builder.get_object("ezhilEditorWindow")
         try:
+            d = Gtk.CssProvider.get_default()
+            ## style = formatString( "style \"my-style\" { font_name = \"Mono %i\" }"
+            ## class \"*\" style \"my-style\"", fontSize);
+            ## gtk_rc_parse_string( style )
+            d.load_from_data("default * { font : \"Latha 7\" }")
             self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
         except Exception as ie:
-            pass
+            raise ie
         self.window.set_resizable(True)
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
