@@ -99,8 +99,10 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
         self.tag["code"]  = textbuffer.create_tag("code",
             style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
         # use for chapter title
-        self.tag["title"]  = textbuffer.create_tag("keyword",
+        self.tag["title"]  = textbuffer.create_tag("title",
             weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font_title)
+        self.tag["keyword"]  = textbuffer.create_tag("keyword",
+            weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font)
         # use for text/section tags
         self.tag["text"] = textbuffer.create_tag("text",font=self.default_font,foreground="black")
         self.tag["literal"]  = textbuffer.create_tag("literal",
@@ -115,7 +117,7 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
             weight=Pango.Weight.SEMIBOLD,font=self.default_font,foreground="green")
 
         self.highlighter.tag_comment = self.tag["comment"]
-        self.highlighter.tag_keyword  = self.tag["title"]
+        self.highlighter.tag_keyword  = self.tag["keyword"]
         self.highlighter.tag_literal = self.tag["literal"]
         self.highlighter.tag_operator = self.tag["operator"]
         self.highlighter.tag_found = self.tag["found"]
