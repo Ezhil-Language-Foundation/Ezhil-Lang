@@ -18,6 +18,9 @@ import json
 import gi
 import tamil
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 gi.require_version('Gtk','3.0')
 try:
     from gi.repository import Gtk, GObject, GLib, Pango
