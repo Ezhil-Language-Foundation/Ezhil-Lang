@@ -139,7 +139,7 @@ class EzhuthiSettings(object):
                 for key,val in json.load(fp,encoding="UTF-8").items():
                     self.data[key] = val
         except IOError as ioe:
-            print(ioe)
+            print(u"First-time creation of Ezhuthi settings; ignoring exception - %s"%ioe)
 
 class EditorState:
     LICENSE_NOTE = u"""
@@ -256,7 +256,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             d.load_from_data("default * { font : \"Latha 7\" }")
             self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
         except Exception as ie:
-            raise ie
+            print(u"Message: loading image or CSS style failed - %s"%ie)
         self.window.set_resizable(True)
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
