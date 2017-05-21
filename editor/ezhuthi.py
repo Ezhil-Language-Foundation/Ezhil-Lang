@@ -19,7 +19,10 @@ import gi
 import tamil
 
 reload(sys)
-sys.setdefaultencoding('utf8')
+try:
+    sys.setdefaultencoding('utf8')
+except Exception as iex:
+    pass
 
 gi.require_version('Gtk','3.0')
 try:
