@@ -18,12 +18,6 @@ import json
 import gi
 import tamil
 
-reload(sys)
-try:
-    sys.setdefaultencoding('utf8')
-except Exception as iex:
-    pass
-
 gi.require_version('Gtk','3.0')
 try:
     from gi.repository import Gtk, GObject, GLib, Pango
@@ -787,9 +781,13 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         if ed.filename is not "":
             textbuffer = ed.textview.get_buffer()
         filename = ed.filename
-        #print("Saved File: " + filename)
+        if not PYTHON3:
+            try:
+                filename = filename.decode("UTF-8")
+            except UnicodeDecodeError as ude:
+                raise Exception(ude)
         ed.StatusBar.push(0,u"உங்களது நிரல் சேமிக்க பட்டது: " + filename)
-        index = filename.replace("\\","/").rfind("/") + 1
+        index = filename.replace(u"\\",u"/").rfind(u"/") + 1
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)
         ed.window.set_title(filename[index:] + ed.TitlePrefix)
         try:
