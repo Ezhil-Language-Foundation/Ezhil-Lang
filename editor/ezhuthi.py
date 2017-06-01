@@ -14,12 +14,11 @@ import re
 import sys
 import time
 import json
-
-import gi
 import tamil
 
-gi.require_version('Gtk','3.0')
 try:
+    import gi
+    gi.require_version('Gtk','3.0')
     from gi.repository import Gtk, GObject, GLib, Pango
 except ImportError as ie:
     print(u"Your system cannot run Ezhil on this Linux system; please install additional libraries")
