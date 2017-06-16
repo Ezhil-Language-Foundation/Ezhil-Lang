@@ -256,7 +256,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
         except Exception as ie:
             print(u"Message: loading image or CSS style failed - %s"%ie)
-        self.window.set_resizable(True)
+        self.window.set_resizable(False) #fix the window
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
 

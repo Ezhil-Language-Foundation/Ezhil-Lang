@@ -274,7 +274,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="menuItemSaveAs">
-                        <property name="label">என் சேமி (_A)</property>
+                        <property name="label">என சேமி (_A)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
