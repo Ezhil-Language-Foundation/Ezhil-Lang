@@ -76,7 +76,8 @@ class EzhilSyntaxHighlightingEditor(object):
             self.textbuffer.delete(start,end)
         lines = text.split(u"\n")
         lexer = Tokenizer()
-        for line in lines:
+        max_idx = len(lines)
+        for idx,line in enumerate(lines):
             comment_line = line.strip()
             if comment_line.startswith(u"#"):
                 self.apply_comment_syntax_highlighting(comment_line)
@@ -123,5 +124,7 @@ class EzhilSyntaxHighlightingEditor(object):
                 #self.textbuffer.insert_at_cursor(u" ")
             if comment_line:
                 self.apply_comment_syntax_highlighting(u" "+comment_line)
+                continue
+            if idx >= (max_idx - 1):
                 continue
             self.textbuffer.insert_at_cursor(u"\n")

@@ -790,9 +790,12 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)
         ed.window.set_title(filename[index:] + ed.TitlePrefix)
         try:
+            text_clean = PYTHON3 and text or text.decode("utf-8")
             with codecs.open(filename, "w","utf-8") as file:
-                file.write(PYTHON3 and text or text.decode("utf-8"))
+                file.write(text_clean)
                 file.close()
+            # call syntax highlighting to atleast show colors on save
+            ed.run_syntax_highlighting(text_clean)            
         except IOError as ioe:
             # new file:
             with codecs.open(filename, "w","utf-8") as file:
