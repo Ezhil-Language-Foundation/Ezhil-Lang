@@ -139,7 +139,7 @@ class EzhuthiSettings(object):
                     self.data[key] = val
         except IOError as ioe:
             print(u"First-time creation of Ezhuthi settings; ignoring exception - %s"%ioe)
-
+        
 class EditorState:
     LICENSE_NOTE = u"""
 
@@ -740,7 +740,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             dialog.run()
             dialog.destroy() #OK or Cancel don't matter
             return False
-        runner = MPRunner()
+        runner = MPRunner(timeout=ed.settings.get_timeout())
         GLib.idle_add( lambda : Gtk.events_pending() and Gtk.main_iteration() )
         ed.tstart = time.time()
         runner.run(ed.filename)
