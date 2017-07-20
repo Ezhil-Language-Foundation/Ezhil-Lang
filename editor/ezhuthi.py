@@ -393,8 +393,8 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
         #Gtk.main()
 
-    def do_autorun(self):
-        GLib.timeout_add(1000,lambda : self.run_btn.emit("clicked") )
+    def do_autorun(self,delay=1000):
+        GLib.timeout_add(delay,lambda : self.run_btn.emit("clicked") )
         return
 
     def refresh_tags(self):

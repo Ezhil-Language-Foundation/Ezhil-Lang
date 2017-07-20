@@ -95,7 +95,14 @@ class EzhilSyntaxHighlightingEditor(object):
             try:
                 lexemes = lexer.tokenize(line)
             except Exception as ie:
-                lexemes = lexer.tokenize(orig_line)
+                try:
+                    lexemes = lexer.tokenize(orig_line)
+                except Exception as ie:
+                    #failsafe
+                    self.textbuffer.insert_at_cursor(orig_line)
+                    self.textbuffer.insert_at_cursor(u"\n")
+                    continue
+            
             for lexeme in lexemes:
                 is_string = False
                 tok = lexeme.kind

@@ -205,7 +205,7 @@ def start_tests():
             ed.autorun = True
             ed.filename = test
             ed.load_file()
-            ed.do_autorun()
+            ed.do_autorun(delay=50)
             Gtk.main()
             print("%s -> OK"%test)
             passed += 1
