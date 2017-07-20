@@ -133,7 +133,7 @@ class EzhuthiSettings(object):
                      'keyword-color':u'blue','home-directory':os.getcwd(),'timeout':60,
                      'accept_license':False}
         try:
-            print( os.path.join(os.getcwd(),EzhuthiSettings.FILENAME) )
+            #print( os.path.join(os.getcwd(),EzhuthiSettings.FILENAME) )
             with codecs.open(os.path.join(os.getcwd(),EzhuthiSettings.FILENAME),"r","UTF-8") as fp:
                 for key,val in json.load(fp,encoding="UTF-8").items():
                     self.data[key] = val
@@ -801,6 +801,9 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             with codecs.open(filename, "w","utf-8") as file:
                 file.write(PYTHON3 and text or text.decode("utf-8"))
                 file.close()
+        except Exception as exc:
+            print(u"Warning: syntax highlighting failed for current file")
+            #textbuffer.set_text(text) #no-highlighting text in case of failure
         textbuffer.set_modified(False)
         return
     

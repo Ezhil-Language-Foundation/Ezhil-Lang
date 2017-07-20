@@ -78,6 +78,7 @@ class EzhilSyntaxHighlightingEditor(object):
         lexer = Tokenizer()
         max_idx = len(lines)
         for idx,line in enumerate(lines):
+            orig_line = line
             comment_line = line.strip()
             if comment_line.startswith(u"#"):
                 self.apply_comment_syntax_highlighting(comment_line)
@@ -90,7 +91,11 @@ class EzhilSyntaxHighlightingEditor(object):
                 line_alt = line
                 comment_line = None
             line = line_alt
-            lexemes = lexer.tokenize(line)
+            
+            try:
+                lexemes = lexer.tokenize(line)
+            except Exception as ie:
+                lexemes = lexer.tokenize(orig_line)
             for lexeme in lexemes:
                 is_string = False
                 tok = lexeme.kind
