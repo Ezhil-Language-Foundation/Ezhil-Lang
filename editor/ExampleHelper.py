@@ -14,7 +14,12 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+_DEBUG = False
+
 class ExampleDescription:
+    key_order = ['1_data_and_arithmetic_builtins',
+'2_conditional_if_statement',
+'3_for_while_loops','4_functions','5_recursive_functions','6_data_structures','7_advanced_concepts','examples']
     data = {
 '1_data_and_arithmetic_builtins':u'தொடக்க நிலை எண், கணித செயற்குறிகள் (arithmetic)', 
 '2_conditional_if_statement':u'நிபந்தனை கட்டளைகள் (conditional)',
@@ -32,23 +37,33 @@ class ExampleDiscovery:
     EXAMPLEROOT = u"examples"
     def __init__(self):
         self.examples = [[]]
+        self.indexes = [[]]
         self.process(os.path.join(os.getcwd(),ExampleDiscovery.EXAMPLEROOT))
         #self.examples = filter(len,self.examples)
         #print("Total examples = %d"%sum(map(len,self.examples)))
+        #from pprint import pprint
+        #pprint(self.examples)
         
-    def process(self,fd):
+    def process(self,fd,index=None):
         if os.path.isdir(fd):
-            for f_or_d in glob.glob(os.path.join(fd,'*')):
+            dirpos = 0
+            filepos = 0
+            for f_or_d in sorted(glob.glob(os.path.join(fd,'*'))):
+                if not os.path.isdir(f_or_d):
+                    filepos += 1
+                    self.handlefile([f_or_d,index and "%s.%d"%(index,filepos) or "%d"%(filepos)])
+            for f_or_d in sorted(glob.glob(os.path.join(fd,'*'))):
                 if os.path.isdir( f_or_d):
-                    self.process( f_or_d )
+                    dirpos += 1
+                    self.process( f_or_d ,index and "%s.%d"%(index,dirpos) or "%d"%dirpos)
                     self.examples.append([])
-                else:
-                    self.handlefile(f_or_d)
+                    self.indexes.append([])
         else:
-            self.handlefile(fd)
-
+            self.handlefile([fd,index and "%s.%d"%(index,1) or "%d"%1 ])
+        
     def handlefile(self,fd):
-        self.examples[-1].append(fd)
+        self.examples[-1].append(fd[0])
+        self.indexes[-1].append(fd[1])
 
 class ExampleBrowserWindow(Gtk.Window):
     def __init__(self,ref_editor=None):
@@ -71,21 +86,32 @@ class ExampleBrowserWindow(Gtk.Window):
 
         #Creating the ListStore model
         self.examplestore = Gtk.ListStore(str, str)
-        with open("data.txt","w") as fp:
-            pprint.pprint(self.example_collector.examples,fp)
+        if _DEBUG:
+            with open("data.txt","w") as fp:
+                pprint.pprint(self.example_collector.examples,fp)
         
-        for direxample in self.example_collector.examples:
-            if not ( type(direxample) is list ):
-                continue
+        folderpos = 0
+        for pos,direxample in enumerate(self.example_collector.examples):
             if len(direxample) < 1:
                 continue
             dirname = direxample[0].split(os.path.sep)    
             dirname = dirname[-2]
-            self.examplestore.append([ExampleDescription.data.get(dirname,dirname).strip(),u'<folder/desc>'])
-            for demoex in direxample:
-                item = u'\t'+os.path.split(demoex)[-1]
-                self.examplestore.append([item,demoex])
-
+                        
+            for pos2,demoex in enumerate(direxample):
+                index = self.example_collector.indexes[pos][pos2]
+                if pos2 == 0:
+                    # பாகம்/அத்யாயம்
+                    index_pfx = index.find(".")!= -1 and ".".join( index.split(".")[:-1] ) or index
+                    pfx = u"பாகம்"
+                    if index_pfx.find(".") == -1:
+                        pfx = u"அத்யாயம்"
+                    secname = ExampleDescription.data.get(dirname,dirname).strip() #section name
+                    if secname.find("_") >= 0:
+                        secname = " ".join(secname.split("_")[1:])
+                    self.examplestore.append([u"%s %s> "%(pfx,index_pfx) +secname,u'<folder/desc>'])
+                name = os.path.basename(demoex)
+                self.examplestore.append([index +u"\t %s"%name,demoex])
+                
         #creating the treeview, making a model, and adding the columns
         self.treeview = Gtk.TreeView.new_with_model(self.examplestore)
         for i, column_title in enumerate([u"உதாரணங்கள்"]):
