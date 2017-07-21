@@ -82,6 +82,7 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
         self.tag = {}
         self.pageno = 0
         self.default_font = "Sans 18"
+        self.default_font_chapter = "Serif 16"
         self.default_font_title = "Sans 24"
         self.textbuffer = None
         self.layoutpos = {"title":u"","section":0}
@@ -104,6 +105,8 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
         self.tag["keyword"]  = textbuffer.create_tag("keyword",
             weight=Pango.Weight.BOLD,foreground="blue",font=self.default_font)
         # use for text/section tags
+        self.tag["chapter"] = textbuffer.create_tag("chapter",
+            weight=Pango.Weight.SEMIBOLD,foreground="black",font=self.default_font_chapter)
         self.tag["text"] = textbuffer.create_tag("text",font=self.default_font,foreground="black")
         self.tag["literal"]  = textbuffer.create_tag("literal",
             style=Pango.Style.ITALIC,font=self.default_font,foreground="green")
@@ -141,17 +144,16 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
 
     def visit_chapter(self,*args):
         child = args[0]
-        title = u"%d) "%self.pageno + child.getAttribute("title")+u"\n"
+        # skip chapter 0 - ithu managatti mathiri irukku
+        title = ((self.pageno > 0) and u"%d) "%self.pageno or u" ") + child.getAttribute("title")+u"\n"
         self.layoutpos["title"]=title
-        #print("Chapter => %s"%title)
         self.append_text_with_tag(title,self.tag["title"])
 
     def visit_section(self,*args):
         child = args[0]
         self.layoutpos["section"] += 1
-        #print("Section => %s"%str(child))
         self.append_text_with_tag(u"_"*100+u"\n",self.tag["text"])
-        self.append_text_with_tag(u"பிரிவு %d\n"%self.layoutpos["section"],self.tag["found"])
+        self.append_text_with_tag(u"பிரிவு %d\n"%self.layoutpos["section"], self.tag["found"])
 
     def visit_code(self,*args):
         child = args[0]
@@ -168,7 +170,7 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
     def visit_text(self,text):
         child = text
         #print("Text => %s"%str(child))
-        self.append_text_with_tag(child.data,self.tag["text"])
+        self.append_text_with_tag(child.data,self.pageno == 0 and self.tag["chapter"] or self.tag["text"])
 
     def visit_list(self,*args):
         child = args[0]
@@ -226,7 +228,9 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
     def update_toc(self,box,parent):
         toc_list = [u"<chapter title=\"தமிழில் நிரல் எழுது - புத்தக உள்ளீடு\">",]
         for pos,chapter in self.chapters.items():
-            btn = Gtk.Button(u"%d. %s"%(pos,chapter['title']))
+            btn = Gtk.Button(u"%d. <b>%s</b>"%(pos,chapter['title']))
+            btn.get_children()[0].set_use_markup(True)
+            btn.set_alignment(0.0,0.0)
             btn.connect('clicked',parent.on_navigate_to,chapter['title'],pos)
             box.pack_start(btn,True,True,0)
             toc_list.append(u"<section>%s</section>"%chapter['title'])
