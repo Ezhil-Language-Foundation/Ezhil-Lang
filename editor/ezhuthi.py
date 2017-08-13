@@ -35,6 +35,7 @@ from ExampleHelper import ExampleBrowserWindow
 from SplashActivity import SplashActivity
 from syntaxhighlighing import EzhilSyntaxHighlightingEditor
 from iyakki import MPRunner
+from ezhilpopuptools import PopupForTextView
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -129,7 +130,7 @@ class EzhuthiSettings(object):
 
     def __init__(self,filename):
         object.__init__(self)
-        self.data = {'font-face':u'Sans Italic','font-size':u'16','text-color':u'black',
+        self.data = {'font-face':u'Sans','font-size':u'8','text-color':u'black',
                      'keyword-color':u'blue','home-directory':os.getcwd(),'timeout':60,
                      'accept_license':False}
         try:
@@ -234,7 +235,6 @@ class EditorState:
             self.settings.set_license_accepted()
         return False
 
-
 class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     _instance = None
     def __init__(self,filename=None,autorun=False):
@@ -269,18 +269,18 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         
         self.exampleMenu = self.builder.get_object("exampleBrowserItem")
         self.exampleMenu.connect("activate",lambda wid: self.exampleBrowser(wid))
-
+        
         self.helpItem = self.builder.get_object("HelpBtn")
         self.helpItem.connect("clicked",lambda wid: self.helpBrowser(wid))
         self.helpMenuItem = self.builder.get_object("helpMenuItem")
         self.helpMenuItem.connect("activate",lambda wid: self.helpBrowser(wid))
-
+        
         self.toolitemFont = self.builder.get_object("FontBtn")
         self.toolitemFont.connect("clicked", lambda wid: self.chooseFont(wid))
-
+        
         self.menuKeyword = self.builder.get_object("toggleKeyword")
         self.menuKeyword.connect("activate",lambda wid: self.toggleKeyword(wid))
-
+        
         ## self.console_textview.set_editable(False)
         self.console_textview.set_cursor_visible(False)
         self.console_textview.set_buffer(UndoableBuffer())
@@ -289,6 +289,8 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         self.textview = self.builder.get_object("codeEditorTextView")
         self.StatusBar = self.builder.get_object("editorStatus")
         self.textview.set_buffer(UndoableBuffer())
+        popup1 = PopupForTextView(self.textview,'EXECUTE_SELECTION')
+        self.textview_popup_handler = [popup1]#,PopupForTextView(self.textview,'SHOW_HELP',popup1)]
         self.textbuffer = self.textview.get_buffer()
         self.scrolled_codeview.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.AUTOMATIC)
         self.tag_text = None
@@ -303,7 +305,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         self.keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
         self.operators16 = [u"@",u"+",u"-",u"*",u"/",u"%",u"^",u"==",u">",u"<",u">=",u"<=",u"!=",u"!=",u"!",u",",u"(",u")",u"{",u"}",u"()",u"[]"]
         self.forms = [u"@(  )\t ஆனால் \n இல்லை  \n முடி",u" @(  )\t வரை \n முடி",u"நிரல்பாகம்\t உதாரணம் () \n முடி"]
-
+        
         self.widget_keywords = self.builder.get_object("hbox_keywords8")
         self.widget_operators = self.builder.get_object("hbox_operators16")
         self.widget_forms = self.builder.get_object("hbox_forms")
@@ -392,7 +394,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         #self.textbuffer.connect_after('delete-range', Editor.keep_syntax_highlighting_on)
         #GLib.timeout_add(5000, Editor.keep_syntax_highlighting_on )
         #Gtk.main()
-
+    
     def do_autorun(self,delay=1000):
         GLib.timeout_add(delay,lambda : self.run_btn.emit("clicked") )
         return

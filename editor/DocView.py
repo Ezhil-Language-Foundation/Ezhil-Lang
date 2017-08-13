@@ -23,6 +23,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GLib, Pango
 from syntaxhighlighing import EzhilSyntaxHighlightingEditor
+from ezhilpopuptools import PopupForTextView
 
 # represents DTD of our XML
 # Rules:
@@ -288,7 +289,8 @@ class DocBrowserWindow(object):
         self.textbuffer = self.textview.get_buffer()
         self.textview.set_editable(False)
         self.textview.set_cursor_visible(True)
-
+        self.textview_popup = PopupForTextView(self.textview,'EXECUTE_SELECTION')
+        
         self.btn_next = self.builder.get_object("btnNext")
         self.btn_next.connect("clicked",lambda arg: self.on_navigate(arg,'->'))
         self.btn_prev = self.builder.get_object("btnPrev")
