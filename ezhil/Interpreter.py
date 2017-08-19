@@ -87,7 +87,7 @@ def ezhil_quit():
     sys.exit(0)
 
 def ezhil_version():
-    return 0.90
+    return 0.99
 
 def ezhil_copyright():
     return u"(C) 2007-2016 Muthiah Annamalai, and other contributors."

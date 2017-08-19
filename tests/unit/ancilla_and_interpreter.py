@@ -14,7 +14,7 @@ import ezhil
 
 class Ancilla(unittest.TestCase):
     def test_latest_version(self):     
-        assert( ezhil.version() >= 0.90 )
+        assert( ezhil.version() >= 0.99 )
 
     def test_credits(self):
         assert( ezhil.credits().find("Annamalai") >= 0 )
