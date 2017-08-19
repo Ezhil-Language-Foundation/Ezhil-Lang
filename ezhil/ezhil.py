@@ -259,6 +259,24 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         else:
             pass #nothing to run
 
+class MockFile:
+    def __init__(self,data):
+        self.data = data
+
+# simple synchronous evaluator for ezhil code passed in process
+def ezhil_eval(program_text,debug=False,encoding="utf-8",safe_mode=False):
+    file_input = MockFile(program_text)
+    lexer = EzhilLex(fname=file_input,dbg=debug,encoding=encoding)
+    lexer.tokenize(data=program_text)
+    if ( debug ): 
+        print(u"####### dump tokens ########")
+        lexer.dump_tokens()
+        print(u"##########################")
+    parse_eval = EzhilInterpreter( lexer=lexer, debug=debug, safe_mode=safe_mode )
+    parse_eval.parse()
+    rval,_ = parse_eval.evaluate_interactive(throw=True)
+    return rval
+
 def ezhil_file_parse_eval( file_input,redirectop,debug,encoding="utf-8",doprofile=False,safe_mode=False):
     """ runs as a separate process with own memory space, pid etc, with @file_input, @debug values,
         the output is written out into a file named, "ezhil_$PID.out". Calling process is responsible to

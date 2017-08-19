@@ -13,7 +13,7 @@ from .ezhil_parser import EzhilParser
 from .ezhil_scanner import EzhilLex, EzhilToken
 from .errors import RuntimeException, ParseException, TimeoutException
 from .runtime import EzhilCustomFunction
-from .ezhil import ezhil_file_REPL, main, ezhil_timeout_exec
+from .ezhil import ezhil_file_REPL, main, ezhil_timeout_exec, ezhil_eval
 from .ezhil import EzhilInterpreter, EzhilFileExecuter, EzhilInterpExecuter
 from .ezhil import ezhil_interactive_interpreter as start
 from .ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck, TransformSemanticAnalyzer
@@ -31,4 +31,4 @@ __all__ = ['version','credits','copyright','Interpreter','REPL','Lex','get_prog_
            'start','ezhil_transforms','ezhil_serializer','get_ast','serializeSourceFile','serializeParseTree',\
            'visualizeSourceFile','PrettyPrint','XsyTheme','SerializerXML',\
            'TransformEntryExitProfile', 'TransformSafeModeFunctionCheck', 'TransformSemanticAnalyzer',\
-           'main','get_message','EzhilCustomFunction','exprs_eval','ezhil_timeout_exec']
+           'main','get_message','EzhilCustomFunction','exprs_eval','ezhil_timeout_exec','ezhil_eval']

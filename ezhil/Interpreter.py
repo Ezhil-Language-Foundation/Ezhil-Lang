@@ -840,7 +840,7 @@ class Interpreter(DebugUtils):
                 traceback.print_tb(sys.exc_info()[2])
             raise e
         
-    def evaluate_interactive(self,env=None):
+    def evaluate_interactive(self,env=None,throw=True):
         ## use a persistent environment for interactive interpreter
         try:
             ## use this from the interactive-interpreter
@@ -853,6 +853,8 @@ class Interpreter(DebugUtils):
             self.env.unroll_stack()
             #self.env.call_stack.pop()
             print("ERROR : %s"%str(e))
+            if throw:
+                raise RuntimeException(e)
             if (self.debug): print(str(self.env))
         return [str(e),self.env]
         
@@ -867,7 +869,7 @@ class REPL(Cmd):
             @debug the boolean """
         Cmd.__init__(self)
         ## ala-Python like
-        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Thu Mar 16 00:56:24 PDT 2017)
+        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Thu Aug 20 00:08:00 PDT 2017)
 Ezhil : A Tamil Programming Language - version %g, (C) 2007-2017
 Type "help", "copyright", "credits" or "license" for more information."""%ezhil_version()
         

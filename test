@@ -170,7 +170,8 @@ echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
 # nonexistent_file.n
 # eval1.n
 # yinyang.n -- fails b/c of no X-window
-NFAIL=15 #03/02/17 - Travis CI is console only
+# neg_insufficient_arg_invocation.n
+NFAIL=16 #08/19/17 - Travis CI is console only
 TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
 echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
 if [ $?  -eq 0 ]

@@ -220,6 +220,7 @@ class EzhilLex ( Lex ) :
             self.tokens = list()
         else:
             if hasattr(self.File,'data'):
+                if ( self.debug ): print("data attribute")
                 data = self.File.data
             elif self.encoding == "utf-8":
                 data = self.File.read()

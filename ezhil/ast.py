@@ -213,7 +213,6 @@ class ExprCall(object):
     
     def evaluate(self,env):
         #self.dbg_msg( unicode(env) )
-        self.debug = False
         if ( self.debug ):
             print(u"\n".join( env.builtin_map.keys() ))
             print("*"*60)
@@ -223,10 +222,13 @@ class ExprCall(object):
             self.dbg_msg("calling function "+ self.fname+ " with %d args"%len(self.arglist))
             fval = env.get_function(self.fname)
             #("Check arguments accepted by function against supplied by call site")
-            expected_args = len(fval.arglist)
-            actual_args = len(self.arglist)
-            if expected_args != actual_args:
-                raise RuntimeException(u"Function '%s' expects %d arguments but received only %d at site:\n\t %s\n"%(self.fname,expected_args,actual_args,unicode(self)))
+            if hasattr(fval,'arglist'):
+                # only check the argument matching for custom functions
+                # 'BlindBuiltins' or 'BlindFunctions' donot get argument checked.
+                expected_args = len(fval.arglist)
+                actual_args = len(self.arglist)
+                if expected_args != actual_args:
+                    raise RuntimeException(u"Function '%s' expects %d arguments but received only %d at site:\n\t %s\n"%(self.fname,expected_args,actual_args,unicode(self)))
             ## use applicative order evaluation.
             eval_arglist = [ i.evaluate(env) for i in self.arglist.get_list()];
             env.set_args(  eval_arglist )

@@ -1,0 +1,6 @@
+# this is a test for error detection in Ezhil
+நிரல்பாகம் function(தேவைஇல்லை)
+# என்னவோ செய்ய
+பின்கொடு பட்டியல்()
+முடி 
+function( )

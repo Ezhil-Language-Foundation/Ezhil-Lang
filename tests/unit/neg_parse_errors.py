@@ -7,7 +7,8 @@
 # setup the paths
 import ezhiltests
 from ezhiltests import TestEzhilException, ezhil
-from  ezhil.errors import ParseException
+from  ezhil.errors import ParseException, RuntimeException
+from ezhil import ezhil_eval
 
 # helper functions for testsuites
 import unittest
@@ -74,5 +75,22 @@ class StmtNeg(unittest.TestCase):
     முடி""" #missing end function statement
         TestEzhilException.create_and_test(exprCode,ParseException,"cannot find token END")
 
+class TooFewArgsNeg(unittest.TestCase):
+    def test_insufficient_call_args(self):
+        exprCode  = u"""
+# this is a test for error detection in Ezhil
+நிரல்பாகம் function(தேவைஇல்லை)
+# என்னவோ செய்ய
+பின்கொடு பட்டியல்()
+முடி 
+function( )
+"""
+        #missing end function statement
+        expected = u"Function '%s' expects %d arguments but received only %d"%(u"function",1,0)
+        with self.assertRaises(RuntimeException) as context:
+            ezhil_eval(exprCode)
+        self.assertEqual('Run-time error:',context.exception[0])
+        self.assertTrue(expected in context.exception[1][1])
+
 if __name__ == '__main__':    
-    test_support.run_unittest(ExprNeg,StmtNeg)
+    test_support.run_unittest(ExprNeg,StmtNeg,TooFewArgsNeg)
