@@ -307,7 +307,10 @@ class Lex(object):
                 tval=Lexeme(int(chunks),Token.NUMBER)
         elif chunks[0].isalpha():
             tval=Lexeme(chunks,Token.ID)
+        elif chunks in  ['\r','\n','\r\n']:
+            return None
         else:
+            print("==>",chunks,"<==")
             scanner_exception = u"Lexical error: " + unicode(chunks) + u" at Line , Col "+unicode(self.get_line_col( pos )) +u" in file "+self.fname;
             raise ScannerException( scanner_exception )
         
