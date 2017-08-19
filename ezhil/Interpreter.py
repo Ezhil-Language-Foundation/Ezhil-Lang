@@ -824,8 +824,9 @@ class Interpreter(DebugUtils):
 
             # always verify semantics before running code
             #if ( self.debug ): print(self.ast )
+            if ( self.debug ): print("pre-semantic xform analyzer")
             TransformSemanticAnalyzer(interpreter=self, debug=self.debug)
-            
+            if ( self.debug ): print("post-semantic xform analyzer")
             # constant fold
             #for i in range(0,2):
             #    TransformConstantFolder( interpreter = self, debug=self.debug)

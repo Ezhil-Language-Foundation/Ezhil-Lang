@@ -212,15 +212,21 @@ class ExprCall(object):
             +unicode(self.arglist)+u")]]"
     
     def evaluate(self,env):
-        self.dbg_msg( unicode(env) )
+        #self.dbg_msg( unicode(env) )
+        self.debug = False
         if ( self.debug ):
             print(u"\n".join( env.builtin_map.keys() ))
             print("*"*60)
             print(u"\t".join(env.function_map.keys() ))
             print( self.fname, " ==?== ",env.builtin_map.get(self.fname,None))
         if ( env.has_function(self.fname) ):
-            self.dbg_msg("calling function "+ self.fname)
+            self.dbg_msg("calling function "+ self.fname+ " with %d args"%len(self.arglist))
             fval = env.get_function(self.fname)
+            #("Check arguments accepted by function against supplied by call site")
+            expected_args = len(fval.arglist)
+            actual_args = len(self.arglist)
+            if expected_args != actual_args:
+                raise RuntimeException(u"Function '%s' expects %d arguments but received only %d at site:\n\t %s\n"%(self.fname,expected_args,actual_args,unicode(self)))
             ## use applicative order evaluation.
             eval_arglist = [ i.evaluate(env) for i in self.arglist.get_list()];
             env.set_args(  eval_arglist )
@@ -837,7 +843,7 @@ class EvalStmt(Stmt):
 
     def evaluate(self,env): 
         if ( self.debug ) : 
-            print(u"evaluating EvalStmt")
+            print(u"evaluating EvalStmt : %s"%str(self.expr))
             print(self.expr.__class__)
         return self.expr.evaluate(env)
 
