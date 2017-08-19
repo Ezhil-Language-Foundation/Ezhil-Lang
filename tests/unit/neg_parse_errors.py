@@ -5,8 +5,7 @@
 # 
 
 # setup the paths
-import ezhiltests
-from ezhiltests import TestEzhilException, ezhil
+from ezhiltests import skip_python2_6, TestEzhilException, ezhil
 from  ezhil.errors import ParseException, RuntimeException
 from ezhil import ezhil_eval
 
@@ -76,6 +75,7 @@ class StmtNeg(unittest.TestCase):
         TestEzhilException.create_and_test(exprCode,ParseException,"cannot find token END")
 
 class TooFewArgsNeg(unittest.TestCase):
+    @skip_python2_6
     def test_insufficient_call_args(self):
         exprCode  = u"""
 # this is a test for error detection in Ezhil
