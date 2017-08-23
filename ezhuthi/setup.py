@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # 
-# (C) 2008-2017 முத்தையா அண்ணாமலை 
-# ezhil language project
+# (C) 2017 Ezhil Language Foundation
+#  முத்தையா அண்ணாமலை  <ezhillang@gmail.com>
+# This file is part of Ezhil Language Project
 
 try:
     # specify dependecies properly
@@ -12,13 +13,15 @@ except ImportError:
 
 from codecs import open
 
-setup(name='ezhil',
+setup(name='ezhuthi',
       version='1',
-      description='Ezhil - Tamil programming language implemented in Python; Ezhil works on both Python 2 and Python 3',
+      description='Ezhuthi - a GTK based GUI for Ezhil (Tamil programming language) Python 2 and Python 3',
       author='Muthiah Annamalai',
       author_email='ezhillang@gmail.com',
       url='https://github.com/Ezhil-Language-Foundation/Ezhil-Lang',
-      packages=['ezhil'],
+      packages=['ezhuthi'],
+      package_dir={'ezhuthi': 'ezhuthi'},
+      package_data={'ezhuthi': ['res/*.*','res/img/*','xmlbook/*']},
       license='GPLv3',
       platforms='PC,Linux,Mac',
       classifiers=['Natural Language :: Tamil',
@@ -28,9 +31,9 @@ setup(name='ezhil',
     'Programming Language :: Python :: 3.2',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4'],
-      install_requires=["open-tamil", "argparse"],
+      install_requires=["ezhil","pygobject","open-tamil", "argparse"],
       entry_points={'console_scripts': [
-          'ezhili = ezhil.ezhil:main',
+          'ezhuthi = ezhuthi.ezhuthi:main',
           ]
       },
       long_description='Ezhil is a Tamil programming language for early education',

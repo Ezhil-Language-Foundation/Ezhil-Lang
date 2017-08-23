@@ -15,6 +15,8 @@ if PYTHON3:
 gi.require_version('Gtk','3.0')
 from gi.repository import Gtk, GObject
 
+from resources import getResourceFile
+
 class SplashActivity:
     """
         எழில் - தமிழ் கணினி மொழி
@@ -23,7 +25,7 @@ class SplashActivity:
     """
     def __init__(self,follow_action):
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("res/editor.glade")
+        self.builder.add_from_file(getResourceFile("editor.glade"))
         splash = self.builder.get_object("splashWindow")
         splash.set_decorated(False)
         splash.set_position(Gtk.WindowPosition.CENTER_ALWAYS)

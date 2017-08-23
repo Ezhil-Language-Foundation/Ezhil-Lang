@@ -36,6 +36,7 @@ from SplashActivity import SplashActivity
 from syntaxhighlighing import EzhilSyntaxHighlightingEditor
 from iyakki import MPRunner
 from ezhilpopuptools import PopupForTextView
+from resources import getResourceFile
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
@@ -242,7 +243,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         EzhilSyntaxHighlightingEditor.__init__(self)
         Editor._instance = self
         self.autorun = autorun
-        self.builder.add_from_file("res/editor.glade")
+        self.builder.add_from_file(getResourceFile("editor.glade"))
         if filename:
             self.filename = filename
         ## construct the GUI from GLADE
@@ -253,7 +254,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             ## class \"*\" style \"my-style\"", fontSize);
             ## gtk_rc_parse_string( style )
             d.load_from_data("default * { font : \"Latha 7\" }")
-            self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+            self.window.set_icon_from_file(getResourceFile("img","ezhil_square_2015_128px.png"))
         except Exception as ie:
             print(u"Message: loading image or CSS style failed - %s"%ie)
         self.window.set_resizable(False) #fix the window
@@ -615,7 +616,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     def get_license_text():
         txt = u"GPL v-3"
         try:
-            with codecs.open(u"res/LICENSE_notes.txt","r","UTF-8") as fp:
+            with codecs.open(getResourceFile("LICENSE_notes.txt"),"r","UTF-8") as fp:
                 txt = fp.read()
         except IOError as ioe:
             pass
@@ -923,7 +924,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     @staticmethod
     def show_about_status(*args):
         builder = Gtk.Builder()
-        builder.add_from_file("res/editor.glade")
+        builder.add_from_file(getResourceFile("editor.glade"))
         abt_menu = args[0]
         abt_dlg = builder.get_object("ezhilAboutDialog")
         #Parent = builder.get_object("ezhilEditorWindow"))
@@ -967,8 +968,8 @@ def mainfn(arg_autorun):
         Editor(len(sys.argv) > 1 and sys.argv[1] or None,autorun=arg_autorun)
         Gtk.main()
 
-# TODO - options for 'debug', 'LANG', 'encoding' etc..
-if __name__ == u"__main__":
+
+def main():
     # show preference for user locale.
     if ( os.getenv('LANG','en_US.utf8').lower().find("ta") == -1 ):
         os.putenv('LANG','ta_IN.utf8')
@@ -986,3 +987,7 @@ if __name__ == u"__main__":
         SplashActivity(lambda : mainfn(arg_autorun))
     else:
         mainfn(arg_autorun)
+
+# TODO - options for 'debug', 'LANG', 'encoding' etc..
+if __name__ == u"__main__":
+    main()

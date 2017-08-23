@@ -24,6 +24,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GLib, Pango
 from syntaxhighlighing import EzhilSyntaxHighlightingEditor
 from ezhilpopuptools import PopupForTextView
+from resources import getResourceFile
 
 # represents DTD of our XML
 # Rules:
@@ -270,15 +271,15 @@ class DocBrowserWindow(object):
         self.default_font = default_font
 
         book_chapters = ['ch1.xml', 'ch2.xml', 'ch3.xml', 'ch4.xml', 'ch5.xml', 'ch6.xml', 'ch7.xml', 'ch8.xml','appendix.xml']
-        self.book = XMLtoDoc( map(lambda x: os.path.join('xmlbook',x),book_chapters) )
+        self.book = XMLtoDoc( map(lambda x: getResourceFile('xmlbook',x),book_chapters) )
         self.page = 0 #TOC/HOME
 
-        self.builder.add_from_file("res/helper.glade")
+        self.builder.add_from_file(getResourceFile("helper.glade"))
 
         self.window = self.builder.get_object("appEzhilHelpBook")
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         try:
-            self.window.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
+            self.window.set_icon_from_file(getResourceFile("img","ezhil_square_2015_128px.png"))
         except Exception as ie:
             pass
         self.window.set_title(u"தமிழில் நிரல் எழுது - எழில் கணினி மொழி")
