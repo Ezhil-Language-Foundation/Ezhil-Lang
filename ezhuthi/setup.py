@@ -14,7 +14,7 @@ except ImportError:
 from codecs import open
 
 setup(name='ezhuthi',
-      version='1',
+      version='0.99',
       description='Ezhuthi - a GTK based GUI for Ezhil (Tamil programming language) Python 2 and Python 3',
       author='Muthiah Annamalai',
       author_email='ezhillang@gmail.com',

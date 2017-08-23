@@ -13,7 +13,7 @@ except ImportError:
 from codecs import open
 
 setup(name='ezhil',
-      version='1',
+      version='0.99',
       description='Ezhil - Tamil programming language implemented in Python; Ezhil works on both Python 2 and Python 3',
       author='Muthiah Annamalai',
       author_email='ezhillang@gmail.com',
