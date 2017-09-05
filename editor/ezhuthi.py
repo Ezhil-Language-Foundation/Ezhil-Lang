@@ -931,6 +931,10 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
             if respo == Gtk.ResponseType.OK:
                 Editor.save_file(None)
+            elif respo == Gtk.ResponseType.CANCEL:
+                ed.StatusBar.push(0,u"வெளியேறு செயல்  தவிற்கப்பட்டது")
+                if not (isinstance(exit_btn,Gtk.ApplicationWindow) or isinstance(exit_btn,Gtk.ToolButton)):
+                    return
         Gtk.main_quit()
     
     @staticmethod
