@@ -29,7 +29,7 @@ class OSKeyboard(object):
         self.keys3rows_btns = []
         self.mode = u"non-numeric"
         self.spc = u" "*16
-        self.shift_words = [u"பிர", u"Shift"]
+        self.shift_words = [u"பிற", u"Shift"]
         self.shiftmode = False
 
     def __str__(self):
@@ -58,8 +58,8 @@ class OSKeyboard(object):
             if numerickdb:
                 rows2[-1][1] = u"ஆங்"
         else:
-            if rows2[-1][0].find(u"பிர") == -1:
-                rows2[-1].insert(0,u"பிர")
+            if rows2[-1][0].find(u"பிற") == -1:
+                rows2[-1].insert(0,u"பிற")
                 rows2[-1].insert(len(rows2[-1]),u"&lt;- அழி")
             rows2.append([u"0-9",u"ஆங்",self.spc+u"வெளி"+self.spc,u"் ",u"இடு"])
             if numerickdb:

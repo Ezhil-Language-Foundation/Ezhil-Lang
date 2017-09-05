@@ -551,15 +551,32 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             ed.textview.place_cursor_onscreen()
             return
         elif value == u"் ":
+            if not m_start.starts_line():
+                offset = m_start.get_offset()
+                m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
+                old_value = ed.textbuffer.get_text(m_prev,m_start,True)
+                # encoding conversion
+                if not PYTHON3:
+                    try:
+                        old_value = old_value.decode("UTF-8")
+                    except Exception as e:
+                        pass
+                if not (old_value in tamil.utf8.grantha_agaram_letters):
+                    # these letters in keyboard cannot be used with pulli - it is bad combination of unicode points
+                    # and don't form valid letters in Tamil; so we will keep them 
+                    ed.textbuffer.insert_at_cursor(tamil.utf8.ayudha_letter)
+                else:
+                    ed.textbuffer.insert_at_cursor(value)
+                return
             ed.textbuffer.insert_at_cursor(value)
             ed.textview.place_cursor_onscreen()
             return
-
+        
         # dispose of English language stuff
         if lang.lower().find("eng") >= 0:
             Editor.insert_at_cursor(widget,value)
             return
-
+        
         if not m_start.starts_line():
             offset = m_start.get_offset()
             m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
