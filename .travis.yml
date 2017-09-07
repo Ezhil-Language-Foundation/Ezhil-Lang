@@ -16,7 +16,7 @@ language: python
 python:
   - "3.3" #Ezhil boots on Python 3
   - "2.7"
-  - "2.6"
+#  - "2.6"  #some weirdness in Travis C-I
 #  - "pypy" #unittests are broke in PyPy
 install:
   - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install --use-mirrors ordereddict; fi
