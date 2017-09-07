@@ -23,7 +23,9 @@ class OSKeyboard(object):
     def __init__(self,lang,keys3rows,shift_keys3rows):
         object.__init__(self)
         self.lang = lang
-        self.numeric3rows = [ toList(u"1234567890"),toList(u"-/:;()$&@"),toList(u".,?!'") ]
+        rowlast = toList(u"=.,?!'")
+        rowlast.extend([u'&lt;',u'&gt;',u'{',u'}',u'[',u']']) #add <, >, {,}, [,] keys to virtual kbd
+        self.numeric3rows = [ toList(u"1234567890"),toList(u"-/:;()$&@"),rowlast ]
         self.keys3rows = copy.copy(keys3rows)
         self.shift_keys3rows = copy.copy(shift_keys3rows)
         self.keys3rows_btns = []
@@ -76,8 +78,12 @@ class OSKeyboard(object):
             key = u"\n"
         elif key == u"&amp;":
             key = u"&"
+        elif key == u"&lt;":
+            key = u"<"
+        elif key == u"&gt;":
+            key = u">"
         return key
-
+    
     def build_widget(self,parent_box,edobj,numerickbd=False):
         if numerickbd:
             self.mode = u"numeric"

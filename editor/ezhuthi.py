@@ -105,8 +105,8 @@ class EzhuthiSettings(object):
     FILENAME = "ezhuthi.json"
     @staticmethod
     def load():
-        return EzhuthiSettings(EzhuthiSettings.FILENAME)
-
+        return EzhuthiSettings(EzhuthiSettings.FILENAME)        
+    
     def save(self):
         with codecs.open(EzhuthiSettings.FILENAME,"w","UTF-8") as fp:
             json.dump(self.data,fp)
@@ -333,6 +333,9 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         self.cp_menu = self.builder.get_object("copy_item")
         self.cp_menu.connect("activate",Editor.copy_action)
 
+        self.close_menu = self.builder.get_object("closeMenuItem")
+        self.close_menu.connect("activate",Editor.close_file)
+        
         # for undo-redo buttons
         self.undo_btn = self.builder.get_object("UndoBtn")
         self.redo_btn = self.builder.get_object("RedoBtn")
@@ -695,6 +698,22 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     @staticmethod
     def reset_new(menuitem,arg1=None):
         ed = Editor.get_instance()
+        #Fix bug "When I am working on a file (unsaved) and I click on "Pudhiya" or Ctrl-N, a new blank file is opened and the existing changes are completely lost!"
+        if ed.is_edited():
+            okcancel=True
+            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
+            if respo == Gtk.ResponseType.OK:
+                try:
+                    Editor.save_file(None)
+                except Except as ex:
+                    return 
+                if ed.is_edited():
+                    ed.StatusBar.push(0,u"புது நிரல் எழுதமுடியவில்லை!")
+                    return
+            elif (respo == Gtk.ResponseType.CANCEL) or (respo == Gtk.ResponseType.DELETE_EVENT):
+                pass #its okay user has chosen to delete the buffer
+                ed.StatusBar.push(0,u"சேமிப்பு செயல்  தவிற்கப்பட்டது; உங்கள் நிரல் சேமிக்கப்படாது!")
+                
         ed.count += 1
         ed.filename = u"untitled_%d"%ed.count
         ed.set_title()
@@ -716,7 +735,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         response = dialog.run()
         dialog.destroy() #OK or Cancel don't matter
         return response
-
+    
     @staticmethod
     def cut_action(*args_ign):
         ed = Editor.get_instance()
@@ -790,7 +809,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
                  Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
             Editor.add_filters(dialog)
             response = dialog.run()
-            if response == Gtk.ResponseType.CANCEL:
+            if response == Gtk.ResponseType.CANCEL or response == Gtk.ResponseType.DELETE_EVENT:
                 dialog.destroy()
                 #print("Dismiss save dialog - not saved!")
                 return
@@ -851,7 +870,25 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         else:
             chooser.destroy()
         return
-    
+
+    ## open handler
+    @staticmethod
+    def close_file(menuitem, arg1=None)
+        ed = Editor.get_instance()
+        if ed.is_edited():
+            okcancel=True
+            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
+            if respo == Gtk.ResponseType.OK:
+                try:
+                    Editor.save_file(None)
+                except Exception as ioe:
+                    ed.StatusBar.push(0,u"சரியாக நிரலை சேமிக்க முடியவில்லை! நிரல் மூட படாது")
+                    return
+            else:
+                ed.StatusBar.push(0,u"நிரலை சேமிக்கவில்லை. அடுத்த நிரலை திறக்க தயார்.") 
+        ed.load_file(u"untitled_0.n")
+        return
+        
     def load_file(self,specific_file=None):
         # at this routine all the pre-validations are completed
         ed = Editor.get_instance()
@@ -914,9 +951,8 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     def show_example(self,filename):
         if self.is_edited():
-            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்! அதன் பின்னரே உதாரணங்களை காமிக்க முடியும்",okcancel)
-            if respo == Gtk.ResponseType.OK:
-                self.load_file(filename)
+            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்! அதன் பின்னரே உதாரணங்களை காமிக்க முடியும்")
+            return False
         else:
             self.load_file(filename)
         return True

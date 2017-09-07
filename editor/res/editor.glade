@@ -263,6 +263,16 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkImageMenuItem" id="closeMenuItem">
+                        <property name="label">மூடு (_C)</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <accelerator key="c" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="menuItemSave">
                         <property name="label">சேமி (_S)</property>
                         <property name="visible">True</property>
