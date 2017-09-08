@@ -18,7 +18,6 @@ import time
 
 import gi
 import ezhil
-from SplashActivity import SplashActivity
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:

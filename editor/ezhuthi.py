@@ -873,7 +873,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     ## open handler
     @staticmethod
-    def close_file(menuitem, arg1=None)
+    def close_file(menuitem, arg1=None):
         ed = Editor.get_instance()
         if ed.is_edited():
             okcancel=True
