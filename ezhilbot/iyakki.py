@@ -16,22 +16,15 @@ import tempfile
 import threading
 import time
 
-import gi
 import ezhil
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
     unicode = str
 
-gi.require_version('Gtk','3.0')
-
-from gi.repository import Gtk, GObject, GLib, Pango
-
 def MPRunner_actor(pipe,filename):
     multiprocessing.freeze_support()
-    GObject.threads_init()
     is_success = False
-    ezhil.EzhilCustomFunction.set(GtkStaticWindow.dummy_input)
     old_stdin = sys.stdin
     old_stdout = sys.stdout
     old_stderr = sys.stderr
@@ -42,7 +35,7 @@ def MPRunner_actor(pipe,filename):
     try:
         sys.stdout = codecs.open(tmpfilename,"w","utf-8")
         sys.stderr = sys.stdout
-        executer = ezhil.EzhilFileExecuter(filename)
+        executer = ezhil.EzhilFileExecuter(filename,debug=False,redirectop=False,TIMEOUT=3,encoding="utf-8",doprofile=False,safe_mode=True)
         executer.run()
         is_success = True
     except Exception as e:
@@ -89,56 +82,29 @@ class MPRunner:
             res_std_out = u"தெரியாத பிழை நேர்ந்தது!"
         self.res_std_out,self.is_success = res_std_out,is_success
         return
-
-class GtkStaticWindow:
-    _instance = None
-
-    @staticmethod
-    def get_instance():
-        if not GtkStaticWindow._instance:
-            GtkStaticWindow._instance = GtkStaticWindow()
-        return GtkStaticWindow._instance
-
-    def __init__(self):
-        self.gui = threading.Thread(target=lambda : Gtk.main_iteration())
         
-        self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
-        self.window.set_default_size(100,150) #vanishingly small size
-        self.window.connect("delete-event",Gtk.main_quit)
-        self.window.set_title(u"எழில் இயக்கி சாளரம்")
-        self.window.set_decorated(False)
-        self.window.show_all()
-        GLib.idle_add( Gtk.main_iteration )
-        self.gui.start()
-
-    @staticmethod
-    def dummy_input(*args):
-        message= not args and "Enter Input" or args[0]
-        if not args or len(args) < 2:
-            title = u"எழுதி - எழில் மொழி செயலி" #Ezhil language IDE
+    def __str__(self):
+        r = list()
+        if self.is_success:
+            r.append(u"SUCCESS")
         else:
-            title = args[1]
-        static_window = GtkStaticWindow.get_instance()
-        window = static_window.window
-        dialogWindow = Gtk.MessageDialog(window,
-                              Gtk.DialogFlags.MODAL,
-                              Gtk.MessageType.QUESTION,
-                              Gtk.ButtonsType.OK_CANCEL,
-                              message)
-        dialogWindow.set_title(title)
-        dialogBox = dialogWindow.get_content_area()
-        userEntry = Gtk.Entry()
-        userEntry.set_size_request(257,0)
-        dialogBox.pack_end(userEntry, False, False, 0)
-        dialogWindow.show_all()
-        response = dialogWindow.run()
-        text = userEntry.get_text() 
-        print(u"#####- உள்ளீடு நிரல்பாகம் இயங்கி முடிந்தது -####")
-        if (response == Gtk.ResponseType.OK) and (text != ''):
-            return text
-        return ""
+            r.append(u"FAILURE")
+            
+        r.append(u"\nOUTPUT:")
+        r.append(self.res_std_out)
+        return u" ".join(r)
+        
+    def report(self):
+        if self.is_success:
+            print("SUCCESS")
+        else:
+            print("FAILURE")
+            
+        print("OUTPUT:")
+        print(self.res_std_out)
 
 if __name__ == "__main__":
     filename = sys.argv[1]
     runner = MPRunner()
     runner.run(filename)
+    runner.report()

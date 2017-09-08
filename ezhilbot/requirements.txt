@@ -1,0 +1,7 @@
+ezhil==0.99
+ezhuthi==0.99
+graphviz==0.4.8
+pygobject==3.18.2
+pyinstaller==3.3.dev0
+python-twitter==3.3
+Open-Tamil==0.67
