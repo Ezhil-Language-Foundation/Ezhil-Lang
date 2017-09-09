@@ -188,7 +188,6 @@ def main():
             id = r.id
     else:
         print("Nothing since last tweet of ID=%d"%LastReply.get_id())
-    
     LastReply.set_id(id)
     
 def process_ezhil(api,code_msg,user):
@@ -199,9 +198,12 @@ def process_ezhil(api,code_msg,user):
         srcfilename = "tmpcode_%d.n"%random.randint(0,10000)
         with codecs.open(srcfilename,"w","UTF-8") as fp:
             fp.write(code_msg)
+        
         runner = MPRunner(timeout=3) #run for 3s max.
         runner.run(srcfilename)
         runner.report()
+        if not runner.is_success:
+            return
         message = unicode(runner)
         message = u" ".join([u'@'+user,message])
         
