@@ -8,7 +8,7 @@
 '''Post a message to twitter'''
 
 __author__ = ['dewitt@google.com','ezhillang@gmail.com']
-
+_DEBUG = True
 try:
     import configparser
 except ImportError as _:
@@ -173,18 +173,28 @@ def main():
     kwargs = {}
     if id > 0:
         kwargs = {"since_id":id}
-    rep = api.GetReplies(**kwargs)
+    rep = api.GetMentions(**kwargs)
+    
     for r in rep:
         print("Reply : id=%s,text=%s,user=%s"%(r.id,r.text,r.user.screen_name))
-        print("%s"%r)
         code_msg = r.text
         user = r.user.screen_name
-        process_ezhil(api,code_msg,user)
-        LastReply.set_id(r.id)
+        try:
+            code_msg = code_msg.replace(u"@ezhillang","")
+            process_ezhil(api,code_msg,user)
+        except Exception as ioe:
+            print("Executing reply %s failed\n"%ioe)
+        if id < r.id:
+            id = r.id
     else:
         print("Nothing since last tweet of ID=%d"%LastReply.get_id())
-
+    
+    LastReply.set_id(id)
+    
 def process_ezhil(api,code_msg,user):
+    if user.find("ezhillang") >= 0:
+        print("Skipping : %s"%user)
+        return
     try:
         srcfilename = "tmpcode_%d.n"%random.randint(0,10000)
         with codecs.open(srcfilename,"w","UTF-8") as fp:
@@ -202,14 +212,14 @@ def process_ezhil(api,code_msg,user):
         rev.reverse()
         
         for r in rev:
-            api.PostUpdate(r)
+            status=api.PostUpdate(r)
         
     except UnicodeDecodeError:
         print(u"Your message could not be encoded.  Perhaps it contains non-ASCII characters? ")
         print(u"Try explicitly specifying the encoding with the --encoding flag")
         return
     finally:
-        os.unlink(srcfilename)
+        if not _DEBUG: os.unlink(srcfilename)
     print(u"%s just posted: %s" % (status.user.name, status.text))
 
 if __name__ == "__main__":
