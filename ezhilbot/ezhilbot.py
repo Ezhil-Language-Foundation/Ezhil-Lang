@@ -131,7 +131,19 @@ class LastReply:
             os.stat(LastReply.FILENAME)
         except Exception as ioe:
             LastReply.set_id(-1)
-    
+
+def escape_html(code):
+    html_escape_table = {
+            u"&amp;":u"&",
+            u"&quot;":u'"',
+            u"&apos;":u"'",
+            u"&gt;":u">",
+            u"&lt;":u"<",
+            }
+    for k,v in html_escape_table.items():
+        code = code.replace(k,v)
+    return code
+
 def main():
     try:
         shortflags = 'h'
@@ -181,7 +193,8 @@ def main():
         user = r.user.screen_name
         try:
             code_msg = code_msg.replace(u"@ezhillang","")
-            process_ezhil(api,code_msg,user)
+            code_msg = escape_html(code_msg)
+            process_ezhil(r.id,api,code_msg,user)
         except Exception as ioe:
             print("Executing reply %s failed\n"%ioe)
         if id < r.id:
@@ -190,7 +203,7 @@ def main():
         print("Nothing since last tweet of ID=%d"%LastReply.get_id())
     LastReply.set_id(id)
     
-def process_ezhil(api,code_msg,user):
+def process_ezhil(id,api,code_msg,user):
     if user.find("ezhillang") >= 0:
         print("Skipping : %s"%user)
         return
@@ -203,6 +216,8 @@ def process_ezhil(api,code_msg,user):
         runner.run(srcfilename)
         runner.report()
         if not runner.is_success:
+            status = api.PostUpdate(u"@%s : code failed execution for id=%d!"%(user,id))
+            print(u"%s just posted: %s" % (status.user.name, status.text))
             return
         message = unicode(runner)
         message = u" ".join([u'@'+user,message])
@@ -215,6 +230,7 @@ def process_ezhil(api,code_msg,user):
         
         for r in rev:
             status=api.PostUpdate(r)
+            print(u"%s just posted: %s" % (status.user.name, status.text))
         
     except UnicodeDecodeError:
         print(u"Your message could not be encoded.  Perhaps it contains non-ASCII characters? ")
