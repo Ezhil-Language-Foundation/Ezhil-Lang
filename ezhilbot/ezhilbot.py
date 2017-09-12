@@ -216,7 +216,7 @@ def process_ezhil(id,api,code_msg,user):
         runner.run(srcfilename)
         runner.report()
         if not runner.is_success:
-            status = api.PostUpdate(u"@%s : code failed execution for id=%d!"%(user,id))
+            status = api.PostUpdate(u"@%s : code failed execution for https://twitter.com/%s/status/%d!"%(user,user,id))
             print(u"%s just posted: %s" % (status.user.name, status.text))
             return
         message = unicode(runner)
