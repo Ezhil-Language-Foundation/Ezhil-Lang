@@ -204,7 +204,7 @@ def main():
     LastReply.set_id(id)
     
 def process_ezhil(id,api,code_msg,user):
-    if user.find("ezhillang") >= 0:
+    if user.find("ezhillangbot") >= 0:
         print("Skipping : %s"%user)
         return
     try:
