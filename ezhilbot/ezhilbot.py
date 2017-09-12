@@ -192,7 +192,7 @@ def main():
         code_msg = r.text
         user = r.user.screen_name
         try:
-            code_msg = code_msg.replace(u"@ezhillang","")
+            code_msg = code_msg.replace(u"@ezhillangbot","")
             code_msg = escape_html(code_msg)
             process_ezhil(r.id,api,code_msg,user)
         except Exception as ioe:
