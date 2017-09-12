@@ -220,7 +220,7 @@ def process_ezhil(id,api,code_msg,user):
             print(u"%s just posted: %s" % (status.user.name, status.text))
             return
         message = unicode(runner)
-        message = u" ".join([u'@'+user,message])
+        message = u" ".join([u'@'+user,message.replace(u'@',u'%')])
         
         rev = []
         # section in chunks of 140
