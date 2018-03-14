@@ -51,7 +51,7 @@ class BadLexingTests(QuietTestCase):
         for idx,wrongID in enumerate(BadLexingTests.pattgen( 2*choice([100,250,350]) )):
             flag = False
             try:
-                if ( debug ): print("Testing WrongID # %d"%idx,wrongID)                
+                if ( debug ): print(u"Testing WrongID # %d"%idx,wrongID)                
                 code = wrongID+u"= 1"
                 TestEzhil(code).run()
             except Exception as e:
@@ -63,5 +63,5 @@ class BadLexingTests(QuietTestCase):
                 raise Exception(u"WRONG ID was not errored out =>"+wrongID)
         return
 
-if __name__ == "__main__":
+if __name__ == u"__main__":
     unittest.main()

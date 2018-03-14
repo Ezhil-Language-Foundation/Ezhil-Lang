@@ -25,7 +25,7 @@ class ErrorException(Exception):
     
     def __unicode__(self):
         ##works in python2.6
-        return u" ".join(self.args)
+        return u" ".join(list(map(lambda x:u"%s"%x,self.args)))
 
 
 class ScannerException(ErrorException):
