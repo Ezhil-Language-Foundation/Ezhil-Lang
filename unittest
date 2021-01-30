@@ -4,12 +4,7 @@
 cd tests/unit/
 
 # use python3 for testing if passed an arg
-if [ $# -ge 1 ]
-then
-    PYTHON=python3
-else
-    PYTHON=python
-fi
+PYTHON=python3
 
 #echo "Using Interpreter $PYTHON"
 

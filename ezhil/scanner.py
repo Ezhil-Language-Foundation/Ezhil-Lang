@@ -171,8 +171,8 @@ class Lex(object):
                 self.File = codecs.open(fname,"r","utf-8")
             elif self.encoding == "tscii":
                 # use open-tamil libraries to translate the source file
-                self.File = open(fname,"r")
-                self.converted_data = tamil.tscii.convert_to_unicode( self.File.read() )
+                self.File = open(fname,"rb")
+                self.converted_data = tamil.tscii.convert_to_unicode_from_bytes( self.File.read() )
                 if (self.debug ):
                     print("########## TSCII CONVERSION  TO UNICODE DONE ##########")
                     print("######################### %d letters found #################"%len(self.converted_data))
