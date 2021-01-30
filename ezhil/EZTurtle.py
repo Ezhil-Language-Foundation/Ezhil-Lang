@@ -4,25 +4,43 @@
 
 import turtle
 
+
 class EZTurtle:
     """ EZTurtle class implements a singleton for famed Turtle module.
         Unfortunately turtle class does not take Unicode arguments.    """
     instance = None
-    
+
     @staticmethod
-    def getInstance( ):
+    def getInstance():
         if not EZTurtle.instance:
-            EZTurtle.instance = turtle.Pen();
+            EZTurtle.instance = turtle.Pen()
         return EZTurtle.instance
-    
+
     @staticmethod
     def functionAttributes():
-        attrib = {0:['ht','home','showturtle','hideturtle','reset','penup','up','down','pendown','clear','isvisible',],
-                  1:['rt','lt','left','right','forward','fd','bd','backward','color','fill','speed','pencolor','dot'],
-                  2:['goto'],
-                  -1:['circle','setworldcoordinates'] } #-1 => indicates varargs
+        attrib = {
+            0: [
+                'ht',
+                'home',
+                'showturtle',
+                'hideturtle',
+                'reset',
+                'penup',
+                'up',
+                'down',
+                'pendown',
+                'clear',
+                'isvisible',
+            ],
+            1: [
+                'rt', 'lt', 'left', 'right', 'forward', 'fd', 'bd', 'backward',
+                'color', 'fill', 'speed', 'pencolor', 'dot'
+            ],
+            2: ['goto'],
+            -1: ['circle', 'setworldcoordinates']
+        }  #-1 => indicates varargs
         return attrib
-    
+
     # 0-arg functions
     @staticmethod
     def home():
@@ -33,26 +51,27 @@ class EZTurtle:
         EZTurtle.getInstance().clear(*[])
 
     @staticmethod
-    def showturtle( ):
+    def showturtle():
         EZTurtle.getInstance().showturtle(*[])
 
     @staticmethod
     def hideturtle():
         EZTurtle.getInstance().hideturtle(*[])
-    
+
     @staticmethod
     def penup():
         EZTurtle.getInstance().penup(*[])
-    up = penup;
+
+    up = penup
 
     @staticmethod
     def pendown():
         EZTurtle.getInstance().pendown(*[])
-        
+
     @staticmethod
     def down():
         EZTurtle.pendown()
-    
+
     # 1-arg functions
     @staticmethod
     def rt(x):
@@ -61,15 +80,15 @@ class EZTurtle:
     @staticmethod
     def right(x):
         EZTurtle.rt(x)
-    
+
     @staticmethod
     def lt(x):
         EZTurtle.getInstance().lt(*[x])
-    
+
     @staticmethod
     def left(x):
         EZTurtle.lt(x)
-        
+
     @staticmethod
     def forward(x):
         EZTurtle.getInstance().forward(*[x])
@@ -77,7 +96,7 @@ class EZTurtle:
     @staticmethod
     def fd(x):
         EZTurtle.forward(x)
-            
+
     @staticmethod
     def backward(x):
         EZTurtle.getInstance().backward(*[x])
@@ -85,7 +104,7 @@ class EZTurtle:
     @staticmethod
     def bd(x):
         EZTurtle.backward(x)
-    
+
     @staticmethod
     def back(x):
         EZTurtle.getInstance().back(*[x])
@@ -93,13 +112,13 @@ class EZTurtle:
     @staticmethod
     def bk(x):
         EZTurtle.getInstance().bk(*[x])
-    
+
     @staticmethod
-    def setworldcoordinates(*x): #polymorphic invocation supported here
+    def setworldcoordinates(*x):  #polymorphic invocation supported here
         turtle.setworldcoordinates(*x)
-    
+
     @staticmethod
-    def circle(*x): #polymorphic invocation supported here
+    def circle(*x):  #polymorphic invocation supported here
         EZTurtle.getInstance().circle(*x)
 
     @staticmethod
@@ -115,9 +134,9 @@ class EZTurtle:
         EZTurtle.getInstance().clone(*[x])
 
     @staticmethod
-    def color(x):        
+    def color(x):
         EZTurtle.getInstance().color(*[str(x)])
-    
+
     @staticmethod
     def degrees(x):
         EZTurtle.getInstance().degrees(*[x])
@@ -151,8 +170,8 @@ class EZTurtle:
         EZTurtle.getInstance().getturtle(*[x])
 
     @staticmethod
-    def goto(x,y):
-        EZTurtle.getInstance().goto(*[x,y])
+    def goto(x, y):
+        EZTurtle.getInstance().goto(*[x, y])
 
     @staticmethod
     def heading(x):
@@ -197,7 +216,7 @@ class EZTurtle:
     @staticmethod
     def pos(x):
         EZTurtle.getInstance().pos(*[x])
-    
+
     @staticmethod
     def position(x):
         EZTurtle.getInstance().position(*[x])
@@ -213,7 +232,7 @@ class EZTurtle:
     @staticmethod
     def reset():
         EZTurtle.getInstance().reset()
-    
+
     @staticmethod
     def resizemode(x):
         EZTurtle.getInstance().resizemode(*[x])

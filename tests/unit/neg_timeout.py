@@ -12,6 +12,7 @@ from ezhil.errors import RuntimeException
 # helper functions for testsuites
 import unittest
 
+
 class InfiniteTimeoutTest(unittest.TestCase):
     def test_timeout(self):
         self.do_timeout_test("infi.n")
@@ -20,14 +21,15 @@ class InfiniteTimeoutTest(unittest.TestCase):
         self.do_timeout_test("purinfi.n")
 
     # utility function
-    def do_timeout_test(self,fname):
+    def do_timeout_test(self, fname):
         e = None
         try:
             ezhil.ezhil_timeout_exec(fname)
         except Exception as e:
             pass
-        self.assertEquals(type(e),RuntimeException)
-        self.assertTrue( u'13 (seconds)' in unicode(e))
+        self.assertEqual(type(e), RuntimeException)
+        self.assertTrue('13 (seconds)' in str(e))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,7 +6,7 @@
 
 from .ezhil import main
 
-# support 'python -m ezhil' syntax 
+# support 'python -m ezhil' syntax
 # including running files specified at CLI
 if __name__ == u'__main__':
     main()

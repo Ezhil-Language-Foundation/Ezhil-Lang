@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # (C) 2013 Muthiah Annamalai
-# 
+#
 # This file is part of Ezhil Language test suite
 # to verify behavior of interactive interpreter
 
@@ -14,18 +14,20 @@ from test import test_support
 
 import ezhil
 
+
 class Interactive2(unittest.TestCase):
     def test_numbers_and_printing(self):
-        code = u"""
+        code = """
         1 + 1
         1 - 1
         1 + 2 - 3
     """
         TestInteractiveEzhil.create_and_test(code)
 
+
 class Interactive(unittest.TestCase):
     def test_numbers_and_printing(self):
-        code = u"""
+        code = """
       1 + 1
             பதிப்பி 10 + 10
             பதிப்பி 1/10.0
@@ -40,5 +42,6 @@ class Interactive(unittest.TestCase):
     """
         TestInteractiveEzhil.create_and_test(code)
 
-if __name__ == '__main__':    
-    test_support.run_unittest(Interactive,Interactive2)
+
+if __name__ == '__main__':
+    unittest.main()
