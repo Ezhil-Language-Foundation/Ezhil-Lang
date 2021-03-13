@@ -41,4 +41,4 @@ class Interactive(unittest.TestCase):
         TestInteractiveEzhil.create_and_test(code)
 
 if __name__ == '__main__':    
-    test_support.run_unittest(Interactive,Interactive2)
+    unittest.main()

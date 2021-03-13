@@ -146,7 +146,7 @@ class TransformVisitor(Visitor):
         self.lexer = self.interpreter.lexer    
         self.debug = debug
         if ( self.debug ):
-             print(unicode(self.top_ast))
+             print(str(self.top_ast))
         self.top_ast.visit(self)
         
     def update_line(self,obj):

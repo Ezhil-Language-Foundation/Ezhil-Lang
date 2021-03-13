@@ -22,7 +22,7 @@ class WikiStyle:
             out = u'<span style="color:#'+attrib[0]
         if ( len(attrib) >= 2 ):
             out = out + u';background:#'+attrib[1]
-        out = out + u'">' + attrib.process(text) + u"</span>"
+        out = out + u'">' + str(attrib.process(text)) + u"</span>"
         return out
 
 class Printer(Visitor):
@@ -43,7 +43,7 @@ class Printer(Visitor):
         if ( obj.line > self.line ):
             self.line = obj.line
             self.append( self.NEWLINE  )
-        if ( self.lexer.comments.has_key(self.line) ):
+        if ( self.line in self.lexer.comments ):
             #print "visiting comment "
             self.append( self.lexer.comments[self.line] )
             del self.lexer.comments[self.line]
@@ -57,30 +57,30 @@ class Printer(Visitor):
         #args[0] is AST object
         self.append(u"def :")
         self.update_line(args[0])
-        self.append(unicode(args[0]))
+        self.append((args[0]))
         
     def visit_identifier(self, IDobj):  
         attrib = self.theme.Variables
         self.update_line(IDobj)
-        self.append( self.styler(attrib,unicode(IDobj.id)))
+        self.append( self.styler(attrib,(IDobj.id)))
         return
     
     def visit_string(self, string):
         attrib = self.theme.LiteralString
         self.update_line(string)
-        self.append(self.styler(attrib,unicode(string)))
+        self.append(self.styler(attrib,(string)))
         return
 
     def visit_number(self, num):
         attrib = self.theme.LiteralNumber
         self.update_line(num)
-        self.append(self.styler(attrib,unicode(num)))
+        self.append(self.styler(attrib,(num)))
         return
 
     def visit_expr_call(self,expr_call):
         var_attrib = self.theme.Variables
         self.update_line(expr_call)
-        self.append(self.styler(var_attrib,unicode(expr_call.func_id.id)))
+        self.append(self.styler(var_attrib,(expr_call.func_id.id)))
         op_attrib = self.theme.Operators
         self.append( self.styler(op_attrib,"(") )
         expr_call.arglist.visit( self )
@@ -249,7 +249,7 @@ class Printer(Visitor):
         kw_attrib = self.theme.Keywords
         keyword = u"பதிப்பி"
         self.update_line(print_stmt)
-        self.append( self.styler(kw_attrib,unicode(keyword)) )
+        self.append( self.styler(kw_attrib,(keyword)) )
         print_stmt.exprlst.visit(self)
         return
 
@@ -264,7 +264,7 @@ class Printer(Visitor):
                 arg.visit(self)
             else:
                 var_attrib = self.theme.Variables
-                self.append( self.styler(var_attrib,unicode(arg)) )            
+                self.append( self.styler(var_attrib,(arg)) )            
             if ( pos < (L-1) ):
                 self.append( ", " )
         return
@@ -313,7 +313,7 @@ class Printer(Visitor):
     def pretty_print(self):
         self.parse_eval = EzhilInterpreter(lexer=self.lexer)
         ast = self.parse_eval.parse()
-        print(unicode(ast))
+        print((ast))
         ast.visit(self)
         
         # dump remaining comments
@@ -348,7 +348,7 @@ class Printer(Visitor):
                 attrib = self.theme.Builtins
                 out.append(u'<BR />\n')
             
-            t.val = u" " + unicode(t.val)
+            t.val = u" " + (t.val)
             out.append( self.styler(attrib,t.val) )
             if ( add_br ):
                 out.append(u"<BR />\n")

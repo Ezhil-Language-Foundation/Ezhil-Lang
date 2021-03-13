@@ -93,4 +93,4 @@ function( )
         self.assertTrue(expected in str(context.exception))
 
 if __name__ == '__main__':    
-    test_support.run_unittest(ExprNeg,StmtNeg,TooFewArgsNeg)
+    unittest.main()

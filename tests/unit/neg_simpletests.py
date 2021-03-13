@@ -5,6 +5,7 @@
 # 
 
 # setup the paths
+import ezhiltests
 from ezhil import ezhil_eval
 from ezhil.errors import RuntimeException
 
@@ -18,13 +19,10 @@ debug = False
 
 class SimpleNegTests(unittest.TestCase):
     def test_wrong_identifier(self):
-        e = None
         code = u"f01234\n"
-        try:
+        with self.assertRaises(RuntimeException) as e:
             ezhil_eval(code)
-        except RuntimeException as e:
-            pass
-        self.assertTrue(isinstance(e,RuntimeException))
+        self.assertTrue('Run-time error: Cannot Find Identifier f01234 at Line 1, col 0.' in str(e.exception))
         return
 
 if __name__ == u"__main__":

@@ -6,6 +6,7 @@
 
 # setup the paths
 import ezhiltests
+import codecs
 from ezhiltests import TestEzhilException, QuietTestCase, ezhil
 from ezhil import EzhilInterpreter, EzhilLex
 from ezhil.ezhil_serializer import SerializerXML
@@ -31,11 +32,22 @@ class XMLValidator:
         self.parse()
     
     def parse(self):
-        try:
-            self.Parser.ParseFile(open(self.xml_file, "r"))
-        except Exception as e:
-            print("ERROR: Can't open XML file -> %s.\n Casue: %s!\n"%(self.xml_file,str(e)))
-            raise e
+        #try:
+        class ShimObj:
+            def __init__(self,that):
+                self._file = codecs.open(that.xml_file, "rb", "utf-8")
+                self._offset = 0
+                self._data = bytes(self._file.read(),'utf-8')
+
+            def read(self,size):
+                data = self._data[self._offset:min(len(self._data),self._offset+size)]
+                self._offset += size
+                return data
+
+        self.Parser.ParseFile(ShimObj(self))
+        #except Exception as e:
+        #    print("ERROR: Can't open XML file -> %s.\n Cause: %s!\n"%(self.xml_file,str(e)))
+        #    raise e
         
     # TBD
     def handleCharData(self, data): pass

@@ -90,13 +90,13 @@ class TestPrettyPrinter(QuietTestCase):
             expt_fmt = expt_fmt.split("\n");
             formatted_str = PrettyPrint(relpath+filename).pretty_print()
             if not ( all([( formatted_str.find( line ) >= 0 ) for line in expt_fmt]) ):
-                if self.debug: print "file "+filename+" did not find expected strings "
-                if self.debug: print u"\n>>>".join(expt_fmt)
+                if self.debug: print("file "+filename+" did not find expected strings ")
+                if self.debug: print(u"\n>>>".join(expt_fmt))
                 flag = False
             else:
-                if self.debug: print "file " + filename + " passed the test"
+                if self.debug: print("file " + filename + " passed the test")
             print("##############################################")
         self.assertTrue( flag )
 
 if __name__ == '__main__':    
-    test_support.run_unittest(TestPrettyPrinter)
+    unittest.main()

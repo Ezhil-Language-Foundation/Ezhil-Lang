@@ -42,4 +42,4 @@ class DupeFcnsNeg(unittest.TestCase):
         TestEzhilException.create_and_test_spl_safe_mode(exprCode,Exception,"multiply defined")
 
 if __name__ == '__main__':
-    test_support.run_unittest(DupeFcnsNeg)
+    unittest.main()

@@ -32,10 +32,10 @@ class BadLexingTests(QuietTestCase):
     
     @staticmethod
     def pattgen(limit):
-        for idx in xrange(limit):
+        for idx in range(limit):
             idlen = choice(range(2,8))
             newID = list()
-            for idy in xrange(idlen):
+            for idy in range(idlen):
                 if choice([2,3])%2 == 0:
                     newID.append( choice( BadLexingTests.TOTAL ) )
                 else:

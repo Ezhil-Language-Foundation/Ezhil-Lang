@@ -48,4 +48,4 @@ raw_input("How old is the earth?>> ")
         TestEzhilException.create_and_test_spl_safe_mode(exprCode,RuntimeException,"may not be used in SAFE MODE")
 
 if __name__ == '__main__':
-    test_support.run_unittest(MissingFcnsNeg,SafeModeNeg)
+    unittest.main()

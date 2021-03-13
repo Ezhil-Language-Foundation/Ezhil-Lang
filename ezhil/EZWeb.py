@@ -35,10 +35,10 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
         POSTvars = cgi.parse_qs( query_string )
         print(str(POSTvars))
         
-        if POSTvars.has_key('prog'):
+        if 'prog' in POSTvars:
             program ="\n".join(POSTvars['prog'])
             program = codecs.decode( program ,'utf-8')
-        elif POSTvars.has_key('eval'):
+        elif 'eval' in POSTvars:
             program = 'printf("Welcome to Ezhil! You can type a program and execute it online!")'
         else:
             self.send_response(404)

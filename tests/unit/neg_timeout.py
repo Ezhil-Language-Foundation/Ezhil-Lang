@@ -21,13 +21,9 @@ class InfiniteTimeoutTest(unittest.TestCase):
 
     # utility function
     def do_timeout_test(self,fname):
-        e = None
-        try:
+        with self.assertRaises(RuntimeException) as e:
             ezhil.ezhil_timeout_exec(fname)
-        except Exception as e:
-            pass
-        self.assertEquals(type(e),RuntimeException)
-        self.assertTrue( u'13 (seconds)' in unicode(e))
+        self.assertTrue( u'13 (seconds)' in str(e.exception))
 
 if __name__ == '__main__':
     unittest.main()

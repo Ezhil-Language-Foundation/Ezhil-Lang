@@ -325,12 +325,15 @@ class Interpreter(DebugUtils):
             self.add_blind_fcns( bfn, b)
         
     @staticmethod
-    def ezhil_assert( x  ):
+    def ezhil_assert( *x  ):
         # we raise Exception(u'Assertion failed!') further up stack
-        if not x:
+        if not x[0]:
             # TBD: print the description of the AST x
             pass
-        assert x
+        if len(x) > 1:
+            assert x[0], x[1]
+        else:
+            assert x[0]
         return True
     
     # file IO functions - 6 total
@@ -735,16 +738,16 @@ class Interpreter(DebugUtils):
         self.builtin_map["copy"]= BuiltinFunction(dict.copy,"copy",1)
         self.builtin_map["fromkeys"]= BuiltinFunction(dict.fromkeys,"fromkeys",1)
         self.builtin_map["items"]= BuiltinFunction(dict.items,"items",1)
-        
+        self.builtin_map["has_key"] = BuiltinFunction(lambda *x: x[1] in x[0], "has_key", 2)
+
         if not PYTHON3:
-            self.builtin_map["has_key"]= BuiltinFunction(dict.has_key,"has_key",1)
             self.builtin_map["iteritems"]= BuiltinFunction(dict.iteritems,"iteritems",1)
             self.builtin_map["iterkeys"]= BuiltinFunction(dict.iterkeys,"iterkeys",1)
             self.builtin_map["itervalues"]= BuiltinFunction(dict.itervalues,"itervalues",1)
             self.builtin_map["pop_dict"]= BuiltinFunction(dict.pop,"pop",1)
             self.builtin_map["popitem"]= BuiltinFunction(dict.popitem,"popitem",1)
             self.builtin_map["setdefault"]= BuiltinFunction(dict.setdefault,"setdefault",1)
-        
+
         if PYTHON3:
             self.builtin_map["keys"]= BuiltinFunction(lambda x: list(dict.keys(x)),"keys",1)
             self.builtin_map["values"]= BuiltinFunction(lambda x: list(dict.values(x)),"values",1)

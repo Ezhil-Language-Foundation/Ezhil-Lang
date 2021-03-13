@@ -37,7 +37,7 @@ class StringAttrib(Attrib):
     @staticmethod
     def process(*args):
         """ chicken wrapped bacon """
-        return u"\""+args[0]+u"\""
+        return u"\""+str(args[0])+u"\""
 
 class XsyTheme:
     def __init__(self):

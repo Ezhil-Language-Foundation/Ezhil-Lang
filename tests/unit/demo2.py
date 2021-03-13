@@ -25,7 +25,7 @@ debug = False
 class Executer(unittest.TestCase):
     def test_basic_file_settings(self):
         #print program
-        obj = EzhilFileExecuter( file_input = [program], debug=False, redirectop = True, TIMEOUT = 10 ) # 2 minutes
+        obj = EzhilFileExecuter( file_input = [program], debug=True, redirectop = False, TIMEOUT = 10 ) # 2 minutes
         
         # actually run the process
         obj.run()
@@ -67,4 +67,4 @@ class Executer(unittest.TestCase):
         return
 
 if __name__ == '__main__':    
-    test_support.run_unittest(Executer)
+    unittest.main()
