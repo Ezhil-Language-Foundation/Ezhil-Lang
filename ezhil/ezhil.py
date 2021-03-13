@@ -12,7 +12,6 @@ if PYTHON3:
     unicode = str
 else:
     sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
-    #sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 import os
 import tempfile
