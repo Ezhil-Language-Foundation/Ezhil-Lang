@@ -11,7 +11,7 @@ from setuptools import setup
 from codecs import open
 
 setup(name='ezhil',
-      version='1.0',
+      version='1.0rc',
       description='Ezhil - Tamil programming language implemented in Python; Ezhil works on Python 3',
       author='Muthiah Annamalai',
       author_email='ezhillang@gmail.com',
