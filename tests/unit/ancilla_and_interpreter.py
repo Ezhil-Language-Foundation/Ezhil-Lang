@@ -13,14 +13,14 @@ from test import test_support
 import ezhil
 
 class Ancilla(unittest.TestCase):
-    def test_latest_version(self):     
-        assert( ezhil.version() >= 0.99 )
+    def test_latest_version(self):
+        self.assertEqual( ezhil.version(), 1.0 )
 
     def test_credits(self):
-        assert( ezhil.credits().find("Annamalai") >= 0 )
+        self.assertTrue( ezhil.credits().find("Annamalai") >= 0 )
 
     def test_start_method(self):
-        assert( callable(ezhil.start) )
+        self.assertTrue( callable(ezhil.start) )
     
     # 40 keywords/tokens for Ezhil Language
     def test_keywords(self):

@@ -87,10 +87,10 @@ def ezhil_quit():
     sys.exit(0)
 
 def ezhil_version():
-    return 0.99
+    return 1.0
 
 def ezhil_copyright():
-    return u"(C) 2007-2016 Muthiah Annamalai, and other contributors."
+    return u"(C) 2007-2016,2021 Muthiah Annamalai, and other contributors."
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
@@ -872,8 +872,8 @@ class REPL(Cmd):
             @debug the boolean """
         Cmd.__init__(self)
         ## ala-Python like
-        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Thu Aug 20 00:08:00 PDT 2017)
-Ezhil : A Tamil Programming Language - version %g, (C) 2007-2017
+        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Sat Mar 13 11:47:22 PST 2021)
+Ezhil : A Tamil Programming Language - version %g, (C) 2007-2017,2021 Ezhil Language Foundation.
 Type "help", "copyright", "credits" or "license" for more information."""%ezhil_version()
         
         self.lang = lang
