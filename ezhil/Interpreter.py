@@ -79,8 +79,8 @@ def ezhil_keywords():
      ">>":"BITWISE_RSHIFT",
      "~":"BITWISE_COMPLEMENT",
      "!":"LOGICAL_NOT"}
-    val = keywords.keys()
-    val.sort( tamil.utf8.compare_words_lexicographic )
+    val = list(keywords.keys())
+    val = tamil.utf8.tamil_sorted(val)
     return val,[keywords[ref] for ref in val]
 
 def ezhil_quit():

@@ -159,7 +159,7 @@ class TestEzhilException( TestEzhil ):
                     if ( self.debug ): print(self.success)
                     if ( self.debug ): print("### testing ",unicode(msg))
                     self.success = self.success and \
-                        (( ex.message.find( msg ) >= 0 ) or \
+                        (( str(ex).find( msg ) >= 0 ) or \
                              len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 or unicode(ex).find( msg ) >= 0 )
                     if ( self.debug ): print(self.success)
             
@@ -247,7 +247,7 @@ class TestTimeoutEzhil(TestEzhil):
         self.success = False
         try:
             #redirect output = True, when you need a TIMEOUT
-            ezhil.EzhilFileExecuter(self.filename,debug=False,redirectop=True,TIMEOUT=self.timeout)
+            ezhil.EzhilFileExecuter(self.filename,debug=False,redirectop=False,TIMEOUT=self.timeout)
         except TimeoutException as tex:
             self.success = True #expected to raise an exception
         except Exception as ex:

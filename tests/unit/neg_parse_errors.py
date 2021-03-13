@@ -89,8 +89,8 @@ function( )
         expected = u"Function '%s' expects %d arguments but received only %d"%(u"function",1,0)
         with self.assertRaises(RuntimeException) as context:
             ezhil_eval(exprCode)
-        self.assertEqual('Run-time error:',context.exception[0])
-        self.assertTrue(expected in context.exception[1][1])
+        self.assertTrue(isinstance(context.exception,RuntimeException))
+        self.assertTrue(expected in str(context.exception))
 
 if __name__ == '__main__':    
     test_support.run_unittest(ExprNeg,StmtNeg,TooFewArgsNeg)

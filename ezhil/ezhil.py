@@ -197,7 +197,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                 raise e
         else:
             self.dbg_msg("EzhilFileExecuter - entering the redirect mode\n")
-            self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':file_input,'redirectop':redirectop,'debug':debug,'doprofile':doprofile,'safe_mode':safe_mode})
+            self.p = Process(target=ezhil_file_parse_eval,kwargs={'file_input':bytes(file_input,'utf-8'),'redirectop':redirectop,'debug':debug,'doprofile':doprofile,'safe_mode':safe_mode})
         #print("done...")
         
     def run(self):
