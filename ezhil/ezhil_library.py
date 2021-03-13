@@ -16,9 +16,11 @@ else:
     # Fall back to Python 2's urllib2
     from urllib2 import urlopen
 
+
 def ezhil_urlopen(*args):
     html = urlopen(*args)
     return html
+
 
 def ezhil_urlread(html):
     data = html.read()
@@ -26,15 +28,26 @@ def ezhil_urlread(html):
         return data.decode("utf-8")
     return data
 
+
 def ezhil_urlclose(html):
     html.close()
 
+
 def Load_URL_APIs(interpreter):
-    interpreter.add_builtin("urlopen",ezhil_urlopen,nargin=1,ta_alias="இணைய_இணைப்பு_திற")
-    interpreter.add_builtin("urlread",ezhil_urlread,nargin=1,ta_alias="இணைய_இணைப்பு_படி")
-    interpreter.add_builtin("urlclose",ezhil_urlclose,nargin=1,ta_alias="இணைய_இணைப்பு_மூடு")
+    interpreter.add_builtin("urlopen",
+                            ezhil_urlopen,
+                            nargin=1,
+                            ta_alias="இணைய_இணைப்பு_திற")
+    interpreter.add_builtin("urlread",
+                            ezhil_urlread,
+                            nargin=1,
+                            ta_alias="இணைய_இணைப்பு_படி")
+    interpreter.add_builtin("urlclose",
+                            ezhil_urlclose,
+                            nargin=1,
+                            ta_alias="இணைய_இணைப்பு_மூடு")
     # JSON
-    interpreter.add_builtin("json_loads",json.loads,nargin=1)
-    interpreter.add_builtin("json_load",json.load,nargin=1)
-    interpreter.add_builtin("json_dump",json.dump,nargin=1)
-    interpreter.add_builtin("json_dumps",json.dumps,nargin=1)
+    interpreter.add_builtin("json_loads", json.loads, nargin=1)
+    interpreter.add_builtin("json_load", json.load, nargin=1)
+    interpreter.add_builtin("json_dump", json.dump, nargin=1)
+    interpreter.add_builtin("json_dumps", json.dumps, nargin=1)

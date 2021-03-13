@@ -1,9 +1,9 @@
 import Interpreter
 q = Interpreter.NoClobberDict()
-q['foo']='bar';
+q['foo'] = 'bar'
 
 try:
-    q['foo']='car';
+    q['foo'] = 'car'
 except KeyError as e:
     exit(0)
 
