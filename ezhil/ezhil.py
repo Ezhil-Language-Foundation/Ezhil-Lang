@@ -33,7 +33,7 @@ from .ezhil_parser import EzhilParser
 from .ezhil_scanner import EzhilLex
 from .errors import RuntimeException, ParseException, TimeoutException
 from multiprocessing import Process, current_process
-from time import sleep,clock,time
+from time import sleep,time
 from .ezhil_transforms import TransformEntryExitProfile, TransformSafeModeFunctionCheck
 
 class EzhilInterpreter( Interpreter ):
