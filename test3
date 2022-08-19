@@ -170,6 +170,6 @@ else
 fi
 
 # cleanup
-rm failed3.txt
-rm success3.txt
+#rm failed3.txt
+#rm success3.txt
 exit $exitcode

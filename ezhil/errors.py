@@ -46,7 +46,8 @@ class ParseException(ErrorException):
     def __init__(self, desc):
         ErrorException.__init__(self)
         self.args = [Messages.PARSE_ERROR, desc]
-        self.__dict__.update({'message':desc})
+        self.__dict__.update({'message': desc})
+
 
 class SemanticException(ErrorException):
     def __init__(self, desc):

@@ -25,15 +25,15 @@ from .scanner import Token, Lexeme, Lex
 from .errors import RuntimeException, ParseException
 
 ## runtime elements
-from .runtime import  Environment, BuiltinFunction, \
- BlindBuiltins, DebugUtils
+from .runtime import Environment, BuiltinFunction, \
+    BlindBuiltins, DebugUtils
 
 ## AST elements
 from .ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
- BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
- ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
- ValueList, Function, StmtList, Identifier, Number, \
- String
+    BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
+    ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
+    ValueList, Function, StmtList, Identifier, Number, \
+    String
 
 
 ## Parser implementes the grammar for 'exprs' language.
@@ -41,6 +41,7 @@ from .ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
 class Parser(DebugUtils):
     """ when you add new language feature, add a AST class 
     and its evaluate methods. Also add a parser method """
+
     def __init__(self, lexer, fcn_map, builtin_map, dbg=False):
         DebugUtils.__init__(self, dbg)
         self.parsing_function = False
@@ -48,10 +49,10 @@ class Parser(DebugUtils):
         self.ast = None
         self.currently_parsing = [
         ]  # stack, just in case we should have parse errors
-        self.function_map = fcn_map  #parsed functions
-        self.builtin_map = builtin_map  #pointers to builtin functions
-        self.if_stack = []  #parsing if-statements
-        self.loop_stack = []  #parsing while-statements
+        self.function_map = fcn_map  # parsed functions
+        self.builtin_map = builtin_map  # pointers to builtin functions
+        self.if_stack = []  # parsing if-statements
+        self.loop_stack = []  # parsing while-statements
         self.last_tok = None  ## handle to last token dequeued
         self.inside_if = False
 
@@ -95,9 +96,9 @@ class Parser(DebugUtils):
         ## if match return token, else ParseException
         tok = self.dequeue()
         if (tok.kind != kind):
-            raise ParseException(u"cannot find token "+ \
-                                Token.get_name(kind) + u" got " \
-                                + unicode(tok) + u" instead!")
+            raise ParseException(u"cannot find token " + \
+                                 Token.get_name(kind) + u" got " \
+                                 + unicode(tok) + u" instead!")
         return tok
 
     def __repr__(self):
@@ -148,7 +149,7 @@ class Parser(DebugUtils):
             if (ptok.kind == Token.END):
                 break
             if (not self.inside_if and
-                (ptok.kind == Token.ELSE or ptok.kind == Token.ELSEIF)):
+                    (ptok.kind == Token.ELSE or ptok.kind == Token.ELSEIF)):
                 break
             st = self.stmt()
             stlist.append(st)

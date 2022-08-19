@@ -19,15 +19,15 @@ from .ezhil_scanner import EzhilToken, EzhilLex, EzhilLexeme
 from .errors import RuntimeException, ParseException
 
 ## runtime elements
-from .runtime import  Environment, BuiltinFunction, \
- BlindBuiltins, DebugUtils
+from .runtime import Environment, BuiltinFunction, \
+    BlindBuiltins, DebugUtils
 
 ## AST elements
 from .ast import Expr, UnaryExpr, ExprCall, ExprList, Stmt, ReturnStmt, \
- BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
- ForStmt, AssignStmt, PrintStmt, DeclarationStmt, EvalStmt, ArgList, \
- ImportStmt, ValueList, Function, StmtList, Identifier, Number, \
- String, Array, Dict
+    BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, DoWhileStmt, \
+    ForStmt, AssignStmt, PrintStmt, DeclarationStmt, EvalStmt, ArgList, \
+    ImportStmt, ValueList, Function, StmtList, Identifier, Number, \
+    String, Array, Dict
 
 ## use exprs language parser
 from .ExprsParser import Parser
@@ -41,6 +41,7 @@ from .ezhil_messages import get_message, Messages
 class EzhilParser(Parser):
     """ when you add new language feature, add a AST class 
     and its evaluate methods. Also add a parser method """
+
     def __init__(self, lexer, fcn_map, builtin_map, dbg=False):
         if (not isinstance(lexer, EzhilLex)):
             exception_msg = get_message(Messages.ClassNotFound)
@@ -58,10 +59,10 @@ class EzhilParser(Parser):
         ## if match return token, else ParseException
         tok = self.dequeue()
         if (tok.kind != kind):
-            raise ParseException(u"cannot find token "+ \
+            raise ParseException(u"cannot find token " + \
                                  EzhilToken.get_name(kind) + u" got " \
-                                + unicode(tok)  \
-                                + u" instead!")
+                                 + unicode(tok) \
+                                 + u" instead!")
         return tok
 
     def parse(self):
@@ -76,7 +77,7 @@ class EzhilParser(Parser):
                 func = self.function()
                 self.warn_function_overrides(func.name)
                 self.function_map[func.name] = func
-                self.ast.append(DeclarationStmt(func))  #add to AST
+                self.ast.append(DeclarationStmt(func))  # add to AST
             else:
                 self.dbg_msg(u"parsing for stmt")
                 st = self.stmtlist()
@@ -122,7 +123,7 @@ class EzhilParser(Parser):
         # enter this if-statement always
         ifstmt = IfStmt(Number(1), None, None, l, c, self.debug)
         self.if_stack.append(ifstmt)
-        self.dbg_msg("parsing SWITCH-body")  #self.dbg_msg
+        self.dbg_msg("parsing SWITCH-body")  # self.dbg_msg
         ptok = self.peek()
         equality_token = EzhilLexeme("=", EzhilToken.EQUALITY)
         while (ptok.kind == EzhilToken.ATRATEOF
@@ -146,7 +147,7 @@ class EzhilParser(Parser):
                     case_stmt = IfStmt(expr, next_stmt, None, l, c, self.debug)
                     ifstmt.append_stmt(case_stmt)
             elif (ptok.kind == EzhilToken.OTHERWISE):
-                #parse else branch
+                # parse else branch
                 self.dbg_msg("parsing OTHERWISE: ")
                 self.match(EzhilToken.OTHERWISE)
                 self.dbg_msg("parsing OTHERWISE-Body")
@@ -195,7 +196,7 @@ class EzhilParser(Parser):
                 tok = self.peek()
                 if (tok.kind != EzhilToken.ELSEIF):
                     # maybe another IF statement, SWITCH-CASE or a WHILE loop, DO-WHILE loop etc.
-                    next_stmt = self.stmtlist(exp)  #pass in the expression
+                    next_stmt = self.stmtlist(exp)  # pass in the expression
                     prev_body.append(next_stmt)
                     # append to previously scanned body.
                 else:
@@ -208,7 +209,7 @@ class EzhilParser(Parser):
                                  unicode(next_stmt))
                     ifstmt.append_stmt(next_stmt)
             elif (ptok.kind == EzhilToken.ELSE):
-                #parse else branch
+                # parse else branch
                 self.dbg_msg(u"parsing stmt else: ")
                 self.match(EzhilToken.ELSE)
                 self.dbg_msg(u"parsing ELSE-Body")
@@ -264,7 +265,7 @@ class EzhilParser(Parser):
                 self.currently_parsing.pop()
             else:
                 exp = pass_in_ATexpr
-                pass_in_ATexpr = None  #use it just once
+                pass_in_ATexpr = None  # use it just once
             if (self.debug): print("return from valuelist ", unicode(exp))
             ptok = self.peek()
             if (ptok.kind == EzhilToken.IF):
@@ -315,7 +316,7 @@ class EzhilParser(Parser):
                 if (self.debug): print(u"build equals stmt")
                 update = AssignStmt(iter, eq_token, plus1_iter, l, c,
                                     self.debug)
-                body = self.stmtlist()  #parse body
+                body = self.stmtlist()  # parse body
                 # and insert artifical update variable in body
                 VL2 = ValueList([exp[0], iter], l, c, self.debug)
                 extract_foreach_iter_from_list = ExprCall(

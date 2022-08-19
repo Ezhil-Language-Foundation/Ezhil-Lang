@@ -21,7 +21,7 @@ PYTHON3 = (sys.version[0] == '3')
 #    ncalls - int
 #    cum_time - list
 #    total_time - float
-#FunctionProfileRecord = collections.namedtuple(u'FunctionProfileRecord',\
+# FunctionProfileRecord = collections.namedtuple(u'FunctionProfileRecord',\
 #                                                   [u'name',u'start_time',u'end_time',u'cum_time',u'self_time',u'ncalls',u'total_time'])
 class FunctionProfileRecord(object):
     def __init__(self, name, start_time, end_time, cum_time, self_time, ncalls,
@@ -32,7 +32,7 @@ class FunctionProfileRecord(object):
         self.end_time = end_time
         self.cum_time = cum_time
         self.self_time = self_time
-        self.self_time_running = 0  #self-time running deficit of all downstream calls
+        self.self_time_running = 0  # self-time running deficit of all downstream calls
         self.ncalls = ncalls
         self.total_time = total_time
         self.total_self_time = 0
@@ -76,9 +76,9 @@ class Profiler(object):
             else:
                 padded_name = rec.name[0:9]
 
-            print(u"%10s | %3d| %5f | %3f | %5f"%(padded_name,rec.ncalls,\
-                                                  (rec.total_self_time/rec.ncalls)/1e-3,\
-                                                  (rec.total_time/rec.ncalls)/1e-3,rec.total_time/1e-3))
+            print(u"%10s | %3d| %5f | %3f | %5f" % (padded_name, rec.ncalls, \
+                                                    (rec.total_self_time / rec.ncalls) / 1e-3, \
+                                                    (rec.total_time / rec.ncalls) / 1e-3, rec.total_time / 1e-3))
         print(u"##########################################################")
         return
 
@@ -87,13 +87,13 @@ class Profiler(object):
 
     def add_new_function(self, fname, start_time):
         if not self.function_records.get(fname, None):
-            frec = FunctionProfileRecord(name = fname, \
-                                             start_time = [start_time], \
-                                             ncalls = 1, \
-                                             end_time = [], \
-                                             cum_time = [], \
-                                             self_time = [0], \
-                                             total_time = 0)
+            frec = FunctionProfileRecord(name=fname, \
+                                         start_time=[start_time], \
+                                         ncalls=1, \
+                                         end_time=[], \
+                                         cum_time=[], \
+                                         self_time=[0], \
+                                         total_time=0)
             self.function_records[fname] = frec
         else:
             frec = self.function_records[fname]

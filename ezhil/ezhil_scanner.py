@@ -19,6 +19,7 @@ if PYTHON3:
 
 class EzhilLexeme(Lexeme):
     """ Ezhil Lexeme - """
+
     def __init__(self, val, kind, fname=u""):
         Lexeme.__init__(self, val, kind, fname)
 
@@ -26,9 +27,9 @@ class EzhilLexeme(Lexeme):
         return u"%s - %s" % (self.val, self.kind)
 
     def __unicode__(self):
-        return u" %s [%s] Line=%d, Col=%d in File %s "% \
-            (self.val,self.get_kind(), \
-                self.line,self.col,self.fname)
+        return u" %s [%s] Line=%d, Col=%d in File %s " % \
+               (self.val, self.get_kind(), \
+                self.line, self.col, self.fname)
 
 
 class EzhilToken(Token):
@@ -46,7 +47,7 @@ class EzhilToken(Token):
     Token.FOREACH = len(Token.token_types)
 
     Token.token_types.append(u"IN|இல்")
-    Token.IN = Token.COMMA  #short-circuit!
+    Token.IN = Token.COMMA  # short-circuit!
 
     Token.token_types.append(u"DOWHILE|முடியேனில்")
     Token.DOWHILE = len(Token.token_types)
@@ -66,7 +67,7 @@ class EzhilToken(Token):
         if Token.get_name(kind) in [u"FOREACH", u"DOWHILE", u"IN", u"IMPORT"]:
             return True
         if Token.get_name(kind) in [
-                u"பின்கொடு", u"பதிப்பி", u"ஒவ்வொன்றாக", u"@", u"இல்"
+            u"பின்கொடு", u"பதிப்பி", u"ஒவ்வொன்றாக", u"@", u"இல்"
         ]:
             return True
         return False
@@ -77,6 +78,7 @@ class EzhilToken(Token):
 
 class EzhilLex(Lex):
     """ Lex Tamil characters : RAII principle - lex on object construction"""
+
     def __init__(self, fname=None, dbg=False, encoding="utf-8"):
         if (dbg): print(u"init/EzhilLex")
         Lex.__init__(self, fname, dbg, encoding)
@@ -189,7 +191,7 @@ class EzhilLex(Lex):
         elif (chunks[0] == u"\"" and chunks[-1] == u"\""):
             tval = EzhilLexeme(chunks[1:-1], EzhilToken.STRING)
         elif chunks[0].isdigit() or chunks[0] == '+' or chunks[0] == '-':
-            #tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
+            # tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             # deduce a float or integer
             if (chunks.find(u'.') >= 0 or chunks.find(u'e') >= 0
                     or chunks.find(u'E') >= 0):
@@ -287,7 +289,7 @@ class EzhilLex(Lex):
                     idx = idx + 1
                 end = idx
                 self.comments[self.line] = data[start:end]
-            elif (c.isdigit()):  #or c == '+' or c == '-'  ):
+            elif (c.isdigit()):  # or c == '+' or c == '-'  ):
                 num = c
                 tok_start_idx = idx
                 idx = idx + 1

@@ -48,8 +48,8 @@ class Token:
     def is_keyword(kind):
         """ predicate to identify if @kind token is a keyword """
         if (Token.get_name(kind) in [
-                "END", "FOR", "WHILE", "DO", "IF", "ELSEIF", "ELSE", "DEF",
-                "SWITCH", "CASE", "OTHERWISE"
+            "END", "FOR", "WHILE", "DO", "IF", "ELSEIF", "ELSE", "DEF",
+            "SWITCH", "CASE", "OTHERWISE"
         ]):
             return True
         return False
@@ -149,12 +149,13 @@ class Lexeme:
         self.col = c
 
     def __str__(self):
-        return u" %s Line=%d, Col=%d in File %s "% \
-            (unicode(self.val),self.line,self.col,self.fname)
+        return u" %s Line=%d, Col=%d in File %s " % \
+               (unicode(self.val), self.line, self.col, self.fname)
 
 
 class DummyFile:
     """ wrap a bunch of string data in a file interface """
+
     def __init__(self, data):
         self.data = data
 
@@ -168,6 +169,7 @@ class DummyFile:
 class Lex(object):
     """ Lexer automatically starts lexing on init.
     Maybe use some Library module? """
+
     def __init__(self, fname=None, dbg=False, encoding="utf-8"):
         object.__init__(self)
         self.encoding = encoding.lower()
@@ -175,7 +177,7 @@ class Lex(object):
         self.debug = dbg
         self.converted_data = None
         self.comments = {
-        }  #comments dict indexed by line number with comments present as string value
+        }  # comments dict indexed by line number with comments present as string value
         if (isinstance(fname, str) or isinstance(fname, unicode)):
             self.fname = fname
             if self.encoding == "utf-8":
@@ -214,7 +216,7 @@ class Lex(object):
         self.spc = re.compile(u"\s+")
         self.newlines = re.compile(u"\n+")
         self.unary_binary_ops = \
-            [ '+','-','=','*','/','>','<','%','^','!=','!','&&','||','|','&','!','>>','<<','~']
+            ['+', '-', '=', '*', '/', '>', '<', '%', '^', '!=', '!', '&&', '||', '|', '&', '!', '>>', '<<', '~']
         ## need to be the last on init & only for files
         if (not self.stdin_mode): self.tokenize()
         ## REPL loop can call tokenize_string whenever it
@@ -333,7 +335,7 @@ class Lex(object):
             print("==>", chunks, "<==")
             scanner_exception = u"Lexical error: " + unicode(
                 chunks) + u" at Line , Col " + unicode(
-                    self.get_line_col(pos)) + u" in file " + self.fname
+                self.get_line_col(pos)) + u" in file " + self.fname
             raise ScannerException(scanner_exception)
 
         [l, c] = self.get_line_col(pos)
@@ -482,8 +484,8 @@ class Lex(object):
         """ if match return value of token """
         if self.peek().kind != tokval:
             ##print self
-            raise ScannerException(u"cannot find token "+ \
-                                Token.get_name(tokval) + u" got " \
-                                + unicode(self.peek())  \
-                                + u" instead!")
+            raise ScannerException(u"cannot find token " + \
+                                   Token.get_name(tokval) + u" got " \
+                                   + unicode(self.peek()) \
+                                   + u" instead!")
         return self.dequeue()

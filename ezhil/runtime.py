@@ -66,6 +66,7 @@ class DebugUtils:
 
 class BuiltinFunction:
     """ a templatized way to invoke bulitin functions."""
+
     def __init__(self, fn, name, padic=1, dbg=False):
         self.fn = fn
         self.name = name
@@ -97,7 +98,7 @@ class BuiltinFunction:
         env.call_function(self.name)
 
         ## check arguments match, otherwise raise error
-        args = env.get_args()  #.get_list()
+        args = env.get_args()  # .get_list()
         env.set_local({})
 
         if (self.use_adicity and len(args) < self.padic):
@@ -126,7 +127,7 @@ class BuiltinFunction:
             except AssertionError as assert_excep:
                 raise assert_excep
             except Exception as excep:
-                #print u"catch exception", excep
+                # print u"catch exception", excep
                 raise RuntimeException(unicode(excep))
         env.clear_call(
             copyvars=self.name in ["execute", "eval", u'இயக்கு', u'மதிப்பீடு'])
@@ -139,6 +140,7 @@ class BlindBuiltins(BuiltinFunction):
     """ also blindly include all functions from the 
         os, sys, curses.ascii, math etc. donot check arguments 
         here.    """
+
     def __init__(self, fn, name, dbg=False, aslist=False, padic=-1):
         BuiltinFunction.__init__(self, fn, name, padic, dbg)
         self.use_adicity = False
@@ -179,6 +181,7 @@ class CountDownTimer(object):
 # <<Side-Effects>>: computation is side-effect of programming.
 class Environment(CountDownTimer):
     """ used to manage the side-effects of an interpreter """
+
     def __init__(self,
                  call_stack,
                  function_map,
@@ -188,20 +191,20 @@ class Environment(CountDownTimer):
         CountDownTimer.__init__(self)
         self.do_profiling = False
         self.profiler = None
-        self.max_recursion_depth = MAX_REC_DEPTH  #keep it smaller than Python stack
-        self.call_stack = call_stack  #list
-        self.function_map = function_map  #dicts
-        self.builtin_map = builtin_map  #dicts
-        self.local_vars = []  #list of dicts.
-        self.arg_stack = []  #list of lists
-        self.ret_stack = []  #list
-        self.debug = dbg  #use to turn debugging on.
+        self.max_recursion_depth = MAX_REC_DEPTH  # keep it smaller than Python stack
+        self.call_stack = call_stack  # list
+        self.function_map = function_map  # dicts
+        self.builtin_map = builtin_map  # dicts
+        self.local_vars = []  # list of dicts.
+        self.arg_stack = []  # list of lists
+        self.ret_stack = []  # list
+        self.debug = dbg  # use to turn debugging on.
         self.readonly_global_vars = {
             'True': True,
             'False': False,
             u"மெய்": True,
             u"பொய்": False
-        }  #dict of global vars
+        }  # dict of global vars
         self.clear_break_return_continue()
 
     def validate_timer(self):
@@ -253,7 +256,7 @@ class Environment(CountDownTimer):
                    (i - 1), self.call_stack[i][0], self.call_stack[i][1]))
         while len(self.call_stack) > 0:
             tos, _ = self.call_stack.pop()
-            #print(u"Error in location %s"%str(tos))
+            # print(u"Error in location %s"%str(tos))
         return
 
     def get_break_return(self):
@@ -306,9 +309,10 @@ class Environment(CountDownTimer):
         return u"<env>"
 
     def __repr__(self):
-        retval = u"CallStack =>"+unicode(self.call_stack) + u"\n" \
-            u"LocalVars =>"+ unicode(self.local_vars) + u"\n" \
-            u"ArgStack =>"+ unicode(self.arg_stack) + u"\n"
+        retval = u"CallStack =>" + unicode(self.call_stack) + u"\n" \
+                                                              u"LocalVars =>" + unicode(self.local_vars) + u"\n" \
+                                                                                                           u"ArgStack =>" + unicode(
+            self.arg_stack) + u"\n"
         return retval
 
     def set_retval(self, rval):
@@ -392,7 +396,7 @@ class Environment(CountDownTimer):
         else:
             d = dict()
             self.local_vars.append(d)
-        #if not (idee in d) and (idee in self.global_vars):
+        # if not (idee in d) and (idee in self.global_vars):
         #    self.global_vars[idee] = val
         # else:
         d[idee] = val

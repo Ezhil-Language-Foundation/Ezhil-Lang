@@ -27,18 +27,18 @@ class Messages:
     GenSyntaxError = 5
     catalog = {
         UnexpectedNumber:
-        ("Expected Number, found something %s",
-         u"எதிர்பாராத எழுத்துக்கள் உள்ளீடில் வந்தன, %s; எண்கள் மட்டுமே வரலாம்"
-         ),
+            ("Expected Number, found something %s",
+             u"எதிர்பாராத எழுத்துக்கள் உள்ளீடில் வந்தன, %s; எண்கள் மட்டுமே வரலாம்"
+             ),
         ClassNotFound:
-        (u"Cannot find %s class", u"%s என்ற நிரல் தொகுப்பை காணவில்லை"),
+            (u"Cannot find %s class", u"%s என்ற நிரல் தொகுப்பை காணவில்லை"),
         CaseSyntaxError:
-        (u"SWITCH-CASE-OTHERWISE : Syntax error in this statement",
-         u"செய் தேர்ந்தெடு வாக்கியம் பிழையாக உள்ளது"),
+            (u"SWITCH-CASE-OTHERWISE : Syntax error in this statement",
+             u"செய் தேர்ந்தெடு வாக்கியம் பிழையாக உள்ளது"),
         IfSyntaxError: (u"If-Else-If statement syntax is messed up",
                         u"ஆனால் இல்லையானால் வாக்கியம்  பிழையாக உள்ளது"),
         GenSyntaxError:
-        (u"Syntax error in program", u"வாக்கியம்  பிழையாக உள்ளத")
+            (u"Syntax error in program", u"வாக்கியம்  பிழையாக உள்ளத")
     }
 
     @staticmethod

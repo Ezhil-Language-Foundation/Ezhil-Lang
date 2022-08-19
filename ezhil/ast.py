@@ -24,11 +24,12 @@ if PYTHON3:
 from .scanner import Token, Lexeme, Lex
 
 ## runtime elements
-from .runtime import  Environment, BuiltinFunction, \
- BlindBuiltins
+from .runtime import Environment, BuiltinFunction, \
+    BlindBuiltins
 
 ## exceptions
 from .errors import RuntimeException, ParseException
+
 
 ##
 ## ATOMS
@@ -61,10 +62,10 @@ class Identifier(object):
             if (hasattr(val, 'evaluate')):
                 val = val.evaluate(env)
             elif (val.__class__ == str):
-                #val = val
+                # val = val
                 pass
             else:
-                #val = val
+                # val = val
                 pass
             self.dbg_msg(unicode(self) + " = val [" + unicode(val) + "]")
             return val
@@ -197,6 +198,7 @@ class Array(list):
 
 class ExprCall(object):
     """handle function call statement etc."""
+
     def __init__(self, func_id, arglist, l, c, dbg=False):
         object.__init__(self)
         self.func_id = func_id
@@ -217,11 +219,11 @@ class ExprCall(object):
             self.line, self.col, unicode(self.fname), len(self.arglist))
 
     def __repr__(self):
-        return u"\n\t [ExprCall[ "+unicode(self.fname)+u" (" \
-            +unicode(self.arglist)+u")]]"
+        return u"\n\t [ExprCall[ " + unicode(self.fname) + u" (" \
+               + unicode(self.arglist) + u")]]"
 
     def evaluate(self, env):
-        #self.dbg_msg( unicode(env) )
+        # self.dbg_msg( unicode(env) )
         if (self.debug):
             print(u"\n".join(env.builtin_map.keys()))
             print("*" * 60)
@@ -231,7 +233,7 @@ class ExprCall(object):
             self.dbg_msg("calling function " + self.fname +
                          " with %d args" % len(self.arglist))
             fval = env.get_function(self.fname)
-            #("Check arguments accepted by function against supplied by call site")
+            # ("Check arguments accepted by function against supplied by call site")
             if hasattr(fval, 'arglist'):
                 # only check the argument matching for custom functions
                 # 'BlindBuiltins' or 'BlindFunctions' donot get argument checked.
@@ -299,13 +301,13 @@ class Stmt(object):
     def __unicode__(self):
         self.dbg_msg(u" ".join([u"stmt => ",
                                 unicode(self.__class__)
-                                ]))  #we're headed toward assertion
+                                ]))  # we're headed toward assertion
         return self.__repr__()
 
     def __repr__(self):
         print("//#//" * 50)
         print(u"stmt => ",
-              unicode(self.__class__))  #we're headed toward assertion
+              unicode(self.__class__))  # we're headed toward assertion
         self.dbg_msg(u"stmt => " + unicode(self.__class__))
         raise Exception(
             u"FATAL : Class %s did not implement the __repr__ method, nor inherits a concrete implementation."
@@ -357,11 +359,12 @@ class Stmt(object):
 class DeclarationStmt(Stmt):
     """ hold function declaration statements; have visit option, 
         but no evaluation options. """
+
     def __init__(self, fcn):
         if isinstance(fcn, Function):
             Stmt.__init__(self, fcn.line, fcn.col, fcn.debug)
             self.class_name = u"Declaration_Statement"
-            self.fcn = fcn  #FunctionStmt object
+            self.fcn = fcn  # FunctionStmt object
         else:
             raise Exception(
                 u"declaration statement can only hold FunctionStmt objects")
@@ -378,6 +381,7 @@ class DeclarationStmt(Stmt):
 class ImportStmt(Stmt):
     """ hold function declaration statements; have visit option, 
         but no evaluation options. """
+
     def __init__(self, line, col, debug, fname):
         Stmt.__init__(self, line, col, debug)
         self.class_name = u"Import_Statement"
@@ -385,7 +389,7 @@ class ImportStmt(Stmt):
 
     def evaluate(self, env):
         # make a function call to ezhil_execute
-        #self.dbg_msg(" add call : execute(\"begin\")")
+        # self.dbg_msg(" add call : execute(\"begin\")")
         [l, c] = self.line, self.col
         fname = ValueList([self.filename], l, c, self.debug)
         import_via_execute = ExprCall(Identifier("execute", l, c), fname, l, c,
@@ -465,7 +469,7 @@ class Expr(Stmt):
         return 1
 
     def __repr__(self):
-        return u"\n\t [Expr[ "+ unicode(self.term)+ u"] " + \
+        return u"\n\t [Expr[ " + unicode(self.term) + u"] " + \
                Token.token_types[self.binop.kind] + \
                u"\t NextExpr [" + unicode(self.next_expr) + u"]]"
 
@@ -550,7 +554,7 @@ class Expr(Stmt):
         if (hasattr(term, 'evaluate')):
             if (isinstance(
                     term,
-                    Number)):  #work for both Number, and derived Boolean class
+                    Number)):  # work for both Number, and derived Boolean class
                 tval = term.num
             elif (isinstance(term, String)):
                 tval = term.string
@@ -559,7 +563,7 @@ class Expr(Stmt):
                     " cannot normalize token; unknown clause," +
                     unicode(term) + ", to evaluate @ " + obj.get_pos())
         else:
-            tval = term  #float cast not required.
+            tval = term  # float cast not required.
         return tval
 
     def evaluate(self, env):
@@ -598,6 +602,7 @@ class Expr(Stmt):
 
 class ReturnStmt(Stmt):
     """ return expr """
+
     def __init__(self, rval, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
         self.rvalue = rval
@@ -618,6 +623,7 @@ class ReturnStmt(Stmt):
 
 class BreakStmt(Stmt):
     """ return expr """
+
     def __init__(self, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
 
@@ -636,6 +642,7 @@ class BreakStmt(Stmt):
 
 class ContinueStmt(Stmt):
     """ return expr """
+
     def __init__(self, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
 
@@ -671,6 +678,7 @@ class ElseStmt(Stmt):
 
 class IfStmt(Stmt):
     """ if ( op ) stmtlist {else | elseif ( op )| stmt } end"""
+
     def __init__(self, expr, body, next_stmt, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
         self.expr = expr
@@ -743,6 +751,7 @@ class IfStmt(Stmt):
 
 class WhileStmt(Stmt):
     """ while ( exp ) stmtlist  end"""
+
     def __init__(self, expr, body, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
         self.expr = expr
@@ -775,6 +784,7 @@ class WhileStmt(Stmt):
 
 class DoWhileStmt(WhileStmt):
     """ do stmtlist  while ( exp )"""
+
     def __init__(self, expr, body, l, c, dbg=False):
         WhileStmt.__init__(self, expr, body, l, c, dbg)
 
@@ -802,6 +812,7 @@ class DoWhileStmt(WhileStmt):
 
 class ForStmt(Stmt):
     """ For ( exp1 ; exp2 ; exp3 ) stmtlist  end"""
+
     def __init__(self, expr1, expr2, expr3, body, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
         self.expr_init = expr1
@@ -811,9 +822,9 @@ class ForStmt(Stmt):
         self.class_name = "ForStmt"
 
     def __repr__(self):
-        rval = u"\t\n [ForStmt[[ ("+unicode(self.expr_init)+"; "+\
-            unicode(self.expr_cond) + "; " +\
-            unicode(self.expr_update)+") ]] " + unicode(self.body) +"]"
+        rval = u"\t\n [ForStmt[[ (" + unicode(self.expr_init) + "; " + \
+               unicode(self.expr_cond) + "; " + \
+               unicode(self.expr_update) + ") ]] " + unicode(self.body) + "]"
         return rval
 
     def evaluate(self, env):
@@ -840,6 +851,7 @@ class ForStmt(Stmt):
 
 class AssignStmt(Stmt):
     """ lhs = rhs """
+
     def __init__(self, lvalue, op, rvalue, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
         self.lvalue = lvalue
@@ -848,7 +860,7 @@ class AssignStmt(Stmt):
         self.class_name = "AssignStmt"
 
     def __repr__(self):
-        return u"\n\t [AssignStmt[ "+ unicode(self.lvalue)+u"] " + \
+        return u"\n\t [AssignStmt[ " + unicode(self.lvalue) + u"] " + \
                Token.token_types[self.assignop.kind] + \
                u"\t Expr [" + unicode(self.rvalue) + u"]]"
 
@@ -866,11 +878,11 @@ class AssignStmt(Stmt):
             self.dbg_msg(u"assignop: rhs = " + unicode(self.rvalue))
             rhs = self.rvalue.evaluate(env)
             self.do_assignop(self.lvalue, rhs, self.assignop.kind, env)
-            self.dbg_msg(u"assignop lvalue ["+unicode(self.lvalue) \
-                             +u"] = ["+unicode(rhs) + \
-                             u"( saved as ) " + \
-                             unicode(self.lvalue))
-            #unicode(env.get_id(self.lvalue.id)) )
+            self.dbg_msg(u"assignop lvalue [" + unicode(self.lvalue) \
+                         + u"] = [" + unicode(rhs) + \
+                         u"( saved as ) " + \
+                         unicode(self.lvalue))
+            # unicode(env.get_id(self.lvalue.id)) )
             return rhs
         raise Exception("Unknown assign operator @ " + self.get_pos())
 
@@ -881,6 +893,7 @@ class AssignStmt(Stmt):
 
 class PrintStmt(Stmt):
     """ print EXPR """
+
     def __init__(self, exprlst, l, c, dbg):
         Stmt.__init__(self, l, c, dbg)
         self.exprlst = exprlst
@@ -890,7 +903,7 @@ class PrintStmt(Stmt):
 
     def do_printop(self, env):
         val = self.exprlst.evaluate(env)
-        print(val)  #this prints to output
+        print(val)  # this prints to output
         return val
 
     def evaluate(self, env):
@@ -904,6 +917,7 @@ class PrintStmt(Stmt):
 
 class EvalStmt(Stmt):
     """ EXPR """
+
     def __init__(self, expr, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
         self.expr = expr
@@ -926,6 +940,7 @@ class EvalStmt(Stmt):
 ## PLACEHOLDER
 class ArgList:
     """ defines argument list in a function definition """
+
     def __init__(self, argvals, l, c, dbg=False):
         """ to get self.args, use get_list() method """
         self.args = argvals
@@ -947,9 +962,10 @@ class ArgList:
         return
 
 
-#TODO : derive from 'list' and 'Stmt' class and update code
+# TODO : derive from 'list' and 'Stmt' class and update code
 class ValueList:
     """ defines value list in a function definition """
+
     def __init__(self, argvals, l, c, dbg=False):
         """ to get self.args, use get_list() method """
         self.args = argvals
@@ -972,7 +988,7 @@ class ValueList:
     def get_list(self):
         return self.args
 
-    #def evaluate(self):
+    # def evaluate(self):
     #    if ( isinstance(self.args,list) and len(self.args) == 1):
     #        return self.args[0]
     #    return self.args
@@ -1026,6 +1042,7 @@ class StmtList(Stmt):
 
 class Function(Stmt):
     """ function definition itself """
+
     def __init__(self, fname, arglist, body, l, c, dbg=False):
         Stmt.__init__(self, l, c, dbg)
         self.name = fname
@@ -1039,19 +1056,19 @@ class Function(Stmt):
         return
 
     def __repr__(self):
-        return u"\n\t [Function[ "+ unicode(self.name)+u"( " + \
-            unicode(self.arglist) + u")]\n" + \
-            u"\t Body [" + unicode(self.body) + u"]]\n"
+        return u"\n\t [Function[ " + unicode(self.name) + u"( " + \
+               unicode(self.arglist) + u")]\n" + \
+               u"\t Body [" + unicode(self.body) + u"]]\n"
 
     def evaluate(self, env):
         ## push stuff into the call-stack
         env.call_function(u"%s" % (self.name), u" at  %s" % (self.get_pos()))
         ## check arguments match, otherwise raise error
-        args = env.get_args()  #.get_list()
+        args = env.get_args()  # .get_list()
         fargs = self.arglist.get_list()
         if (len(args) != len(fargs)):
             raise Exception("Call Arguments donot match with" + \
-                                "function definition @ "+self.get_pos())
+                            "function definition @ " + self.get_pos())
 
         ## create local variables on the stack in order of definitions
         lut = {}

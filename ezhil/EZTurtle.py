@@ -38,7 +38,7 @@ class EZTurtle:
             ],
             2: ['goto'],
             -1: ['circle', 'setworldcoordinates']
-        }  #-1 => indicates varargs
+        }  # -1 => indicates varargs
         return attrib
 
     # 0-arg functions
@@ -114,11 +114,11 @@ class EZTurtle:
         EZTurtle.getInstance().bk(*[x])
 
     @staticmethod
-    def setworldcoordinates(*x):  #polymorphic invocation supported here
+    def setworldcoordinates(*x):  # polymorphic invocation supported here
         turtle.setworldcoordinates(*x)
 
     @staticmethod
-    def circle(*x):  #polymorphic invocation supported here
+    def circle(*x):  # polymorphic invocation supported here
         EZTurtle.getInstance().circle(*x)
 
     @staticmethod

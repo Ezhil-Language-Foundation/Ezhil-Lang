@@ -6,7 +6,7 @@
 
 if [ $# -lt 1 ]
 then
-    python -m ezhil -stdin
+    python3 -m ezhil -stdin
 else
-    python -m ezhil  $@
+    python3 -m ezhil  $@
 fi

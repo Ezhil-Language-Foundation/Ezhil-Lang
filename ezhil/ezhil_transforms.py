@@ -8,6 +8,7 @@
 from __future__ import print_function
 
 import sys
+
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
     unicode = str
@@ -17,10 +18,10 @@ from .transform import Visitor, TransformVisitor
 from .ezhil_scanner import EzhilToken
 ## AST elements
 from .ast import Expr, ExprCall, ExprList, Stmt, ReturnStmt, \
- BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
- ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
- ValueList, Function, StmtList, Identifier, Number, \
- String, Boolean
+    BreakStmt, ContinueStmt, ElseStmt, IfStmt, WhileStmt, \
+    ForStmt, AssignStmt, PrintStmt, EvalStmt, ArgList, \
+    ValueList, Function, StmtList, Identifier, Number, \
+    String, Boolean
 
 from .errors import RuntimeException, SemanticException
 
@@ -47,8 +48,8 @@ class TransformEntryExitProfile(TransformVisitor):
 
 class TransformSafeModeFunctionCheck(TransformVisitor):
     def __init__(self, **kwargs):
-        self.forbidden_fcn_names = [u'raw_input',u'input',u'fopen',u'open',u'fclose',\
-        u'உள்ளீடு',u'turtle',u'கோப்பை_எழுது',u'கோப்பை_திற',u'கோப்பை_மூடு']
+        self.forbidden_fcn_names = [u'raw_input', u'input', u'fopen', u'open', u'fclose', \
+                                    u'உள்ளீடு', u'turtle', u'கோப்பை_எழுது', u'கோப்பை_திற', u'கோப்பை_மூடு']
         TransformVisitor.__init__(self, **kwargs)
 
     def visit_expr_call(self, expr_call):
@@ -68,12 +69,11 @@ class TransformSemanticAnalyzer(TransformVisitor):
         TransformVisitor.__init__(self, **kwargs)
         return
 
-
-# Find a list of rules for type checking Ezhil AST.
-# You may only add like types. I.e. (You may only add numbers or strings but never between each other)
-# You may index arrays with only integers or numbers or dictionaries with Strings
-# You can type check argument types, and number of builtin functions.
-# You may type check arguments for number of args in a function call.
+    # Find a list of rules for type checking Ezhil AST.
+    # You may only add like types. I.e. (You may only add numbers or strings but never between each other)
+    # You may index arrays with only integers or numbers or dictionaries with Strings
+    # You can type check argument types, and number of builtin functions.
+    # You may type check arguments for number of args in a function call.
 
     def visit_expr_call(self, expr_call):
         callee = expr_call.func_id.id
@@ -107,7 +107,7 @@ class TransformSemanticAnalyzer(TransformVisitor):
             binexpr.term, Identifier)
         rhs_id_expr_call = isinstance(binexpr.next_expr,
                                       ExprCall) or isinstance(
-                                          binexpr.next_expr, Identifier)
+            binexpr.next_expr, Identifier)
 
         if isinstance(binexpr.next_expr, Expr):
             binexpr.next_expr.visit(self)
@@ -126,8 +126,8 @@ class TransformSemanticAnalyzer(TransformVisitor):
         else:
             if lhs_is_string or rhs_is_string:
                 if not ((lhs_is_string and rhs_is_string) or \
-                   (lhs_is_string and rhs_id_expr_call) or \
-                   (rhs_is_string and lhs_id_expr_call)):
+                        (lhs_is_string and rhs_id_expr_call) or \
+                        (rhs_is_string and lhs_id_expr_call)):
                     raise SemanticException(
                         "Cannot join strings and expression at expression %s" %
                         unicode(binexpr))
@@ -145,7 +145,7 @@ class TransformConstantFolder(TransformVisitor):
     def __init__(self, **kwargs):
         TransformVisitor.__init__(self, **kwargs)
         self.rval = None
-        #print(self.top_ast)
+        # print(self.top_ast)
         return
 
     def constant_fold(self, binexpr):
@@ -170,8 +170,8 @@ class TransformConstantFolder(TransformVisitor):
     def visit_binary_expr(self, binexpr):
         # if lhs is constant and you are able to fold rhs
         # then replace binexpr with the value
-        #print(type(binexpr.term))
-        #print(type(binexpr.next_expr))
+        # print(type(binexpr.term))
+        # print(type(binexpr.next_expr))
         next_expr_alt = None
         if isinstance(binexpr.next_expr, Expr):
             binexpr.next_expr.visit(self)
@@ -183,10 +183,10 @@ class TransformConstantFolder(TransformVisitor):
         term_expr_alt = self.get_rval()
 
         print(type(term_expr_alt))
-        #print("-------")
+        # print("-------")
         if next_expr_alt == None or term_expr_alt == None:
             return None
-        #print("------x------")
+        # print("------x------")
 
         lhs_is_num = isinstance(term_expr_alt, Number)
         [foldable, val] = self.can_fold_expr(next_expr_alt)

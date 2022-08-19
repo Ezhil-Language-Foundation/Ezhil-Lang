@@ -171,12 +171,12 @@ class SerializerXML(TransformVisitor):
 
     def visit_break_stmt(self, break_stmt):
         tobj = Tag(self.file, name=u"BREAK", tab=self.tab)
-        keyword = u"நிறுத்து"  #EzhilToken.Keywords["break"]
+        keyword = u"நிறுத்து"  # EzhilToken.Keywords["break"]
         return
 
     def visit_continue_stmt(self, cont_stmt):
         tobj = Tag(self.file, name=u"CONTINUE", tab=self.tab)
-        keyword = u"தொடர்"  #EzhilToken.Keywords["continue"]
+        keyword = u"தொடர்"  # EzhilToken.Keywords["continue"]
         return
 
     def visit_else_stmt(self, else_stmt):
@@ -213,7 +213,7 @@ class SerializerXML(TransformVisitor):
 
     def visit_end_kw(self):
         # END kw
-        #tobj = Tag(name="END",tab=self.tab)
+        # tobj = Tag(name="END",tab=self.tab)
         keyword_end = u"முடி"
 
     def visit_while_stmt(self, while_stmt):
