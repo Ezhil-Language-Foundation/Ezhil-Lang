@@ -137,7 +137,7 @@ class EzhuthiSettings(object):
         try:
             #print( os.path.join(os.getcwd(),EzhuthiSettings.FILENAME) )
             with codecs.open(os.path.join(os.getcwd(),EzhuthiSettings.FILENAME),"r","UTF-8") as fp:
-                for key,val in json.load(fp,encoding="UTF-8").items():
+                for key,val in json.load(fp).items():
                     self.data[key] = val
         except IOError as ioe:
             print(u"First-time creation of Ezhuthi settings; ignoring exception - %s"%ioe)
@@ -249,12 +249,13 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         ## construct the GUI from GLADE
         self.window = self.builder.get_object("ezhilEditorWindow")
         try:
-            d = Gtk.CssProvider.get_default()
+            pass
+            #d = Gtk.CssProvider.get_default()
             ## style = formatString( "style \"my-style\" { font_name = \"Mono %i\" }"
             ## class \"*\" style \"my-style\"", fontSize);
             ## gtk_rc_parse_string( style )
-            d.load_from_data("default * { font : \"Latha 7\" }")
-            self.window.set_icon_from_file(getResourceFile("img","ezhil_square_2015_128px.png"))
+            #d.load_from_data("default * { font : \"Latha 7\" }")
+            #self.window.set_icon_from_file(getResourceFile("img","ezhil_square_2015_128px.png"))
         except Exception as ie:
             print(u"Message: loading image or CSS style failed - %s"%ie)
         self.window.set_resizable(False) #fix the window
@@ -429,9 +430,9 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     def chooseFont(self,widget):
         fontDlg = Gtk.FontSelectionDialog(parent=self.window,title=u"ஒரு எழுத்துருவை தேர்வு செய்யவும்")
         fontDlg.set_size_request(550,400)
-        fontDlg.set_font_name(self.default_font)
+        #fontDlg.set_font_name(self.default_font)
         # Question: what is a proper Tamil pangram ?
-        fontDlg.set_preview_text(u"The quick brown fox jumped over the lazy dog. தமிழில் நிரல் எழுது – Write code in தமிழ் எழில் : தமிழ் நிரலாக்க மொழி")
+        # fontDlg.set_preview_text(u"The quick brown fox jumped over the lazy dog. தமிழில் நிரல் எழுது – Write code in தமிழ் எழில் : தமிழ் நிரலாக்க மொழி")
         res = fontDlg.run()
         if res == Gtk.ResponseType.OK:
             self.fontsel = fontDlg.get_font_selection()
@@ -512,7 +513,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             btn.show()
 
         for kw in self.forms:
-            btn = Gtk.Button(u" ".join(re.split("\s+",kw)))
+            btn = Gtk.Button(label=u" ".join(re.split("\s+",kw)))
             self.widget_forms.pack_start( btn, True, True, 0)
             btn.connect("clicked",Editor.insert_at_cursor,kw)
             btn.show()
@@ -816,7 +817,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             if dialog.get_filename():
                 ed.filename = dialog.get_filename()
             dialog.destroy()
-        if ed.filename is not "":
+        if ed.filename != "":
             textbuffer = ed.textview.get_buffer()
         filename = ed.filename
         if not PYTHON3:
