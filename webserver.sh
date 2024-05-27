@@ -1,3 +1,4 @@
-#!/bin/sh
-cd ./web && python ../ezhil/EZWeb.py
-
+#!/bin/bash -x
+pushd web
+python3 ../ezhil/EZWeb.py
+popd

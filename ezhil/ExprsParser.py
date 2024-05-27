@@ -16,7 +16,7 @@ import inspect
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 ## scanner for exprs language
 from .scanner import Token, Lexeme, Lex
@@ -68,13 +68,13 @@ class Parser(DebugUtils):
     def check_loop_stack(self):
         if (len(self.loop_stack) == 0):
             raise ParseException(
-                u"break/continue statement outside any loop, near" +
+                "break/continue statement outside any loop, near" +
                 str(self.last_token()))
         return len(self.loop_stack)
 
     def check_if_stack(self):
         if (len(self.if_stack) == 0):
-            raise ParseException(u"unmatched else statement, near" +
+            raise ParseException("unmatched else statement, near" +
                                  str(self.last_token()))
         return len(self.if_stack)
 
@@ -83,30 +83,30 @@ class Parser(DebugUtils):
 
     def peek(self):
         ptok = self.lex.peek()
-        self.dbg_msg(u"peek: " + unicode(ptok))
+        self.dbg_msg("peek: " + str(ptok))
         return ptok
 
     def dequeue(self):
         tok = self.lex.dequeue()
         self.last_tok = tok
-        self.dbg_msg(u"deqeue: " + unicode(tok))
+        self.dbg_msg("deqeue: " + str(tok))
         return tok
 
     def match(self, kind):
         ## if match return token, else ParseException
         tok = self.dequeue()
         if (tok.kind != kind):
-            raise ParseException(u"cannot find token " + \
-                                 Token.get_name(kind) + u" got " \
-                                 + unicode(tok) + u" instead!")
+            raise ParseException("cannot find token " + \
+                                 Token.get_name(kind) + " got " \
+                                 + str(tok) + " instead!")
         return tok
 
     def __repr__(self):
-        rval = u"[Interpreter: "
-        rval = rval + u"[Functions["
+        rval = "[Interpreter: "
+        rval = rval + "[Functions["
         for k in list(self.function_map.keys()):
-            rval = rval + u"\n " + str(self.function_map[k])
-        rval = rval + u"]] " + str(self.ast) + u"]\n"
+            rval = rval + "\n " + str(self.function_map[k])
+        rval = rval + "]] " + str(self.ast) + "]\n"
         return rval
 
     def warn_function_overrides(self, func_name):
@@ -114,10 +114,10 @@ class Parser(DebugUtils):
         ## if they shadow builtins.
         val = (func_name in self.function_map)
         if (val):
-            raise Exception(u"ERROR: function %s is multiply defined" %
+            raise Exception("ERROR: function %s is multiply defined" %
                             (func_name))
         if func_name in self.builtin_map:
-            raise Exception(u"ERROR: function %s overrides builtin" %
+            raise Exception("ERROR: function %s overrides builtin" %
                             (func_name))
         return val
 
@@ -159,7 +159,7 @@ class Parser(DebugUtils):
         """ try an assign, print, return, if or eval statement """
         self.dbg_msg(" STMT ")
         ptok = self.peek()
-        self.dbg_msg("stmt: peeking at " + unicode(ptok))
+        self.dbg_msg("stmt: peeking at " + str(ptok))
         if (ptok.kind == Token.RETURN):
             ## return <expression>
             ret_tok = self.dequeue()
@@ -298,7 +298,7 @@ class Parser(DebugUtils):
                 return AssignStmt(lhs, assign_tok, rhs, l, c, self.debug)
             return EvalStmt(lhs, l, c, self.debug)
         raise ParseException("parsing Statement, unkown operators" +
-                             unicode(ptok))
+                             str(ptok))
 
     def function(self):
         """ def[kw] fname[id] (arglist) {body} end[kw] """
@@ -343,7 +343,7 @@ class Parser(DebugUtils):
                 self.match(Token.COMMA)
             else:
                 raise ParseException(" function call argument list " +
-                                     unicode(ptok))
+                                     str(ptok))
         self.match(Token.RPAREN)
         [l, c] = lparen_tok.get_line_col()
         return ValueList(valueList, l, c, self.debug)
@@ -363,7 +363,7 @@ class Parser(DebugUtils):
                 self.match(Token.COMMA)
             else:
                 raise ParseException(" function definition argument list " +
-                                     unicode(ptok))
+                                     str(ptok))
         self.match(Token.RPAREN)
         [l, c] = lparen_tok.get_line_col()
         return ArgList(args, l, c, self.debug)
@@ -402,7 +402,7 @@ class Parser(DebugUtils):
         elif ptok.kind == Token.LPAREN:
             ## function call -OR- array type.
             if (res.__class__ != Identifier):
-                raise ParseException("invalid function call" + unicode(ptok))
+                raise ParseException("invalid function call" + str(ptok))
             [l, c] = ptok.get_line_col()
             vallist = self.valuelist()
             res = ExprCall(res, vallist, l, c, self.debug)
@@ -442,7 +442,7 @@ class Parser(DebugUtils):
             [l, c] = tok_id.get_line_col()
             val = Identifier(tok.val, l, c, self.debug)
             ptok = self.peek()
-            self.dbg_msg("factor: " + unicode(ptok) + " / " + str(tok))
+            self.dbg_msg("factor: " + str(ptok) + " / " + str(tok))
             if (ptok.kind == Token.LPAREN):
                 ## function call
                 [l, c] = ptok.get_line_col()
@@ -451,7 +451,7 @@ class Parser(DebugUtils):
             elif (ptok.kind == Token.LSQRBRACE):
                 ## array type
                 val = None
-                raise ParseException("arrays not implemented" + unicode(ptok))
+                raise ParseException("arrays not implemented" + str(ptok))
         elif tok.kind == Token.STRING:
             str_tok = self.dequeue()
             [l, c] = str_tok.get_line_col()

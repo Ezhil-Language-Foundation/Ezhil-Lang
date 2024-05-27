@@ -21,20 +21,20 @@ class ExampleDescription:
 '2_conditional_if_statement',
 '3_for_while_loops','4_functions','5_recursive_functions','6_data_structures','7_advanced_concepts','examples']
     data = {
-'1_data_and_arithmetic_builtins':u'தொடக்க நிலை எண், கணித செயற்குறிகள் (arithmetic)', 
-'2_conditional_if_statement':u'நிபந்தனை கட்டளைகள் (conditional)',
-'3_for_while_loops':u'ஆக-முடி, வரை - மடக்கு வாக்கியம் (loop)',
-'4_functions':u'நிரல்பாகம் - சார்புகள் (function)',
-'5_recursive_functions':u'அடுக்கு நிரல்பாகம் - அடுக்கு சார்புகள் (recursive function)',
-'6_data_structures':u'தரவமைப்பு வகைகள் (data structures)',
-'7_advanced_concepts':u'மேல்நிலை பாடம் - கோப்பு, இயங்கு தளம்',
-'examples':u'உதாரணங்கள்'}
+'1_data_and_arithmetic_builtins':'தொடக்க நிலை எண், கணித செயற்குறிகள் (arithmetic)', 
+'2_conditional_if_statement':'நிபந்தனை கட்டளைகள் (conditional)',
+'3_for_while_loops':'ஆக-முடி, வரை - மடக்கு வாக்கியம் (loop)',
+'4_functions':'நிரல்பாகம் - சார்புகள் (function)',
+'5_recursive_functions':'அடுக்கு நிரல்பாகம் - அடுக்கு சார்புகள் (recursive function)',
+'6_data_structures':'தரவமைப்பு வகைகள் (data structures)',
+'7_advanced_concepts':'மேல்நிலை பாடம் - கோப்பு, இயங்கு தளம்',
+'examples':'உதாரணங்கள்'}
  
 # 'c:\\Users\\muthu\\devel\\ezhil-lang\\editor'
 class ExampleDiscovery:
     # Build a DFS style flat-list of nested-directories looking for example files
     # on 03/30/17 we have over 177 examples.
-    EXAMPLEROOT = u"examples"
+    EXAMPLEROOT = "examples"
     def __init__(self):
         self.examples = [[]]
         self.indexes = [[]]
@@ -73,7 +73,7 @@ class ExampleBrowserWindow(Gtk.Window):
             self.set_icon_from_file("res/img/ezhil_square_2015_128px.png")
         except Exception as ie:
             pass
-        self.set_title(u"எழில் : தமிழ் நிரலாக்க மொழி - உதாரணங்கள்")
+        self.set_title("எழில் : தமிழ் நிரலாக்க மொழி - உதாரணங்கள்")
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         #self.set_border_width(10)
         self.example_collector = ExampleDiscovery()
@@ -102,25 +102,25 @@ class ExampleBrowserWindow(Gtk.Window):
                 if pos2 == 0:
                     # பாகம்/அத்யாயம்
                     index_pfx = index.find(".")!= -1 and ".".join( index.split(".")[:-1] ) or index
-                    pfx = u"பாகம்"
+                    pfx = "பாகம்"
                     if index_pfx.find(".") == -1:
-                        pfx = u"அத்யாயம்"
+                        pfx = "அத்யாயம்"
                     secname = ExampleDescription.data.get(dirname,dirname).strip() #section name
                     if secname.find("_") >= 0:
                         secname = " ".join(secname.split("_")[1:])
-                    self.examplestore.append([u"%s %s> "%(pfx,index_pfx) +secname,u'<folder/desc>'])
+                    self.examplestore.append(["%s %s> "%(pfx,index_pfx) +secname,'<folder/desc>'])
                 name = os.path.basename(demoex)
-                self.examplestore.append([index +u"\t %s"%name,demoex])
+                self.examplestore.append([index +"\t %s"%name,demoex])
                 
         #creating the treeview, making a model, and adding the columns
         self.treeview = Gtk.TreeView.new_with_model(self.examplestore)
-        for i, column_title in enumerate([u"உதாரணங்கள்"]):
+        for i, column_title in enumerate(["உதாரணங்கள்"]):
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(column_title, renderer, text=i)
             self.treeview.append_column(column)
         
         self.buttons = list()
-        prog_language = u"உதாரணம் காட்டு"
+        prog_language = "உதாரணம் காட்டு"
         button = Gtk.Button(prog_language)
         self.buttons.append(button)
         button.connect("clicked", self.on_selection_button_clicked)
@@ -172,10 +172,10 @@ class ExampleBrowserWindow(Gtk.Window):
         if self.ref_editor:
             self.ref_editor.show_example(example_name)
         else:
-            print("example name => %s"%example_name)
+            print(("example name => %s"%example_name))
         return True
 
-if __name__ == u"__main__":
+if __name__ == "__main__":
     win = ExampleBrowserWindow()
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()

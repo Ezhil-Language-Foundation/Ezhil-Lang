@@ -16,7 +16,7 @@ import ezhil
 
 class Interactive2(unittest.TestCase):
     def test_numbers_and_printing(self):
-        code = u"""
+        code = """
         1 + 1
         1 - 1
         1 + 2 - 3
@@ -25,7 +25,7 @@ class Interactive2(unittest.TestCase):
 
 class Interactive(unittest.TestCase):
     def test_numbers_and_printing(self):
-        code = u"""
+        code = """
       1 + 1
             பதிப்பி 10 + 10
             பதிப்பி 1/10.0

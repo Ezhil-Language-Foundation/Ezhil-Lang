@@ -28,11 +28,11 @@ class TestPrettyPrinter(QuietTestCase):
     def test_run_addition(self):
         relpath  = "../../tests/"
 
-        hello_patterns = u"""<span style="color:#00FF00">exit</span><span style="color:#FF0000">)</span><BR />
+        hello_patterns = """<span style="color:#00FF00">exit</span><span style="color:#FF0000">)</span><BR />
 <span style="color:#C0FFEE">"# இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்"</span><BR />
 <span style="color:#0000FF">பதிப்பி</span><span style="color:#CD5C5C">"இது என் முதல் எழில் நிரல்"</span><BR />"""
 
-        fact_patterns = u"""
+        fact_patterns = """
 <span style="color:#0000FF">நிரல்பாகம்</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">( </span><span style="color:#00FF00">n</span><span style="color:#FF0000">) </span><span style="color:#FF0000">@( </span><BR />
 <span style="color:#00FF00">n</span><span style="color:#FF0000">==</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">) </span><span style="color:#0000FF">ஆனால்</span><BR />
 <span style="color:#0000FF">பின்கொடு</span><span style="color:#FF8DC">1</span><BR />
@@ -53,13 +53,13 @@ class TestPrettyPrinter(QuietTestCase):
 <span style="color:#00FF00">ans</span><span style="color:#FF0000">=</span><span style="color:#00FF00">fact</span><span style="color:#FF0000">(</span><span style="color:#FF8DC">0.75</span><span style="color:#FF0000">*</span><span style="color:#00FF00">ப</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">4</span><span style="color:#FF0000">/</span><span style="color:#FF8DC">2</span><span style="color:#FF0000">)</span><BR />
 <BR />"""
 
-        infinite_loop_patterns = u"""
+        infinite_loop_patterns = """
 <span style="color:#00FF00">i</span><span style="color:#FF0000">>=</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">) </span><span style="color:#0000FF">வரை</span><BR />
 <span style="color:#00FF00">i</span><span style="color:#FF0000">=</span><span style="color:#00FF00">i</span><span style="color:#FF0000">+</span><span style="color:#FF8DC">1</span><BR />
 <span style="color:#0000FF">முடி</span><BR />
 """
 
-        ford2_patterns = u"""
+        ford2_patterns = """
 <span style="color:#FF0000">@( </span><BR />
 <span style="color:#00FF00">x</span><span style="color:#FF0000">=</span><span style="color:#FF8DC">0</span><span style="color:#FF0000">-</span><span style="color:#FF8DC">1</span><span style="color:#FF0000">, </span><span style="color:#FF8DC">0</span><span style="color:#FF0000">, </span><span style="color:#FF8DC">0</span><span style="color:#FF0000">) </span><span style="color:#0000FF">ஆக</span><BR />
 <span style="color:#0000FF">பதிப்பி</span><span style="color:#00FF00">x</span>,<span style="color:#CD5C5C">"கருவேபில"</span><BR />
@@ -85,16 +85,16 @@ class TestPrettyPrinter(QuietTestCase):
                 
         flag = True
         self.debug = False
-        for filename, expt_fmt in file_patterns.items():
-            print("########## Testing pprint for program %s"%filename)
+        for filename, expt_fmt in list(file_patterns.items()):
+            print(("########## Testing pprint for program %s"%filename))
             expt_fmt = expt_fmt.split("\n");
             formatted_str = PrettyPrint(relpath+filename).pretty_print()
             if not ( all([( formatted_str.find( line ) >= 0 ) for line in expt_fmt]) ):
-                if self.debug: print("file "+filename+" did not find expected strings ")
-                if self.debug: print(u"\n>>>".join(expt_fmt))
+                if self.debug: print(("file "+filename+" did not find expected strings "))
+                if self.debug: print(("\n>>>".join(expt_fmt)))
                 flag = False
             else:
-                if self.debug: print("file " + filename + " passed the test")
+                if self.debug: print(("file " + filename + " passed the test"))
             print("##############################################")
         self.assertTrue( flag )
 

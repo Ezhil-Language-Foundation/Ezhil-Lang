@@ -6,7 +6,7 @@
 ## (C) 2017 Muthiah Annamalai
 ## Licensed under GPL Version 3
 ## Ezhil Language Foundation
-from __future__ import print_function
+
 import os
 import codecs
 
@@ -14,7 +14,7 @@ import gi
 gi.require_version('Gtk','3.0')
 from gi.repository import Gtk, GLib
 
-from iyakki import MPRunner
+from .iyakki import MPRunner
 from random import randint
 _DEBUG = False
 
@@ -22,9 +22,9 @@ _DEBUG = False
 class PopupWindow:
     @staticmethod
     def display_message(window,success_flag,text_msg):
-        passfail = [u"பிழையுடன்",u"சரியாக"]
+        passfail = ["பிழையுடன்","சரியாக"]
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.INFO,
-        Gtk.ButtonsType.OK_CANCEL,u"எழில் கீற்று இயக்கியதில் %s இயக்கி முடிந்தது."%passfail[int(success_flag)])
+        Gtk.ButtonsType.OK_CANCEL,"எழில் கீற்று இயக்கியதில் %s இயக்கி முடிந்தது."%passfail[int(success_flag)])
         dialog.format_secondary_text(text_msg)
         dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         response = dialog.run()
@@ -64,9 +64,9 @@ class PopupForTextView(object):
         
     def get_mode_callback_label(self):
         if self.mode == 'EXECUTE_SELECTION':
-            return (u"இயக்கு",PopupForTextView.executeCallback)
+            return ("இயக்கு",PopupForTextView.executeCallback)
         else:
-            return (u"உதவி குறிப்பு",PopupForTextView.searchCallback)
+            return ("உதவி குறிப்பு",PopupForTextView.searchCallback)
         
     @staticmethod
     def searchCallback(menu_item,user_data):
@@ -85,9 +85,9 @@ class PopupForTextView(object):
         #print(u"execute callback on [%s]"%selection)
         
         filename = "tmp_%d.ezhil"%randint(0,10000)
-        if _DEBUG: print(u"dummy file => %s"%filename)
+        if _DEBUG: print("dummy file => %s"%filename)
         with codecs.open(filename,"wb") as fp:
-            fp.write(u"# Ezhil code snippet\n")
+            fp.write("# Ezhil code snippet\n")
             fp.write(selection)
         window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
         try:

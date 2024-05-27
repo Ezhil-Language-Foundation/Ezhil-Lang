@@ -7,7 +7,7 @@
 ## This module is the pretty-printer for the Ezhil language.
 ## It contains classes @WikiStyle, @Printer
 ## 
-from __future__ import print_function
+
 from .theme import XsyTheme
 from .ezhil_scanner import EzhilLex, EzhilToken
 from .ezhil import EzhilInterpreter
@@ -20,10 +20,10 @@ class WikiStyle:
         """ @text is any character stream that has to be wrapper in a style-Theme,
             specified by @attrib """
         if (len(attrib) >= 1):
-            out = u'<span style="color:#' + attrib[0]
+            out = '<span style="color:#' + attrib[0]
         if (len(attrib) >= 2):
-            out = out + u';background:#' + attrib[1]
-        out = out + u'">' + str(attrib.process(text)) + u"</span>"
+            out = out + ';background:#' + attrib[1]
+        out = out + '">' + str(attrib.process(text)) + "</span>"
         return out
 
 
@@ -57,7 +57,7 @@ class Printer(Visitor):
     def default(self, *args):
         """ /dev/zero dump for all visitor methods when not handled in derived class"""
         # args[0] is AST object
-        self.append(u"def :")
+        self.append("def :")
         self.update_line(args[0])
         self.append((args[0]))
 
@@ -126,7 +126,7 @@ class Printer(Visitor):
     def visit_return_stmt(self, ret_stmt):
         kw_attrib = self.theme.Keywords
         self.update_line(ret_stmt)
-        keyword = u"பின்கொடு"
+        keyword = "பின்கொடு"
         self.append(self.styler(kw_attrib, keyword))
         # return may have optional argument
         if hasattr(ret_stmt.rvalue, 'visit'):
@@ -137,7 +137,7 @@ class Printer(Visitor):
     def visit_break_stmt(self, break_stmt):
         kw_attrib = self.theme.Keywords
         self.update_line(break_stmt)
-        keyword = u"நிறுத்து"  # EzhilToken.Keywords["break"]
+        keyword = "நிறுத்து"  # EzhilToken.Keywords["break"]
         self.append(self.NEWLINE)
         self.append(self.styler(kw_attrib, keyword))
         self.append(self.NEWLINE)
@@ -146,14 +146,14 @@ class Printer(Visitor):
     def visit_continue_stmt(self, cont_stmt):
         kw_attrib = self.theme.Keywords
         self.update_line(cont_stmt)
-        keyword = u"தொடர்"  # EzhilToken.Keywords["continue"]
+        keyword = "தொடர்"  # EzhilToken.Keywords["continue"]
         self.append(self.styler(kw_attrib, keyword))
         self.append(self.NEWLINE)
         return
 
     def visit_else_stmt(self, else_stmt):
         kw_attrib = self.theme.Keywords
-        keyword = u"இல்லை"
+        keyword = "இல்லை"
         self.append(self.styler(kw_attrib, keyword))
         self.update_line(else_stmt)
         else_stmt.stmt.visit(self)
@@ -169,7 +169,7 @@ class Printer(Visitor):
 
         # IF kw
         kw_attrib = self.theme.Keywords
-        keyword_if = u"ஆனால்"
+        keyword_if = "ஆனால்"
         self.append(self.styler(kw_attrib, keyword_if))
 
         # True-Body
@@ -184,7 +184,7 @@ class Printer(Visitor):
     def visit_end_kw(self):
         # END kw
         kw_attrib = self.theme.Keywords
-        keyword_end = u"முடி"
+        keyword_end = "முடி"
         self.append(self.styler(kw_attrib, keyword_end))
 
     def visit_while_stmt(self, while_stmt):
@@ -196,13 +196,13 @@ class Printer(Visitor):
         op_attrib = self.theme.Operators
 
         # condition expression
-        self.append(self.styler(op_attrib, u"@( "))
+        self.append(self.styler(op_attrib, "@( "))
         while_stmt.expr.visit(self)
-        self.append(self.styler(op_attrib, u") "))
+        self.append(self.styler(op_attrib, ") "))
 
         # While kw
         kw_attrib = self.theme.Keywords
-        keyword_while = u"வரை"
+        keyword_while = "வரை"
         self.append(self.styler(kw_attrib, (keyword_while)))
 
         # Body
@@ -222,17 +222,17 @@ class Printer(Visitor):
         op_attrib = self.theme.Operators
 
         # condition expression
-        self.append(self.styler(op_attrib, u"@( "))
+        self.append(self.styler(op_attrib, "@( "))
         for_stmt.expr_init.visit(self)
-        self.append(self.styler(op_attrib, u", "))
+        self.append(self.styler(op_attrib, ", "))
         for_stmt.expr_cond.visit(self)
-        self.append(self.styler(op_attrib, u", "))
+        self.append(self.styler(op_attrib, ", "))
         for_stmt.expr_update.visit(self)
-        self.append(self.styler(op_attrib, u") "))
+        self.append(self.styler(op_attrib, ") "))
 
         # For kw
         kw_attrib = self.theme.Keywords
-        keyword_for = u"ஆக"
+        keyword_for = "ஆக"
         self.append(self.styler(kw_attrib, keyword_for))
         self.append(self.NEWLINE)
         # Body
@@ -249,7 +249,7 @@ class Printer(Visitor):
 
     def visit_print_stmt(self, print_stmt):
         kw_attrib = self.theme.Keywords
-        keyword = u"பதிப்பி"
+        keyword = "பதிப்பி"
         self.update_line(print_stmt)
         self.append(self.styler(kw_attrib, (keyword)))
         print_stmt.exprlst.visit(self)
@@ -294,7 +294,7 @@ class Printer(Visitor):
 
         # Function kw
         kw_attrib = self.theme.Keywords
-        keyword_fn = u"நிரல்பாகம்"
+        keyword_fn = "நிரல்பாகம்"
         self.append(self.styler(kw_attrib, keyword_fn))
 
         # name of function
@@ -303,9 +303,9 @@ class Printer(Visitor):
 
         # arglist expression
         op_attrib = self.theme.Operators
-        self.append(self.styler(op_attrib, u"( "))
+        self.append(self.styler(op_attrib, "( "))
         fndecl_stmt.arglist.visit(self)
-        self.append(self.styler(op_attrib, u") "))
+        self.append(self.styler(op_attrib, ") "))
 
         # Body expression
         fndecl_stmt.body.visit(self)
@@ -320,11 +320,11 @@ class Printer(Visitor):
 
         # dump remaining comments
         comm_attrib = self.theme.Comment
-        for line, comment in self.lexer.comments.items():
+        for line, comment in list(self.lexer.comments.items()):
             self.append(self.styler(comm_attrib, comment))
             self.append(self.NEWLINE)
 
-        return u"".join(self.output)
+        return "".join(self.output)
 
     # method walks the lexer-tokens and calls the appropriate elements
     # basic lexical hiliting. This is useful when parsing fails, or just
@@ -338,28 +338,28 @@ class Printer(Visitor):
             if EzhilToken.is_keyword(t.kind):
                 attrib = self.theme.Keywords
                 if (EzhilToken.get_name(t.kind) in ["END", "ELSE"]):
-                    out.append(u'<BR />\n')
+                    out.append('<BR />\n')
             elif EzhilToken.is_number(t.kind):
                 attrib = self.theme.LiteralNumber
             elif EzhilToken.is_string(t.kind):
                 attrib = self.theme.LiteralString
-                t.val = u'"' + t.val + u'"'  # FIXME: ideally do some escaping as well
+                t.val = '"' + t.val + '"'  # FIXME: ideally do some escaping as well
             elif EzhilToken.is_id(t.kind):
                 attrib = self.theme.Variables
-            elif (t.val in [u"@", u"பதிப்பி"]):
+            elif (t.val in ["@", "பதிப்பி"]):
                 attrib = self.theme.Builtins
-                out.append(u'<BR />\n')
+                out.append('<BR />\n')
 
-            t.val = u" " + (t.val)
+            t.val = " " + (t.val)
             out.append(self.styler(attrib, t.val))
             if (add_br):
-                out.append(u"<BR />\n")
+                out.append("<BR />\n")
 
-        return u"".join(out)
+        return "".join(out)
 
 
 def pretty_print_file(filename):
-    print(u"working with ", filename)
+    print("working with ", filename)
     print(Printer(filename).pretty_print())
     return True
 
@@ -368,6 +368,6 @@ if __name__ == "__main__":
     from sys import argv, exit
 
     if len(argv) <= 1:
-        print(u"usage: python ezhil/prettify.py <file1> <file2> ... ")
+        print("usage: python ezhil/prettify.py <file1> <file2> ... ")
         exit(-1)
-    map(pretty_print_file, argv[1:])
+    list(map(pretty_print_file, argv[1:]))

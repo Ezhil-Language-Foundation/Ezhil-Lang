@@ -34,23 +34,23 @@ def exprs_eval():
             try:
                 parse_eval.parse()
             except Exception as e:
-                print(u"parsing the code '%s' failed with exception:\n\t %s" %
-                      (files, str(e)))
+                print(("parsing the code '%s' failed with exception:\n\t %s" %
+                      (files, str(e))))
                 if (debug):
-                    print("*" * 60)
-                    print(str(parse_eval))
+                    print(("*" * 60))
+                    print((str(parse_eval)))
                 exitcode = 255
                 raise ParseException(str(e))
 
             try:
                 env = parse_eval.evaluate()
             except Exception as e:
-                print(
-                    u"evaluating the code '%s' failed with exception:\n\t %s" %
-                    (files, str(e)))
+                print((
+                    "evaluating the code '%s' failed with exception:\n\t %s" %
+                    (files, str(e))))
                 if debug:
-                    print("*" * 60)
-                    print(str(e))
+                    print(("*" * 60))
+                    print((str(e)))
                 exitcode = 255
                 raise RuntimeException(str(e))
         return exitcode

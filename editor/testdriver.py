@@ -3,9 +3,9 @@
 ##
 ## (C) 2017 Ezhil Language Foundation
 ## Licensed under GPL Version 3
-from __future__ import print_function
+
 import re
-import ezhuthi
+from . import ezhuthi
 import sys
 import os
 import multiprocessing
@@ -13,7 +13,7 @@ import gi
 gi.require_version('Gtk','3.0')
 
 from gi.repository import Gtk, GObject, GLib, Pango
-from ExampleHelper import ExampleDiscovery
+from .ExampleHelper import ExampleDiscovery
 
 def custom_exit(*x):
     Gtk.main_quit()
@@ -214,7 +214,7 @@ def start_tests():
     sys.exit = actual_exit
     sys.exit( passed != total_files ) #exit 0 is success
 
-if __name__ == u"__main__":
+if __name__ == "__main__":
     # show preference for user locale.
     if ( os.getenv('LANG','en_US.utf8').lower().find("ta") == -1 ):
         os.putenv('LANG','ta_IN.utf8')

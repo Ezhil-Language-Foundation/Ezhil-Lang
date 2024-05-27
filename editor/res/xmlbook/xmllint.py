@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # (C) 2017 Ezhil Language Foundation
 # 
-from __future__ import print_function
+
 from xml.dom.minidom import parse
 import sys
 import glob

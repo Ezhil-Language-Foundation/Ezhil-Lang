@@ -26,7 +26,7 @@ class EzhilWeb:
         """ filter program execution output for Ezhil interpreter or Python stack traces"""
         FAILED_STRINGS = ["Traceback (most recent call last)",
                           "Run-time error Cannot Find Identifier"]
-        return any(filter( lambda x: progout.find(x) > -1, FAILED_STRINGS))
+        return any([x for x in FAILED_STRINGS if progout.find(x) > -1])
 
 def evaluate( request ):
     progin = ''
@@ -36,7 +36,7 @@ def evaluate( request ):
     exception = ''
 
     if request.method == "POST":
-        print "received POST request"
+        print("received POST request")
         vars = {}
         vars['eval'] = request.POST['eval']
         vars['prog'] = request.POST['prog']

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+
 import ezhiltests, os
 
 from ezhil import EzhilFileExecuter
@@ -10,7 +10,7 @@ from test import test_support
 
 import ezhil
 
-program = u"""# மாதிரி =>  முடிவிலா சுழற்சி
+program = """# மாதிரி =>  முடிவிலா சுழற்சி
 # கூகிள் மொழிபெயர்ப்பு பயன்படுத்தி
 
 i = 0
@@ -39,8 +39,8 @@ class Executer(unittest.TestCase):
             failed = False
         
         if ( debug ):
-            print (u"output = ")
-            print (u"%s,%s"%(progout.decode('utf-8'), str(failed)))
+            print ("output = ")
+            print ("%s,%s"%(progout.decode('utf-8'), str(failed)))
         return
 
     def test_basic_file_settings_no_redirect(self):
@@ -62,8 +62,8 @@ class Executer(unittest.TestCase):
             failed = False
 
         if ( debug ):
-            print (u"output = ")
-            print (u"%s,%s"%(progout.decode('utf-8'), str(failed)))        
+            print ("output = ")
+            print ("%s,%s"%(progout.decode('utf-8'), str(failed)))        
         return
 
 if __name__ == '__main__':    

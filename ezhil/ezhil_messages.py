@@ -5,20 +5,20 @@
 ## This class allows you to get translated messages
 ## It is sort of like gettext
 
-from __future__ import print_function
+
 import sys
 
 WINDOWS = sys.platform.find("win") >= 0
 PYTHON3 = (sys.version[0] == '3')
 
 if PYTHON3:
-    unicode = str
+    str = str
 
 
 # set default language as English for testing
 class Messages:
-    SOURCE_LANGUAGE = u"EN"
-    LANGUAGE_INDEX = {u"EN": 0, u"TA": 1}
+    SOURCE_LANGUAGE = "EN"
+    LANGUAGE_INDEX = {"EN": 0, "TA": 1}
 
     UnexpectedNumber = 1
     ClassNotFound = 2
@@ -28,17 +28,17 @@ class Messages:
     catalog = {
         UnexpectedNumber:
             ("Expected Number, found something %s",
-             u"எதிர்பாராத எழுத்துக்கள் உள்ளீடில் வந்தன, %s; எண்கள் மட்டுமே வரலாம்"
+             "எதிர்பாராத எழுத்துக்கள் உள்ளீடில் வந்தன, %s; எண்கள் மட்டுமே வரலாம்"
              ),
         ClassNotFound:
-            (u"Cannot find %s class", u"%s என்ற நிரல் தொகுப்பை காணவில்லை"),
+            ("Cannot find %s class", "%s என்ற நிரல் தொகுப்பை காணவில்லை"),
         CaseSyntaxError:
-            (u"SWITCH-CASE-OTHERWISE : Syntax error in this statement",
-             u"செய் தேர்ந்தெடு வாக்கியம் பிழையாக உள்ளது"),
-        IfSyntaxError: (u"If-Else-If statement syntax is messed up",
-                        u"ஆனால் இல்லையானால் வாக்கியம்  பிழையாக உள்ளது"),
+            ("SWITCH-CASE-OTHERWISE : Syntax error in this statement",
+             "செய் தேர்ந்தெடு வாக்கியம் பிழையாக உள்ளது"),
+        IfSyntaxError: ("If-Else-If statement syntax is messed up",
+                        "ஆனால் இல்லையானால் வாக்கியம்  பிழையாக உள்ளது"),
         GenSyntaxError:
-            (u"Syntax error in program", u"வாக்கியம்  பிழையாக உள்ளத")
+            ("Syntax error in program", "வாக்கியம்  பிழையாக உள்ளத")
     }
 
     @staticmethod

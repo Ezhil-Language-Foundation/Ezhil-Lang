@@ -75,7 +75,7 @@ class SerializeToXML(QuietTestCase):
         # 1. run same test as above but save contents to file
         # 2. next, run the XML validators to ensure well formed XML
         def xmlvalidation_hook(parse_tree,file,xmlfilename):
-            print("Validating XML file %s"%xmlfilename)
+            print(("Validating XML file %s"%xmlfilename))
             try:
                 XMLValidator(xmlfilename)
                 self.assertTrue(True,"PASS - %s"%xmlfilename)

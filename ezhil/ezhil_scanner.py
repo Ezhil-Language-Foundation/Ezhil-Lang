@@ -14,20 +14,20 @@ from tamil.utf8 import has_tamil, istamil, istamil_alnum
 from .errors import ScannerException
 
 if PYTHON3:
-    unicode = str
+    str = str
 
 
 class EzhilLexeme(Lexeme):
     """ Ezhil Lexeme - """
 
-    def __init__(self, val, kind, fname=u""):
+    def __init__(self, val, kind, fname=""):
         Lexeme.__init__(self, val, kind, fname)
 
     def get_kind(self):
-        return u"%s - %s" % (self.val, self.kind)
+        return "%s - %s" % (self.val, self.kind)
 
     def __unicode__(self):
-        return u" %s [%s] Line=%d, Col=%d in File %s " % \
+        return " %s [%s] Line=%d, Col=%d in File %s " % \
                (self.val, self.get_kind(), \
                 self.line, self.col, self.fname)
 
@@ -42,20 +42,20 @@ class EzhilToken(Token):
     Token.token_types.append("@")
     Token.ATRATEOF = len(Token.token_types)
 
-    Token.token_types.append(u"RETURN|பின்கொடு")
-    Token.token_types.append(u"FOREACH|ஒவ்வொன்றாக")
+    Token.token_types.append("RETURN|பின்கொடு")
+    Token.token_types.append("FOREACH|ஒவ்வொன்றாக")
     Token.FOREACH = len(Token.token_types)
 
-    Token.token_types.append(u"IN|இல்")
+    Token.token_types.append("IN|இல்")
     Token.IN = Token.COMMA  # short-circuit!
 
-    Token.token_types.append(u"DOWHILE|முடியேனில்")
+    Token.token_types.append("DOWHILE|முடியேனில்")
     Token.DOWHILE = len(Token.token_types)
 
-    Token.token_types.append(u"IMPORT|உள்ளடக்கு")
+    Token.token_types.append("IMPORT|உள்ளடக்கு")
     Token.IMPORT = len(Token.token_types)
 
-    TALETTERS = u'|அ|ஆ|இ|ஈ|உ|ஊ|எ|ஏ|ஐ|ஒ|ஓ|ஔ|ஃ|க்|ச்|ட்|த்|ப்|ற்|ங்|ஞ்|ண்|ந்|ம்|ன்|ய்|ர்|ல்|வ்|ழ்|ள்|க|ச|ட|த|ப|ற|ஞ|ங|ண|ந|ம|ன|ய|ர|ல|வ|ழ|ள|ஜ|ஷ|ஸ|ஹ|க|கா|கி|கீ|கு|கூ|கெ|கே|கை|கொ|கோ|கௌ|ச|சா|சி|சீ|சு|சூ|செ|சே|சை|சொ|சோ|சௌ|ட|டா|டி|டீ|டு|டூ|டெ|டே|டை|டொ|டோ|டௌ|த|தா|தி|தீ|து|தூ|தெ|தே|தை|தொ|தோ|தௌ|ப|பா|பி|பீ|பு|பூ|பெ|பே|பை|பொ|போ|பௌ|ற|றா|றி|றீ|று|றூ|றெ|றே|றை|றொ|றோ|றௌ|ஞ|ஞா|ஞி|ஞீ|ஞு|ஞூ|ஞெ|ஞே|ஞை|ஞொ|ஞோ|ஞௌ|ங|ஙா|ஙி|ஙீ|ஙு|ஙூ|ஙெ|ஙே|ஙை|ஙொ|ஙோ|ஙௌ|ண|ணா|ணி|ணீ|ணு|ணூ|ணெ|ணே|ணை|ணொ|ணோ|ணௌ|ந|நா|நி|நீ|நு|நூ|நெ|நே|நை|நொ|நோ|நௌ|ம|மா|மி|மீ|மு|மூ|மெ|மே|மை|மொ|மோ|மௌ|ன|னா|னி|னீ|னு|னூ|னெ|னே|னை|னொ|னோ|னௌ|ய|யா|யி|யீ|யு|யூ|யெ|யே|யை|யொ|யோ|யௌ|ர|ரா|ரி|ரீ|ரு|ரூ|ரெ|ரே|ரை|ரொ|ரோ|ரௌ|ல|லா|லி|லீ|லு|லூ|லெ|லே|லை|லொ|லோ|லௌ|வ|வா|வி|வீ|வு|வூ|வெ|வே|வை|வொ|வோ|வௌ|ழ|ழா|ழி|ழீ|ழு|ழூ|ழெ|ழே|ழை|ழொ|ழோ|ழௌ|ள|ளா|ளி|ளீ|ளு|ளூ|ளெ|ளே|ளை|ளொ|ளோ|ளௌ|ௐ|ஜ|ஜா|ஜி|ஜீ|ஜு|ஜூ|ஜெ|ஜே|ஜை|ஜொ|ஜோ|ஜௌ|ஷ|ஷா|ஷி|ஷீ|ஷு|ஷூ|ஷெ|ஷே|ஷை|ஷொ|ஷோ|ஷௌ|ஸ|ஸா|ஸி|ஸீ|ஸு|ஸூ|ஸெ|ஸே|ஸை|ஸொ|ஸோ|ஸௌ|ஹ|ஹா|ஹி|ஹீ|ஹு|ஹூ|ஹெ|ஹே|ஹை|ஹொ|ஹோ|ஹௌ|'
+    TALETTERS = '|அ|ஆ|இ|ஈ|உ|ஊ|எ|ஏ|ஐ|ஒ|ஓ|ஔ|ஃ|க்|ச்|ட்|த்|ப்|ற்|ங்|ஞ்|ண்|ந்|ம்|ன்|ய்|ர்|ல்|வ்|ழ்|ள்|க|ச|ட|த|ப|ற|ஞ|ங|ண|ந|ம|ன|ய|ர|ல|வ|ழ|ள|ஜ|ஷ|ஸ|ஹ|க|கா|கி|கீ|கு|கூ|கெ|கே|கை|கொ|கோ|கௌ|ச|சா|சி|சீ|சு|சூ|செ|சே|சை|சொ|சோ|சௌ|ட|டா|டி|டீ|டு|டூ|டெ|டே|டை|டொ|டோ|டௌ|த|தா|தி|தீ|து|தூ|தெ|தே|தை|தொ|தோ|தௌ|ப|பா|பி|பீ|பு|பூ|பெ|பே|பை|பொ|போ|பௌ|ற|றா|றி|றீ|று|றூ|றெ|றே|றை|றொ|றோ|றௌ|ஞ|ஞா|ஞி|ஞீ|ஞு|ஞூ|ஞெ|ஞே|ஞை|ஞொ|ஞோ|ஞௌ|ங|ஙா|ஙி|ஙீ|ஙு|ஙூ|ஙெ|ஙே|ஙை|ஙொ|ஙோ|ஙௌ|ண|ணா|ணி|ணீ|ணு|ணூ|ணெ|ணே|ணை|ணொ|ணோ|ணௌ|ந|நா|நி|நீ|நு|நூ|நெ|நே|நை|நொ|நோ|நௌ|ம|மா|மி|மீ|மு|மூ|மெ|மே|மை|மொ|மோ|மௌ|ன|னா|னி|னீ|னு|னூ|னெ|னே|னை|னொ|னோ|னௌ|ய|யா|யி|யீ|யு|யூ|யெ|யே|யை|யொ|யோ|யௌ|ர|ரா|ரி|ரீ|ரு|ரூ|ரெ|ரே|ரை|ரொ|ரோ|ரௌ|ல|லா|லி|லீ|லு|லூ|லெ|லே|லை|லொ|லோ|லௌ|வ|வா|வி|வீ|வு|வூ|வெ|வே|வை|வொ|வோ|வௌ|ழ|ழா|ழி|ழீ|ழு|ழூ|ழெ|ழே|ழை|ழொ|ழோ|ழௌ|ள|ளா|ளி|ளீ|ளு|ளூ|ளெ|ளே|ளை|ளொ|ளோ|ளௌ|ௐ|ஜ|ஜா|ஜி|ஜீ|ஜு|ஜூ|ஜெ|ஜே|ஜை|ஜொ|ஜோ|ஜௌ|ஷ|ஷா|ஷி|ஷீ|ஷு|ஷூ|ஷெ|ஷே|ஷை|ஷொ|ஷோ|ஷௌ|ஸ|ஸா|ஸி|ஸீ|ஸு|ஸூ|ஸெ|ஸே|ஸை|ஸொ|ஸோ|ஸௌ|ஹ|ஹா|ஹி|ஹீ|ஹு|ஹூ|ஹெ|ஹே|ஹை|ஹொ|ஹோ|ஹௌ|'
     RE_ALPHA_NUMERIC_ = re.compile(
         r'[a-z|A-Z|_' + TALETTERS + '][a-z|A-Z|0-9|_' + TALETTERS + ']*',
         re.UNICODE)
@@ -64,10 +64,10 @@ class EzhilToken(Token):
     def is_keyword(kind):
         if Token.is_keyword(kind):
             return True
-        if Token.get_name(kind) in [u"FOREACH", u"DOWHILE", u"IN", u"IMPORT"]:
+        if Token.get_name(kind) in ["FOREACH", "DOWHILE", "IN", "IMPORT"]:
             return True
         if Token.get_name(kind) in [
-            u"பின்கொடு", u"பதிப்பி", u"ஒவ்வொன்றாக", u"@", u"இல்"
+            "பின்கொடு", "பதிப்பி", "ஒவ்வொன்றாக", "@", "இல்"
         ]:
             return True
         return False
@@ -80,121 +80,121 @@ class EzhilLex(Lex):
     """ Lex Tamil characters : RAII principle - lex on object construction"""
 
     def __init__(self, fname=None, dbg=False, encoding="utf-8"):
-        if (dbg): print(u"init/EzhilLex")
+        if (dbg): print("init/EzhilLex")
         Lex.__init__(self, fname, dbg, encoding)
 
     def get_lexeme(self, chunks, pos):
         if (self.debug):
-            print(u"get_lexeme", chunks, pos)
+            print(("get_lexeme", chunks, pos))
 
         if chunks == None:
             return None
 
-        if chunks == u"பதிப்பி":
+        if chunks == "பதிப்பி":
             tval = EzhilLexeme(chunks, EzhilToken.PRINT)
-        elif chunks == u"தேர்ந்தெடு":
+        elif chunks == "தேர்ந்தெடு":
             tval = EzhilLexeme(chunks, EzhilToken.SWITCH)
-        elif chunks == u"தேர்வு":
+        elif chunks == "தேர்வு":
             tval = EzhilLexeme(chunks, EzhilToken.CASE)
-        elif chunks == u"ஏதேனில்":
+        elif chunks == "ஏதேனில்":
             tval = EzhilLexeme(chunks, EzhilToken.OTHERWISE)
-        elif chunks == u"ஆனால்":
+        elif chunks == "ஆனால்":
             tval = EzhilLexeme(chunks, EzhilToken.IF)
-        elif chunks == u"இல்லைஆனால்":
+        elif chunks == "இல்லைஆனால்":
             tval = EzhilLexeme(chunks, EzhilToken.ELSEIF)
-        elif chunks == u"இல்லை":
+        elif chunks == "இல்லை":
             tval = EzhilLexeme(chunks, EzhilToken.ELSE)
-        elif chunks == u"ஆக":
+        elif chunks == "ஆக":
             tval = EzhilLexeme(chunks, EzhilToken.FOR)
-        elif chunks == u"ஒவ்வொன்றாக":
+        elif chunks == "ஒவ்வொன்றாக":
             tval = EzhilLexeme(chunks, EzhilToken.FOREACH)
-        elif chunks == u"இல்":
+        elif chunks == "இல்":
             tval = EzhilLexeme(chunks, EzhilToken.COMMA)
-        elif chunks == u"வரை":
+        elif chunks == "வரை":
             tval = EzhilLexeme(chunks, EzhilToken.WHILE)
-        elif chunks == u"செய்":
+        elif chunks == "செய்":
             tval = EzhilLexeme(chunks, EzhilToken.DO)
-        elif chunks == u"முடியேனில்":
+        elif chunks == "முடியேனில்":
             tval = EzhilLexeme(chunks, EzhilToken.DOWHILE)
-        elif chunks == u"பின்கொடு":
+        elif chunks == "பின்கொடு":
             tval = EzhilLexeme(chunks, EzhilToken.RETURN)
-        elif chunks == u"முடி":
+        elif chunks == "முடி":
             tval = EzhilLexeme(chunks, EzhilToken.END)
-        elif chunks == u"நிரல்பாகம்":
+        elif chunks == "நிரல்பாகம்":
             tval = EzhilLexeme(chunks, EzhilToken.DEF)
-        elif chunks == u"தொடர்":
+        elif chunks == "தொடர்":
             tval = EzhilLexeme(chunks, EzhilToken.CONTINUE)
-        elif chunks == u"நிறுத்து":
+        elif chunks == "நிறுத்து":
             tval = EzhilLexeme(chunks, EzhilToken.BREAK)
-        elif chunks == u"உள்ளடக்கு":
+        elif chunks == "உள்ளடக்கு":
             tval = EzhilLexeme(chunks, EzhilToken.IMPORT)
-        elif chunks == u"@":
+        elif chunks == "@":
             tval = EzhilLexeme(chunks, EzhilToken.ATRATEOF)
-        elif chunks == u"=":
+        elif chunks == "=":
             tval = EzhilLexeme(chunks, EzhilToken.EQUALS)
-        elif chunks == u"-":
+        elif chunks == "-":
             tval = EzhilLexeme(chunks, EzhilToken.MINUS)
-        elif chunks == u"+":
+        elif chunks == "+":
             tval = EzhilLexeme(chunks, EzhilToken.PLUS)
-        elif chunks == u">":
+        elif chunks == ">":
             tval = EzhilLexeme(chunks, EzhilToken.GT)
-        elif chunks == u"<":
+        elif chunks == "<":
             tval = EzhilLexeme(chunks, EzhilToken.LT)
-        elif chunks == u">=":
+        elif chunks == ">=":
             tval = EzhilLexeme(chunks, EzhilToken.GTEQ)
-        elif chunks == u"<=":
+        elif chunks == "<=":
             tval = EzhilLexeme(chunks, EzhilToken.LTEQ)
-        elif chunks == u"==":
+        elif chunks == "==":
             tval = EzhilLexeme(chunks, EzhilToken.EQUALITY)
-        elif chunks == u"!=":
+        elif chunks == "!=":
             tval = EzhilLexeme(chunks, EzhilToken.NEQ)
-        elif chunks == u"*":
+        elif chunks == "*":
             tval = EzhilLexeme(chunks, EzhilToken.PROD)
-        elif chunks == u"/":
+        elif chunks == "/":
             tval = EzhilLexeme(chunks, EzhilToken.DIV)
-        elif chunks == u",":
+        elif chunks == ",":
             tval = EzhilLexeme(chunks, EzhilToken.COMMA)
-        elif chunks == u"(":
+        elif chunks == "(":
             tval = EzhilLexeme(chunks, EzhilToken.LPAREN)
-        elif chunks == u")":
+        elif chunks == ")":
             tval = EzhilLexeme(chunks, EzhilToken.RPAREN)
-        elif chunks == u"[":
+        elif chunks == "[":
             tval = EzhilLexeme(chunks, EzhilToken.LSQRBRACE)
-        elif chunks == u"]":
+        elif chunks == "]":
             tval = EzhilLexeme(chunks, EzhilToken.RSQRBRACE)
-        elif chunks == u"{":
+        elif chunks == "{":
             tval = Lexeme(chunks, Token.LCURLBRACE)
-        elif chunks == u"}":
+        elif chunks == "}":
             tval = Lexeme(chunks, Token.RCURLBRACE)
-        elif chunks == u":":
+        elif chunks == ":":
             tval = Lexeme(chunks, Token.COLON)
-        elif chunks == u"%":
+        elif chunks == "%":
             tval = EzhilLexeme(chunks, EzhilToken.MOD)
-        elif chunks == u"^":
+        elif chunks == "^":
             tval = EzhilLexeme(chunks, EzhilToken.EXP)
-        elif chunks == u"&&":
+        elif chunks == "&&":
             tval = Lexeme(chunks, EzhilToken.LOGICAL_AND)
-        elif chunks == u"&":
+        elif chunks == "&":
             tval = Lexeme(chunks, EzhilToken.BITWISE_AND)
-        elif chunks == u"||":
+        elif chunks == "||":
             tval = Lexeme(chunks, EzhilToken.LOGICAL_OR)
-        elif chunks == u"|":
+        elif chunks == "|":
             tval = Lexeme(chunks, EzhilToken.BITWISE_OR)
-        elif chunks == u"<<":
+        elif chunks == "<<":
             tval = Lexeme(chunks, EzhilToken.BITWISE_LSHIFT)
-        elif chunks == u">>":
+        elif chunks == ">>":
             tval = Lexeme(chunks, EzhilToken.BITWISE_RSHIFT)
-        elif chunks == u"~":
+        elif chunks == "~":
             tval = Lexeme(chunks, EzhilToken.BITWISE_COMPLEMENT)
-        elif chunks == u"!":
+        elif chunks == "!":
             tval = Lexeme(chunks, EzhilToken.LOGICAL_NOT)
-        elif (chunks[0] == u"\"" and chunks[-1] == u"\""):
+        elif (chunks[0] == "\"" and chunks[-1] == "\""):
             tval = EzhilLexeme(chunks[1:-1], EzhilToken.STRING)
         elif chunks[0].isdigit() or chunks[0] == '+' or chunks[0] == '-':
             # tval=EzhilLexeme(float(chunks),EzhilToken.NUMBER)
             # deduce a float or integer
-            if (chunks.find(u'.') >= 0 or chunks.find(u'e') >= 0
-                    or chunks.find(u'E') >= 0):
+            if (chunks.find('.') >= 0 or chunks.find('e') >= 0
+                    or chunks.find('E') >= 0):
                 tval = EzhilLexeme(float(chunks), EzhilToken.NUMBER)
             else:
                 tval = EzhilLexeme(int(chunks), EzhilToken.NUMBER)
@@ -204,23 +204,23 @@ class EzhilLex(Lex):
             if match_obj:
                 if len(match_obj.group(0)) != len(chunks):
                     raise ScannerException(
-                        u"Lexical error: Invalid identifier name '" +
-                        unicode(chunks) + u"' at Line , Col " +
-                        unicode(self.get_line_col(pos)) + u" in file " +
+                        "Lexical error: Invalid identifier name '" +
+                        str(chunks) + "' at Line , Col " +
+                        str(self.get_line_col(pos)) + " in file " +
                         self.fname)
                 tval = EzhilLexeme(chunks, EzhilToken.ID)
             else:
-                raise ScannerException(u"Lexical error: " + unicode(chunks) +
-                                       u" at Line , Col " +
-                                       unicode(self.get_line_col(pos)) +
-                                       u" in file " + self.fname)
+                raise ScannerException("Lexical error: " + str(chunks) +
+                                       " at Line , Col " +
+                                       str(self.get_line_col(pos)) +
+                                       " in file " + self.fname)
 
         [l, c] = self.get_line_col(pos)
         tval.set_line_col([l, c])
         tval.set_file_name(self.fname)
         self.tokens.append(tval)
 
-        if (self.debug): print(u"Lexer token = ", tval)
+        if (self.debug): print(("Lexer token = ", tval))
         return l
 
     @staticmethod
@@ -230,9 +230,9 @@ class EzhilLex(Lex):
     def tokenize(self, data=None):
         """ do hard-work of tokenizing and
         put EzhilLexemes into the tokens[] Q """
-        if (self.debug): print(u"Start of Ezhil lexer - begin tokenize")
+        if (self.debug): print("Start of Ezhil lexer - begin tokenize")
         if (self.stdin_mode):
-            if (self.debug): print(self.tokens)
+            if (self.debug): print((self.tokens))
             ## cleanup the Q for stdin_mode of any EOF that can remain.
             if (len(self.tokens) != 0):
                 self.match(EzhilToken.EOF)
@@ -257,8 +257,8 @@ class EzhilLex(Lex):
 
         while (idx < len(data)):
             c = data[idx]
-            if (self.debug): print(idx, c)
-            if (istamil(c) or c.isalpha() or c == u'_'):
+            if (self.debug): print((idx, c))
+            if (istamil(c) or c.isalpha() or c == '_'):
                 tok_start_idx = idx
                 s = c
                 idx = idx + 1
@@ -273,19 +273,19 @@ class EzhilLex(Lex):
                             % (data[idx], s))
                 self.get_lexeme(s, tok_start_idx)
             elif (c.isspace()):  # or c in u' 'or c == u'\t' or c == u'\n'
-                if (c == u'\n'):
+                if (c == '\n'):
                     ##actual col = idx - col_idx
                     self.update_line_col(idx)
                 idx = idx + 1
-            elif (c == u'\r'):
+            elif (c == '\r'):
                 idx = idx + 1
                 continue
-            elif (c == u'#'):
+            elif (c == '#'):
                 ## single line skip comments like Python/Octave
                 start = idx
-                while (idx < len(data) and not (data[idx] in [u'\r', u'\n'])):
+                while (idx < len(data) and not (data[idx] in ['\r', '\n'])):
                     idx = idx + 1
-                if (idx < len(data) and data[idx] == u'\r'):
+                if (idx < len(data) and data[idx] == '\r'):
                     idx = idx + 1
                 end = idx
                 self.comments[self.line] = data[start:end]
@@ -296,32 +296,32 @@ class EzhilLex(Lex):
                 ## FIXME: this prevents you from +.xyz, or -.xyz use 0.xyz
                 ## instead. also may throw an error if we exceed
                 ## buffer-length.
-                if (c in [u'+', u'-'] and (idx < len(data))
+                if (c in ['+', '-'] and (idx < len(data))
                         and not data[idx].isdigit()):
                     self.get_lexeme(c, idx)
                     continue
                 in_sci_notation = False
                 while ((idx < len(data))
                        and (data[idx].isdigit()
-                            or data[idx] in [u'+', u'-', u'e', u'E', u'.'])):
-                    if (data[idx] in [u'+', u'-'] and not in_sci_notation):
+                            or data[idx] in ['+', '-', 'e', 'E', '.'])):
+                    if (data[idx] in ['+', '-'] and not in_sci_notation):
                         break
-                    elif (data[idx] in [u'e', u'E']):
+                    elif (data[idx] in ['e', 'E']):
                         in_sci_notation = True
                     num = num + data[idx]
                     idx = idx + 1
                 self.get_lexeme(num, tok_start_idx)
-            elif (c == u"\""):
+            elif (c == "\""):
                 tok_start_idx = idx
                 s = c
                 idx = idx + 1
-                while (idx < len(data) and (data[idx] != u'\"')):
-                    if (data[idx] == u'\\'):
+                while (idx < len(data) and (data[idx] != '\"')):
+                    if (data[idx] == '\\'):
                         idx = idx + 1
-                        if (data[idx] == u'n'):
-                            s = s + u'\n'
-                        elif (data[idx] == u't'):
-                            s = s + u'\t'
+                        if (data[idx] == 'n'):
+                            s = s + '\n'
+                        elif (data[idx] == 't'):
+                            s = s + '\t'
                         else:
                             s = s + data[idx]
                     else:
@@ -333,12 +333,12 @@ class EzhilLex(Lex):
             elif (c in self.unary_binary_ops):
                 tok_start_idx = idx
                 if (len(data) > (1 + idx)
-                        and data[idx + 1] in [u'=', u'|', u'&', u'>', u'<']):
+                        and data[idx + 1] in ['=', '|', '&', '>', '<']):
                     c = c + data[idx + 1]
                     idx = idx + 1
                 self.get_lexeme(c, tok_start_idx)
                 idx = idx + 1
-            elif c == u";":
+            elif c == ";":
                 # treat as newline
                 idx = idx + 1
                 continue
@@ -356,10 +356,10 @@ class EzhilLex(Lex):
         eof_tok.set_line_col(self.get_line_col(tok_start_idx))
         self.tokens.append(eof_tok)
         if (self.debug):
-            print(u"before reverse")
+            print("before reverse")
             self.dump_tokens()
         self.tokens.reverse()
         if (self.debug):
-            print(u"after reverse")
+            print("after reverse")
             self.dump_tokens()
         return

@@ -15,7 +15,7 @@ from ezhil import TimeoutException
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 class QuietTestCase(unittest.TestCase):
     """ run quiet unit-tests without verbosity """
@@ -42,11 +42,11 @@ class QuietTestCase(unittest.TestCase):
         if self.debug:
             print("############### STDOUT #################")
             fp = codecs.open(self.get_filename(),"r","utf-8")
-            print(fp.read())
+            print((fp.read()))
             fp.close()
             print("################ STDERR #################")
             fp = codecs.open("err_"+self.get_filename(),"r","utf-8")
-            print(fp.read())
+            print((fp.read()))
             fp.close()
             print("################ END QUIET TEST ##########")
         
@@ -63,7 +63,7 @@ class TestEzhil:
         self.filename = self.create_tmp_file(ezhil_test_code)
         self.debug = False
         
-    def create_tmp_file(self,contents=u""):
+    def create_tmp_file(self,contents=""):
         # dump stuff into a unique temporary file - refactor to write multiple
         # files from the class.
         handle = -1
@@ -86,7 +86,7 @@ class TestEzhil:
         
     def __str__(self):
         if ( self._tested ):
-            return "******* test completed with status "+unicode(self.success)+" *********"
+            return "******* test completed with status "+str(self.success)+" *********"
         return "******* test not yet run ********"
         
     def run( self ):
@@ -99,7 +99,7 @@ class TestEzhil:
         except Exception as ex:
             traceback.print_stack()
             print("Ezhil Interpreter stopped with the exception ....")            
-            print( ex.message, ex.args )
+            print(( ex.message, ex.args ))
             raise ex
         finally:
             print("********* completed Ezhil test *********")
@@ -130,7 +130,7 @@ class TestEzhilException( TestEzhil ):
         """ this class expects to receive an exception on running the Ezhil interpreter,
             and when we match the exception message the test is supposed to pass
         """
-        print("\n"*3)
+        print(("\n"*3))
         try:
             self._tested = True
             ezhil.EzhilFileExecuter( file_input=self.filename , debug=self.debug, redirectop=False, TIMEOUT=None,safe_mode=self.safe_mode )
@@ -142,13 +142,13 @@ class TestEzhilException( TestEzhil ):
             self.success = False # we expected a particular kind of exception
             if self.exception:
                 self.success = isinstance( ex, self.exception )
-                if ( self.debug ): print(">>>>>>>>>>>> We found an exception \n %s \n"%ex)
+                if ( self.debug ): print((">>>>>>>>>>>> We found an exception \n %s \n"%ex))
             
             if not self.success:
                 traceback.print_stack()
                 raise Exception("Expected exception class %s was not found; instead %s was received."%(self.exception,ex))
             
-            if ( self.debug ): print( u"### EXCEPTION ==> \n %s"%unicode(ex) )
+            if ( self.debug ): print(( "### EXCEPTION ==> \n %s"%str(ex) ))
             if self.message:
                 self.success = True
                 # check multiple messages
@@ -156,21 +156,21 @@ class TestEzhilException( TestEzhil ):
                     self.message = [self.message]
                 
                 for msg in self.message:
-                    if ( self.debug ): print(self.success)
-                    if ( self.debug ): print("### testing ",unicode(msg))
+                    if ( self.debug ): print((self.success))
+                    if ( self.debug ): print(("### testing ",str(msg)))
                     self.success = self.success and \
                         (( str(ex).find( msg ) >= 0 ) or \
-                             len(filter(lambda x: x.find( msg ) >=0, ex.args )) > 0 or unicode(ex).find( msg ) >= 0 )
-                    if ( self.debug ): print(self.success)
+                             len([x for x in ex.args if x.find( msg ) >=0]) > 0 or str(ex).find( msg ) >= 0 )
+                    if ( self.debug ): print((self.success))
             
             if not self.success and not self.partial:
                 print("######## TEST FAILED #############")
-                print(self.success,self.partial)
-                print(u"ACTUAL == %s"%unicode(ex))
-                print(u"EXPECTED == %s"%unicode(self.message))
-                raise Exception(u"Expected message %s was not found. We found message %s"%(self.message,unicode(ex)))            
+                print((self.success,self.partial))
+                print(("ACTUAL == %s"%str(ex)))
+                print(("EXPECTED == %s"%str(self.message)))
+                raise Exception("Expected message %s was not found. We found message %s"%(self.message,str(ex)))            
             return self.success
-        raise Exception(u"Expected message %s was not found.",unicode(self.exception))
+        raise Exception("Expected message %s was not found.",str(self.exception))
 
     @staticmethod
     def create_and_test_spl_safe_mode( code, exception, msg):
@@ -218,7 +218,7 @@ class TestInteractiveEzhil(TestEzhil):
         except Exception as ex:
             traceback.print_stack()            
             if ( self.debug ): print("Ezhil Interpreter stopped with the exception ....")
-            if ( self.debug ): print( ex.message, ex.args )
+            if ( self.debug ): print(( ex.message, ex.args ))
             raise ex
         finally:
             print("********* completed Ezhil test *********")
@@ -242,7 +242,7 @@ class TestTimeoutEzhil(TestEzhil):
 
     def run( self ):
         """ run the interpreter """
-        print("\n******* beginning to run Ezhil test with timeout = %d(s)*******"%(self.timeout))
+        print(("\n******* beginning to run Ezhil test with timeout = %d(s)*******"%(self.timeout)))
         self._tested = True
         self.success = False
         try:
@@ -252,7 +252,7 @@ class TestTimeoutEzhil(TestEzhil):
             self.success = True #expected to raise an exception
         except Exception as ex:
             if ( self.debug ): print("Ezhil Interpreter stopped with the exception ....")
-            if ( self.debug ): print( ex.message, ex.args )
+            if ( self.debug ): print(( ex.message, ex.args ))
             raise ex
         finally:
             print("********* completed Ezhil test *********")

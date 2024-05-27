@@ -3,12 +3,12 @@
 ##
 ## (C) 2016-2017 Muthiah Annamalai,
 ## Licensed under GPL Version 3
-from __future__ import print_function
+
 import sys
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 import ezhil
 import gi
 
@@ -61,7 +61,7 @@ class EzhilSyntaxHighlightingEditor(object):
     def apply_comment_syntax_highlighting(self,c_line):
         syntax_tag = self.tag_comment
         self.textbuffer.insert_at_cursor( c_line )
-        self.textbuffer.insert_at_cursor(u"\n")
+        self.textbuffer.insert_at_cursor("\n")
         n_end = self.textbuffer.get_end_iter()
         n_start = self.textbuffer.get_iter_at_offset(self.textbuffer.get_char_count()-1-len(c_line))
         self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
@@ -74,13 +74,13 @@ class EzhilSyntaxHighlightingEditor(object):
             start,end = bounds
         if not self.append_mode:
             self.textbuffer.delete(start,end)
-        lines = text.split(u"\n")
+        lines = text.split("\n")
         lexer = Tokenizer()
         max_idx = len(lines)
         for idx,line in enumerate(lines):
             orig_line = line
             comment_line = line.strip()
-            if comment_line.startswith(u"#"):
+            if comment_line.startswith("#"):
                 self.apply_comment_syntax_highlighting(comment_line)
                 continue
             idx_comment_part = comment_line.find("#")
@@ -100,14 +100,14 @@ class EzhilSyntaxHighlightingEditor(object):
                 except Exception as ie:
                     #failsafe
                     self.textbuffer.insert_at_cursor(orig_line)
-                    self.textbuffer.insert_at_cursor(u"\n")
+                    self.textbuffer.insert_at_cursor("\n")
                     continue
             
             for lexeme in lexemes:
                 is_string = False
                 tok = lexeme.kind
                 is_keyword = False
-                if unicode(lexeme.val) in [u"உள்ளடக்கு",u"பின்கொடு",u"பதிப்பி",u"ஒவ்வொன்றாக",u"@",u"இல்",u"நிறுத்து"] or EzhilToken.is_keyword(tok):
+                if str(lexeme.val) in ["உள்ளடக்கு","பின்கொடு","பதிப்பி","ஒவ்வொன்றாக","@","இல்","நிறுத்து"] or EzhilToken.is_keyword(tok):
                     is_keyword = True
                     syntax_tag = self.tag_keyword
                 elif EzhilToken.is_id(tok):
@@ -122,11 +122,11 @@ class EzhilSyntaxHighlightingEditor(object):
                 m_start = self.textbuffer.get_insert()
 
                 if is_keyword:
-                     lexeme_val = lexeme.val + u" "
+                     lexeme_val = lexeme.val + " "
                 elif EzhilToken.is_number(lexeme.kind):
-                    lexeme_val = unicode(lexeme.val)
+                    lexeme_val = str(lexeme.val)
                 elif is_string:
-                     lexeme_val = u"\""+lexeme.val.replace(u"\n",u"\\n")+u"\""
+                     lexeme_val = "\""+lexeme.val.replace("\n","\\n")+"\""
                 else:
                      lexeme_val = lexeme.val
                 self.textbuffer.insert_at_cursor( lexeme_val )
@@ -135,8 +135,8 @@ class EzhilSyntaxHighlightingEditor(object):
                 self.textbuffer.apply_tag(syntax_tag,n_start,n_end)
                 #self.textbuffer.insert_at_cursor(u" ")
             if comment_line:
-                self.apply_comment_syntax_highlighting(u" "+comment_line)
+                self.apply_comment_syntax_highlighting(" "+comment_line)
                 continue
             if idx >= (max_idx - 1):
                 continue
-            self.textbuffer.insert_at_cursor(u"\n")
+            self.textbuffer.insert_at_cursor("\n")

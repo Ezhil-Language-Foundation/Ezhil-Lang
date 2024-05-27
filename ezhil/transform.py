@@ -21,7 +21,7 @@ class Visitor:
         # tree-source-transformer etc.
 
     def default(self, *args):
-        raise Exception(u'Transform Visitor Not Implemented for AST [%s]' % str(args[0]))
+        raise Exception('Transform Visitor Not Implemented for AST [%s]' % str(args[0]))
 
     def visit_identifier(self, id):
         self.default(id)
@@ -151,7 +151,7 @@ class TransformVisitor(Visitor):
         self.lexer = self.interpreter.lexer
         self.debug = debug
         if (self.debug):
-            print(str(self.top_ast))
+            print((str(self.top_ast)))
         self.top_ast.visit(self)
 
     def update_line(self, obj):
@@ -198,22 +198,22 @@ class TransformVisitor(Visitor):
         return
 
     def visit_return_stmt(self, ret_stmt):
-        keyword = u"பின்கொடு"
+        keyword = "பின்கொடு"
         # return may have optional argument
         if hasattr(ret_stmt.rvalue, 'visit'):
             ret_stmt.rvalue.visit(self)
         return
 
     def visit_break_stmt(self, break_stmt):
-        keyword = u"நிறுத்து"  # EzhilToken.Keywords["break"]
+        keyword = "நிறுத்து"  # EzhilToken.Keywords["break"]
         return
 
     def visit_continue_stmt(self, cont_stmt):
-        keyword = u"தொடர்"  # EzhilToken.Keywords["continue"]
+        keyword = "தொடர்"  # EzhilToken.Keywords["continue"]
         return
 
     def visit_else_stmt(self, else_stmt):
-        keyword = u"இல்லை"
+        keyword = "இல்லை"
         if else_stmt.stmt: else_stmt.stmt.visit(self)
         return
 
@@ -222,7 +222,7 @@ class TransformVisitor(Visitor):
         if if_elseif_stmt.expr: if_elseif_stmt.expr.visit(self)
 
         # IF kw
-        keyword_if = u"ஆனால்"
+        keyword_if = "ஆனால்"
 
         # True-Body
         if if_elseif_stmt.body: if_elseif_stmt.body.visit(self)
@@ -235,7 +235,7 @@ class TransformVisitor(Visitor):
 
     def visit_end_kw(self):
         # END kw
-        keyword_end = u"முடி"
+        keyword_end = "முடி"
 
     def visit_while_stmt(self, while_stmt):
         """
@@ -247,7 +247,7 @@ class TransformVisitor(Visitor):
         if while_stmt.expr: while_stmt.expr.visit(self)
 
         # While kw
-        keyword_while = u"வரை"
+        keyword_while = "வரை"
 
         # Body
         if while_stmt.body: while_stmt.body.visit(self)
@@ -273,7 +273,7 @@ class TransformVisitor(Visitor):
             for_stmt.expr_update.visit(self)
 
         # For kw
-        keyword_for = u"ஆக"
+        keyword_for = "ஆக"
         # Body
         if for_stmt.body:
             for_stmt.body.visit(self)
@@ -288,7 +288,7 @@ class TransformVisitor(Visitor):
         return
 
     def visit_print_stmt(self, print_stmt):
-        keyword = u"பதிப்பி"
+        keyword = "பதிப்பி"
         if print_stmt.exprlst:
             print_stmt.exprlst.visit(self)
         return
@@ -324,7 +324,7 @@ class TransformVisitor(Visitor):
         """
 
         # Function kw
-        keyword_fn = u"நிரல்பாகம்"
+        keyword_fn = "நிரல்பாகம்"
 
         # name of function
 

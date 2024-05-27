@@ -15,34 +15,34 @@ import tamil
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 
 ## SCANNER
 class Token:
     token_types = [
-        u"EOF", u"ID", u"NUMBER", u"PRINT", u"+", u"-", u"*", u"/", u"(", u")",
-        u",", u"=", u"END", u"DEF", u"RETURN", u"IF", u"ELSEIF", u"ELSE",
-        u"DO", u"WHILE", u"FOR", u"STRING", u">", u"<", u">=", u"<=", u"!=",
-        u"==", u"[", u"]", u"^", u"%", u"BREAK", u"CONTINUE", u"SWITCH",
-        u"CASE", u"OTHERWISE", u"&&", u"||", u"&", u"|", u"!", u"{", u"}",
-        u":", u"<<", u">>", u"~"
+        "EOF", "ID", "NUMBER", "PRINT", "+", "-", "*", "/", "(", ")",
+        ",", "=", "END", "DEF", "RETURN", "IF", "ELSEIF", "ELSE",
+        "DO", "WHILE", "FOR", "STRING", ">", "<", ">=", "<=", "!=",
+        "==", "[", "]", "^", "%", "BREAK", "CONTINUE", "SWITCH",
+        "CASE", "OTHERWISE", "&&", "||", "&", "|", "!", "{", "}",
+        ":", "<<", ">>", "~"
     ]
 
     @staticmethod
     def is_string(kind):
         """ predicate to check if @kind token is a string """
-        return Token.get_name(kind) == u"STRING"
+        return Token.get_name(kind) == "STRING"
 
     @staticmethod
     def is_number(kind):
         """ predicate to check if @kind token is a number """
-        return Token.get_name(kind) == u"NUMBER"
+        return Token.get_name(kind) == "NUMBER"
 
     @staticmethod
     def is_id(kind):
         """ predicate to check if @kind token is an identifier """
-        return Token.get_name(kind) == u"ID"
+        return Token.get_name(kind) == "ID"
 
     @staticmethod
     def is_keyword(kind):
@@ -59,8 +59,8 @@ class Token:
         """ used in reporting errors in match() on parsing stage """
         if (kind >= 0 and kind < len(Token.token_types)):
             return Token.token_types[kind]
-        raise ScannerException(u"Index out of bounds. Unknown token " +
-                               unicode(kind))
+        raise ScannerException("Index out of bounds. Unknown token " +
+                               str(kind))
         return None
 
     EOF = 0
@@ -149,8 +149,8 @@ class Lexeme:
         self.col = c
 
     def __str__(self):
-        return u" %s Line=%d, Col=%d in File %s " % \
-               (unicode(self.val), self.line, self.col, self.fname)
+        return " %s Line=%d, Col=%d in File %s " % \
+               (str(self.val), self.line, self.col, self.fname)
 
 
 class DummyFile:
@@ -163,7 +163,7 @@ class DummyFile:
         pass
 
     def readlines(self):
-        return self.data.split(u"\n")
+        return self.data.split("\n")
 
 
 class Lex(object):
@@ -178,10 +178,10 @@ class Lex(object):
         self.converted_data = None
         self.comments = {
         }  # comments dict indexed by line number with comments present as string value
-        if (isinstance(fname, str) or isinstance(fname, unicode)):
+        if (isinstance(fname, str) or isinstance(fname, str)):
             self.fname = fname
             if self.encoding == "utf-8":
-                if (self.debug): print(u"-> opening file %s", fname)
+                if (self.debug): print(("-> opening file %s", fname))
                 self.File = codecs.open(fname, "r", "utf-8")
             elif self.encoding == "tscii":
                 # use open-tamil libraries to translate the source file
@@ -192,29 +192,29 @@ class Lex(object):
                     print(
                         "########## TSCII CONVERSION  TO UNICODE DONE ##########"
                     )
-                    print(
+                    print((
                         "######################### %d letters found #################"
-                        % len(self.converted_data))
+                        % len(self.converted_data)))
             else:
                 raise Exception("Unknown encoding %s used for file %s" %
                                 (encoding, fname))
         elif (isinstance(fname, list)):
             """ specify, fname = ["contents of program as a string"] """
-            self.fname = u"<DUMMYFILE>"
+            self.fname = "<DUMMYFILE>"
             self.File = DummyFile(fname[0])
         else:
-            self.fname = u"<STDIN>"
+            self.fname = "<STDIN>"
             self.stdin_mode = True
         if (self.debug):
-            print(u"post file open")
+            print("post file open")
         ##actual col = idx - col_idx
         self.line = 1
         self.col_idx = 0
         ##contains lexeme's in reverse order
         ##for popping is elegant.
         self.tokens = []
-        self.spc = re.compile(u"\s+")
-        self.newlines = re.compile(u"\n+")
+        self.spc = re.compile("\s+")
+        self.newlines = re.compile("\n+")
         self.unary_binary_ops = \
             ['+', '-', '=', '*', '/', '>', '<', '%', '^', '!=', '!', '&&', '||', '|', '&', '!', '>>', '<<', '~']
         ## need to be the last on init & only for files
@@ -225,105 +225,105 @@ class Lex(object):
     def reset(self):
         """ reset the lexer """
         if (self.debug):
-            print(u"Dumping out " + str(len(self.tokens)) + "Lexemes ")
+            print(("Dumping out " + str(len(self.tokens)) + "Lexemes "))
         self.tokens = []
 
     def __repr__(self):
         if (self.debug):
             for idx in range(0, len(self.tokens)):
-                print(u"%d] %s" % (idx, repr(self.tokens.pop())))
-        return u""
+                print(("%d] %s" % (idx, repr(self.tokens.pop()))))
+        return ""
 
     def get_lexeme(self, chunks, pos):
         if chunks == None:
             return None
 
-        if chunks == u"print":
+        if chunks == "print":
             tval = Lexeme(chunks, Token.PRINT)
-        elif chunks == u"if":
+        elif chunks == "if":
             tval = Lexeme(chunks, Token.IF)
-        elif chunks == u"elseif":
+        elif chunks == "elseif":
             tval = Lexeme(chunks, Token.ELSEIF)
-        elif chunks == u"else":
+        elif chunks == "else":
             tval = Lexeme(chunks, Token.ELSE)
-        elif chunks == u"for":
+        elif chunks == "for":
             tval = Lexeme(chunks, Token.FOR)
-        elif chunks == u"while":
+        elif chunks == "while":
             tval = Lexeme(chunks, Token.WHILE)
-        elif chunks == u"do":
+        elif chunks == "do":
             tval = Lexeme(chunks, Token.DO)
-        elif chunks == u"return":
+        elif chunks == "return":
             tval = Lexeme(chunks, Token.RETURN)
-        elif chunks == u"end":
+        elif chunks == "end":
             tval = Lexeme(chunks, Token.END)
-        elif chunks == u"def":
+        elif chunks == "def":
             tval = Lexeme(chunks, Token.DEF)
-        elif chunks == u"continue":
+        elif chunks == "continue":
             tval = Lexeme(chunks, Token.CONTINUE)
-        elif chunks == u"break":
+        elif chunks == "break":
             tval = Lexeme(chunks, Token.BREAK)
-        elif chunks == u"=":
+        elif chunks == "=":
             tval = Lexeme(chunks, Token.EQUALS)
-        elif chunks == u"-":
+        elif chunks == "-":
             tval = Lexeme(chunks, Token.MINUS)
-        elif chunks == u"+":
+        elif chunks == "+":
             tval = Lexeme(chunks, Token.PLUS)
-        elif chunks == u">":
+        elif chunks == ">":
             tval = Lexeme(chunks, Token.GT)
-        elif chunks == u"<":
+        elif chunks == "<":
             tval = Lexeme(chunks, Token.LT)
-        elif chunks == u">=":
+        elif chunks == ">=":
             tval = Lexeme(chunks, Token.GTEQ)
-        elif chunks == u"<=":
+        elif chunks == "<=":
             tval = Lexeme(chunks, Token.LTEQ)
-        elif chunks == u"==":
+        elif chunks == "==":
             tval = Lexeme(chunks, Token.EQUALITY)
-        elif chunks == u"!=":
+        elif chunks == "!=":
             tval = Lexeme(chunks, Token.NEQ)
-        elif chunks == u"*":
+        elif chunks == "*":
             tval = Lexeme(chunks, Token.PROD)
-        elif chunks == u"/":
+        elif chunks == "/":
             tval = Lexeme(chunks, Token.DIV)
-        elif chunks == u",":
+        elif chunks == ",":
             tval = Lexeme(chunks, Token.COMMA)
-        elif chunks == u"(":
+        elif chunks == "(":
             tval = Lexeme(chunks, Token.LPAREN)
-        elif chunks == u")":
+        elif chunks == ")":
             tval = Lexeme(chunks, Token.RPAREN)
-        elif chunks == u"[":
+        elif chunks == "[":
             tval = Lexeme(chunks, Token.LSQRBRACE)
-        elif chunks == u"]":
+        elif chunks == "]":
             tval = Lexeme(chunks, Token.RSQRBRACE)
-        elif chunks == u"{":
+        elif chunks == "{":
             tval = Lexeme(chunks, Token.LCURLBRACE)
-        elif chunks == u"}":
+        elif chunks == "}":
             tval = Lexeme(chunks, Token.RCURLBRACE)
-        elif chunks == u":":
+        elif chunks == ":":
             tval = Lexeme(chunks, Token.COLON)
-        elif chunks == u"%":
+        elif chunks == "%":
             tval = Lexeme(chunks, Token.MOD)
-        elif chunks == u"^":
+        elif chunks == "^":
             tval = Lexeme(chunks, Token.EXP)
-        elif chunks == u"&&":
+        elif chunks == "&&":
             tval = Lexeme(chunks, Token.LOGICAL_AND)
-        elif chunks == u"&":
+        elif chunks == "&":
             tval = Lexeme(chunks, Token.BITWISE_AND)
-        elif chunks == u"||":
+        elif chunks == "||":
             tval = Lexeme(chunks, Token.LOGICAL_OR)
-        elif chunks == u"<<":
+        elif chunks == "<<":
             tval = Lexeme(chunks, Token.BITWISE_LSHIFT)
-        elif chunks == u">>":
+        elif chunks == ">>":
             tval = Lexeme(chunks, Token.BITWISE_RSHIFT)
-        elif chunks == u"~":
+        elif chunks == "~":
             tval = Lexeme(chunks, Token.BITWISE_COMPLEMENT)
-        elif chunks == u"|":
+        elif chunks == "|":
             tval = Lexeme(chunks, Token.BITWISE_OR)
-        elif (chunks[0] == u"\"" and chunks[-1] == u"\""):
+        elif (chunks[0] == "\"" and chunks[-1] == "\""):
             tval = Lexeme(chunks[1:-1], Token.STRING)
-        elif chunks[0].isdigit() or chunks[0] == u'+' or chunks[0] == u'-':
+        elif chunks[0].isdigit() or chunks[0] == '+' or chunks[0] == '-':
             # deduce a float or integer
-            if (chunks.find(u'.') >= 0 or chunks.find(u'e') >= 0
-                    or chunks.find(u'E') >= 0):
+            if (chunks.find('.') >= 0 or chunks.find('e') >= 0
+                    or chunks.find('E') >= 0):
                 tval = Lexeme(float(chunks), Token.NUMBER)
             else:
                 tval = Lexeme(int(chunks), Token.NUMBER)
@@ -332,10 +332,10 @@ class Lex(object):
         elif chunks in ['\r', '\n', '\r\n']:
             return None
         else:
-            print("==>", chunks, "<==")
-            scanner_exception = u"Lexical error: " + unicode(
-                chunks) + u" at Line , Col " + unicode(
-                self.get_line_col(pos)) + u" in file " + self.fname
+            print(("==>", chunks, "<=="))
+            scanner_exception = "Lexical error: " + str(
+                chunks) + " at Line , Col " + str(
+                self.get_line_col(pos)) + " in file " + self.fname
             raise ScannerException(scanner_exception)
 
         [l, c] = self.get_line_col(pos)
@@ -361,9 +361,9 @@ class Lex(object):
     def tokenize(self, data=None):
         """ do hard-work of tokenizing and
         put Lexemes into the tokens[] Q """
-        if (self.debug): print(u"tokenize")
+        if (self.debug): print("tokenize")
         if (self.stdin_mode):
-            if (self.debug): print(self.tokens)
+            if (self.debug): print((self.tokens))
             ## cleanup the Q for stdin_mode of any EOF that can remain.
             if (len(self.tokens) != 0):
                 self.match(Token.EOF)
@@ -373,7 +373,7 @@ class Lex(object):
             self.tokens = list()
         else:
             if self.encoding == "utf-8":
-                data = u"".join(self.File.readlines())
+                data = "".join(self.File.readlines())
             elif self.encoding == "tscii":
                 data = self.converted_data
             else:
@@ -382,7 +382,7 @@ class Lex(object):
         tok_start_idx = 0
 
         while (idx < len(data)):
-            if (self.debug): print(idx, data[idx])
+            if (self.debug): print((idx, data[idx]))
             c = data[idx]
 
             if (c == ' ' or c == '\t' or c == '\n'):
@@ -451,7 +451,7 @@ class Lex(object):
         if (not self.stdin_mode): self.File.close()
 
         ## and manually add an EOF statement.
-        eof_tok = Lexeme(u"", Token.EOF)
+        eof_tok = Lexeme("", Token.EOF)
         eof_tok.set_line_col(self.get_line_col(tok_start_idx))
         self.tokens.append(eof_tok)
 
@@ -459,10 +459,10 @@ class Lex(object):
         return
 
     def dump_tokens(self):
-        print(u" \n".join([
-            unicode(self.tokens[i])
+        print((" \n".join([
+            str(self.tokens[i])
             for i in range(len(self.tokens) - 1, -1, -1)
-        ]))
+        ])))
         return
 
     def dequeue(self):
@@ -476,7 +476,7 @@ class Lex(object):
     def peek(self):
         """ remove Lexeme from the head of Q"""
         if len(self.tokens) == 0:
-            raise ScannerException(u"tokens[] queue is empty ")
+            raise ScannerException("tokens[] queue is empty ")
         ##print "**> PEEK-ing, ",self.tokens[-1]
         return self.tokens[-1]
 
@@ -484,8 +484,8 @@ class Lex(object):
         """ if match return value of token """
         if self.peek().kind != tokval:
             ##print self
-            raise ScannerException(u"cannot find token " + \
-                                   Token.get_name(tokval) + u" got " \
-                                   + unicode(self.peek()) \
-                                   + u" instead!")
+            raise ScannerException("cannot find token " + \
+                                   Token.get_name(tokval) + " got " \
+                                   + str(self.peek()) \
+                                   + " instead!")
         return self.dequeue()

@@ -24,7 +24,7 @@ class ExprNeg(unittest.TestCase):
 
 class StmtNeg(unittest.TestCase):
     def test_nested_fn(self):
-        exprCode = u""" நிரல்பாகம்  fact2 ( n )
+        exprCode = """ நிரல்பாகம்  fact2 ( n )
     @( n == 0 ) ஆனால்      
             பின்கொடு  1
     இல்லை
@@ -34,10 +34,10 @@ class StmtNeg(unittest.TestCase):
         1+1 #nested function
     முடி
 முடி""" #error message is bad for nested function case. but alteast it errors out.
-        TestEzhilException.create_and_test(exprCode,ParseException,u"Parse error: cannot find token END")
+        TestEzhilException.create_and_test(exprCode,ParseException,"Parse error: cannot find token END")
 	
     def test_return_stmt_dangling_function(self):
-        exprCode  = u"""
+        exprCode  = """
 # (C) முத்தையா அண்ணாமலை 2013
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
     நிரல்பாகம்  fact2 ( n )
@@ -51,7 +51,7 @@ class StmtNeg(unittest.TestCase):
         TestEzhilException.create_and_test(exprCode,ParseException,"return statement outside of function body")
 	
     def test_missing_ifstmt(self):
-        exprCode  = u"""
+        exprCode  = """
 # (C) முத்தையா அண்ணாமலை 2013
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 நிரல்பாகம்  fact ( n )
@@ -63,7 +63,7 @@ class StmtNeg(unittest.TestCase):
         TestEzhilException.create_and_test(exprCode,ParseException,"parsing Statement, unknown operators")
         
     def test_missing_end(self):        
-        exprCode  = u"""
+        exprCode  = """
 # (C) முத்தையா அண்ணாமலை 2013
 # இது ஒரு எழில் தமிழ் நிரலாக்க மொழி உதாரணம்
 நிரல்பாகம்  fact ( n )
@@ -77,7 +77,7 @@ class StmtNeg(unittest.TestCase):
 class TooFewArgsNeg(unittest.TestCase):
     @skip_python2_6
     def test_insufficient_call_args(self):
-        exprCode  = u"""
+        exprCode  = """
 # this is a test for error detection in Ezhil
 நிரல்பாகம் function(தேவைஇல்லை)
 # என்னவோ செய்ய
@@ -86,7 +86,7 @@ class TooFewArgsNeg(unittest.TestCase):
 function( )
 """
         #missing end function statement
-        expected = u"Function '%s' expects %d arguments but received only %d"%(u"function",1,0)
+        expected = "Function '%s' expects %d arguments but received only %d"%("function",1,0)
         with self.assertRaises(RuntimeException) as context:
             ezhil_eval(exprCode)
         self.assertTrue(isinstance(context.exception,RuntimeException))

@@ -3,7 +3,7 @@
 ## 
 ## (C) 2017 Ezhil Language Foundation
 ## Licensed under GPL Version 3
-from __future__ import print_function
+
 import tamil
 import gi
 import sys
@@ -11,7 +11,7 @@ import copy
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 gi.require_version('Gtk','3.0')
 from gi.repository import Gtk
@@ -23,24 +23,24 @@ class OSKeyboard(object):
     def __init__(self,lang,keys3rows,shift_keys3rows):
         object.__init__(self)
         self.lang = lang
-        rowlast = toList(u"=.,?!'")
-        rowlast.extend([u'&lt;',u'&gt;',u'{',u'}',u'[',u']']) #add <, >, {,}, [,] keys to virtual kbd
-        self.numeric3rows = [ toList(u"1234567890"),toList(u"-/:;()$&@"),rowlast ]
+        rowlast = toList("=.,?!'")
+        rowlast.extend(['&lt;','&gt;','{','}','[',']']) #add <, >, {,}, [,] keys to virtual kbd
+        self.numeric3rows = [ toList("1234567890"),toList("-/:;()$&@"),rowlast ]
         self.keys3rows = copy.copy(keys3rows)
         self.shift_keys3rows = copy.copy(shift_keys3rows)
         self.keys3rows_btns = []
-        self.mode = u"non-numeric"
-        self.spc = u" "*16
-        self.shift_words = [u"பிற", u"Shift"]
+        self.mode = "non-numeric"
+        self.spc = " "*16
+        self.shift_words = ["பிற", "Shift"]
         self.shiftmode = False
 
     def __str__(self):
-        sval = self.lang + u"\n"
-        sval += u"\n".join([ u",".join(row) for row in self.keys3rows])
-        sval += u"\n---shifted-keys--\n"
-        sval += u"\n".join([ u",".join(row) for row in self.shift_keys3rows])
-        sval += u"\n---Numeric-keys--\n"
-        sval += u"\n".join([ u",".join(row) for row in self.numeric3rows])
+        sval = self.lang + "\n"
+        sval += "\n".join([ ",".join(row) for row in self.keys3rows])
+        sval += "\n---shifted-keys--\n"
+        sval += "\n".join([ ",".join(row) for row in self.shift_keys3rows])
+        sval += "\n---Numeric-keys--\n"
+        sval += "\n".join([ ",".join(row) for row in self.numeric3rows])
         return sval
 
     def toggle_shift_mode(self):
@@ -48,56 +48,56 @@ class OSKeyboard(object):
         return self.shiftmode
 
     def numericmode(self):
-        return self.mode.find(u"non-numeric") == -1
+        return self.mode.find("non-numeric") == -1
 
     def padded(self,key_rows,numerickdb=False):
         rows2 = key_rows #copy.copy(key_rows)
         if self.lang.find("English") >= 0:
-            if rows2[-1][0].find(u"Shift") == -1:
-                rows2[-1].insert(0,u"Shift")
-                rows2[-1].insert(len(rows2[-1]),u"&lt;- back")
-            rows2.append([u"0-9",u"தமிழ்",self.spc+u"Space"+self.spc,u"Enter"])
+            if rows2[-1][0].find("Shift") == -1:
+                rows2[-1].insert(0,"Shift")
+                rows2[-1].insert(len(rows2[-1]),"&lt;- back")
+            rows2.append(["0-9","தமிழ்",self.spc+"Space"+self.spc,"Enter"])
             if numerickdb:
-                rows2[-1][1] = u"ஆங்"
+                rows2[-1][1] = "ஆங்"
         else:
-            if rows2[-1][0].find(u"பிற") == -1:
-                rows2[-1].insert(0,u"பிற")
-                rows2[-1].insert(len(rows2[-1]),u"&lt;- அழி")
-            rows2.append([u"0-9",u"ஆங்",self.spc+u"வெளி"+self.spc,u"் ",u"இடு"])
+            if rows2[-1][0].find("பிற") == -1:
+                rows2[-1].insert(0,"பிற")
+                rows2[-1].insert(len(rows2[-1]),"&lt;- அழி")
+            rows2.append(["0-9","ஆங்",self.spc+"வெளி"+self.spc,"் ","இடு"])
             if numerickdb:
-                rows2[-1][1] = u"தமிழ்"
+                rows2[-1][1] = "தமிழ்"
         return rows2
 
     def get_key_modifier(self,key):
         # backspace hook
-        if key.find(u"&lt;-") >= 0:
-            key = u"\b"
-        elif key.find(u"வெளி") >= 0 or key.find(u"Space") >= 0:
-            key = u" "
-        elif key.find(u"இடு") >= 0 or key.find(u"Enter") >= 0:
-            key = u"\n"
-        elif key == u"&amp;":
-            key = u"&"
-        elif key == u"&lt;":
-            key = u"<"
-        elif key == u"&gt;":
-            key = u">"
+        if key.find("&lt;-") >= 0:
+            key = "\b"
+        elif key.find("வெளி") >= 0 or key.find("Space") >= 0:
+            key = " "
+        elif key.find("இடு") >= 0 or key.find("Enter") >= 0:
+            key = "\n"
+        elif key == "&amp;":
+            key = "&"
+        elif key == "&lt;":
+            key = "<"
+        elif key == "&gt;":
+            key = ">"
         return key
     
     def build_widget(self,parent_box,edobj,numerickbd=False):
         if numerickbd:
-            self.mode = u"numeric"
+            self.mode = "numeric"
         else:
-            self.mode = u"non-numeric"
+            self.mode = "non-numeric"
 
         rows = list()
-        toggle_keys = [u"ஆங்",u"0-9",u"தமிழ்"]
+        toggle_keys = ["ஆங்","0-9","தமிழ்"]
 
         #numeric mode cannot have any shift modes
 
         if numerickbd:
             ref_keys3rows = self.numeric3rows
-            ref_keys3rows[1][7] = u"&amp;"
+            ref_keys3rows[1][7] = "&amp;"
         else:
             if self.shiftmode:
                 ref_keys3rows = self.shift_keys3rows
@@ -121,9 +121,9 @@ class OSKeyboard(object):
                 btns.append(btn)
                 for child in btn.get_children():
                     if self.lang.find("English") >= 0:
-                        child.set_label(u"<span weight=\"heavy\" size=\"large\" fallback=\"true\">%s</span>"%key)
+                        child.set_label("<span weight=\"heavy\" size=\"large\" fallback=\"true\">%s</span>"%key)
                     else:
-                        child.set_label(u"<span weight=\"heavy\" size=\"large\" fallback=\"true\">%s</span>"%key)
+                        child.set_label("<span weight=\"heavy\" size=\"large\" fallback=\"true\">%s</span>"%key)
                     child.set_use_markup(True)
                     break
                 key = self.get_key_modifier(key)
@@ -136,21 +136,21 @@ class OSKeyboard(object):
         return rows
 
 class EnglishKeyboard(OSKeyboard):
-    keys3rows = [toList(u"QWERTYUIOP".lower()),toList(u"ASDFGHJKL".lower()),toList(u"ZXCVBNM".lower())]
-    shift_keys3rows = [toList(u"QWERTYUIOP"),toList(u"ASDFGHJKL"),toList(u"ZXCVBNM")]
+    keys3rows = [toList("QWERTYUIOP".lower()),toList("ASDFGHJKL".lower()),toList("ZXCVBNM".lower())]
+    shift_keys3rows = [toList("QWERTYUIOP"),toList("ASDFGHJKL"),toList("ZXCVBNM")]
     def __init__(self):
-        OSKeyboard.__init__(self,u"English",EnglishKeyboard.keys3rows,EnglishKeyboard.shift_keys3rows)
+        OSKeyboard.__init__(self,"English",EnglishKeyboard.keys3rows,EnglishKeyboard.shift_keys3rows)
 
 class TamilKeyboard(OSKeyboard):
-    special = u"புள்ளி"
-    space = u"வெளி"
-    pulli = u"் "
-    keys3rows = [toList(u"ஆஈஊஏளறனடணசஞ"),toList(u"அஇஉஐஎகபமதநய"),[u"ஔ",u"ஓ",u"ஒ",u"வ",u"ங",u"ல",u"ர",u"ழ"]]
-    shift_keys3rows = [[u"௧",u"௨",u"௩",u"௪",u"௫",u"௬",u"௭",u"௮",u"௯",u"௦",u"௰"],
-                       [u"ஃ",u"ஸ",u"ஷ",u"ஜ",u"ஹ",u"க்ஷ",u"ஶ்ரீ",u"ஶ",u"ௐ",u"௱",u"௲"],
-                       [u"௳",u"௴",u"௵",u"௶",u"௷",u"௸",u"௹",u"௺"]]
+    special = "புள்ளி"
+    space = "வெளி"
+    pulli = "் "
+    keys3rows = [toList("ஆஈஊஏளறனடணசஞ"),toList("அஇஉஐஎகபமதநய"),["ஔ","ஓ","ஒ","வ","ங","ல","ர","ழ"]]
+    shift_keys3rows = [["௧","௨","௩","௪","௫","௬","௭","௮","௯","௦","௰"],
+                       ["ஃ","ஸ","ஷ","ஜ","ஹ","க்ஷ","ஶ்ரீ","ஶ","ௐ","௱","௲"],
+                       ["௳","௴","௵","௶","௷","௸","௹","௺"]]
     def __init__(self):
-        OSKeyboard.__init__(self,u"Tamil",TamilKeyboard.keys3rows,TamilKeyboard.shift_keys3rows)
+        OSKeyboard.__init__(self,"Tamil",TamilKeyboard.keys3rows,TamilKeyboard.shift_keys3rows)
 
 class JointKeyboard:
     def __init__(self,parent_box,ed):

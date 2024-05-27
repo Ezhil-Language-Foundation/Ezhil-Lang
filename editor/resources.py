@@ -11,4 +11,4 @@ def getResourceFile(*args):
 
 def get_resource_dir():
     dirname, filename = os.path.split(os.path.abspath(__file__))
-    return os.path.sep.join([dirname,u'res'])
+    return os.path.sep.join([dirname,'res'])

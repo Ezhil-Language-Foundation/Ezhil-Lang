@@ -16,7 +16,7 @@ from .profile import Profiler
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 
 # customize I/O like functions for external GUI
@@ -60,7 +60,7 @@ class DebugUtils:
     def dbg_msg(self, msg):
         """ handy to print debug messages """
         if (self.debug):
-            print(u"## ", msg)
+            print(("## ", msg))
         return
 
 
@@ -76,7 +76,7 @@ class BuiltinFunction:
         self.aslist = False
 
     def __str__(self):
-        return u"[BuiltinFunction[%s,nargs=%d]]" % (self.name, self.padic)
+        return "[BuiltinFunction[%s,nargs=%d]]" % (self.name, self.padic)
 
     def evaluate(self, env):
         try:
@@ -84,11 +84,11 @@ class BuiltinFunction:
         except AssertionError as assert_excep:
             env.unroll_stack()
             raise RuntimeException(
-                unicode(assert_excep) + u' Assertion failed!')
+                str(assert_excep) + ' Assertion failed!')
         except Exception as excep:
             env.unroll_stack()
-            print(u"failed dispatching function ", unicode(self),
-                  u"with exception", unicode(excep))
+            print(("failed dispatching function ", str(self),
+                  "with exception", str(excep)))
             if (self.debug):
                 traceback.print_tb(sys.exc_info()[2])
             raise excep
@@ -107,7 +107,7 @@ class BuiltinFunction:
 
         # keep evaluating for as many evaluate object-methods are available
         # because Python libraries don't recognize ezhil AST objects.
-        while (any(filter(lambda x: hasattr(x, 'evaluate'), args))):
+        while (any([x for x in args if hasattr(x, 'evaluate')])):
             args_ = []
             for a in args:
                 if hasattr(a, 'evaluate'):
@@ -116,7 +116,7 @@ class BuiltinFunction:
             args = args_
 
         if (self.use_adicity):
-            if (self.debug): print(self.fn, args, self.padic)
+            if (self.debug): print((self.fn, args, self.padic))
             rval = self.fn(*args)
         else:
             try:
@@ -128,9 +128,9 @@ class BuiltinFunction:
                 raise assert_excep
             except Exception as excep:
                 # print u"catch exception", excep
-                raise RuntimeException(unicode(excep))
+                raise RuntimeException(str(excep))
         env.clear_call(
-            copyvars=self.name in ["execute", "eval", u'இயக்கு', u'மதிப்பீடு'])
+            copyvars=self.name in ["execute", "eval", 'இயக்கு', 'மதிப்பீடு'])
         ## pop stuff into the call-stack
         env.return_function(self.name)
         return rval
@@ -202,8 +202,8 @@ class Environment(CountDownTimer):
         self.readonly_global_vars = {
             'True': True,
             'False': False,
-            u"மெய்": True,
-            u"பொய்": False
+            "மெய்": True,
+            "பொய்": False
         }  # dict of global vars
         self.clear_break_return_continue()
 
@@ -216,7 +216,7 @@ class Environment(CountDownTimer):
         return
 
     def __del__(self):
-        if (self.debug): print(u"deleting environment")
+        if (self.debug): print("deleting environment")
 
     def enable_profiling(self):
         self.validate_timer()
@@ -251,9 +251,9 @@ class Environment(CountDownTimer):
                 self.clear_call()
 
         for i in range(1, len(self.call_stack)):
-            print(u"%sError in function '%s'%s:" %
-                  (u" " *
-                   (i - 1), self.call_stack[i][0], self.call_stack[i][1]))
+            print(("%sError in function '%s'%s:" %
+                  (" " *
+                   (i - 1), self.call_stack[i][0], self.call_stack[i][1])))
         while len(self.call_stack) > 0:
             tos, _ = self.call_stack.pop()
             # print(u"Error in location %s"%str(tos))
@@ -306,13 +306,13 @@ class Environment(CountDownTimer):
     def __unicode__(self):
         if (self.debug):
             return repr(self)
-        return u"<env>"
+        return "<env>"
 
     def __repr__(self):
-        retval = u"CallStack =>" + unicode(self.call_stack) + u"\n" \
-                                                              u"LocalVars =>" + unicode(self.local_vars) + u"\n" \
-                                                                                                           u"ArgStack =>" + unicode(
-            self.arg_stack) + u"\n"
+        retval = "CallStack =>" + str(self.call_stack) + "\n" \
+                                                              "LocalVars =>" + str(self.local_vars) + "\n" \
+                                                                                                           "ArgStack =>" + str(
+            self.arg_stack) + "\n"
         return retval
 
     def set_retval(self, rval):
@@ -355,13 +355,13 @@ class Environment(CountDownTimer):
     def set_args(self, val):
         self.validate_timer()
         """ manage a global argument stack """
-        self.dbg_msg("setting args " + unicode(val))
+        self.dbg_msg("setting args " + str(val))
         return self.arg_stack.append(val)
 
     def set_local(self, vars):
         self.validate_timer()
         self.local_vars.append(vars)
-        self.dbg_msg("setting locals " + unicode(vars))
+        self.dbg_msg("setting locals " + str(vars))
         self.clear_break_return_continue()
         return
 
@@ -390,7 +390,7 @@ class Environment(CountDownTimer):
         """ someday do global_id """
         self.validate_timer()
         if idee in self.readonly_global_vars:
-            raise Exception(u"Error: Attempt to reassign constant %s" % idee)
+            raise Exception("Error: Attempt to reassign constant %s" % idee)
         if (len(self.local_vars) > 0):
             d = self.local_vars[-1]
         else:
@@ -400,7 +400,7 @@ class Environment(CountDownTimer):
         #    self.global_vars[idee] = val
         # else:
         d[idee] = val
-        self.dbg_msg("set_id: " + unicode(idee) + " = " + unicode(val))
+        self.dbg_msg("set_id: " + str(idee) + " = " + str(val))
         return
 
     def get_id(self, idee):
@@ -415,17 +415,17 @@ class Environment(CountDownTimer):
             raise RuntimeException("Identifier %s not found" % idee)
         variables = self.local_vars[-1]
         val = variables[idee]
-        self.dbg_msg("get_id: val = " + unicode(val))
+        self.dbg_msg("get_id: val = " + str(val))
         return val
 
-    def call_function(self, fn, callsite=u""):
+    def call_function(self, fn, callsite=""):
         """ set call stack, used in function calls. Also check overflow"""
         self.validate_timer()
         if (len(self.call_stack) >= self.max_recursion_depth):
             raise RuntimeException("Maximum recursion depth [ " +
-                                   unicode(self.max_recursion_depth) +
+                                   str(self.max_recursion_depth) +
                                    " ] exceeded; stack overflow.")
-        self.dbg_msg(u"calling function" + unicode(fn) + callsite)
+        self.dbg_msg("calling function" + str(fn) + callsite)
         if (self.is_profiling()):
             self.profiler.add_function(fn)
         self.call_stack.append((fn, callsite))

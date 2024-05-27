@@ -27,7 +27,7 @@ class ErrorException(Exception):
 
     def __unicode__(self):
         ##works in python2.6
-        return u" ".join(list(map(lambda x: u"%s" % x, self.args)))
+        return " ".join(list(["%s" % x for x in self.args]))
 
 
 class ScannerException(ErrorException):
@@ -55,7 +55,7 @@ class SemanticException(ErrorException):
         self.args = [Messages.PARSE_ERROR, desc]
 
     def __unicode__(self):
-        return u"Semantic error in program: %s" % (
+        return "Semantic error in program: %s" % (
             ErrorException.__unicode__(self))
 
 

@@ -7,7 +7,7 @@
 ## Ezhil language Interpreter via Web
 
 ## Ref: http://wiki.python.org/moin/BaseHttpServer
-from __future__ import print_function
+
 import time
 
 import sys, os
@@ -19,7 +19,7 @@ from ezhil import EzhilFileExecuter #, EzhilInterpExecuter
 #from os import unlink
 import cgi
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import re
 
 class EzhilWeb():
@@ -60,7 +60,7 @@ class EzhilWeb():
         """ filter program execution output for Ezhil interpreter or Python stack traces"""
         FAILED_STRINGS = ["Traceback (most recent call last)",
                           "Run-time error Cannot Find Identifier"]
-        return any(filter( lambda x: progout.find(x) > -1, FAILED_STRINGS))
+        return any([x for x in FAILED_STRINGS if progout.find(x) > -1])
     
     def do_ezhil_execute(self,program):
         # execute the Ezhil Interpreter with string @program

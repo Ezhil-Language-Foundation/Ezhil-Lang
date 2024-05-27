@@ -46,15 +46,15 @@ class Profiler(object):
         self.add_function("profile")
 
     def calc_total_time(self):
-        for fname, frec in self.function_records.items():
+        for fname, frec in list(self.function_records.items()):
             frec.total_time = sum(frec.cum_time)
             frec.total_self_time = sum(frec.self_time)
         return
 
     def report_stats(self):
         self.calc_total_time()
-        fnames = self.function_records.keys()
-        frecs = self.function_records.values()
+        fnames = list(self.function_records.keys())
+        frecs = list(self.function_records.values())
 
         if PYTHON3:
             fnames = list(fnames)
@@ -64,11 +64,11 @@ class Profiler(object):
             frecs.sort(
                 lambda rec_x, rec_y: cmp(rec_x.total_time, rec_y.total_time))
         frecs.reverse()
-        print(u"############# Ezhil Code Profile Report ##################")
-        print(u"######## program completed in %g (s) ##############" %
-              frecs[0].total_time)
-        print(u" Function  | N  | Avg(Self)| Avg (Cum)| Total ")
-        print(u"----------------------------------------------------------")
+        print("############# Ezhil Code Profile Report ##################")
+        print(("######## program completed in %g (s) ##############" %
+              frecs[0].total_time))
+        print(" Function  | N  | Avg(Self)| Avg (Cum)| Total ")
+        print("----------------------------------------------------------")
         for rec in frecs:
             rec.name = rec.name.strip()
             if len(rec.name) < 10:
@@ -76,10 +76,10 @@ class Profiler(object):
             else:
                 padded_name = rec.name[0:9]
 
-            print(u"%10s | %3d| %5f | %3f | %5f" % (padded_name, rec.ncalls, \
+            print(("%10s | %3d| %5f | %3f | %5f" % (padded_name, rec.ncalls, \
                                                     (rec.total_self_time / rec.ncalls) / 1e-3, \
-                                                    (rec.total_time / rec.ncalls) / 1e-3, rec.total_time / 1e-3))
-        print(u"##########################################################")
+                                                    (rec.total_time / rec.ncalls) / 1e-3, rec.total_time / 1e-3)))
+        print("##########################################################")
         return
 
     def add_function(self, fname):
@@ -117,7 +117,7 @@ class Profiler(object):
         return
 
 
-if __name__ == u"__main__":
+if __name__ == "__main__":
     pr = Profiler()
     pr.add_new_function('a', time.time())
     time.sleep(1)

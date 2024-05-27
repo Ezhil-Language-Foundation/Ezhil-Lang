@@ -11,16 +11,16 @@ class APITestCase(TestCase):
         self.client = Client()
 
     def test_valid_ezhil_code(self):
-        code = u'பதிப்பி "வணக்கம்!"'
+        code = 'பதிப்பி "வணக்கம்!"'
         response = self.client.post('/api/', content_type='application/json',
                                     data=json.dumps({'code': code}))
-        expected_response = {'result': u"வணக்கம்!\n", 'is_success': True}
+        expected_response = {'result': "வணக்கம்!\n", 'is_success': True}
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content), expected_response)
 
     def test_invalid_ezhil_code(self):
-        code = u'print("welcome")'
+        code = 'print("welcome")'
         response = self.client.post('/api/', content_type='application/json',
                                     data=json.dumps({'code': code}))
         content = json.loads(response.content)

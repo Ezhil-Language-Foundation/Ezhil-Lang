@@ -18,7 +18,7 @@ from .ezhil_program_utils import get_ast
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 try:
     import graphviz as gv
@@ -40,8 +40,8 @@ class Tag(object):
             pfx = " "
         else:
             pfx = ""
-        serialized_attrs = pfx + u" ".join(
-            ["%s=\"%s\" " % (str(k), str(v)) for k, v in attrs.items()])
+        serialized_attrs = pfx + " ".join(
+            ["%s=\"%s\" " % (str(k), str(v)) for k, v in list(attrs.items())])
         self.fileobj.write("%s<%s%s>\n" %
                            (self.tabstr, self.tagname, serialized_attrs))
 
@@ -144,7 +144,7 @@ class GraphVisualizer(TransformVisitor):
         return
 
     def visit_identifier(self, IDobj):
-        self.disp_basic("ID", unicode(IDobj.id))
+        self.disp_basic("ID", str(IDobj.id))
         return
 
     def visit_string(self, string):
@@ -218,7 +218,7 @@ class GraphVisualizer(TransformVisitor):
 
     def visit_return_stmt(self, ret_stmt):
         tobj = Tag(self.file, name="RETURN", tab=self.tab)
-        keyword = u"பின்கொடு"
+        keyword = "பின்கொடு"
         # return may have optional argument
         if hasattr(ret_stmt.rvalue, 'visit'):
             ret_stmt.rvalue.visit(self)
@@ -226,18 +226,18 @@ class GraphVisualizer(TransformVisitor):
 
     def visit_break_stmt(self, break_stmt):
         tobj = Tag(self.file, name="BREAK", tab=self.tab)
-        keyword = u"நிறுத்து"  # EzhilToken.Keywords["break"]
+        keyword = "நிறுத்து"  # EzhilToken.Keywords["break"]
         return
 
     def visit_continue_stmt(self, cont_stmt):
         tobj = Tag(self.file, name="CONTINUE", tab=self.tab)
-        keyword = u"தொடர்"  # EzhilToken.Keywords["continue"]
+        keyword = "தொடர்"  # EzhilToken.Keywords["continue"]
         return
 
     def visit_else_stmt(self, else_stmt):
         tobj = Tag(self.file, name="ELSE", tab=self.tab)
         self.incr()
-        keyword = u"இல்லை"
+        keyword = "இல்லை"
         else_stmt.stmt.visit(self)
         self.decr()
         return
@@ -250,7 +250,7 @@ class GraphVisualizer(TransformVisitor):
         if_elseif_stmt.expr.visit(self)
 
         # IF kw
-        keyword_if = u"ஆனால்"
+        keyword_if = "ஆனால்"
 
         # True-Body
         if_elseif_stmt.body.visit(self)
@@ -269,7 +269,7 @@ class GraphVisualizer(TransformVisitor):
     def visit_end_kw(self):
         # END kw
         # tobj = Tag(name="END",tab=self.tab)
-        keyword_end = u"முடி"
+        keyword_end = "முடி"
 
     def visit_while_stmt(self, while_stmt):
         """
@@ -288,7 +288,7 @@ class GraphVisualizer(TransformVisitor):
         del tobj_while_cond
 
         # While kw
-        keyword_while = u"வரை"
+        keyword_while = "வரை"
 
         # Body
         while_stmt.body.visit(self)
@@ -322,7 +322,7 @@ class GraphVisualizer(TransformVisitor):
         del tobj_for_update
 
         # For kw
-        keyword_for = u"ஆக"
+        keyword_for = "ஆக"
 
         # Body
         for_stmt.body.visit(self)
@@ -351,7 +351,7 @@ class GraphVisualizer(TransformVisitor):
 
     def visit_print_stmt(self, print_stmt):
         tobj = Tag(self.file, name="PRINT", tab=self.tab)
-        keyword = u"பதிப்பி"
+        keyword = "பதிப்பி"
         self.incr()
         print_stmt.exprlst.visit(self)
         self.decr()
@@ -396,7 +396,7 @@ class GraphVisualizer(TransformVisitor):
                    attrs={"name": fndecl_stmt.name})
 
         # Function kw
-        keyword_fn = u"நிரல்பாகம்"
+        keyword_fn = "நிரல்பாகம்"
 
         # name of function
 
@@ -425,5 +425,5 @@ if __name__ == "__main__":
         print("Usage: python ezhil_vsiualizer.py <srcfile1> <srcfile2> ...")
         sys.exit(255)
     for srcfile in sys.argv[1:]:
-        print("processing =>", srcfile)
+        print(("processing =>", srcfile))
         visualizeSourceFile(srcfile)

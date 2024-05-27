@@ -7,13 +7,13 @@
 ## Ezhil language Interpreter via Web
 
 ## Ref: http://wiki.python.org/moin/BaseHttpServer
-from __future__ import print_function
+
 import time
-from ezhil import EzhilFileExecuter, EzhilInterpExecuter
-import BaseHTTPServer, tempfile, threading
-from SimpleHTTPServer import SimpleHTTPRequestHandler
-from SocketServer import ThreadingMixIn
-from CGIHTTPServer import CGIHTTPRequestHandler
+from .ezhil import EzhilFileExecuter, EzhilInterpExecuter
+import http.server, tempfile, threading
+from http.server import SimpleHTTPRequestHandler
+from socketserver import ThreadingMixIn
+from http.server import CGIHTTPRequestHandler
 from os import unlink
 import cgi, cgitb, codecs
 import sys, traceback
@@ -59,19 +59,19 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
     def do_ezhil_execute(self, program):
         # write the input program into a temporary file and execute the Ezhil Interpreter
 
-        program_fmt = u"""<TABLE>
+        program_fmt = """<TABLE>
         <TR><TD>
         <TABLE>
         <TR>
         <TD><font color=\"blue\"><OL>"""
 
-        print(u"Source program")
+        print("Source program")
         print(program)
-        print(u"*" * 60)
+        print("*" * 60)
 
-        program_fmt += u"\n".join(
+        program_fmt += "\n".join(
             ["<li>%s</li>" % (prog_line) for line_no, prog_line in enumerate(program.split('\n'))])
-        program_fmt += u"""</OL></font></TD></TR>\n</TABLE></TD><TD>"""
+        program_fmt += """</OL></font></TD></TR>\n</TABLE></TD><TD>"""
 
         # run the interpreter in a sandbox and capture the output hopefully
         try:
@@ -99,40 +99,40 @@ class BaseEzhilWeb(SimpleHTTPRequestHandler):
             # it from ASCII format I/O since we are in CGI mode.
             progout = progout.decode('utf-8')
             if DEBUG:
-                print(u"output = ")
+                print("output = ")
                 print(progout)
 
             # SUCCESS_STRING = "<H2> Your program executed correctly! Congratulations. </H2>"
             FAILED_STRING = "Traceback (most recent call last)"
             if obj.exitcode != 0 and progout.find(FAILED_STRING) > -1:
-                print(u"Exitcode => ", obj.exitcode)
-                op = u"%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>" % (
+                print("Exitcode => ", obj.exitcode)
+                op = "%s <B>FAILED Execution, with parsing or evaluation error</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>" % (
                 program_fmt, progout)
             else:
                 failed = False
                 obj.exitcode = 0
-                op = u"%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>" % (
+                op = "%s <B>Succeeded Execution</B> for program with output, <BR/> <font color=\"green\"><pre>%s</pre></font></TD></TR></TABLE>" % (
                 program_fmt, progout)
         except Exception as e:
-            print(u"FAILED EXECUTION", str(e))
+            print("FAILED EXECUTION", str(e))
             traceback.print_tb(sys.exc_info()[2])
             failed = True
-            op = u"%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>" % (
+            op = "%s <B>FAILED Execution</B> for program with <font color=\"red\">error <pre>%s</pre> </font></TD></TR></TABLE>" % (
             program_fmt, str(e))
         else:
-            print(u"Output file")
+            print("Output file")
             obj.get_output()
 
-        prev_page = u"""<script>
+        prev_page = """<script>
     document.write("Navigate back to your source program : <a href='#' onClick='history.back();return false;'>Go Back</a>");
 </script><HR/>"""
         # op = ""
         if failed:
-            op = u"<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>" + op
+            op = "<H2> Your program has some errors! Try correcting it and re-evaluate the code</H2><HR/><BR/>" + op
         else:
-            op = u"<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>" + op
+            op = "<H2> Your program executed correctly! Congratulations. </H2><HR/><BR/>" + op
         op = prev_page + op
-        real_op = u"<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n" % op
+        real_op = "<html> <head> <title>Ezhil interpreter</title> </head><body> %s </body></html>\n" % op
 
         # CGI pipe only allows ASCII style strings
         self.wfile.write(real_op.encode('utf-8'))
@@ -149,7 +149,7 @@ HOST_NAME = "localhost"
 PORT_NUMBER = 8080
 
 if __name__ == "__main__":
-    httpd = BaseHTTPServer.HTTPServer((HOST_NAME, PORT_NUMBER), EzhilWeb)
+    httpd = http.server.HTTPServer((HOST_NAME, PORT_NUMBER), EzhilWeb)
     print(time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER))
     try:
         httpd.serve_forever()

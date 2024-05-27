@@ -19,11 +19,11 @@ debug = False
 
 class SimpleNegTests(unittest.TestCase):
     def test_wrong_identifier(self):
-        code = u"f01234\n"
+        code = "f01234\n"
         with self.assertRaises(RuntimeException) as e:
             ezhil_eval(code)
         self.assertTrue('Run-time error: Cannot Find Identifier f01234 at Line 1, col 0.' in str(e.exception))
         return
 
-if __name__ == u"__main__":
+if __name__ == "__main__":
     unittest.main()

@@ -8,5 +8,5 @@ from .ezhil import main
 
 # support 'python -m ezhil' syntax
 # including running files specified at CLI
-if __name__ == u'__main__':
+if __name__ == '__main__':
     main()

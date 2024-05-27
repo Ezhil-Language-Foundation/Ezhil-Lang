@@ -5,7 +5,7 @@
 ## Licensed under GPL Version 3
 ## Certain sections of code are borrowed from public sources and are attributed accordingly.
 
-from __future__ import print_function
+
 
 import codecs
 import multiprocessing
@@ -21,7 +21,7 @@ import ezhil
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 gi.require_version('Gtk','3.0')
 
@@ -36,7 +36,7 @@ def MPRunner_actor(pipe,filename):
     old_stdout = sys.stdout
     old_stderr = sys.stderr
     tmpfilename = tempfile.mktemp()+".n"
-    res_std_out = u""
+    res_std_out = ""
     old_exit = sys.exit
     sys.exit = lambda x: 0
     try:
@@ -46,13 +46,13 @@ def MPRunner_actor(pipe,filename):
         executer.run()
         is_success = True
     except Exception as e:
-        print(u" '{0}':\n{1}'".format(filename, unicode(e)))
+        print(" '{0}':\n{1}'".format(filename, str(e)))
     finally:
-        print(u"######- நிரல் இயக்கி முடிந்தது-######")
+        print("######- நிரல் இயக்கி முடிந்தது-######")
         sys.exit = old_exit
         sys.stdout.flush()
         sys.stdout.close()
-        with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
+        with codecs.open(tmpfilename,"r","utf-8") as fp:
             res_std_out = fp.read()
         sys.stdout = old_stdout
         sys.stderr = old_stderr
@@ -67,7 +67,7 @@ class MPRunner:
     def __init__(self,timeout=60,autorun=False):
         self.timeout = min(timeout,autorun and 5 or timeout)
         self.is_success = False
-        self.res_std_out = u""
+        self.res_std_out = ""
     
     def run(self,filename):
         # Start bar as a process
@@ -83,10 +83,10 @@ class MPRunner:
             p.terminate()
             p.join()
             is_success = False
-            res_std_out = u"இயக்கும் நேரம் %g(s) வினாடிகள் முடிந்தது காலாவதி ஆகியது\n"%self.timeout
+            res_std_out = "இயக்கும் நேரம் %g(s) வினாடிகள் முடிந்தது காலாவதி ஆகியது\n"%self.timeout
         else:
             is_success = False
-            res_std_out = u"தெரியாத பிழை நேர்ந்தது!"
+            res_std_out = "தெரியாத பிழை நேர்ந்தது!"
         self.res_std_out,self.is_success = res_std_out,is_success
         return
 
@@ -105,7 +105,7 @@ class GtkStaticWindow:
         self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.set_default_size(100,150) #vanishingly small size
         self.window.connect("delete-event",Gtk.main_quit)
-        self.window.set_title(u"எழில் இயக்கி சாளரம்")
+        self.window.set_title("எழில் இயக்கி சாளரம்")
         self.window.set_decorated(False)
         self.window.show_all()
         GLib.idle_add( Gtk.main_iteration )
@@ -115,7 +115,7 @@ class GtkStaticWindow:
     def dummy_input(*args):
         message= not args and "Enter Input" or args[0]
         if not args or len(args) < 2:
-            title = u"எழுதி - எழில் மொழி செயலி" #Ezhil language IDE
+            title = "எழுதி - எழில் மொழி செயலி" #Ezhil language IDE
         else:
             title = args[1]
         static_window = GtkStaticWindow.get_instance()
@@ -133,7 +133,7 @@ class GtkStaticWindow:
         dialogWindow.show_all()
         response = dialogWindow.run()
         text = userEntry.get_text() 
-        print(u"#####- உள்ளீடு நிரல்பாகம் இயங்கி முடிந்தது -####")
+        print("#####- உள்ளீடு நிரல்பாகம் இயங்கி முடிந்தது -####")
         if (response == Gtk.ResponseType.OK) and (text != ''):
             return text
         return ""

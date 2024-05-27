@@ -5,13 +5,13 @@
 ## Licensed under GPL Version 3
 ##
 ## Interpreter for Ezhil language
-from __future__ import print_function
+
 
 import sys
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 ## Tx
 from .transform import Visitor, TransformVisitor
@@ -48,16 +48,16 @@ class TransformEntryExitProfile(TransformVisitor):
 
 class TransformSafeModeFunctionCheck(TransformVisitor):
     def __init__(self, **kwargs):
-        self.forbidden_fcn_names = [u'raw_input', u'input', u'fopen', u'open', u'fclose', \
-                                    u'உள்ளீடு', u'turtle', u'கோப்பை_எழுது', u'கோப்பை_திற', u'கோப்பை_மூடு']
+        self.forbidden_fcn_names = ['raw_input', 'input', 'fopen', 'open', 'fclose', \
+                                    'உள்ளீடு', 'turtle', 'கோப்பை_எழுது', 'கோப்பை_திற', 'கோப்பை_மூடு']
         TransformVisitor.__init__(self, **kwargs)
 
     def visit_expr_call(self, expr_call):
         callee = expr_call.func_id.id
         if callee in self.forbidden_fcn_names:
             raise RuntimeException(
-                u"ERROR %s:\n\t %s may not be used in SAFE MODE ." %
-                (self.interpreter.get_fname(), unicode(expr_call)))
+                "ERROR %s:\n\t %s may not be used in SAFE MODE ." %
+                (self.interpreter.get_fname(), str(expr_call)))
         if expr_call.arglist:
             expr_call.arglist.visit(self)
         return
@@ -77,7 +77,7 @@ class TransformSemanticAnalyzer(TransformVisitor):
 
     def visit_expr_call(self, expr_call):
         callee = expr_call.func_id.id
-        if callee == u"__getitem__":
+        if callee == "__getitem__":
             # T.B.D
             pass
         if expr_call.arglist:
@@ -89,11 +89,10 @@ class TransformSemanticAnalyzer(TransformVisitor):
     # check ...
     def visit_assign_stmt(self, assign_stmt):
         if any(
-                map(lambda typename: isinstance(assign_stmt.lvalue, typename),
-                    [Number, String, Boolean, Function])):
+                [isinstance(assign_stmt.lvalue, typename) for typename in [Number, String, Boolean, Function]]):
             raise SemanticException(
                 "Cannot use number, string, constant or functions on LHS of assignment %s"
-                % unicode(assign_stmt))
+                % str(assign_stmt))
         if assign_stmt.lvalue:
             assign_stmt.lvalue.visit(self)
         if assign_stmt.rvalue:
@@ -122,7 +121,7 @@ class TransformSemanticAnalyzer(TransformVisitor):
                 else:
                     raise SemanticException(
                         "Cannot use string with operators other than '+','>=','<=','!=','==','>','<' or '*' at expression %s %s"
-                        % (unicode(binexpr), binexpr.get_pos()))
+                        % (str(binexpr), binexpr.get_pos()))
         else:
             if lhs_is_string or rhs_is_string:
                 if not ((lhs_is_string and rhs_is_string) or \
@@ -130,14 +129,14 @@ class TransformSemanticAnalyzer(TransformVisitor):
                         (rhs_is_string and lhs_id_expr_call)):
                     raise SemanticException(
                         "Cannot join strings and expression at expression %s" %
-                        unicode(binexpr))
+                        str(binexpr))
         return
 
     def visit_import(self, importstmt):
         if not isinstance(importstmt.filename, String):
             raise SemanticException(
                 "Import statement should be a string at time of interpretation at %s"
-                % unicode(importstmt))
+                % str(importstmt))
         return
 
 

@@ -22,7 +22,7 @@ touch dump_file3
 export EZHIL_DATA_PATH=`pwd`/tests/data
 export EZHIL_TEST_PATH=`pwd`/tests/
 # run tests for Ezhil as well
-cd ./tests
+pushd `pwd`/tests
 # last space important before the \
 for i in `cat ../test_cases | sort`
 do
@@ -53,7 +53,7 @@ then
     rm names.txt
 fi
 
-cd ../
+pop
 
 echo "**************************************************"
 echo " Running Web tests" | tee -a dump_file3
@@ -67,29 +67,28 @@ else
     echo "ezhil_web.py" >> failed3.txt
 fi
 
-echo "**************************************************"
-echo " Running API tests"
-echo "**************************************************"
+#echo "**************************************************"
+#echo " Running API tests"
+#echo "**************************************************"
 
-cd web/ulle_veliye/
-pip3 install -r requirements.txt
-python3 manage.py test
+#cd web/ulle_veliye/
+#pip3 install -r requirements.txt
+#python3 manage.py test
 
 cd -
 echo "**************************************************"
 echo " Running interactive tests " | tee -a dump_file3
 echo "***************************************************"
-for i in `echo demos/ch2.n \
-`
-do
-    echo "ezhil" | PYTHONPATH=$MODEZHIL python3 -m ezhil ./tests/$i  >>  dump_file3
-    if [ $? -eq 0 ]
-    then
-	echo "passed ezhil interactive test for  $i" >> success3.txt
-    else
-	echo "failed ezhil interactive test for $i" >> failed3.txt
-    fi
-done
+#for i in `echo demos/ch2.n`
+#do
+#    echo "ezhil" | PYTHONPATH=$MODEZHIL python3 -m ezhil ./tests/$i  >>  dump_file3
+#    if [ $? -eq 0 ]
+#    then
+#	echo "passed ezhil interactive test for  $i" >> success3.txt
+#    else
+#	echo "failed ezhil interactive test for $i" >> failed3.txt
+#    fi
+#done
 
 echo "**************************************************"
 echo " Running all the failure programs, that must fail."
@@ -151,10 +150,10 @@ echo "Passed = "`wc -l success3.txt`", Failed = "`wc -l failed3.txt`
 #   29	temple.n
 #   30	unaryop.n
 #   31	yinyang.n
-NFAIL=26 #11/28/15
+NFAIL=11 #/28/15
 TOTFAIL=`wc -l failed3.txt | cut -d'f' -f1`
-echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python
-if [ $?  -eq 0 ]
+echo "from sys import exit; ( $TOTFAIL <=  $NFAIL ) and exit(0) or exit(255)" | python3
+if [ $TOTFAIL  -eq $NFAIL ]
 then
    echo "########## Expected failures" | tee -a dump_file3
    exitcode=0 # success

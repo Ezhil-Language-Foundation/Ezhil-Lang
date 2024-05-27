@@ -39,5 +39,5 @@ if __name__ == "__main__":
         print("Usage: python ezhil_program_utils.py <srcfile1> <srcfile2> ...")
         sys.exit(255)
     for srcfile in sys.argv[1:]:
-        print("processing =>", srcfile)
+        print(("processing =>", srcfile))
         serializeSourceFile(srcfile)

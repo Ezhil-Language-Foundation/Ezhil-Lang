@@ -4,18 +4,18 @@
 ## (C) 2017 Ezhil Language Foundation
 ## Licensed under GPL Version 3
 
-from __future__ import print_function
+
 import sys
 import time
 import gi
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 gi.require_version('Gtk','3.0')
 from gi.repository import Gtk, GObject
 
-from resources import getResourceFile
+from .resources import getResourceFile
 
 class SplashActivity:
     """

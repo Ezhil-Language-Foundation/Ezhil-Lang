@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-import views
+from . import views
 
 urlpatterns = patterns('',
                        # dynamic views

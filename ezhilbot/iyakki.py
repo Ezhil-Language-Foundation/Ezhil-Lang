@@ -5,7 +5,7 @@
 ## Licensed under GPL Version 3
 ## Certain sections of code are borrowed from public sources and are attributed accordingly.
 
-from __future__ import print_function
+
 
 import codecs
 import multiprocessing
@@ -20,7 +20,7 @@ import ezhil
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 def MPRunner_actor(pipe,filename):
     multiprocessing.freeze_support()
@@ -29,7 +29,7 @@ def MPRunner_actor(pipe,filename):
     old_stdout = sys.stdout
     old_stderr = sys.stderr
     tmpfilename = tempfile.mktemp()+".n"
-    res_std_out = u""
+    res_std_out = ""
     old_exit = sys.exit
     sys.exit = lambda x: 0
     try:
@@ -39,13 +39,13 @@ def MPRunner_actor(pipe,filename):
         executer.run()
         is_success = True
     except Exception as e:
-        print(u" '{0}':\n{1}'".format(filename, unicode(e)))
+        print(" '{0}':\n{1}'".format(filename, str(e)))
     finally:
-        print(u"######- நிரல் இயக்கி முடிந்தது-######")
+        print("######- நிரல் இயக்கி முடிந்தது-######")
         sys.exit = old_exit
         sys.stdout.flush()
         sys.stdout.close()
-        with codecs.open(tmpfilename,u"r",u"utf-8") as fp:
+        with codecs.open(tmpfilename,"r","utf-8") as fp:
             res_std_out = fp.read()
         sys.stdout = old_stdout
         sys.stderr = old_stderr
@@ -60,7 +60,7 @@ class MPRunner:
     def __init__(self,timeout=60,autorun=False):
         self.timeout = min(timeout,autorun and 5 or timeout)
         self.is_success = False
-        self.res_std_out = u""
+        self.res_std_out = ""
     
     def run(self,filename):
         # Start bar as a process
@@ -76,23 +76,23 @@ class MPRunner:
             p.terminate()
             p.join()
             is_success = False
-            res_std_out = u"இயக்கும் நேரம் %g(s) வினாடிகள் முடிந்தது காலாவதி ஆகியது\n"%self.timeout
+            res_std_out = "இயக்கும் நேரம் %g(s) வினாடிகள் முடிந்தது காலாவதி ஆகியது\n"%self.timeout
         else:
             is_success = False
-            res_std_out = u"தெரியாத பிழை நேர்ந்தது!"
+            res_std_out = "தெரியாத பிழை நேர்ந்தது!"
         self.res_std_out,self.is_success = res_std_out,is_success
         return
         
     def __str__(self):
         r = list()
         if self.is_success:
-            r.append(u"SUCCESS")
+            r.append("SUCCESS")
         else:
-            r.append(u"FAILURE")
+            r.append("FAILURE")
             
-        r.append(u"\nOUTPUT:")
+        r.append("\nOUTPUT:")
         r.append(self.res_std_out)
-        return u" ".join(r)
+        return " ".join(r)
         
     def report(self):
         if self.is_success:

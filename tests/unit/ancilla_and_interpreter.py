@@ -3,7 +3,7 @@
 # 
 # This file is part of Ezhil Language test suite
 # 
-from __future__ import print_function
+
 # setup the paths
 from ezhiltests import *
 
@@ -33,7 +33,7 @@ class Interpreter(unittest.TestCase):
 class WebEzhil(unittest.TestCase):
     @unittest.skip("fails w/ redirect mode due to some errors in API change in Python3; TBD")
     def test_timeout_infinite_loop(self):
-        infinite_loop_code = u"""
+        infinite_loop_code = """
 # மாதிரி =>  முடிவிலா சுழற்சி
 # கூகிள் மொழிபெயர்ப்பு பயன்படுத்தி
 

@@ -1,3 +1,62 @@
 #!/bin/bash
 
-./unittest python3
+# run unit tests when previous bits passed
+pushd tests/unit/
+
+# use python3 for testing if passed an arg
+PYTHON=python3
+
+#echo "Using Interpreter $PYTHON"
+
+if [ -e success.txt ];
+then
+    rm success.txt
+fi
+if [ -e failed.txt ];
+then
+    rm failed.txt
+fi
+
+touch success.txt
+touch failed.txt
+
+for i in `ls *.py`
+do
+    echo Running test $i
+    $PYTHON $i
+    if [ $? -eq 0 ]
+    then
+        echo $i >> success.txt
+    else
+        echo $i >> failed.txt
+    fi
+done
+echo ""
+echo "***********Summary of UnitTests******************"
+echo "Passed = "`wc -l success.txt`", Failed = "`wc -l failed.txt`
+echo "*************************************************"
+
+NFAIL=2 #ideally no unittests should fail
+TOTFAIL=`wc -l failed.txt | cut -d'f' -f1`
+echo "from sys import exit; exit( $TOTFAIL !=  $NFAIL )" | python3
+if [ $TOTFAIL  -eq $NFAIL ]
+then
+   echo "Testing Successful!"
+   exitcode=0 # success
+
+   # cleanup only on success
+   rm failed.txt
+   rm success.txt
+else
+   echo "Expecting $NFAIL failures, but found $TOTFAIL failures"
+   echo ""
+   echo "######### LIST OF FAILED FILES ###########"
+   cat failed.txt 
+   echo " "
+   echo "Too few/many failures; some negative tests may have failed"
+   exitcode=255 #failed failures != $NFAIL
+fi
+
+
+popd
+exit $exitcode

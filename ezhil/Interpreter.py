@@ -2,7 +2,7 @@
 ## (C) 2007, 2008, 2013, 2014, 2015 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
-from __future__ import print_function
+
 
 import argparse
 from functools import reduce
@@ -21,11 +21,11 @@ from pprint import pprint
 import time
 import traceback
 import json
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
     string = str
     raw_input = input
 
@@ -62,11 +62,11 @@ from .ezhil_library import Load_URL_APIs
 
 
 def ezhil_keywords():
-    keywords = {u"பதிப்பி": "PRINT", u"தேர்ந்தெடு": "SWITCH",
-                u"தேர்வு": "CASE", u"ஏதேனில்": "OTHERWISE", u"ஆனால்": "IF", u"இல்லைஆனால்": "ELSEIF",
-                u"இல்லை": "ELSE", u"ஆக": "FOR", u"ஒவ்வொன்றாக": "FOREACH", u"இல்": "COMMA",
-                u"வரை": "WHILE", u"செய்": "DO", u"முடியேனில்": "DOWHILE", u"பின்கொடு": "RETURN", u"முடி": "END",
-                u"நிரல்பாகம்": "DEF", u"தொடர்": "CONTINUE", u"நிறுத்து": "BREAK", u"உள்ளடக்கு": "IMPORT",
+    keywords = {"பதிப்பி": "PRINT", "தேர்ந்தெடு": "SWITCH",
+                "தேர்வு": "CASE", "ஏதேனில்": "OTHERWISE", "ஆனால்": "IF", "இல்லைஆனால்": "ELSEIF",
+                "இல்லை": "ELSE", "ஆக": "FOR", "ஒவ்வொன்றாக": "FOREACH", "இல்": "COMMA",
+                "வரை": "WHILE", "செய்": "DO", "முடியேனில்": "DOWHILE", "பின்கொடு": "RETURN", "முடி": "END",
+                "நிரல்பாகம்": "DEF", "தொடர்": "CONTINUE", "நிறுத்து": "BREAK", "உள்ளடக்கு": "IMPORT",
                 "@": "ATRATEOF", "=": "EQUALS", "-": "MINUS",
                 "+": "PLUS", ">": "GT", "<": "LT", ">=": "GTEQ", "<=": "LTEQ",
                 "==": "EQUALITY", "!=": "NEQ", "*": "PROD", "/": "DIV", ",": "COMMA",
@@ -95,17 +95,17 @@ def ezhil_version():
 
 
 def ezhil_copyright():
-    return u"(C) 2007-2016,2021 Muthiah Annamalai, and other contributors."
+    return "(C) 2007-2016,2021 Muthiah Annamalai, and other contributors."
 
 
 # you can also, get your name here, its easy!
 def ezhil_credits():
-    return u"Ezhil language, version %g, was created by Muthiah Annamalai with several contributors." % (
+    return "Ezhil language, version %g, was created by Muthiah Annamalai with several contributors." % (
         ezhil_version())
 
 
 def ezhil_license():
-    return u"Licensed under GPL Version 3"
+    return "Licensed under GPL Version 3"
 
 
 def ezhil_tamil_length(arg):
@@ -170,7 +170,7 @@ class NoClobberDict(dict):
             # print(u"-------> %s"%unicode(self.get(key)))
             traceback.print_stack()
             raise KeyError(
-                u"Dictionary is getting clobbered; key '" + key + "' already present '%s'" % unicode(self.get(key)))
+                "Dictionary is getting clobbered; key '" + key + "' already present '%s'" % str(self.get(key)))
         dict.__setitem__(self, key, val)
 
 
@@ -202,23 +202,23 @@ def ezhil_eval(*args):
 def ezhil_profile(*args):
     global global_interpreter
     env = global_interpreter.env
-    if args[0] == u"begin":
+    if args[0] == "begin":
         env.enable_profiling()
         return True
 
     if not env.profiler:
-        raise RuntimeException(u"profile begin should be called before other profile commands like end, results etc")
+        raise RuntimeException("profile begin should be called before other profile commands like end, results etc")
 
-    if args[0] == u"end":
+    if args[0] == "end":
         env.disable_profiling()
         return
 
-    if args[0] == u"results":
+    if args[0] == "results":
         env.report_profiling()
         env.reset_profiling()
         return
 
-    raise RuntimeException(u"profile command used with unknown argument %s" % args[0])
+    raise RuntimeException("profile command used with unknown argument %s" % args[0])
 
 
 def ezhil_execute(*args):
@@ -228,7 +228,7 @@ def ezhil_execute(*args):
     debug = global_interpreter.debug
 
     if len(args) < 1:
-        raise RuntimeException(u"ezhil_execute: missing filename argument")
+        raise RuntimeException("ezhil_execute: missing filename argument")
     if (debug): print(args[0])
     lexer = EzhilLex(fname=args[0])
     if (debug): lexer.dump_tokens()
@@ -302,29 +302,29 @@ class Interpreter(DebugUtils):
         else:
             user_prefix = args[0]
 
-        print(u"######### Builtin Function ########")
+        print("######### Builtin Function ########")
         if not user_prefix:
             pos = 0
             for xpos, fcn in enumerate(self.builtin_map.keys()):
                 if (user_prefix and not fcn.startswith(user_prefix)):
                     continue
                 pos = pos + 1
-                print(u"%03d> %s" % (pos, unicode(fcn)))
+                print("%03d> %s" % (pos, str(fcn)))
             return
 
-        print(u"######### Functions - Library + User defined - ########")
+        print("######### Functions - Library + User defined - ########")
         pos = 0
         for xpos, fcn in enumerate(self.function_map.keys()):
             if (user_prefix and not fcn.startswith(user_prefix)):
                 continue
             pos = pos + 1
-            print(u"%03d> %s" % (pos, unicode(fcn)))
+            print("%03d> %s" % (pos, str(fcn)))
 
     def add_blind_fcns(self, bfn, b):
         """ an internal method to reduce repetition """
         if (not inspect.ismethod(bfn)
                 and not inspect.isclass(bfn)
-                and isinstance(bfn, collections.Callable)):
+                and callable(bfn)):
             self.dbg_msg("adding: " + b);
             self.builtin_map[b] = BlindBuiltins(bfn, b);
         else:
@@ -342,7 +342,7 @@ class Interpreter(DebugUtils):
             bfn = getattr(os, b)
             if str(b).find('exec') >= 0 or str(b).find('spawn') >= 0:
                 continue
-            if PYTHON3 and b == u"replace":
+            if PYTHON3 and b == "replace":
                 continue
             self.add_blind_fcns(bfn, b)
 
@@ -374,7 +374,7 @@ class Interpreter(DebugUtils):
             fp = codecs.open(*args)
             return fp
         except Exception as e:
-            print(u"WARNING : cannot open file %s with exception %s", args[0], str(e))
+            print("WARNING : cannot open file %s with exception %s", args[0], str(e))
         return -1
 
     @staticmethod
@@ -384,7 +384,7 @@ class Interpreter(DebugUtils):
             assert (hasattr(args[0], 'close'))
             args[0].close()
         except Exception as e:
-            print(u"WARNING: file_close failed with exception %s" % str(e))
+            print("WARNING: file_close failed with exception %s" % str(e))
             return -1
         return 0
 
@@ -418,7 +418,7 @@ class Interpreter(DebugUtils):
         try:
             op = EzhilCustomFunction.raw_input(args)
         except KeyboardInterrupt as e:
-            print(u"\nTo exit the program type : exit or press CTRL + D on your keyboard")
+            print("\nTo exit the program type : exit or press CTRL + D on your keyboard")
             return String("")
         return String(op)
 
@@ -427,7 +427,7 @@ class Interpreter(DebugUtils):
         try:
             op = eval(EzhilCustomFunction.raw_input(args))
         except KeyboardInterrupt as e:
-            print(u"\nTo exit the program type : exit or press CTRL + D on your keyboard")
+            print("\nTo exit the program type : exit or press CTRL + D on your keyboard")
             return Number(0)
         if (isinstance(op, int) or isinstance(op, float)):
             return Number(0.0 + op)
@@ -436,7 +436,7 @@ class Interpreter(DebugUtils):
     @staticmethod
     def SPRINTF_worker(*args):
         if (len(args) < 1):
-            raise Exception(u'Not enough arguments to printf() function')
+            raise Exception('Not enough arguments to printf() function')
         fmt = args[0]
         arg = tuple(args[1:]);
         opstr = fmt % arg;
@@ -456,7 +456,7 @@ class Interpreter(DebugUtils):
     @staticmethod
     def ezhil_reverse(*args):
         if (len(args) != 1): raise Exception('One argument alone expected to reverse function')
-        if (isinstance(args[0], str) or isinstance(args[0], unicode)):
+        if (isinstance(args[0], str) or isinstance(args[0], str)):
             return String(args[0][::-1])  # string-reverse
 
         return list.reverse(args[0])
@@ -487,8 +487,8 @@ class Interpreter(DebugUtils):
 
     def install_builtins(self):
         """ populate with the builtin functions"""
-        self.builtin_map[u'printf'] = BlindBuiltins(Interpreter.PRINTF, u'printf', self.debug)
-        self.builtin_map[u'sprintf'] = BlindBuiltins(Interpreter.SPRINTF, u'sprintf', self.debug)
+        self.builtin_map['printf'] = BlindBuiltins(Interpreter.PRINTF, 'printf', self.debug)
+        self.builtin_map['sprintf'] = BlindBuiltins(Interpreter.SPRINTF, 'sprintf', self.debug)
 
         self.builtin_map['abs'] = BlindBuiltins(abs, 'abs', self.debug)
         self.builtin_map['all'] = BlindBuiltins(all, 'all', self.debug)
@@ -522,9 +522,9 @@ class Interpreter(DebugUtils):
 
         # skip these system functions
         self.builtin_map['eval'] = BlindBuiltins(ezhil_eval, 'eval', self.debug)
-        self.builtin_map[u'மதிப்பீடு'] = self.builtin_map['eval']
+        self.builtin_map['மதிப்பீடு'] = self.builtin_map['eval']
         self.builtin_map['execute'] = BlindBuiltins(ezhil_execute, 'execute', self.debug)
-        self.builtin_map[u'இயக்கு'] = self.builtin_map['execute']
+        self.builtin_map['இயக்கு'] = self.builtin_map['execute']
 
         self.builtin_map['profile'] = BlindBuiltins(ezhil_profile, 'profile', self.debug)
         # self.builtin_map['execfile']=BlindBuiltins(execfile,'execfile',self.debug)
@@ -558,7 +558,7 @@ class Interpreter(DebugUtils):
             self.builtin_map['memoryview'] = BlindBuiltins(memoryview, 'memoryview', self.debug)
         except NameError as ie:
             if (self.debug):
-                print(u"Name Error:", unicode(ie))
+                print("Name Error:", str(ie))
 
         # self.builtin_map['min']=BlindBuiltins(min,'min',self.debug)
         self.builtin_map['next'] = BlindBuiltins(next, 'next', self.debug)
@@ -605,11 +605,11 @@ class Interpreter(DebugUtils):
         self.builtin_map["raw_input"] = BuiltinFunction(Interpreter.RAWINPUT, "raw_input")
 
         # keywords
-        self.add_builtin("keywords", lambda: ezhil_keywords()[0], nargin=0, ta_alias=u"குறிசொற்கள்")
+        self.add_builtin("keywords", lambda: ezhil_keywords()[0], nargin=0, ta_alias="குறிசொற்கள்")
 
         # assert
         self.builtin_map["assert"] = BuiltinFunction(Interpreter.ezhil_assert, "assert")
-        self.builtin_map[u"உறுதிப்படுத்த"] = self.builtin_map["assert"]
+        self.builtin_map["உறுதிப்படுத்த"] = self.builtin_map["assert"]
 
         # str - used for simple serialization in Ezhil
         self.builtin_map["str"] = BuiltinFunction(str, "str")
@@ -618,18 +618,18 @@ class Interpreter(DebugUtils):
         self.builtin_map["sys_platform"] = BuiltinFunction(lambda: sys.platform, "sys_platform", padic=0)
 
         # sleep/pause
-        self.add_builtin("sleep", ezhil_sleep, nargin=1, ta_alias=u"உரங்கு")
+        self.add_builtin("sleep", ezhil_sleep, nargin=1, ta_alias="உரங்கு")
         self.builtin_map["pause"] = BlindBuiltins(Interpreter.ezhil_pause, "pause")
 
         # date/time
-        self.add_builtin("date_time", ezhil_date_time, nargin=0, ta_alias=u"தேதி_நேரம்")
-        self.add_builtin("time", time.time, nargin=0, ta_alias=u"நேரம்")
-        self.add_builtin("ctime", time.ctime, nargin=1, ta_alias=u"cநேரம்")
+        self.add_builtin("date_time", ezhil_date_time, nargin=0, ta_alias="தேதி_நேரம்")
+        self.add_builtin("time", time.time, nargin=0, ta_alias="நேரம்")
+        self.add_builtin("ctime", time.ctime, nargin=1, ta_alias="cநேரம்")
         self.add_builtin("clock", time.time, nargin=0)
 
         # islist, isnumber predicates
-        self.add_builtin("islist", ezhil_islist, nargin=1, ta_alias=u"பட்டியலா")
-        self.add_builtin("isnumber", ezhil_isnumber, nargin=1, ta_alias=u"எண்ணா")
+        self.add_builtin("islist", ezhil_islist, nargin=1, ta_alias="பட்டியலா")
+        self.add_builtin("isnumber", ezhil_isnumber, nargin=1, ta_alias="எண்ணா")
         # random functions
         aslist = True;
         self.builtin_map["choice"] = BlindBuiltins(random.choice, "choice", self.debug, aslist)
@@ -670,12 +670,12 @@ class Interpreter(DebugUtils):
         self.builtin_map["min"] = BuiltinFunction(min, "min", 2)
         # turtle functions - optional - 
         try:
-            from EZTurtle import EZTurtle
+            from .EZTurtle import EZTurtle
 
             turtle_attrib = EZTurtle.functionAttributes();
             for nargs, fcnName in list(turtle_attrib.items()):
                 for vv in fcnName:
-                    turtlefcn = u"turtle_" + vv;
+                    turtlefcn = "turtle_" + vv;
                     if (self.debug): print(nargs, vv)
                     if (nargs == -1):
                         self.builtin_map[turtlefcn] = BlindBuiltins(getattr(EZTurtle, vv), vv, self.debug)
@@ -683,7 +683,7 @@ class Interpreter(DebugUtils):
                         self.builtin_map[turtlefcn] = BuiltinFunction(getattr(EZTurtle, vv), turtlefcn, nargs)
         except ImportError as ie:
             if (self.debug):
-                print(u"Cannot Import EZTurtle module; ignoring for now")
+                print("Cannot Import EZTurtle module; ignoring for now")
         # all builtin functions should pass the following test:
         # for attr in dir(module):
         #     assert callable( getattr( module, attr ) )
@@ -729,7 +729,7 @@ class Interpreter(DebugUtils):
         self.builtin_map["extend"] = BuiltinFunction(list.extend, "extend", 2)
         self.builtin_map["reverse"] = BuiltinFunction(Interpreter.ezhil_reverse, "reverse", 1)
         self.builtin_map["pop_list"] = BuiltinFunction(list.pop, "pop", 1)
-        self.builtin_map[u"மேல்அழி"] = self.builtin_map["pop_list"]
+        self.builtin_map["மேல்அழி"] = self.builtin_map["pop_list"]
         # dictionary methods - first argument, when required, is always a dict obj
         self.builtin_map["clear"] = BuiltinFunction(dict.clear, "clear", 1)
         self.builtin_map["copy"] = BuiltinFunction(dict.copy, "copy", 1)
@@ -747,40 +747,40 @@ class Interpreter(DebugUtils):
 
         # open-tamil API
         # get tamil letters
-        self.add_builtin("get_tamil_letters", tamil.utf8.get_letters, nargin=1, ta_alias=u"தமிழ்_எழுத்துக்கள்")
-        self.add_builtin(u"த", tamil.utf8.get_letters, nargin=1)
-        self.add_builtin("tamil_length", ezhil_tamil_length, nargin=1, ta_alias=u"தநீளம்")
+        self.add_builtin("get_tamil_letters", tamil.utf8.get_letters, nargin=1, ta_alias="தமிழ்_எழுத்துக்கள்")
+        self.add_builtin("த", tamil.utf8.get_letters, nargin=1)
+        self.add_builtin("tamil_length", ezhil_tamil_length, nargin=1, ta_alias="தநீளம்")
 
         # functions returning constant list of Tamil strings
         self.add_builtin("tamil_letters", lambda: tamil.utf8.tamil_letters,
-                         nargin=0, ta_alias=u"தமிழ்எழுத்து")
+                         nargin=0, ta_alias="தமிழ்எழுத்து")
         self.add_builtin("tamil_uyir", lambda: tamil.utf8.uyir_letters,
-                         nargin=0, ta_alias=u"உயிர்எழுத்து")
+                         nargin=0, ta_alias="உயிர்எழுத்து")
         self.add_builtin("tamil_mei", lambda: tamil.utf8.mei_letters,
-                         nargin=0, ta_alias=u"மெய்எழுத்து")
+                         nargin=0, ta_alias="மெய்எழுத்து")
         self.add_builtin("tamil_kuril", lambda: tamil.utf8.kuril_letters,
-                         nargin=0, ta_alias=u"குரில்எழுத்து")
+                         nargin=0, ta_alias="குரில்எழுத்து")
         self.add_builtin("tamil_nedil", lambda: tamil.utf8.nedil_letters,
-                         nargin=0, ta_alias=u"நேடில்எழுத்து")
+                         nargin=0, ta_alias="நேடில்எழுத்து")
         self.add_builtin("tamil_vallinam", lambda: tamil.utf8.vallinam_letters,
-                         nargin=0, ta_alias=u"வல்லினம்எழுத்து")
+                         nargin=0, ta_alias="வல்லினம்எழுத்து")
         self.add_builtin("tamil_mellinam", lambda: tamil.utf8.mellinam_letters,
-                         nargin=0, ta_alias=u"மெல்லினம்")
+                         nargin=0, ta_alias="மெல்லினம்")
         self.add_builtin("tamil_idayinam", lambda: tamil.utf8.idayinam_letters,
-                         nargin=0, ta_alias=u"இடைனம்எழுத்து")
+                         nargin=0, ta_alias="இடைனம்எழுத்து")
         self.add_builtin("tamil_agaram", lambda: tamil.utf8.agaram_letters,
-                         nargin=0, ta_alias=u"அகரம்எழுத்து")
+                         nargin=0, ta_alias="அகரம்எழுத்து")
         self.add_builtin("tamil_uyirmei", lambda: tamil.utf8.uyirmei_letters,
-                         nargin=0, ta_alias=u"உயிர்மெய்எழுத்து")
+                         nargin=0, ta_alias="உயிர்மெய்எழுத்து")
 
         self.add_builtin("tamil_istamil_prefix", tamil.utf8.istamil_prefix,
                          nargin=1)
         self.add_builtin("tamil_all_tamil", tamil.utf8.all_tamil,
-                         nargin=1, ta_alias=u"தனித்தமிழா")
+                         nargin=1, ta_alias="தனித்தமிழா")
         self.add_builtin("tamil_hastamil", tamil.utf8.has_tamil,
-                         nargin=1, ta_alias=u"தமிழ்கொண்டதா")
+                         nargin=1, ta_alias="தமிழ்கொண்டதா")
         self.add_builtin("tamil_reverse_word", tamil.utf8.reverse_word,
-                         nargin=1, ta_alias=u"அந்தாதிமாற்று")
+                         nargin=1, ta_alias="அந்தாதிமாற்று")
         return True
 
     def __del__(self):
@@ -788,11 +788,11 @@ class Interpreter(DebugUtils):
             print("deleting Interpreter...")
 
     def __repr__(self):
-        rval = u"[Interpreter: "
-        rval = rval + u"[Functions["
+        rval = "[Interpreter: "
+        rval = rval + "[Functions["
         for k in list(self.function_map.keys()):
-            rval = rval + u"\n " + unicode(self.function_map[k])
-        rval = rval + u"]] " + unicode(self.ast) + u"]\n"
+            rval = rval + "\n " + str(self.function_map[k])
+        rval = rval + "]] " + str(self.ast) + "]\n"
         return rval
 
     def parse(self):
@@ -857,7 +857,7 @@ class REPL(Cmd):
             @debug the boolean """
         Cmd.__init__(self)
         ## ala-Python like
-        self.banner = u"""எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Sat Mar 13 11:47:22 PST 2021)
+        self.banner = """எழில் - ஒரு தமிழ் நிரலாக்க மொழி (Sat Mar 13 11:47:22 PST 2021)
 Ezhil : A Tamil Programming Language - version %g, (C) 2007-2017,2021 Ezhil Language Foundation.
 Type "help", "copyright", "credits" or "license" for more information.""" % ezhil_version()
 
@@ -867,19 +867,19 @@ Type "help", "copyright", "credits" or "license" for more information.""" % ezhi
         self.debug = debug
         self.line_no = 1
         self.env = None  ## get the first instance from evaluate_interactive
-        self.prevlines = u''  ## support for continued lines
+        self.prevlines = ''  ## support for continued lines
         self.cmdloop()
 
     def parseline(self, line):
-        arg, cmd = u"", u""
+        arg, cmd = "", ""
         line = line.strip()
-        if line in [u"exit", u"help", u"EOF", u"copyright", u"credits", u"license"]:
+        if line in ["exit", "help", "EOF", "copyright", "credits", "license"]:
             cmd = line
-            line = line + u"()"
+            line = line + "()"
         return [cmd, arg, line]
 
     def update_prompt(self):
-        self.prompt = u"%s %d>> " % (self.lang, self.line_no)
+        self.prompt = "%s %d>> " % (self.lang, self.line_no)
 
     def continuedline(self):
         return len(self.prevlines) > 0
@@ -887,7 +887,7 @@ Type "help", "copyright", "credits" or "license" for more information.""" % ezhi
     def preloop(self):
         if not self.continuedline():
             self.update_prompt()
-        print(u"%s" % (self.banner))
+        print("%s" % (self.banner))
 
     def emptyline(self):
         pass
@@ -897,11 +897,11 @@ Type "help", "copyright", "credits" or "license" for more information.""" % ezhi
         self.line_no += 1
         # line = unicode(line)
         if (self.debug): print("evaluating line", line)
-        if (line == u'exit()'): self.exit_hook(doExit=True)
+        if (line == 'exit()'): self.exit_hook(doExit=True)
         try:
             self.lexer.set_line_col([self.line_no, 0])
             if len(self.prevlines) > 0:
-                total_line = self.prevlines + u'\n' + line
+                total_line = self.prevlines + '\n' + line
             else:
                 total_line = line
             self.lexer.tokenize(total_line)
@@ -924,31 +924,31 @@ Type "help", "copyright", "credits" or "license" for more information.""" % ezhi
                     print("Mismatched braces")
                     for idx in nbraces:
                         print(idx)
-                self.prevlines += u'\n' + line
+                self.prevlines += '\n' + line
                 self.lexer.reset()  # reset lexer
                 return
             else:
                 if (self.debug): print("Braces matched")
-                self.prevlines = u''
+                self.prevlines = ''
             [line_no, c] = self.lexer.get_line_col(0)
             if (self.debug): self.lexer.dump_tokens()
 
-            self.prevlines = u''  # erase prev
+            self.prevlines = ''  # erase prev
             self.parse_eval.parse()
             if (self.debug):
-                print(u"*" * 60);
+                print("*" * 60);
             TransformSemanticAnalyzer(interpreter=self.parse_eval, debug=self.debug)
             # TransformConstantFolder( interpreter = self.parse_eval, debug=self.debug)
 
             [rval, self.env] = self.parse_eval.evaluate_interactive(self.env)
             if self.debug:
-                print(u"return value", unicode(rval))
+                print("return value", str(rval))
             if hasattr(rval, 'evaluate'):
                 pprint(rval.__str__())
             elif hasattr(rval, '__str__'):  # print everything except a None object
                 pprint(rval)
         except Exception as excep:
-            print(u"Exception in code, at line %d,  \"%s\" \n >>>>>>> %s " % (self.line_no - 1, line, unicode(excep)))
+            print("Exception in code, at line %d,  \"%s\" \n >>>>>>> %s " % (self.line_no - 1, line, str(excep)))
             self.lexer.reset()
             if (self.debug):
                 raise excep
@@ -958,15 +958,15 @@ Type "help", "copyright", "credits" or "license" for more information.""" % ezhi
         self.update_prompt()
 
     def do_EOF(self, line):
-        print(u"\n")
+        print("\n")
         self.exit_hook()
         return True
 
     def exit_hook(self, doExit=False):
-        if (self.lang == u"எழில்"):
-            print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******")
+        if (self.lang == "எழில்"):
+            print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******")
         else:
-            print(u"******* Goodbye! Now have a nice day *******")
+            print("******* Goodbye! Now have a nice day *******")
         if doExit:
             sys.exit(0)
         return
@@ -977,31 +977,31 @@ def get_prog_name(lang):
     prog_name = None
     debug = False
     parser = argparse.ArgumentParser(prog=lang)
-    parser.add_argument(u"files", nargs='*', default=[])
-    parser.add_argument(u"-debug", action=u"store_true",
+    parser.add_argument("files", nargs='*', default=[])
+    parser.add_argument("-debug", action="store_true",
                         default=False,
-                        help=u"enable debugging information on screen")
-    parser.add_argument(u"-tamilencoding", default=u"UTF-8",
-                        help=u"option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
-    parser.add_argument(u"-profile", action=u"store_true",
+                        help="enable debugging information on screen")
+    parser.add_argument("-tamilencoding", default="UTF-8",
+                        help="option to specify other file encodings; supported  encodings are TSCII, and UTF-8")
+    parser.add_argument("-profile", action="store_true",
                         default=None,
-                        help=u"profile the input file(s)")
-    parser.add_argument(u"-stdin", action=u"store_true",
+                        help="profile the input file(s)")
+    parser.add_argument("-stdin", action="store_true",
                         default=None,
-                        help=u"read input from the standard input")
-    parser.add_argument(u"-stacksize",
+                        help="read input from the standard input")
+    parser.add_argument("-stacksize",
                         default=128,
-                        help=u"default stack size for the Interpreter")
+                        help="default stack size for the Interpreter")
     args = parser.parse_args()
 
     # do it well w.r.t unicode names
     if args.debug:
-        print(u"===>", args.tamilencoding, u" | ===> files: ".join(args.files))
+        print("===>", args.tamilencoding, " | ===> files: ".join(args.files))
     error_fcn = lambda: parser.print_help() or sys.exit(-1)
     if (len(args.files) == 0 and (not args.stdin)):
         error_fcn()
     if not (args.tamilencoding in ["utf-8", "tscii", "TSCII", "UTF-8"]):
-        print(u"ERROR: Unsupported encoding %s; use values TSCII or UTF-8, or see Help" % args.tamilencoding)
+        print("ERROR: Unsupported encoding %s; use values TSCII or UTF-8, or see Help" % args.tamilencoding)
         error_fcn()
     prog_name = args.files
     debug = args.debug
@@ -1010,8 +1010,8 @@ def get_prog_name(lang):
     profile = args.profile and True or False
     stacksize = int(args.stacksize)
     if dostdin and profile:
-        print(u"ERROR: Cannot run profiling and input from console")
+        print("ERROR: Cannot run profiling and input from console")
         error_fcn()
     if args.debug:
-        print(u"###### chosen encoding => ", encoding, stacksize)
+        print("###### chosen encoding => ", encoding, stacksize)
     return [prog_name, debug, dostdin, encoding, stacksize, profile]

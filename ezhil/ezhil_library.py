@@ -2,7 +2,7 @@
 ## (C) 2007, 2008, 2013, 2014, 2015 Muthiah Annamalai,
 ## Licensed under GPL Version 3
 ##
-from __future__ import print_function
+
 import sys
 from .runtime import BuiltinFunction
 import json
@@ -14,7 +14,7 @@ if PYTHON3:
     from urllib.request import urlopen
 else:
     # Fall back to Python 2's urllib2
-    from urllib2 import urlopen
+    from urllib.request import urlopen
 
 
 def ezhil_urlopen(*args):

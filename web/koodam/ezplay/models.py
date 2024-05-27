@@ -9,7 +9,7 @@ class Snippet(models.Model):
     last_updated = models.DateTimeField()
     
     def __unicode__(self):
-        return "snippet<name="+self.prefix+", last_edited="+unicode(self.last_updated)+">"
+        return "snippet<name="+self.prefix+", last_edited="+str(self.last_updated)+">"
 
 # db of recently saved/evaluated snippets on website - across users
 class RecentSnippets(models.Model):

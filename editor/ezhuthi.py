@@ -5,7 +5,7 @@
 ## Licensed under GPL Version 3
 ## Certain sections of code are borrowed from public sources and are attributed accordingly.
 
-from __future__ import print_function
+
 
 import codecs
 import multiprocessing
@@ -21,28 +21,28 @@ try:
     gi.require_version('Gtk','3.0')
     from gi.repository import Gtk, GObject, GLib, Pango
 except ImportError as ie:
-    print(u"Your system cannot run Ezhil on this Linux system; please install additional libraries")
-    print(u"called any of python-gi, python-gobject or pygobject3 using rpm or apt-get methods for your Linux distribution.")
-    print(u"\te.g. $sudo apt-get install python-gi")
-    print(u"\t may resolve your dependencies and install the Gtk libraries for you.")
-    print(u"Report this problem to Ezhil Language team at ezhillang@gmail.com and attach extra stack trace like:")
-    print(u"strace ./ezhuthi.sh > strace.output")
+    print("Your system cannot run Ezhil on this Linux system; please install additional libraries")
+    print("called any of python-gi, python-gobject or pygobject3 using rpm or apt-get methods for your Linux distribution.")
+    print("\te.g. $sudo apt-get install python-gi")
+    print("\t may resolve your dependencies and install the Gtk libraries for you.")
+    print("Report this problem to Ezhil Language team at ezhillang@gmail.com and attach extra stack trace like:")
+    print("strace ./ezhuthi.sh > strace.output")
     sys.exit(-1)
 
-import OSKeyboardWidget
-from DocView import DocBrowserWindow
-from ExampleHelper import ExampleBrowserWindow
-from SplashActivity import SplashActivity
-from syntaxhighlighing import EzhilSyntaxHighlightingEditor
-from iyakki import MPRunner
-from ezhilpopuptools import PopupForTextView
-from resources import getResourceFile
+from . import OSKeyboardWidget
+from .DocView import DocBrowserWindow
+from .ExampleHelper import ExampleBrowserWindow
+from .SplashActivity import SplashActivity
+from .syntaxhighlighing import EzhilSyntaxHighlightingEditor
+from .iyakki import MPRunner
+from .ezhilpopuptools import PopupForTextView
+from .resources import getResourceFile
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
-from undobuffer import UndoableBuffer
+from .undobuffer import UndoableBuffer
 
 # This section of code is borrowed from https://github.com/pyinstaller/pyinstaller/wiki/Recipe-Multiprocessing
 # override multiprocessing pipe in Windows for packaging purposes.
@@ -81,15 +81,15 @@ if sys.platform.startswith('win'):
 
 # Class from http://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html?highlight=textbuffer
 class SearchDialog(Gtk.Dialog):
-    def __init__(self, parent, text=u""):
-        Gtk.Dialog.__init__(self, u"தேடு", parent,
+    def __init__(self, parent, text=""):
+        Gtk.Dialog.__init__(self, "தேடு", parent,
             Gtk.DialogFlags.MODAL, buttons=(
             Gtk.STOCK_FIND, Gtk.ResponseType.OK,
             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
         
         box = self.get_content_area()
         
-        label = Gtk.Label(u"உரையில் தேட வேண்டிய சொல்லை இங்கு இடுக:")
+        label = Gtk.Label("உரையில் தேட வேண்டிய சொல்லை இங்கு இடுக:")
         box.add(label)
         
         self.entry = Gtk.Entry()
@@ -118,10 +118,10 @@ class EzhuthiSettings(object):
         self.data['timeout'] = timeout
 
     def get_font(self):
-        return u"%s %s"%(self.data['font-face'],self.data['font-size'])
+        return "%s %s"%(self.data['font-face'],self.data['font-size'])
     def update_font(self,font):
-        parts = font.split(u" ")
-        self.data['font-face'] = u"".join(parts[:-1])
+        parts = font.split(" ")
+        self.data['font-face'] = "".join(parts[:-1])
         self.data['font-size'] = parts[-1]
 
     def get_license_accepted(self):
@@ -131,19 +131,19 @@ class EzhuthiSettings(object):
 
     def __init__(self,filename):
         object.__init__(self)
-        self.data = {'font-face':u'Sans','font-size':u'8','text-color':u'black',
-                     'keyword-color':u'blue','home-directory':os.getcwd(),'timeout':60,
+        self.data = {'font-face':'Sans','font-size':'8','text-color':'black',
+                     'keyword-color':'blue','home-directory':os.getcwd(),'timeout':60,
                      'accept_license':False}
         try:
             #print( os.path.join(os.getcwd(),EzhuthiSettings.FILENAME) )
             with codecs.open(os.path.join(os.getcwd(),EzhuthiSettings.FILENAME),"r","UTF-8") as fp:
-                for key,val in json.load(fp).items():
+                for key,val in list(json.load(fp).items()):
                     self.data[key] = val
         except IOError as ioe:
-            print(u"First-time creation of Ezhuthi settings; ignoring exception - %s"%ioe)
+            print("First-time creation of Ezhuthi settings; ignoring exception - %s"%ioe)
         
 class EditorState:
-    LICENSE_NOTE = u"""
+    LICENSE_NOTE = """
 
 !!! இந்த உரிமம் ஒப்புக்கொண்டால் மட்டுமே நீங்கள  இந்த செயலியை பயன்படுத்தலாம்!!!
 
@@ -195,11 +195,11 @@ class EditorState:
         self.sw = None
         self.autorun = False
         # pure editor state
-        self.filename = os.path.join(u'examples',u'untitled.n')
+        self.filename = os.path.join('examples','untitled.n')
         self.file_modified = False
         self.count = 0
         # cosmetics
-        self.TitlePrefix = u" -சுவடு எழுதி"
+        self.TitlePrefix = " -சுவடு எழுதி"
 
     def save_settings(self):
         self.settings.update_font(self.default_font)
@@ -225,7 +225,7 @@ class EditorState:
             return False
 
         dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.INFO,
-            Gtk.ButtonsType.OK_CANCEL,u"எழில் - தமிழ் கணினி மொழி உரிமம்")
+            Gtk.ButtonsType.OK_CANCEL,"எழில் - தமிழ் கணினி மொழி உரிமம்")
         dialog.format_secondary_text(EditorState.LICENSE_NOTE)
         dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         response = dialog.run()
@@ -257,7 +257,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             #d.load_from_data("default * { font : \"Latha 7\" }")
             #self.window.set_icon_from_file(getResourceFile("img","ezhil_square_2015_128px.png"))
         except Exception as ie:
-            print(u"Message: loading image or CSS style failed - %s"%ie)
+            print("Message: loading image or CSS style failed - %s"%ie)
         self.window.set_resizable(False) #fix the window
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.console_textview = self.builder.get_object("codeExecutionTextView")
@@ -304,9 +304,9 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         self.tag_pass = None
         self.refresh_tags()
         # add keywords bar
-        self.keywords8 = [u"பதிப்பி",u"முடி",u"நிரல்பாகம்",u"தொடர்",u"நிறுத்து",u"ஒவ்வொன்றாக",u"இல்",u"ஆனால்",u"இல்லைஆனால்",u"இல்லை", u"ஆக",u"வரை",u"பின்கொடு",]
-        self.operators16 = [u"@",u"+",u"-",u"*",u"/",u"%",u"^",u"==",u">",u"<",u">=",u"<=",u"!=",u"!=",u"!",u",",u"(",u")",u"{",u"}",u"()",u"[]"]
-        self.forms = [u"@(  )\t ஆனால் \n இல்லை  \n முடி",u" @(  )\t வரை \n முடி",u"நிரல்பாகம்\t உதாரணம் () \n முடி"]
+        self.keywords8 = ["பதிப்பி","முடி","நிரல்பாகம்","தொடர்","நிறுத்து","ஒவ்வொன்றாக","இல்","ஆனால்","இல்லைஆனால்","இல்லை", "ஆக","வரை","பின்கொடு",]
+        self.operators16 = ["@","+","-","*","/","%","^","==",">","<",">=","<=","!=","!=","!",",","(",")","{","}","()","[]"]
+        self.forms = ["@(  )\t ஆனால் \n இல்லை  \n முடி"," @(  )\t வரை \n முடி","நிரல்பாகம்\t உதாரணம் () \n முடி"]
         
         self.widget_keywords = self.builder.get_object("hbox_keywords8")
         self.widget_operators = self.builder.get_object("hbox_operators16")
@@ -428,7 +428,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     # callback for font button:
     def chooseFont(self,widget):
-        fontDlg = Gtk.FontSelectionDialog(parent=self.window,title=u"ஒரு எழுத்துருவை தேர்வு செய்யவும்")
+        fontDlg = Gtk.FontSelectionDialog(parent=self.window,title="ஒரு எழுத்துருவை தேர்வு செய்யவும்")
         fontDlg.set_size_request(550,400)
         #fontDlg.set_font_name(self.default_font)
         # Question: what is a proper Tamil pangram ?
@@ -513,7 +513,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             btn.show()
 
         for kw in self.forms:
-            btn = Gtk.Button(label=u" ".join(re.split("\s+",kw)))
+            btn = Gtk.Button(label=" ".join(re.split("\s+",kw)))
             self.widget_forms.pack_start( btn, True, True, 0)
             btn.connect("clicked",Editor.insert_at_cursor,kw)
             btn.show()
@@ -523,13 +523,13 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         res_std_out,is_success=args
         ed = Editor.get_instance()
         ed.tend = time.time()
-        time_desc = u" %0.3g வினாடி"%(ed.tend - ed.tstart)
+        time_desc = " %0.3g வினாடி"%(ed.tend - ed.tstart)
         ed.console_buffer.set_text( res_std_out )
         tag = is_success and ed.tag_pass or ed.tag_fail
         start = ed.console_buffer.get_start_iter()
         end = ed.console_buffer.get_end_iter()
         ed.console_buffer.apply_tag(tag,start,end)
-        ed.StatusBar.push(0,u"உங்கள் நிரல் '%s' %s %s நேரத்தில் இயங்கி முடிந்தது"%(ed.filename,[u"பிழை உடன்",u"பிழையில்லாமல்"][is_success],time_desc))
+        ed.StatusBar.push(0,"உங்கள் நிரல் '%s' %s %s நேரத்தில் இயங்கி முடிந்தது"%(ed.filename,["பிழை உடன்","பிழையில்லாமல்"][is_success],time_desc))
         if ed.autorun:
             for i in range(1):
                 time.sleep(1)
@@ -545,16 +545,16 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     # Implements Tamil-99 keyboard
     @staticmethod
-    def insert_tamil99_at_cursor(widget,value,lang=u"Tamil"):
+    def insert_tamil99_at_cursor(widget,value,lang="Tamil"):
         ed = Editor.get_instance()
         m_start = ed.textbuffer.get_iter_at_mark(ed.textbuffer.get_insert())
 
         # handle special characters
-        if value == u"\b":
+        if value == "\b":
             ed.textbuffer.backspace(m_start,False,True)
             ed.textview.place_cursor_onscreen()
             return
-        elif value == u"் ":
+        elif value == "் ":
             if not m_start.starts_line():
                 offset = m_start.get_offset()
                 m_prev = ed.textbuffer.get_iter_at_offset(offset-1)
@@ -592,7 +592,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
                 except Exception as e:
                     pass
 
-            if old_value.find(u"் ") >= 0:
+            if old_value.find("் ") >= 0:
                 ed.textbuffer.insert_at_cursor(value)
                 return
 
@@ -609,7 +609,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
                         except Exception as decodeerror:
                             pass
 
-                    if old_value.find(u"் ") >= 0:
+                    if old_value.find("் ") >= 0:
                         ed.textbuffer.backspace(m_start,False,True)
                         ed.textbuffer.insert_at_cursor(value)
                         return
@@ -635,7 +635,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     @staticmethod
     def get_license_text():
-        txt = u"GPL v-3"
+        txt = "GPL v-3"
         try:
             with codecs.open(getResourceFile("LICENSE_notes.txt"),"r","UTF-8") as fp:
                 txt = fp.read()
@@ -647,7 +647,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     def redo_action(*args):
         ed = Editor.get_instance()
         if not ed.textbuffer.can_redo:
-            ed.StatusBar.push(0,u"திருத்தியில் மீட்க்க எதுவும் இல்லை")
+            ed.StatusBar.push(0,"திருத்தியில் மீட்க்க எதுவும் இல்லை")
             return
         ed.textbuffer.redo()
     
@@ -655,7 +655,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     def undo_action(*args):
         ed = Editor.get_instance()
         if not ed.textbuffer.can_undo:
-            ed.StatusBar.push(0,u"திருத்தியில் மாற்ற எதுவும் இல்லை")
+            ed.StatusBar.push(0,"திருத்தியில் மாற்ற எதுவும் இல்லை")
             return
         ed.textbuffer.undo()
     
@@ -675,7 +675,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
             ed.run_syntax_highlighting(text,[m_start,m_end])
         except Exception as e:
             ed.textbuffer.set_text(m_start,m_end,text)
-            print(u"skip exception %s"%e)
+            print("skip exception %s"%e)
         return False #callback was not handled AFAIK
     
     @staticmethod
@@ -693,8 +693,8 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
     @staticmethod
     def clear_buffer(menuitem,arg1=None):
         ed = Editor.get_instance()
-        ed.console_buffer.set_text(u"")
-        ed.StatusBar.push(0,u"நிரல் வெளிப்பாடு அழிக்கப்பட்டது")
+        ed.console_buffer.set_text("")
+        ed.StatusBar.push(0,"நிரல் வெளிப்பாடு அழிக்கப்பட்டது")
     
     @staticmethod
     def reset_new(menuitem,arg1=None):
@@ -702,21 +702,21 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         #Fix bug "When I am working on a file (unsaved) and I click on "Pudhiya" or Ctrl-N, a new blank file is opened and the existing changes are completely lost!"
         if ed.is_edited():
             okcancel=True
-            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
+            respo = Editor.alert_dialog("நிரலை சேமிக்கவில்லை","உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
             if respo == Gtk.ResponseType.OK:
                 try:
                     Editor.save_file(None)
                 except Except as ex:
                     return 
                 if ed.is_edited():
-                    ed.StatusBar.push(0,u"புது நிரல் எழுதமுடியவில்லை!")
+                    ed.StatusBar.push(0,"புது நிரல் எழுதமுடியவில்லை!")
                     return
             elif (respo == Gtk.ResponseType.CANCEL) or (respo == Gtk.ResponseType.DELETE_EVENT):
                 pass #its okay user has chosen to delete the buffer
-                ed.StatusBar.push(0,u"சேமிப்பு செயல்  தவிற்கப்பட்டது; உங்கள் நிரல் சேமிக்கப்படாது!")
+                ed.StatusBar.push(0,"சேமிப்பு செயல்  தவிற்கப்பட்டது; உங்கள் நிரல் சேமிக்கப்படாது!")
                 
         ed.count += 1
-        ed.filename = u"untitled_%d"%ed.count
+        ed.filename = "untitled_%d"%ed.count
         ed.set_title()
         ed.textbuffer = ed.textview.get_buffer()
         ed.textbuffer.set_text("")
@@ -772,8 +772,8 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         ed = Editor.get_instance()
         if ( ed.is_edited() ):
             #document is edited but not saved;
-            msg = u"உங்கள் நிரல் சேமிக்க பட வேண்டும்! அதன் பின்னரே இயக்கலாம்"
-            title = u"இயக்குவதில் பிழை"
+            msg = "உங்கள் நிரல் சேமிக்க பட வேண்டும்! அதன் பின்னரே இயக்கலாம்"
+            title = "இயக்குவதில் பிழை"
             dialog = Gtk.MessageDialog(ed.window, 0, Gtk.MessageType.INFO,
             Gtk.ButtonsType.OK, title) #"Output of Ezhil Code:"
             dialog.format_secondary_text(msg) #res.std_out
@@ -792,7 +792,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         try:
             ed = Editor.get_instance()
             old_fn = ed.filename
-            ed.filename = u"untitled"
+            ed.filename = "untitled"
             Editor.save_file(*args)
         except Exception as e:
             ed.filename = old_fn
@@ -825,8 +825,8 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
                 filename = filename.decode("UTF-8")
             except UnicodeDecodeError as ude:
                 raise Exception(ude)
-        ed.StatusBar.push(0,u"உங்களது நிரல் சேமிக்க பட்டது: " + filename)
-        index = filename.replace(u"\\",u"/").rfind(u"/") + 1
+        ed.StatusBar.push(0,"உங்களது நிரல் சேமிக்க பட்டது: " + filename)
+        index = filename.replace("\\","/").rfind("/") + 1
         text = textbuffer.get_text(textbuffer.get_start_iter() , textbuffer.get_end_iter(),True)
         ed.window.set_title(filename[index:] + ed.TitlePrefix)
         try:
@@ -842,7 +842,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
                 file.write(PYTHON3 and text or text.decode("utf-8"))
                 file.close()
         except Exception as exc:
-            print(u"Warning: syntax highlighting failed for current file")
+            print("Warning: syntax highlighting failed for current file")
             #textbuffer.set_text(text) #no-highlighting text in case of failure
         textbuffer.set_modified(False)
         return
@@ -878,16 +878,16 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         ed = Editor.get_instance()
         if ed.is_edited():
             okcancel=True
-            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
+            respo = Editor.alert_dialog("நிரலை சேமிக்கவில்லை","உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
             if respo == Gtk.ResponseType.OK:
                 try:
                     Editor.save_file(None)
                 except Exception as ioe:
-                    ed.StatusBar.push(0,u"சரியாக நிரலை சேமிக்க முடியவில்லை! நிரல் மூட படாது")
+                    ed.StatusBar.push(0,"சரியாக நிரலை சேமிக்க முடியவில்லை! நிரல் மூட படாது")
                     return
             else:
-                ed.StatusBar.push(0,u"நிரலை சேமிக்கவில்லை. அடுத்த நிரலை திறக்க தயார்.") 
-        ed.load_file(u"untitled_0.n")
+                ed.StatusBar.push(0,"நிரலை சேமிக்கவில்லை. அடுத்த நிரலை திறக்க தயார்.") 
+        ed.load_file("untitled_0.n")
         return
         
     def load_file(self,specific_file=None):
@@ -901,21 +901,21 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         filename = ed.filename
         textbuffer = textview.get_buffer()
         #print("Opened File: " + filename)
-        StatusBar.push(0, filename+u" - நிரல் திறந்தாச்சு")
+        StatusBar.push(0, filename+" - நிரல் திறந்தாச்சு")
         #print("file =>",filename)
-        Window.set_title(filename + u" - சுவடு எழுதி")
+        Window.set_title(filename + " - சுவடு எழுதி")
         try:
-            text = u""
+            text = ""
             with codecs.open(filename, "r","utf-8") as file:
                 text = file.read()
         except IOError as ioe:
-            Window.set_title(u"untitled.n - சுவடு எழுதி")
+            Window.set_title("untitled.n - சுவடு எழுதி")
         #("Setting buffer to contents =>",text)
         textview.set_buffer(textbuffer)
         try:
             ed.run_syntax_highlighting(text)
         except Exception as slxe:
-            StatusBar.push(0,u"இந்த நிரலை '%s', Syntax Highlighting செய்ய முடியவில்லை"%filename)
+            StatusBar.push(0,"இந்த நிரலை '%s', Syntax Highlighting செய்ய முடியவில்லை"%filename)
             textbuffer.set_text(text)
         textview.scroll_to_iter(textbuffer.get_start_iter(),0.0,not True,0.0,0.0)
         textview.grab_focus()
@@ -952,7 +952,7 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
 
     def show_example(self,filename):
         if self.is_edited():
-            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்! அதன் பின்னரே உதாரணங்களை காமிக்க முடியும்")
+            respo = Editor.alert_dialog("நிரலை சேமிக்கவில்லை","உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்! அதன் பின்னரே உதாரணங்களை காமிக்க முடியும்")
             return False
         else:
             self.load_file(filename)
@@ -965,11 +965,11 @@ class Editor(EditorState, EzhilSyntaxHighlightingEditor):
         ed.save_settings()
         if ed.is_edited():
             okcancel=True
-            respo = Editor.alert_dialog(u"நிரலை சேமிக்கவில்லை",u"உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
+            respo = Editor.alert_dialog("நிரலை சேமிக்கவில்லை","உங்கள் நிரல் மாற்றப்பட்டது; இதனை சேமியுங்கள்!",okcancel)
             if respo == Gtk.ResponseType.OK:
                 Editor.save_file(None)
             elif respo == Gtk.ResponseType.CANCEL:
-                ed.StatusBar.push(0,u"வெளியேறு செயல்  தவிற்கப்பட்டது")
+                ed.StatusBar.push(0,"வெளியேறு செயல்  தவிற்கப்பட்டது")
                 if not (isinstance(exit_btn,Gtk.ApplicationWindow) or isinstance(exit_btn,Gtk.ToolButton)):
                     return
         Gtk.main_quit()
@@ -1035,7 +1035,7 @@ def main():
     GObject.threads_init()
     #debug mode: autorun and quit on the file
     if len(sys.argv) > 2:
-        arg_autorun = (sys.argv[2].lower() in [u"-autorun",u"--autorun"])
+        arg_autorun = (sys.argv[2].lower() in ["-autorun","--autorun"])
     else:
         arg_autorun = False
 
@@ -1047,5 +1047,5 @@ def main():
         mainfn(arg_autorun)
 
 # TODO - options for 'debug', 'LANG', 'encoding' etc..
-if __name__ == u"__main__":
+if __name__ == "__main__":
     main()

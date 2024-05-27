@@ -14,19 +14,14 @@ addons:
 sudo: false
 language: python
 python:
-  - "3.3" #Ezhil boots on Python 3
-  - "2.7"
-#  - "2.6"  #some weirdness in Travis C-I
-#  - "pypy" #unittests are broke in PyPy
+  - "3.12" #Ezhil boots on Python 3
 install:
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install --use-mirrors ordereddict; fi
   - python setup.py install && pip install argparse
   - pip install .
   - pip install nose-cov
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]];  then ./test3; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]];  then ./unittest && ./test;  fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]];  then ./unittest && ./test;  fi
+  - ./unittest3
+  - ./test3
 # TBD: based on Travis' support; until them summa keda
 #  - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]];  then cd editor && python testdriver.py; fi
 #  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]];  then cd editor && python testdriver.py; fi

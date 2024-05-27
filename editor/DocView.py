@@ -4,7 +4,7 @@
 ## (C) 2017 Muthiah Annamalai,
 ## XML
 
-from __future__ import print_function
+
 from xml.dom.minidom import parse
 import sys
 import os
@@ -17,14 +17,14 @@ from xml.dom.minidom import parseString as xml_parse_string
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GLib, Pango
-from syntaxhighlighing import EzhilSyntaxHighlightingEditor
-from ezhilpopuptools import PopupForTextView
-from resources import getResourceFile
+from .syntaxhighlighing import EzhilSyntaxHighlightingEditor
+from .ezhilpopuptools import PopupForTextView
+from .resources import getResourceFile
 
 # represents DTD of our XML
 # Rules:
@@ -87,7 +87,7 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
         self.default_font_chapter = "Serif 16"
         self.default_font_title = "Sans 24"
         self.textbuffer = None
-        self.layoutpos = {"title":u"","section":0}
+        self.layoutpos = {"title":"","section":0}
 
     def build_tags(self,textbuffer):
         self.tag["comment"] = textbuffer.create_tag("comment",
@@ -147,15 +147,15 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
     def visit_chapter(self,*args):
         child = args[0]
         # skip chapter 0 - ithu managatti mathiri irukku
-        title = ((self.pageno > 0) and u"%d) "%self.pageno or u" ") + child.getAttribute("title")+u"\n"
+        title = ((self.pageno > 0) and "%d) "%self.pageno or " ") + child.getAttribute("title")+"\n"
         self.layoutpos["title"]=title
         self.append_text_with_tag(title,self.tag["title"])
 
     def visit_section(self,*args):
         child = args[0]
         self.layoutpos["section"] += 1
-        self.append_text_with_tag(u"_"*100+u"\n",self.tag["text"])
-        self.append_text_with_tag(u"பிரிவு %d\n"%self.layoutpos["section"], self.tag["found"])
+        self.append_text_with_tag("_"*100+"\n",self.tag["text"])
+        self.append_text_with_tag("பிரிவு %d\n"%self.layoutpos["section"], self.tag["found"])
 
     def visit_code(self,*args):
         child = args[0]
@@ -182,7 +182,7 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
             if node.nodeType == node.TEXT_NODE:
                 ref_text = node
                 break
-        self.append_text_with_tag(u"\n",self.tag["list"])
+        self.append_text_with_tag("\n",self.tag["list"])
         if ref_text:
             idx = 0
             for _,line in enumerate(re.split("\n+",ref_text.data.strip())):
@@ -191,7 +191,7 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
                 if len(line) < 1:
                     continue
                 idx = idx + 1
-                self.append_text_with_tag(u"    %d)"%idx+line+u"\n",self.tag["list"])
+                self.append_text_with_tag("    %d)"%idx+line+"\n",self.tag["list"])
         pass
 
     def append_text_with_tag(self,text,tag):
@@ -204,14 +204,14 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
         return
 
     def render_page(self,pageno,textbuffer):
-        if len(self.tag.keys()) == 0:
+        if len(list(self.tag.keys())) == 0:
             self.build_tags(textbuffer)
         self.pageno = pageno
         self.textbuffer = textbuffer
 
         # reset
-        self.layoutpos = {"title":u"","section":0}
-        self.textbuffer.set_text(u"")
+        self.layoutpos = {"title":"","section":0}
+        self.textbuffer.set_text("")
 
         dom = self.chapters[pageno]['dom']
         self.visit(dom)
@@ -228,18 +228,18 @@ class DocLayoutWidgetActions(XMLtoDocVisitor):
         return True
 
     def update_toc(self,box,parent):
-        toc_list = [u"<chapter title=\"தமிழில் நிரல் எழுது - புத்தக உள்ளீடு\">",]
-        for pos,chapter in self.chapters.items():
-            btn = Gtk.Button(u"%d. <b>%s</b>"%(pos,chapter['title']))
+        toc_list = ["<chapter title=\"தமிழில் நிரல் எழுது - புத்தக உள்ளீடு\">",]
+        for pos,chapter in list(self.chapters.items()):
+            btn = Gtk.Button("%d. <b>%s</b>"%(pos,chapter['title']))
             btn.get_children()[0].set_use_markup(True)
             btn.set_alignment(0.0,0.0)
             btn.connect('clicked',parent.on_navigate_to,chapter['title'],pos)
             box.pack_start(btn,True,True,0)
-            toc_list.append(u"<section>%s</section>"%chapter['title'])
-        toc_list.append(u"</chapter>")
-        toc_str = u"\n".join(toc_list)
-        toc_dom = xml_parse_string(PYTHON3 and toc_str or u'{0}'.format(toc_str).encode('utf-8'))
-        self.chapters[0] = {'dom':toc_dom,'title':u'தமிழில் நிரல் எழுது - புத்தக உள்ளீடு','file':u':auto:'}
+            toc_list.append("<section>%s</section>"%chapter['title'])
+        toc_list.append("</chapter>")
+        toc_str = "\n".join(toc_list)
+        toc_dom = xml_parse_string(PYTHON3 and toc_str or '{0}'.format(toc_str).encode('utf-8'))
+        self.chapters[0] = {'dom':toc_dom,'title':'தமிழில் நிரல் எழுது - புத்தக உள்ளீடு','file':':auto:'}
         return True
 
 # class contains the books
@@ -271,7 +271,7 @@ class DocBrowserWindow(object):
         self.default_font = default_font
 
         book_chapters = ['ch1.xml', 'ch2.xml', 'ch3.xml', 'ch4.xml', 'ch5.xml', 'ch6.xml', 'ch7.xml', 'ch8.xml','appendix.xml']
-        self.book = XMLtoDoc( map(lambda x: getResourceFile('xmlbook',x),book_chapters) )
+        self.book = XMLtoDoc( [getResourceFile('xmlbook',x) for x in book_chapters] )
         self.page = 0 #TOC/HOME
 
         self.builder.add_from_file(getResourceFile("helper.glade"))
@@ -282,7 +282,7 @@ class DocBrowserWindow(object):
             self.window.set_icon_from_file(getResourceFile("img","ezhil_square_2015_128px.png"))
         except Exception as ie:
             pass
-        self.window.set_title(u"தமிழில் நிரல் எழுது - எழில் கணினி மொழி")
+        self.window.set_title("தமிழில் நிரல் எழுது - எழில் கணினி மொழி")
         self.tocbox = self.builder.get_object("boxToc")
         self.book.update_toc(self.tocbox,self)
 
@@ -305,28 +305,28 @@ class DocBrowserWindow(object):
 
     def on_navigate(self,widget,direction):
         error = False
-        errormsg = u""
+        errormsg = ""
         if direction == '->':
             #print(u"forward ")
             if (self.page+1) < self.book.pages():
                 self.page += 1
             else:
                 error = True
-                errormsg = u"இதுவே கடைசி பக்கம்"
+                errormsg = "இதுவே கடைசி பக்கம்"
         elif direction == '<-':
             #print(u"backward ")
             if self.page >= 1:
                 self.page -= 1
             else:
                 error = True
-                errormsg = u"இதுவே முதல் பக்கம்"
+                errormsg = "இதுவே முதல் பக்கம்"
         elif direction == 'x':
             #print(u"home")
             self.page = 0
         #print("current page -> %d"%self.page)
         if error:
             dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.INFO,Gtk.ButtonsType.OK, errormsg)
-            dialog.format_secondary_text(u"உதவி பக்கத்திற்கு செல்ல முடியாது.")
+            dialog.format_secondary_text("உதவி பக்கத்திற்கு செல்ல முடியாது.")
             response = dialog.run()
             dialog.destroy() #OK or Cancel don't matter
             return True
@@ -347,6 +347,6 @@ class DocBrowserWindow(object):
     def on_selection_button_clicked(self, widget):
         return True
 
-if __name__ == u"__main__":
+if __name__ == "__main__":
     win = DocBrowserWindow()
     Gtk.main()

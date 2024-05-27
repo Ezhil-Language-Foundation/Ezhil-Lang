@@ -10,7 +10,7 @@ import sys
 
 PYTHON3 = (sys.version[0] == '3')
 if PYTHON3:
-    unicode = str
+    str = str
 else:
     sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
@@ -21,11 +21,11 @@ import traceback
 try:
     import tamil
 except ImportError as no_open_tamil:
-    print(u"Incomplete Ezhil interpreter installation;")
-    print(u"\tFATAL ERROR: %s" % (no_open_tamil))
-    print(u"Missing installation of open-tamil library.")
-    print(u"Get latest version of open-tamil library using Python Package index as")
-    print(u"\t$ pip install open-tamil")
+    print("Incomplete Ezhil interpreter installation;")
+    print(("\tFATAL ERROR: %s" % (no_open_tamil)))
+    print("Missing installation of open-tamil library.")
+    print("Get latest version of open-tamil library using Python Package index as")
+    print("\t$ pip install open-tamil")
     sys.exit(255)
 
 from .Interpreter import Interpreter, REPL, Lex, get_prog_name
@@ -51,45 +51,45 @@ class EzhilInterpreter(Interpreter):
         Interpreter.install_builtins(self)
 
         # input statements, length constructs
-        tamil_equiv = {u"சரம்_இடமாற்று": u"replace", u"சரம்_கண்டுபிடி": u"find", u"நீளம்": u"len",
-                       u"சரம்_உள்ளீடு": u"raw_input", u"உள்ளீடு": u"input"}
+        tamil_equiv = {"சரம்_இடமாற்று": "replace", "சரம்_கண்டுபிடி": "find", "நீளம்": "len",
+                       "சரம்_உள்ளீடு": "raw_input", "உள்ளீடு": "input"}
 
         # printf - as per survey request
-        tamil_equiv.update({u"அச்சிடு": u"printf"})
+        tamil_equiv.update({"அச்சிடு": "printf"})
 
         # list operators
-        tamil_equiv.update({u"பட்டியல்": u"list", u"பின்இணை": u"append", u"தலைகீழ்": u"reverse",
-                            u"வரிசைப்படுத்து": u"sort", u"நீட்டிக்க": u"extend", u"நுழைக்க": u"insert",
-                            u"குறியீட்டெண்": u"index",
-                            u"வெளியேஎடு": u"pop_list", u"பொருந்தியஎண்": u"count"})
+        tamil_equiv.update({"பட்டியல்": "list", "பின்இணை": "append", "தலைகீழ்": "reverse",
+                            "வரிசைப்படுத்து": "sort", "நீட்டிக்க": "extend", "நுழைக்க": "insert",
+                            "குறியீட்டெண்": "index",
+                            "வெளியேஎடு": "pop_list", "பொருந்தியஎண்": "count"})
 
         # generic get/set ops for list/dict
-        tamil_equiv.update({u"எடு": u"__getitem__", u"வை": u"__setitem__", u"சாவிகள்": u"keys"})
+        tamil_equiv.update({"எடு": "__getitem__", "வை": "__setitem__", "சாவிகள்": "keys"})
 
         # file operators
-        tamil_equiv.update({u"கோப்பை_திற": u"file_open", u"கோப்பை_மூடு": u"file_close", u"கோப்பை_படி": u"file_read",
-                            u"கோப்பை_எழுது": u"file_write", u"கோப்பை_எழுது_வரிகள்": u"file_writelines",
-                            u"கோப்பை_படி_வரிகள்": u"file_readlines"})
+        tamil_equiv.update({"கோப்பை_திற": "file_open", "கோப்பை_மூடு": "file_close", "கோப்பை_படி": "file_read",
+                            "கோப்பை_எழுது": "file_write", "கோப்பை_எழுது_வரிகள்": "file_writelines",
+                            "கோப்பை_படி_வரிகள்": "file_readlines"})
 
         # type
-        tamil_equiv.update({u"வகை": u"type"})
+        tamil_equiv.update({"வகை": "type"})
 
         for k, v in list(tamil_equiv.items()):
             self.builtin_map[k] = self.builtin_map[v];
 
         try:
-            import EZTurtle
+            from . import EZTurtle
         except ImportError as ie:
             if (self.debug):
-                print(u"ImportError => turtle ", unicode(ie))
+                print(("ImportError => turtle ", str(ie)))
             return
 
         # translations for turtle module
-        turtle_map = {u"முன்னாடி": u"forward", u"பின்னாடி": u"backward",
-                      u"வலது": u"lt", u"இடது": u"rt",
-                      u"எழுதுகோல்மேலே": u"penup", u"எழுதுகோல்கிழே": u"pendown"}
+        turtle_map = {"முன்னாடி": "forward", "பின்னாடி": "backward",
+                      "வலது": "lt", "இடது": "rt",
+                      "எழுதுகோல்மேலே": "penup", "எழுதுகோல்கிழே": "pendown"}
         for k, v in list(turtle_map.items()):
-            vv = u"turtle_" + v;
+            vv = "turtle_" + v;
             self.builtin_map[k] = self.builtin_map[vv]
 
         return
@@ -177,7 +177,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
             os.unlink(self.fProcName)
             self.fProcName = None
         if hasattr(self.p, 'terminate'):
-            print(u".... terminate!!! ....")
+            print(".... terminate!!! ....")
             self.p.terminate()
         # print(u"exit code = %d"%self.exitcode)
         pass
@@ -186,7 +186,7 @@ class EzhilFileExecuter(EzhilRedirectOutput):
                  safe_mode=False):
         encoding = encoding.lower()
         EzhilRedirectOutput.__init__(self, redirectop, debug)
-        self.dbg_msg(u"ezhil file executer\n")
+        self.dbg_msg("ezhil file executer\n")
         self.fProcName = ""
         self.data = ""
         self.tmpf_name = ""
@@ -194,10 +194,10 @@ class EzhilFileExecuter(EzhilRedirectOutput):
         self.TIMEOUT = TIMEOUT
         if (not redirectop):  # run serially and exit.
             try:
-                self.dbg_msg(u"run in non-redirect mode")
+                self.dbg_msg("run in non-redirect mode")
                 ezhil_file_parse_eval(file_input, self.redirectop, self.debug, encoding, doprofile=doprofile,
                                       safe_mode=safe_mode)
-                self.dbg_msg(u"finished... file parse eval")
+                self.dbg_msg("finished... file parse eval")
                 self.exitcode = 0
             except Exception as e:
                 # print(u"raise exception herexxx")
@@ -235,16 +235,16 @@ class EzhilFileExecuter(EzhilRedirectOutput):
 
                     # dump stuff from fProcName into the stdout
                     fp = open(self.fProcName, 'r')
-                    print(u"######### ------- dump output ------- ##############")
+                    print("######### ------- dump output ------- ##############")
                     self.data = fp.read()
-                    print(self.data)
+                    print((self.data))
                     fp.close()
 
                     if raise_timeout:
                         raise TimeoutException(self.TIMEOUT)
                     # os.unlink( fProcName)
             except Exception as e:
-                print("exception ", unicode(e))
+                print(("exception ", str(e)))
                 traceback.print_tb(sys.exc_info()[2])
                 raise e
             finally:
@@ -283,9 +283,9 @@ def ezhil_eval(program_text, debug=False, encoding="utf-8", safe_mode=False):
     lexer = EzhilLex(fname=file_input, dbg=debug, encoding=encoding)
     lexer.tokenize(data=program_text)
     if (debug):
-        print(u"####### dump tokens ########")
+        print("####### dump tokens ########")
         lexer.dump_tokens()
-        print(u"##########################")
+        print("##########################")
     parse_eval = EzhilInterpreter(lexer=lexer, debug=debug, safe_mode=safe_mode)
     parse_eval.parse()
     rval, _ = parse_eval.evaluate_interactive(throw=True)
@@ -300,15 +300,15 @@ def ezhil_file_parse_eval(file_input, redirectop, debug, encoding="utf-8", dopro
         @doprofile : automatically attach profile("begin") to entry of a file and calls profile("results") to end of file.
     """
     if (redirectop):
-        print(u"redirect mode @ ezhil file parse eval")
+        print("redirect mode @ ezhil file parse eval")
         tmpfilename = EzhilRedirectOutput.pidFileName(current_process().pid)
         sys.stdout = codecs.open(tmpfilename, "w", "utf-8")
         sys.stderr = sys.stdout;
     lexer = EzhilLex(file_input, debug, encoding=encoding)
     if (debug):
-        print(u"####### dump tokens ########")
+        print("####### dump tokens ########")
         lexer.dump_tokens()
-        print(u"##########################")
+        print("##########################")
     parse_eval = EzhilInterpreter(lexer=lexer, debug=debug, safe_mode=safe_mode)
     web_ast = parse_eval.parse()
     if doprofile:
@@ -316,15 +316,15 @@ def ezhil_file_parse_eval(file_input, redirectop, debug, encoding="utf-8", dopro
         TransformEntryExitProfile(interpreter=parse_eval, debug=debug)
 
     if (debug):
-        print(unicode(web_ast))
-    if (debug):  print(u"*" * 60);  print(unicode(parse_eval))
+        print((str(web_ast)))
+    if (debug):  print(("*" * 60));  print((str(parse_eval)))
     exit_code = 0
     try:
         env = parse_eval.evaluate()
     except Exception as e:
         # print(u"xxception raised... %s"%str(redirectop))
         exit_code = 255
-        print(unicode(e))
+        print((str(e)))
         if (debug):
             traceback.print_tb(sys.exc_info()[2])
         raise e
@@ -358,11 +358,11 @@ def ezhil_file_REPL(file_input, lang, lexer, parse_eval, debug=False):
             print("End of Input reached\n")
             do_quit = True  ##evaluate the Lbuffer
         if (debug):
-            print("evaluating buffer", Lbuffer)
+            print(("evaluating buffer", Lbuffer))
             if (len(totbuffer) > 0):
-                print("tot buffer %s" % totbuffer)  # debugging aid
+                print(("tot buffer %s" % totbuffer))  # debugging aid
         if (do_quit):
-            print(u"******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******")
+            print("******* வணக்கம்! பின்னர் உங்களை  பார்க்கலாம். *******")
             return
         try:
             lexer.set_line_col([line_no, 0])
@@ -374,14 +374,14 @@ def ezhil_file_REPL(file_input, lang, lexer, parse_eval, debug=False):
             [lexer_line_no, c] = lexer.get_line_col(0)
             if (debug): lexer.dump_tokens()
             try:
-                if (debug): print(u"parsing buffer item => ", totbuffer)
+                if (debug): print(("parsing buffer item => ", totbuffer))
                 parse_eval.parse()
             except Exception as pexp:
                 ## clear tokens in lexer
                 parse_eval.reset()  # parse_eval
                 if (debug):
-                    print(u"offending buffer item => ", totbuffer)
-                    print(unicode(pexp), unicode(pexp.__class__))
+                    print(("offending buffer item => ", totbuffer))
+                    print((str(pexp), str(pexp.__class__)))
                     traceback.print_tb(sys.exc_info()[2])
                     raise pexp
                 # Greedy strategy to keep avoiding parse-errors by accumulating more of input.
@@ -391,14 +391,14 @@ def ezhil_file_REPL(file_input, lang, lexer, parse_eval, debug=False):
                 continue
             totbuffer = ""
             sys.stdout.write(curr_line_no)
-            if (debug):  print(u"*" * 60);  print(unicode(parse_eval))
+            if (debug):  print(("*" * 60));  print((str(parse_eval)))
             [rval, env] = parse_eval.evaluate_interactive(env)
             if hasattr(rval, 'evaluate'):
-                print(rval.__str__())
+                print((rval.__str__()))
             elif hasattr(rval, '__str__'):  # print everything except a None object
-                print(str(rval))
+                print((str(rval)))
             else:
-                print(u"\n")
+                print("\n")
         except Exception as e:
             print(e)
             raise e
@@ -412,13 +412,13 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         EzhilRedirectInputOutput.__init__(self, file_input, redirectop)
 
         try:
-            lang = u"எழில்"
+            lang = "எழில்"
             lexer = EzhilLex(debug, encoding="utf-8")
-            if (debug): print(unicode(lexer))
+            if (debug): print((str(lexer)))
             parse_eval = EzhilInterpreter(lexer=lexer, debug=debug)
             ezhil_file_REPL(file_input, lang, lexer, parse_eval, debug)
         except Exception as e:
-            print(u"exception ", unicode(e))
+            print(("exception ", str(e)))
             traceback.print_tb(sys.exc_info()[2])
             raise e
         finally:
@@ -434,7 +434,7 @@ class EzhilInterpExecuter(EzhilRedirectInputOutput):
         return
 
 
-def ezhil_interactive_interpreter(lang=u"எழில்", debug=False):
+def ezhil_interactive_interpreter(lang="எழில்", debug=False):
     ## interactive interpreter
     lexer = EzhilLex(debug)
     parse_eval = EzhilInterpreter(lexer=lexer, debug=debug)
@@ -454,15 +454,15 @@ def execute_file(file_name, debug, encoding, doprofile):
         executer.run()
         return 0
     except Exception as e:
-        print(u"Failed executing file '{0}':\n{1}'".format(
-            file_name, unicode(e)))
+        print(("Failed executing file '{0}':\n{1}'".format(
+            file_name, str(e))))
         if debug:
             traceback.print_tb(sys.exc_info()[2])
         return 255
 
 
 def main():
-    lang = u"எழில்"
+    lang = "எழில்"
 
     if len(sys.argv) == 1:
         add_stdin()
@@ -479,8 +479,8 @@ def main():
         # print(u"mode with fnames")
         for idx, file_name in enumerate(fnames):
             if debug:
-                print(u" **** Executing file # {} named {} ".format(
-                    idx + 1, file_name))
+                print((" **** Executing file # {} named {} ".format(
+                    idx + 1, file_name)))
             exit_code = execute_file(file_name=file_name, debug=debug,
                                      encoding=encoding, doprofile=doprofile)
         sys.exit(exit_code)
@@ -492,5 +492,5 @@ def ezhil_timeout_exec(filename):
                                  encoding="utf-8", doprofile=False, safe_mode=True)
 
 
-if __name__ == u"__main__":
+if __name__ == "__main__":
     main()

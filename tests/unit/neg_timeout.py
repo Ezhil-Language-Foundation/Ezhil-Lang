@@ -23,7 +23,7 @@ class InfiniteTimeoutTest(unittest.TestCase):
     def do_timeout_test(self,fname):
         with self.assertRaises(RuntimeException) as e:
             ezhil.ezhil_timeout_exec(fname)
-        self.assertTrue( u'13 (seconds)' in str(e.exception))
+        self.assertTrue( '13 (seconds)' in str(e.exception))
 
 if __name__ == '__main__':
     unittest.main()
